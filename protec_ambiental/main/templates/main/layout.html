@@ -1,0 +1,121 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{title}}</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <!--<link rel="stylesheet" href="http://getbootstrap.com/examples/dashboard/dashboard.css">-->
+
+    {% block more_styles %}
+    {% endblock %}
+
+</head>
+
+
+<body>
+
+<div class="container">
+    {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'success' %}
+                    <div class="alert alert-success">
+                {% elif message.tags == 'warning' %}
+                    <div class="alert">
+                {% elif message.tags == 'error' %}
+                    <div class="alert alert-danger">
+                {% else %}
+                    <div class="alert alert-info">
+                {% endif %}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                {{ message|safe }}
+                </div>
+            {% endfor %}
+    {% endif %}
+
+    <div class="row"  style="padding-top:30px">
+
+        <div class="col-md-2 sidebar">
+                <h2>BitHeart</h2>
+              
+            {% if request.user.is_authenticated %}                    
+                <ul class="nav nav-sidebar">
+                    {% if request.user.is_assistant %}
+                        <li class="{% if 'list' in request.path %}active{% endif %}">
+                                    <a href="{% url 'main:list_meeting' %}">{% trans 'requests'|capfirst %}</a>
+                        </li>
+                           
+                        <li>
+                            <a href="{% url 'main:list_patient' %}">{% trans 'patients'|capfirst %}</a>
+                        </li>
+
+
+                        <li>
+                            <a href="{% url 'main:list_doctor' %}">{% trans 'doctors'|capfirst %}</a>
+                        </li>
+                                              
+                        <hr>
+
+                        <li class="{% if 'edit' in request.path %}active{% endif %}">
+                                <a href="{% url 'main:edit_assistant' request.user.pk %}">{% trans 'edit my profile'|capfirst %}</a>
+                        </li>                    
+                    {% endif %}
+
+                    {% if request.user.is_doctor %}
+
+                            <li>
+                                    <a href="{% url 'main:list_meeting_doctor' %}">{% trans 'requests'|capfirst %}</a>
+                            </li>
+
+                            <li>
+                                    <a href="{% url 'main:edit_doctor' request.user.pk %}">{% trans 'edit my profile'|capfirst %}</a>
+                            </li>
+                            
+                            <li>
+                                    <a href="{% url 'main:list_institution_doctor' %}">{% trans 'institutions'|capfirst %}</a>
+                            </li>
+
+                    {% endif %}
+
+                    <li >
+                                <a href="{% url 'accounts:logout' %}">{% trans 'logout'|capfirst %}</a>
+                        </li>
+
+            </ul>
+            {% else %}
+            <ul>
+                <li><a href="#">{% trans 'Register'|capfirst %}</a></li>
+
+                <li><a href="{% url 'accounts:login' %}">{% trans 'Login'|capfirst %}</a></li>
+            </ul>
+            {% endif %}
+
+        </div>
+
+        <div class="col-md-10">
+            {% block body %}
+
+            {% endblock %}
+        </div>
+    </div>
+</div>
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <!--<link rel="stylesheet" href="/resources/demos/style.css">-->
+        <script>
+              $( function() {
+                $( ".datepicker" ).datepicker({dateFormat: "yy-mm-dd"});
+              } );
+
+        </script>
+        {% block more_scripts %}
+
+        {% endblock %}
+</body>
+
+</html>
+
