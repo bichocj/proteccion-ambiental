@@ -16,9 +16,9 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Person',
             fields=[
-                ('user_ptr', models.OneToOneField(primary_key=True, auto_created=True, to=settings.AUTH_USER_MODEL, parent_link=True, serialize=False)),
+                ('user_ptr', models.OneToOneField(auto_created=True, parent_link=True, primary_key=True, serialize=False, to=settings.AUTH_USER_MODEL)),
                 ('dni', models.IntegerField(null=True, blank=True)),
-                ('sex', models.IntegerField(verbose_name='sexo', choices=[(0, 'masculino'), (1, 'femenino')], default=0)),
+                ('sex', models.IntegerField(default=0, choices=[(0, 'man'), (1, 'woman')], verbose_name='sex')),
             ],
             options={
                 'verbose_name': 'user',
