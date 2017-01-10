@@ -1,0 +1,43 @@
+{% extends 'main/layout.html' %}
+{% block body %}
+
+
+<div class=" main">
+            <h1 class="page-header">Lista de Empresas</h1>
+</div>
+
+<br>
+<br>
+<div class = "row">
+
+	<div class = "col-md-1"></div>
+	<div class = "col-md-10">
+		<table class="table table-bordered">
+			<thead>
+			<tr class = "success">
+				
+				<td><b>Nombre</b></td>
+				<td><b>RUC</b></td>
+				<td><b>Dirección</b></td>
+
+			</tr>
+			</thead>
+			<tbody>
+
+   
+                {% for c in companies %}
+                
+               	<tr>
+                    <td><a href="#">{{ c.name }}</a></td>
+                    <td>{{ c.ruc }}</a></td>
+                    <td>{{ c.address }}</a></td>
+              	</tr>
+   
+              	{% endfor %}
+			</tbody>
+
+		</table>
+	</div>
+
+</div>
+{% endblock %}
