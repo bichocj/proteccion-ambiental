@@ -13,6 +13,7 @@ class Company(models.Model):
 	name = models.CharField(max_length = 100, null = False, blank = False) 
 	address = models.CharField(max_length = 200, null = True, blank = True)
 
+
 class Client(User):
 	company = models.ForeignKey(Company, null = False, blank = False)
 
@@ -23,7 +24,7 @@ class Employee(models.Model):
 	time = models.IntegerField()
 
 class HistoryFormats(models.Model):
-	requeriments = models.IntegerField(null = False, blank = False) #El numero del requerimiento en el cual pertenece
+	requeriment = models.IntegerField(null = False, blank = False) #El numero del requerimiento en el cual pertenece
 #	content = models.TextField("How do a type pdf")
 	company = models.ForeignKey(Company, null = False, blank = False) #Clase Compañia, el formato es completado de una compañia
 	date_time = models.DateTimeField() #La fecha en el que se hizo la modificación del formato
@@ -64,7 +65,7 @@ class Report(models.Model):
 
 class Format(models.Model):
 	requeriments = models.IntegerField(null = False, blank = False)
-#	document = models.TextField("How do a type pdf")
+	document = models.FileField(upload_to = "archivos/", null = True, blank = True)
 	company = models.ForeignKey(Company, null = False, blank = False)
 
 class Calendar(models.Model):

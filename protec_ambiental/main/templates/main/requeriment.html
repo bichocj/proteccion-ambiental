@@ -1,0 +1,98 @@
+{% extends 'main/panel.html' %}
+
+{% block content %}
+
+	<table class="table table-bordered">
+			<thead>
+			<tr class = "success">
+				
+				<td><b>Requerimiento</b></td>
+				<td><b>Formato</b></td>
+			
+			</tr>
+			</thead>
+			<tbody>
+                
+               	<tr>
+					<td><b>Requerimiento 1</b></td>
+                    <td>
+                    	<ul class="list-group">
+
+					        {% for r1 in req_1 %}
+					        <li class="list-group-item">
+					        	<a href="">{{ r1.document }}</a>
+					        		<div align = "right">
+						        		<a href="#"  class="glyphicon glyphicon-cloud-download"></a>
+						        		<a href="#"  class="glyphicon glyphicon-cloud-upload"></a>
+					        		</div>
+					        </li>
+					        {% endfor %}
+                    	
+                    	</ul>
+                    </td>
+              	</tr>
+
+               	<tr>
+                    <td><b>Requerimiento 2</b></td>
+                    <td>
+                    	<ul class="list-group">
+
+					        {% for r2 in req_2 %}
+					        <li class="list-group-item">
+					        	<a href="">{{ r2.document }}</a>
+					        		<div align = "right">
+						        		<a href="#"  class="glyphicon glyphicon-cloud-download"></a>
+						        		<a href="#"  class="glyphicon glyphicon-cloud-upload"></a>
+					        		</div>
+					        </li>
+					        {% endfor %}
+                    	
+                    	</ul>
+                    </td>
+              	</tr>
+
+               	<tr>
+                    <td><b>Requerimiento 3</b></td>
+                    <td>
+                    	<ul class="list-group">
+
+					        {% for r3 in req_3 %}
+					        <li class="list-group-item">
+					        	<a href="">{{ r3.document }}</a>
+
+					        		<div align = "right">
+						        		<a href="#"  class="glyphicon glyphicon-cloud-download"></a>
+						        		<a href="#"  class="glyphicon glyphicon-cloud-upload"></a>
+					        		</div>
+					        </li>
+					        {% endfor %}
+                    	
+                    	</ul>
+                    </td>
+              	</tr>
+
+               	<tr>
+					<td><b>Requerimiento 4</b></td>
+	                    <td>
+	                    	<ul class="list-group">
+
+						        {% for r4 in req_4 %}
+						        <li class="list-group-item">
+						        	<a href="">{{ r4.document }}</a>
+
+					        		<div align = "right">
+						        		<a href="#"  class="glyphicon glyphicon-cloud-download"></a>
+						        		<a href="#"  class="glyphicon glyphicon-cloud-upload"></a>
+					        		</div>
+						        </li>
+						        {% endfor %}
+	                    	
+	                    	</ul>
+	                    </td>              	
+                </tr>
+
+   
+			</tbody>
+
+		</table>
+{% endblock %}

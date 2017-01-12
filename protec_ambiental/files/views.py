@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from django.contrib import messages 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -16,8 +17,8 @@ def Entrada(request):
 			insert = Entrada(titulo = titulo, texto = texto, archivo = Archivo)
 			insert.save()
 
-			return HttpResponseRedirect(reverse('index.html'))
+			return render(request, 'index.html', locals())
 		else:
 			messages.error(request, "Error al procesar el formulario")
 	else:
-		return HttpResponseRedirect(reverse('index.html'))
+		return render(request,'index.html', locals())

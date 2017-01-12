@@ -28,7 +28,7 @@
                 {% for c in companies %}
                 
                	<tr>
-                    <td><a href="#">{{ c.name }}</a></td>
+                    <td><a href="{% url 'main:panel' c.pk %}">{{ c.name }}</a></td>
                     <td>{{ c.ruc }}</a></td>
                     <td>{{ c.address }}</a></td>
               	</tr>
