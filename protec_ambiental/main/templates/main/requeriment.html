@@ -21,10 +21,9 @@
 					        {% for r1 in req_1 %}
 					        <li class="list-group-item">
 					        	<a href="">{{ r1.document }}</a>
-					        		<div align = "right">
-						        		<a href="#"  class="glyphicon glyphicon-cloud-download"></a>
-						        		<a href="#"  class="glyphicon glyphicon-cloud-upload"></a>
-					        		</div>
+							       	<div align = "right">
+						        		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#example1" data-whatever="r1">Actualizar</button>
+						        	</div>
 					        </li>
 					        {% endfor %}
                     	
@@ -40,10 +39,9 @@
 					        {% for r2 in req_2 %}
 					        <li class="list-group-item">
 					        	<a href="">{{ r2.document }}</a>
-					        		<div align = "right">
-						        		<a href="#"  class="glyphicon glyphicon-cloud-download"></a>
-						        		<a href="#"  class="glyphicon glyphicon-cloud-upload"></a>
-					        		</div>
+						        	<div align = "right">
+						        		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#example2" data-whatever="r2">Actualizar</button>
+						        	</div>
 					        </li>
 					        {% endfor %}
                     	
@@ -59,11 +57,9 @@
 					        {% for r3 in req_3 %}
 					        <li class="list-group-item">
 					        	<a href="">{{ r3.document }}</a>
-
-					        		<div align = "right">
-						        		<a href="#"  class="glyphicon glyphicon-cloud-download"></a>
-						        		<a href="#"  class="glyphicon glyphicon-cloud-upload"></a>
-					        		</div>
+						        	<div align = "right">
+						        		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#example3" data-whatever="r3">Actualizar</button>
+						        	</div>
 					        </li>
 					        {% endfor %}
                     	
@@ -79,11 +75,9 @@
 						        {% for r4 in req_4 %}
 						        <li class="list-group-item">
 						        	<a href="">{{ r4.document }}</a>
-
-					        		<div align = "right">
-						        		<a href="#"  class="glyphicon glyphicon-cloud-download"></a>
-						        		<a href="#"  class="glyphicon glyphicon-cloud-upload"></a>
-					        		</div>
+						        	<div align = "right">
+						        		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#example4" data-whatever="r4">Actualizar</button>
+						        	</div>
 						        </li>
 						        {% endfor %}
 	                    	
@@ -95,4 +89,72 @@
 			</tbody>
 
 		</table>
+
+<div class="modal fade" id="example1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-footer">
+			<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+            	{{ form1.as_p }}
+        		<input type="submit" value="Subir">
+    		</form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="example2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-footer">
+			<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+            	{{ form2.as_p }}
+        		<input type="submit" value="Subir">
+    		</form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="example3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-footer">
+      <div class="modal-footer">
+			<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+            	{{ form3.as_p }}
+        		<input type="submit" value="Subir">
+    		</form>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="example4" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-footer">
+		      <div class="modal-footer">
+			<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+            	{{ form4.as_p }}
+        		<input type="submit" value="Subir">
+    		</form>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

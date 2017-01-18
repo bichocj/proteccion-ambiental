@@ -1,14 +1,7 @@
-from django.forms import ModelForm, ClearableFileInput
-from .models import Entrada 
+from django import forms
 
-class CustomClearableFielInput(ClearableFileInput):
-	template_with_clear = '<br> <label for = "%(clear_checkbox_id)s">%(clear_checkbox_label)s</label> %(clear)s'
-
-
-class FormEntrada(ModelForm):
-	class Meta:
-		model = Entrada
-		fields = ('titulo', 'texto', 'archivo')
-		widgets = {
-		'archivo': CustomClearableFielInput
-		}
+class UploadForm(forms.Form):
+	filename = forms.CharField(max_length=100)
+	docfile = forms.FileField(
+        label='Selecciona un archivo'
+    )

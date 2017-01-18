@@ -1,24 +1,14 @@
-from django.shortcuts import render
-from django.contrib import messages 
-from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
-
-from .forms import FormEntrada
-from .models import Entrada
-
-def Entrada(request):
-	if request.method == 'POST':
-		form = FormEntrada(request.POST, request.FILES)
-		if form.is_valid():
-			titulo = request.POST['titulo']
-			texto = request.POST['texto']
-			archivo = request.FILES['archivo']
-
-			insert = Entrada(titulo = titulo, texto = texto, archivo = Archivo)
-			insert.save()
-
-			return render(request, 'index.html', locals())
-		else:
-			messages.error(request, "Error al procesar el formulario")
-	else:
-		return render(request,'index.html', locals())
+from django.shortcuts import render, redirect #puedes importar render_to_response
+from files.forms import UploadForm
+from files.models import Document
+  
+def upload_file(request):
+    if request.method == 'POST':
+        form = UploadForm(request.POST, request.FILES)
+        if form.is_valid():
+        	newdoc = Document(docfile = request.FILES['docfile'])
+        	newdoc.save(form)
+        	return redirect("home")
+    else:
+        form = UploadForm()
+        return render(request, 'index.html', locals())
