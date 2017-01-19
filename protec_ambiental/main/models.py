@@ -65,7 +65,7 @@ class Report(models.Model):
 
 class Format(models.Model):
 	requeriments = models.IntegerField(null = False, blank = False)
-	document = models.FileField(upload_to = "archivos/", null = True, blank = True)
+	document = models.FileField(upload_to = "archivos/%Y/%m/%d", null = True, blank = True)
 	company = models.ForeignKey(Company, null = False, blank = False)
 
 class Calendar(models.Model):

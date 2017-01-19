@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import Company, Format
+from .forms import CompanyForm
 from django.contrib.auth.decorators import login_required
 
 
@@ -29,23 +30,32 @@ def requeriment(request, pk):
 	req_2 = Format.objects.filter(company = company, requeriments = 2)
 	req_3 = Format.objects.filter(company = company, requeriments = 3)
 	req_4 = Format.objects.filter(company = company, requeriments = 4)
-	if request.method == 'POST':	
-		form1 = UploadForm(request.POST, request.FILES)
-		form2 = UploadForm(request.POST, request.FILES)
-		form3 = UploadForm(request.POST, request.FILES)
-		form4 = UploadForm(request.POST, request.FILES)
-		if form.is_valid():
-			newdoc = Document(docfile = request.FILES['docfile'])
-			newdoc.save(form)
-			return render(request, "main/requeriment.html", locals())
-		else:
-			form = UploadForm()
-			return render(request, "main/requeriment.html", locals())
+	#if request.method == 'POST':	
+	#	form1 = UploadForm(request.POST, request.FILES)
+	#	if form.is_valid():
+	#		newdoc = Format(document = request.FILES['document'])
+	#		newdoc.save(form1)
+	#		return render(request, "main/requeriment.html", locals())
+	#	else:
+	#		form = UploadForm()
+	return render(request, "main/requeriment.html", locals())
 
 @login_required
 def calendar(request, pk):
 	company = Company.objects.get(pk = pk)
 	return render(request, "main/calendar.html", locals())
+
+@login_required
+def new_company(request):
+	title = "Nueva empresa"
+	if request.POST:
+		form = CompanyForm(request.POST)
+		if form.is_valid():
+			form.save()
+			return redirect(reverse('main:law'))
+	else:
+		form = CompanyForm()
+	return render(request, "main/hook/form.html", locals())
 
 @login_required
 def accidents(request, pk):
