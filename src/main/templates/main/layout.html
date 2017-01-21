@@ -1,0 +1,118 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html>
+<head>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="http://getbootstrap.com/examples/dashboard/dashboard.css">
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+    <style type="text/css">
+        .circulo1 {
+             width: 200px;
+             height: 200px;
+             -moz-border-radius: 50%;
+             -webkit-border-radius: 50%;
+             border-radius: 50%;
+             background: #37AE74;
+                }
+
+         .circulo2 {
+             width: 200px;
+             height: 200px;
+             -moz-border-radius: 50%;
+             -webkit-border-radius: 50%;
+             border-radius: 50%;
+             background: #378AAE;
+                }
+            
+         a:link {
+                color: #000000;
+                text-decoration: none;
+            }
+    
+    </style>
+    
+
+    <title>Protección Ambiental</title>
+
+    <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <link href="dashboard.css" rel="stylesheet">
+    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+  
+
+  </head>
+
+  <body>
+
+
+
+    {% block more_styles %}
+    {% endblock %}
+
+</head>
+
+
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Project name</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="#">Profile</a></li>
+            <li><a href="#">Help</a></li>
+          </ul>
+          <form class="navbar-form navbar-right">
+            <input type="text" class="form-control" placeholder="Search...">
+          </form>
+        </div>
+      </div>
+    </nav>
+
+
+           {% block body %}
+
+            {% endblock %}
+
+
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script>
+              $( function() {
+                $( ".datepicker" ).datepicker({dateFormat: "yy-mm-dd"});
+              } );
+
+        </script>
+
+        {% block more_scripts %}
+
+        {% endblock %}
+</body>
+
+</html>
+
