@@ -8,7 +8,7 @@ from .models import Company, Format
 class FormatForm(ModelForm):
     class Meta:
         model = Format
-        fields = '__all__'
+        fields = ('document',)
 
 
 class CompanyForm(ModelForm):

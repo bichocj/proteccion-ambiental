@@ -41,8 +41,28 @@
                                 <div class="modal-footer">
                                     <form action="{% url 'main:requirements_list' format.pk %}" method="post" enctype="multipart/form-data">{% csrf_token %}
                                         {{ format.form.as_p }}
-                                        <input type="submit" value="Subir">
+                                        <input type="submit" class="btn btn-primary" value="Subir">
                                     </form>
+                                    <hr>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <td align="left"><b>Documento</b></td>
+
+                                                <td align="left"><b>Fecha de modificación</b></td>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            {% for history in format.history %}
+                                            <tr>
+                                                <td align ="left">{{ history.document }}</td>
+                                                <td align="left">{{ history.date_time }}</td>                                                
+                                            </tr>       
+                                            {% endfor %}
+                                        </tbody>        
+                                    </table>
+
                                 </div>
                             </div>
                         </div>

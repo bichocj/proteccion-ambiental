@@ -24,13 +24,6 @@ class Employee(User):
     time = models.IntegerField()
 
 
-class HistoryFormats(models.Model):
-    requirement = models.IntegerField(null=True, blank=True)  # El numero del requerimiento en el cual pertenece
-    document = models.FileField(upload_to="history/%Y/%m/%d", null=True, blank=True)
-    company = models.ForeignKey(Company, null=True,
-                                blank=True)  # Clase Compania, el formato es completado de una compania
-    date_time = models.DateTimeField()  # La fecha en el que se hizo la modificacion del formato
-
 
 class Meeting(models.Model):
     date = models.DateTimeField()
@@ -89,6 +82,17 @@ class Calendar(models.Model):
 
 
 # type_calendar = models.IntegerField("type", choises =TYPE, default = )
+
+
+class HistoryFormats(models.Model):
+#    requirement = models.ForeignKey(Requirement, null = True, blank = True)
+    format = models.ForeignKey(Format, null = True, blank = True)
+    document = models.FileField(upload_to="history/%Y/%m/%d", null=True, blank=True)
+#    company = models.ForeignKey(Company, null=True,
+#                                blank=True)  # Clase Compania, el formato es completado de una compania
+    date_time = models.DateTimeField()  # La fecha en el que se hizo la modificacion del formato
+
+
 
 class UseProduct(models.Model):
     task = models.ForeignKey(Task, null=False, blank=False)

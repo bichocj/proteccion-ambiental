@@ -31,19 +31,15 @@ def law(request):
 @login_required
 def requirements_list(request, pk):
     if request.POST:
-        formato = Format.objects.get(pk = pk)
-        #creo la historia    
+        format = Format.objects.get(pk = pk)
         history = HistoryFormats()
-        history.requirement = formato.requirement
-        history.company = formato.company
-        history.document = formato.document
+        history.format = format
+        history.document = format.document
         history.date_time = timezone.now()
-        newform = Format( document = request.FILES['document'])
-        newform.requirement = formato.requirement
-        newform.company = formato.company
-        newform.save()
-        formato.delete()
-        return redirect(reverse('main:requirements_list', kwargs={'pk': newform.company.pk}))
+        history.save()
+        format.document = request.FILES['document']
+        format.save()
+        return redirect(reverse('main:requirements_list', kwargs={'pk': format.company.pk}))
     else:
         company = Company.objects.get(pk=pk)
         requirements = Requirement.objects.filter(is_active=True).order_by('order')
@@ -51,6 +47,7 @@ def requirements_list(request, pk):
             requirement.formats = Format.objects.filter(requirement__pk=requirement.pk, company__pk=request.user.company.pk)
             for format in requirement.formats:
                 format.form = FormatForm(instance=format)
+                format.history = HistoryFormats.objects.filter(format = format)
     return render(request, "main/requirements/list.html", locals())
 
 
