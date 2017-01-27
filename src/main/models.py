@@ -25,11 +25,11 @@ class Employee(User):
 
 
 class HistoryFormats(models.Model):
-    requirement = models.IntegerField(null=False, blank=False)  # El numero del requerimiento en el cual pertenece
-    #	content = models.TextField("How do a type pdf")
-    company = models.ForeignKey(Company, null=False,
-                                blank=False)  # Clase Compañia, el formato es completado de una compañia
-    date_time = models.DateTimeField()  # La fecha en el que se hizo la modificación del formato
+    requirement = models.IntegerField(null=True, blank=True)  # El numero del requerimiento en el cual pertenece
+    document = models.FileField(upload_to="history/%Y/%m/%d", null=True, blank=True)
+    company = models.ForeignKey(Company, null=True,
+                                blank=True)  # Clase Compania, el formato es completado de una compania
+    date_time = models.DateTimeField()  # La fecha en el que se hizo la modificacion del formato
 
 
 class Meeting(models.Model):
@@ -56,7 +56,7 @@ class Task(models.Model):
     content = models.TextField(null=False, blank=False)  # contenido
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
-    # Falta añadir evidencia de tipo imagen
+    # Falta anadir evidencia de tipo imagen
     # status = models.IntegerField("status", choises = STATUS, default = )
     expiration = models.DateTimeField()
 

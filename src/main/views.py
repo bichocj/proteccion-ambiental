@@ -1,8 +1,9 @@
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
-from .models import Company, Format, Requirement
+from .models import Company, Format, Requirement, HistoryFormats
 from .forms import CompanyForm, FormatForm
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 
 
 @login_required
@@ -29,12 +30,27 @@ def law(request):
 
 @login_required
 def requirements_list(request, pk):
-    company = Company.objects.get(pk=pk)
-    requirements = Requirement.objects.filter(is_active=True).order_by('order')
-    for requirement in requirements:
-        requirement.formats = Format.objects.filter(requirement__pk=requirement.pk, company__pk=request.user.company.pk)
-        for format in requirement.formats:
-            format.form = FormatForm(instance=format)
+    if request.POST:
+        formato = Format.objects.get(pk = pk)
+        #creo la historia    
+        history = HistoryFormats()
+        history.requirement = formato.requirement
+        history.company = formato.company
+        history.document = formato.document
+        history.date_time = timezone.now()
+        newform = Format( document = request.FILES['document'])
+        newform.requirement = formato.requirement
+        newform.company = formato.company
+        newform.save()
+        formato.delete()
+        return redirect(reverse('main:requirements_list', kwargs={'pk': newform.company.pk}))
+    else:
+        company = Company.objects.get(pk=pk)
+        requirements = Requirement.objects.filter(is_active=True).order_by('order')
+        for requirement in requirements:
+            requirement.formats = Format.objects.filter(requirement__pk=requirement.pk, company__pk=request.user.company.pk)
+            for format in requirement.formats:
+                format.form = FormatForm(instance=format)
     return render(request, "main/requirements/list.html", locals())
 
 
