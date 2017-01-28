@@ -1,0 +1,41 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block more_styles %}
+{% endblock %}
+{% block content %}
+
+<div id="pad-wrapper" class="users-list">
+    <div class="row header">
+        <h3>Calendarios</h3>
+    </div>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Nombre</th>
+            <!--<th><span class="line"></span>Formato</th>-->
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for calendar in calendars %}
+        <tr>
+            <td><b>{{calendar.name}}</b></td>
+            <!--<td></td>-->
+        </tr>
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}
+
+{% block more_scripts %}
+<script>
+$( function() {
+    active_menu('.calendar');
+});
+</script>
+{% endblock%}

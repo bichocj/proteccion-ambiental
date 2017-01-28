@@ -12,6 +12,11 @@ from fullcalendar.models import Calendar, Events
 from django.utils.translation import ugettext as _
 
 
+def calendar_list(request):
+    calendars = Calendar.objects.all()
+    return render(request, "fullcalendar/list.html", locals())
+
+
 def new_calendar(request):
     if request.POST:
         form = CalendarModelForm(request.POST)

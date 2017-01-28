@@ -1,83 +1,97 @@
-{% extends 'main/panel.html' %}
-
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block more_styles %}
+{% endblock %}
 {% block content %}
 
-<table class="table table-bordered">
-    <thead>
-    <tr class="success">
+<div id="pad-wrapper" class="users-list">
+    <div class="row header">
+        <h3>Requerimientos</h3>
+    </div>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Requerimiento</th>
+            <th><span class="line"></span>Formato</th>
+        </tr>
+        </thead>
+        <tbody>
 
-        <td><b>Requerimiento</b></td>
-        <td><b>Formato</b></td>
+        {% for requirement in requirements %}
+        <tr>
+            <td><b>{{requirement.name}}</b></td>
+            <td>
+                <ul class="list-group">
 
-    </tr>
-    </thead>
-    <tbody>
+                    {% for format in requirement.formats %}
+                    <li class="list-group-item">
+                        <a href="{% url 'main:format_list' format.pk %}">{{ format.document }}</a>
+                        <div align="right">
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#formatForm{{format.pk}}"
+                                    data-whatever="r4">Actualizar
+                            </button>
 
-    {% for requirement in requirements %}
-    <tr>
-        <td><b>{{requirement.name}}</b></td>
-        <td>
-            <ul class="list-group">
-
-                {% for format in requirement.formats %}
-                <li class="list-group-item">
-                    <a href="{% url 'main:format_list' format.pk %}">{{ format.document }}</a>
-                    <div align="right">
-                        <button type="button" class="btn btn-primary" data-toggle="modal"
-                                data-target="#formatForm{{format.pk}}"
-                                data-whatever="r4">Actualizar
-                        </button>
-
-                    </div>
-                    <div class="modal fade" id="formatForm{{format.pk}}" tabindex="-1" role="dialog"
-                         aria-labelledby="exampleModalLabel">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal"
-                                            aria-label="Close"><span
-                                            aria-hidden="true">&times;</span></button>
-                                </div>
-                                <div class="modal-footer">
-                                    <form action="{% url 'main:requirements_list' format.pk %}" method="post" enctype="multipart/form-data">{% csrf_token %}
-                                        {{ format.form.as_p }}
-                                        <input type="submit" class="btn btn-primary" value="Subir">
-                                    </form>
-                                    <hr>
-                                    <table class="table">
-                                        <thead>
+                        </div>
+                        <div class="modal fade" id="formatForm{{format.pk}}" tabindex="-1" role="dialog"
+                             aria-labelledby="exampleModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close"><span
+                                                aria-hidden="true">&times;</span></button>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form action="{% url 'main:requirements_list' format.pk %}" method="post"
+                                              enctype="multipart/form-data">{% csrf_token %}
+                                            {{ format.form.as_p }}
+                                            <input type="submit" class="btn btn-primary" value="Subir">
+                                        </form>
+                                        <hr>
+                                        <table class="table">
+                                            <thead>
                                             <tr>
                                                 <td align="left"><b>Documento</b></td>
 
                                                 <td align="left"><b>Fecha de modificación</b></td>
                                             </tr>
-                                        </thead>
+                                            </thead>
 
-                                        <tbody>
+                                            <tbody>
                                             {% for history in format.history %}
                                             <tr>
-                                                <td align ="left"><a>{{ history.document }}</a></td>
-                                                <td align="left">{{ history.date_time }}</td>                                                
-                                            </tr>       
+                                                <td align="left"><a>{{ history.document }}</a></td>
+                                                <td align="left">{{ history.date_time }}</td>
+                                            </tr>
                                             {% endfor %}
-                                        </tbody>        
-                                    </table>
+                                            </tbody>
+                                        </table>
 
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </li>
-                {% endfor %}
+                    </li>
+                    {% endfor %}
 
-            </ul>
-        </td>
-    </tr>
-    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        {% endfor %}
 
-    </tbody>
+        </tbody>
 
-</table>
+    </table>
 
+</div>
 
 {% endblock %}
+
+{% block more_scripts %}
+<script>
+$( function() {
+    active_menu('.requirement');
+});
+</script>
+{% endblock%}
