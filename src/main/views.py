@@ -47,13 +47,14 @@ def format_list(request, pk):
         formats = Format.objects.filter(requirement__pk = pk)
         formats_pdf = list()
         formats_xlsx = list()
-        for f in formats:
-            if f.document.name.endswith('.pdf'):
-                formats_pdf.add(f)
+        for format in formats:
+            if format.document.name.endswith('.pdf'):
+                formats_pdf.append(format)
             else:
-                formats_xlsx.add(f)
+                formats_xlsx.append(formats)
             format.form = FormatForm(instance=format)
             format.history = HistoryFormats.objects.filter(format = format)
+            print(format.document)
         return render(request, "main/requirements/format.html", locals())
 
 @login_required

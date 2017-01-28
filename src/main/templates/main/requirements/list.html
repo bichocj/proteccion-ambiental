@@ -19,13 +19,13 @@
 
         {% for requirement in requirements %}
         <tr>
-            <td><b>{{requirement.name}}</b></td>
+            <td><a href="{% url 'main:format_list' requirement.pk %}"><b>{{requirement.name}}</b></a></td>
             <td>
                 <ul class="list-group">
 
                     {% for format in requirement.formats %}
                     <li class="list-group-item">
-                        <a href="{% url 'main:format_list' format.pk %}">{{ format.document }}</a>
+                        <a href="#">{{ format.document }}</a>
                         <div align="right">
                             <button type="button" class="btn btn-primary" data-toggle="modal"
                                     data-target="#formatForm{{format.pk}}"
