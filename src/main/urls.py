@@ -7,10 +7,9 @@ urlpatterns = patterns('main.views',
                url(r'^reports/(?P<pk>\d+)/$', 'reports', name='reports'),
                url(r'^accidents/(?P<pk>\d+)/$', 'accidents', name='accidents'),
                url(r'^requerimientos/(?P<pk>\d+)/$', 'requirements_list', name='requirements_list'),
-               url(r'^formats/(?P<pk>\d+)/$', 'format_list', name='format_list'),
+               url(r'^requerimientos/formats/(?P<pk>\d+)/$', 'format_list', name='format_list'),
                url(r'^agreement/$', 'agreement', name = 'agreement'),
                url(r'^company/new/$', 'new_company', name = 'new_company'),
-
                url(r'^law/$', 'law', name='law'),
 
            )

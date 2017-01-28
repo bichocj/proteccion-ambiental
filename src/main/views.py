@@ -40,12 +40,15 @@ def format_list(request, pk):
             history.save()
             format.document = request.FILES['document']
             format.save()
+            title = format.requirement.name
             return redirect(reverse('main:format_list', kwargs={'pk': format.requirement.pk}))
         except:
             return redirect(reverse('main:format_list', kwargs={'pk': format.requirement.pk}))
 
     else:
-        formats = Format.objects.filter(requirement__pk = pk)
+        requirement = Requirement.objects.get(pk = pk)
+        title = requirement.name
+        formats = Format.objects.filter(requirement = requirement)
         formats_pdf = list()
         formats_xlsx = list()
         for format in formats:
