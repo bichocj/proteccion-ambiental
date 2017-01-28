@@ -1,0 +1,28 @@
+{% load main_extras %}
+
+{% load i18n %}
+{% load static %}
+
+{% if field|is_checkbox %}
+    <div class="clearfix"></div>
+    <div>
+        <div class="checkbox-option pull-right {% if field.value %}checked{% endif %}">
+            <div class="inner"></div>
+            {{ field }}
+        </div>
+        <div class="clearfix"></div>
+        {% if field.errors %}
+            {% for error in field.errors %}
+                <span class="help-block">{{ error }}</span>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% else %}
+    {{ field }}
+
+    {% if field.errors %}
+        {% for error in field.errors %}
+            <span class="help-block">{{ error }}</span>
+        {% endfor %}
+    {% endif %}
+{% endif %}

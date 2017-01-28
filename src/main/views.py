@@ -1,7 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 from .models import Company, Format, Requirement, HistoryFormats
-from .forms import CompanyForm, FormatForm
+from .forms import CompanyForm, FormatForm, AccidentForm
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 
@@ -93,6 +93,14 @@ def new_company(request):
 @login_required
 def accidents(request, pk):
     company = Company.objects.get(pk=pk)
+    if request.POST:
+        form=AccidentForm(request.POST)
+        if form.is_valid():
+            form.save()
+        else:
+            message='Review all information . . .'
+    else:
+        form=AccidentForm()
     return render(request, "main/accidents.html", locals())
 
 

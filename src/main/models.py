@@ -1,5 +1,9 @@
+from datetime import datetime
+
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.translation import ugettext as _
+
 
 
 class Product(models.Model):
@@ -31,10 +35,17 @@ class Meeting(models.Model):
 
 
 class Accident(models.Model):
-    code = models.CharField(max_length=50, null=False, blank=False)
+    HIGH_WORK = 'HIGH_WORK'
+    INTOXICATION = 'INTOXICATION'
+    TYPE_ACCIDENT_CHOICES = (
+        (HIGH_WORK,'HIGH_WORK'),
+        (INTOXICATION,'INTOXICATION')
+    )
     title = models.CharField(max_length=100, null=False, blank=False)
     content = models.TextField(null=True, blank=True)
-    #	type_accident = models.IntegerField("type", choises=TYPE, default = )
+    type_accident = models.CharField(_('type accident'), max_length=10, choices=TYPE_ACCIDENT_CHOICES, null=True,
+                                     default=HIGH_WORK)  # NOQA
+    date = models.DateField(_('date'),null=False, default=datetime.now())
     company = models.ForeignKey(Company, null=False, blank=False)
 
 
