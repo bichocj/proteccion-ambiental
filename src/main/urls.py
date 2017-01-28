@@ -9,7 +9,7 @@ urlpatterns = patterns('main.views',
                url(r'^requerimientos/(?P<pk>\d+)/$', 'requirements_list', name='requirements_list'),
                url(r'^agreement/$', 'agreement', name = 'agreement'),
                url(r'^company/new/$', 'new_company', name = 'new_company'),
-               url(r'^calendar/(?P<pk>\d+)/$', 'calendar', name='calendar'),
+
                url(r'^law/$', 'law', name='law'),
 
            )

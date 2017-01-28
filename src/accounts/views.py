@@ -1,19 +1,23 @@
 import sendgrid
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.db.models import Q
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.template import loader
 from django.template.loader import get_template
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import ugettext as _
-from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from sendgrid.helpers.mail import *
-    
+
 from accounts.forms import PasswordResetFormEdited
+from accounts.functions import get_member_group
 from proteccion_ambiental.settings import DEFAULT_EMAIL, SENDGRID_KEY, FROM_NAME
 from main.functions import send_email
 
@@ -77,3 +81,17 @@ def password_reset(request):
         form = PasswordResetFormEdited()
 
     return render(request, 'accounts/password_reset.html', locals())
+
+
+@csrf_exempt
+@login_required
+def get_members(request):
+    pattern = request.GET.get('pattern')
+
+    if pattern:
+        objects = get_member_group().user_set.values('pk', 'first_name', 'last_name').filter(
+            Q(first_name__icontains=pattern) | Q(last_name__icontains=pattern))
+    else:
+        objects = []
+    s_json = json.dumps(list(objects))
+    return HttpResponse(s_json, content_type='application/json')

@@ -1,0 +1,285 @@
+{% extends 'main/layout.html' %}
+
+{% load static %}
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% block more_styles %}
+<link rel="stylesheet" type="text/css"
+      href="{% static 'fullcalendar/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css' %}"/>
+<link href="{% static 'fullcalendar/plugins/fullcalendar/fullcalendar.min.css' %}" rel="stylesheet"/>
+<link href="{% static 'fullcalendar/fullcalendar/lib/cupertino/jquery-ui.min.css' %}" rel="stylesheet"/>
+{% endblock %}
+
+{% block page_toolbar %}
+<div class="btn-group pull-right">
+    <a href="{% url 'fullcalendar:settings_calendar' slug %}" class="btn btn-fit-height blue-ebonyclay">
+        <i class="glyphicon glyphicon-cog"></i>
+        {% trans 'Settings' %}
+    </a>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet box green-meadow calendar">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-gift"></i>{% trans "calendar"|capfirst %}
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <div id="calendar" class="has-toolbar">
+                        </div>
+                    </div>
+                </div>
+                <!-- END CALENDAR PORTLET-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="event" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">Event</h4>
+            </div>
+            <div class="modal-body">
+                <form method="post" action="{% url 'fullcalendar:save_event' slug %}" id="event-form">
+                    <div class="form-group form-md-line-input has-success form-md-floating-label">
+                        <div class="input-icon">
+                            {% csrf_token %}
+                            <input type="hidden" id="id_event" name="id" value="">
+                            {{ form_event.title }}
+                            <label for="form_control_1">{% trans 'Title' %}</label>
+                            <span class="help-block"></span>
+                            <i class="fa fa-bell-o"></i>
+                        </div>
+                    </div>
+                    <div class="form-group form-md-line-input has-success form-md-floating-label">
+                        <div class="input-group">
+                            <div class="input-group-control">
+                                {{ form_event.event_start|add_class:"datetime" }}
+                                <label for="form_control_1">{% trans 'Start' %}</label>
+                            </div>
+                        <span class="input-group-btn btn-right">
+                            <span class="glyphicon glyphicon-minus"></span>
+                        </span>
+
+                            <div class="input-group-control">
+                                {{ form_event.event_end|add_class:"datetime" }}
+                                <label for="form_control_1">{% trans 'End' %}</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group form-md-line-input has-success form-md-floating-label">
+                        <div class="input-icon">
+                            <input class="form-control" id="id_member" maxlength="100" type="text">
+                            <input name="member" type="hidden">
+                            <label for="form_control_1">{% trans 'Member' %}</label>
+                            <span class="help-block"></span>
+                            <i class="fa fa-bell-o"></i>
+                        </div>
+                    </div>
+                    <div class="form-group form-md-line-input has-success form-md-floating-label">
+                        <div class="input-icon">
+                            {{ form_event.description }}
+                            <label for="form_control_1">{% trans 'Description' %}</label>
+                            <span class="help-block"></span>
+                            <i class="fa fa-bell-o"></i>
+                        </div>
+                    </div>
+                    <div class="form-group form-md-line-input has-success form-md-floating-label">
+                        <div class="input-icon">
+                            {{ form_event.observation }}
+                            <label for="form_control_1">{% trans 'Observation' %}</label>
+                            <span class="help-block"></span>
+                            <i class="fa fa-bell-o"></i>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn default" data-dismiss="modal">{% trans "close"|capfirst %}</button>
+                <button type="submit" class="btn blue"
+                        form="event-form">{% trans "save changes"|capfirst %}
+                </button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+{% endblock %}
+
+{% block more_scripts %}
+<script src="{% static 'fullcalendar/plugins/moment.min.js' %}"></script>
+<script type="text/javascript"
+        src="{% static 'fullcalendar/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js' %}"></script>
+<script src="{% static 'fullcalendar/plugins/fullcalendar/fullcalendar.js' %}"></script>
+<script>
+        $(document).ready(function () {
+            var format = 'DD/MM/YYYY hh:mm a';
+            $('#calendar').fullCalendar({
+                header: {
+                    left: '',
+                    center: 'title',
+                    right: 'prev,next today,month,agendaWeek,agendaDay'
+                },
+                {% if calendar.max_time and calendar.min_time %}
+                    maxTime: "{{ calendar.max_time }}" ,
+                    minTime: "{{ calendar.min_time }}" ,
+                {% endif %}
+                timezone: false,
+                editable: true,
+                selectable: true,
+                events: '{% url 'fullcalendar:events_json' calendar_id %}',
+                select: function (startDate, endDate) {
+                    $('#event-form').trigger("reset");
+                    $('#event-form .has-warning').removeClass('has-warning');
+                    $('#id_event').val("");
+                    $('#event').modal('show');
+                    $('#id_event_start').val(moment(startDate).format(format)).addClass('edited');
+                    $('#id_event_end').val(moment(endDate).format(format)).addClass('edited');
+                },
+                eventClick: function (calEvent, jsEvent, view) {
+                    $('#event-form').trigger("reset");
+                    $('#id_event').val(calEvent.id);
+                    $.ajax({
+                        url: '{% url 'fullcalendar:get_event' %}',
+                        data: {
+                            id: calEvent.id,
+                            csrfmiddlewaretoken: "{{ csrf_token }}"
+                        },
+                        method: 'POST',
+                        dataType: 'json',
+                        success: function (response) {
+                            if (response.success) {
+                                $.each(response.data, function (index, value) {
+                                    if (index == 'event_start' || index == 'event_end') {
+                                        $('#id_' + index).val(
+                                                moment(value).format(format)
+                                        ).addClass('edited');
+                                    } else if (index == 'member') {
+                                        $('#event-form [name=member]').val(value);
+                                        $('#id_member').val(response.data.member_fullname).addClass('edited');
+                                    } else {
+                                        $('#id_' + index).val(value).addClass('edited');
+                                    }
+                                });
+                                $('#event').modal('show');
+
+                            } else {
+                                console.log(response.message);
+                            }
+                        }
+
+                    });
+                },
+                eventDrop: function (event, delta, revertFunc, jsEvent, ui, view) {
+                    sendEvent(event.id, event.title, event.start, event.end, event.allDay);
+                },
+                eventResize: function (event, delta, reverFunc, jsEvent, ui, view) {
+                    sendEvent(event.id, event.title, event.start, event.end, event.allDay);
+                }
+
+            });
+
+            var sendEvent = function (id, title, start, end, allDay) {
+                $.ajax({
+                    url: '{% url 'fullcalendar:update_event' %}',
+                    method: 'post',
+                    data: {
+                        csrfmiddlewaretoken: "{{ csrf_token }}",
+                        id: id,
+                        title: title,
+                        start: moment(start).format(format),
+                        end: moment(end).format(format),
+                        allDay: allDay
+                    },
+                    dataType: 'json',
+                    success: function (response) {
+                        console.log(response);
+                    }
+                });
+            };
+
+            $('#event-form').on('submit', function (e) {
+                e.preventDefault();
+                var url = $(this).attr('action');
+                var method = $(this).attr('method');
+                var data = $(this).serializeArray();
+
+                $.ajax({
+                    url: url,
+                    method: method,
+                    data: data,
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success) {
+                            var w = $('#calendar').fullCalendar('clientEvents', response.id);
+                            if (w.length == 0) {
+                                $('#calendar').fullCalendar('renderEvent', {
+                                    id: response.id,
+                                    title: response.title,
+                                    start: new Date(response.start),
+                                    end: new Date(response.end),
+                                    allDay: response.allDay
+                                }, 'stick');
+                            } else {
+                                w[0].title = response.title;
+                                w[0].start = new Date(response.start);
+                                w[0].end = new Date(response.end);
+                                w[0].allDay = response.allDay;
+                                $('#calendar').fullCalendar('updateEvent', w[0]);
+                            }
+
+                            $('#event-form').trigger("reset");
+                            $('#event').modal('hide');
+                        } else {
+                            $.each(response.errors, function (index, value) {
+                                $('#id_' + value).addClass('edited').parents('.form-group').removeClass('has-success').addClass('has-warning');
+                            });
+                        }
+                    }
+                });
+            });
+            $('.datetime').datetimepicker({
+                autoclose: true,
+                format: 'dd/mm/yyyy HH:ii p',
+                isRTL: true,
+                showMeridian: true,
+                pickerPosition: "bottom-right",
+                todayBtn: true
+            });
+
+            $("#id_member").autocomplete({
+                source: function (request, response) {
+                    $.get("{% url 'accounts:get_members' %}", {
+                        pattern: request.term
+                    }, function (data) {
+                        var result = [];
+                        for (var i = 0; i < data.length; i++) {
+                            result.push({
+                                label: data[i].first_name + ' ' + data[i].last_name,
+                                value: data[i].first_name + ' ' + data[i].last_name,
+                                user: data[i].pk
+                            })
+                        }
+                        response(result);
+                    });
+                },
+                select: function (a, b) {
+                    $('#event-form [name=member]').val(b.item.user);
+                },
+                minLength: 3,
+                appendTo: "#event-form"
+            });
+        });
+
+</script>
+{% endblock %}

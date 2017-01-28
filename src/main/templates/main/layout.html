@@ -3,20 +3,18 @@
 <html>
 <head>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <link rel="stylesheet" href="http://getbootstrap.com/examples/dashboard/dashboard.css">
-
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <meta charset="utf-8">
+    <title>Protección Ambiental</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="http://getbootstrap.com/examples/dashboard/dashboard.css">
+
+    <meta charset="utf-8">
     <style type="text/css">
         .circulo1 {
              width: 200px;
@@ -35,31 +33,18 @@
              border-radius: 50%;
              background: #378AAE;
                 }
-            
+
          a:link {
                 color: #000000;
                 text-decoration: none;
             }
-    
+
+
+
+
+
+
     </style>
-    
-
-    <title>Protección Ambiental</title>
-
-    <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
-
-    <link href="dashboard.css" rel="stylesheet">
-    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
-  
-
-  </head>
-
-  <body>
-
-
-
     {% block more_styles %}
     {% endblock %}
 
@@ -67,56 +52,90 @@
 
 
 <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="{% url 'main:home' %}">Inicio</a>
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'main:home' %}">Inicio</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-right">
+            <ul class="nav navbar-nav navbar-right">
                 {% if request.user.is_authenticated %}
-                    <li >
-                        <a href="{% url 'accounts:logout' %}">{% trans 'logout' %}</a>
-                    </li>
+                <li>
+                    <a href="{% url 'accounts:logout' %}">{% trans 'logout' %}</a>
+                </li>
                 {% else %}
-                    <li>
-                        <a href="{% url 'accounts:login'%}">{% trans 'login'%}</a>
-                    </li>
+                <li>
+                    <a href="{% url 'accounts:login'%}">{% trans 'login'%}</a>
+                </li>
                 {% endif %}
-          </ul>
-          <form class="navbar-form navbar-right">
-            <input type="text" class="form-control" placeholder="Search...">
-          </form>
+            </ul>
+            <form class="navbar-form navbar-right">
+                <input type="text" class="form-control" placeholder="Search...">
+            </form>
         </div>
-      </div>
-    </nav>
+    </div>
+</nav>
+
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li class="{% if 'requeriment' in request.path %}active{% endif %}">
+                    <a href="{% url 'main:requirements_list' user.company.pk %}">Requisitos</a>
+                </li>
+                <li class="{% if 'calendar' in request.path %}active{% endif %}">
+                    <a href="">Calendario</a>
+                </li>
+                <li class="{% if 'accidents' in request.path %}active{% endif %}">
+                    <a href="{% url 'main:accidents' user.company.pk %}">Accidentes</a>
+                </li>
+                <li class="deactive">
+                    <a href="#">Acuerdo SST</a>
+                </li>
+                <li class="{% if 'reports' in request.path %}active{% endif %}">
+                    <a href="{% url 'main:reports' user.company.pk %}">Reportes</a>
+                </li>
+            </ul>
+        </div>
 
 
-           {% block body %}
+        <div class="col-sm-9 col-sm-offset-3 c
+        ol-md-10 col-md-offset-2 main">
+            <h1 class="page-header">{{ company.name }}</h1>
+            {% block content %}
 
             {% endblock %}
+        </div>
+    </div>
+</div>
 
-
-        <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-        <script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script>
               $( function() {
                 $( ".datepicker" ).datepicker({dateFormat: "yy-mm-dd"});
               } );
 
-        </script>
 
-        {% block more_scripts %}
 
-        {% endblock %}
+
+
+
+</script>
+
+{% block more_scripts %}
+
+{% endblock %}
 </body>
 
 </html>

@@ -1,0 +1,105 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-10-03 16:43-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\fullcalendar\breadcrumb.py:7 .\fullcalendar\forms.py:22
+msgid "Calendar"
+msgstr "crear calendario"
+
+#: .\fullcalendar\breadcrumb.py:19
+msgid "New Calendar"
+msgstr "crear calendario"
+
+#: .\fullcalendar\breadcrumb.py:25
+#: .\fullcalendar\templates\fullcalendar\calendar.html:16
+msgid "Settings"
+msgstr "Configuraciones"
+
+#: .\fullcalendar\forms.py:40
+msgid "Event"
+msgstr "Evento"
+
+#: .\fullcalendar\templates\fullcalendar\calendar.html:27
+msgid "calendar"
+msgstr "crear calendario"
+
+#: .\fullcalendar\templates\fullcalendar\calendar.html:56
+msgid "Title"
+msgstr "Título"
+
+#: .\fullcalendar\templates\fullcalendar\calendar.html:65
+msgid "Start"
+msgstr "Empieza"
+
+#: .\fullcalendar\templates\fullcalendar\calendar.html:72
+msgid "End"
+msgstr "Termina"
+
+#: .\fullcalendar\templates\fullcalendar\calendar.html:79
+msgid "Member"
+msgstr "Socio"
+
+#: .\fullcalendar\templates\fullcalendar\calendar.html:87
+msgid "Description"
+msgstr "Descripción"
+
+#: .\fullcalendar\templates\fullcalendar\calendar.html:95
+msgid "Observation"
+msgstr "Observación"
+
+#: .\fullcalendar\templates\fullcalendar\calendar.html:103
+msgid "close"
+msgstr "cerrar"
+
+#: .\fullcalendar\templates\fullcalendar\calendar.html:104
+msgid "save changes"
+msgstr "guardar cambios"
+
+#: .\fullcalendar\templates\fullcalendar\new_calendar.html:11
+msgid "new calendar"
+msgstr "crear calendario"
+
+#: .\fullcalendar\templates\fullcalendar\new_calendar.html:21
+msgid "title"
+msgstr "Título"
+
+#: .\fullcalendar\templates\fullcalendar\new_calendar.html:28
+msgid "assigned to"
+msgstr "asignado a"
+
+#: .\fullcalendar\templates\fullcalendar\new_calendar.html:35
+msgid "shared to"
+msgstr "compartir con"
+
+#: .\fullcalendar\templates\fullcalendar\new_calendar.html:41
+msgid "cancel"
+msgstr "cancelar"
+
+#: .\fullcalendar\templates\fullcalendar\new_calendar.html:42
+msgid "save"
+msgstr "guardar"
+
+#: .\fullcalendar\views.py:87
+msgid "Save Success"
+msgstr "Guardado"
+
+#: .\fullcalendar\views.py:99 .\fullcalendar\views.py:124
+#: .\fullcalendar\views.py:151
+msgid "Invalid request"
+msgstr "Petición inválida"

@@ -1,0 +1,49 @@
+{% extends 'main/layout.html' %}
+
+{% load i18n %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light">
+            <div class="portlet-title">
+                <div class="caption">
+                    {% trans 'new calendar'|capfirst %}
+                </div>
+            </div>
+            <div class="portlet-body">
+                <form role="form" method="post" action=".">
+                <div class="form-body">
+                    <div class="form-group form-md-line-input has-info form-md-floating-label">
+                        <div class="input-group-control">
+                            {% csrf_token %}
+                            {{ form.title }}
+                            <label for="title">{% trans 'title'|capfirst %}</label>
+                        </div>
+                        {{ form.title.error_messages }}
+                    </div>
+                    <div class="form-group form-md-line-input has-info form-md-floating-label">
+                        <div class="input-group-control">
+                            {{ form.assigned }}
+                            <label for="worker_id">{% trans "assigned to"|capfirst %}</label>
+                        </div>
+                        {{ form.assigned.error_messages }}
+                    </div>
+                    <div class="form-group form-md-line-input has-info form-md-floating-label">
+                        <div class="input-group-control">
+                            {{ form.users }}
+                            <label for="worker_id">{% trans "shared to"|capfirst %}</label>
+                        </div>
+                        {{ form.users.error_messages }}
+                    </div>
+                </div>
+                <div class="form-fit">
+                    <button class="btn btn-default">{% trans "cancel" %}</button>
+                    <button class="btn btn-success" type="submit">{% trans "save" %}</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

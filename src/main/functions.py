@@ -25,6 +25,15 @@ def add_form_control_class(fields):
     for f in fields:
         fields[f].widget.attrs.update({'class': 'form-control'})
 
+# def add_class(form, fields):
+#     for field in fields:
+#         form.fields[field].widget.attrs.update(
+#             {
+#                 "class": 'form-control',
+#                 # 'placeholder' : form.fields[field].label
+#             }
+#         )
+
 
 def add_form_control_datepicker_class(form, fields):
     for f in fields:
@@ -44,3 +53,13 @@ def add_form_onlyread(form, fields):
 def add_form_required(fields):
     for f in fields:
         fields[f].widget.attrs.update({'required': 'true'})
+
+
+def add_class_time_picker(form, fields):
+    for field in fields:
+        form.fields[field].widget.attrs.update(
+            {
+                "class": 'form-control timepicker timepicker-default edited',
+                'placeholder': '00:00:00'
+            }
+        )

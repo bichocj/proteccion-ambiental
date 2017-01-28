@@ -9,25 +9,25 @@ import django.contrib.auth.models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auth', '0006_require_contenttypes_0002'),
+        ('auth', '__first__'),
     ]
 
     operations = [
         migrations.CreateModel(
             name='Person',
             fields=[
-                ('user_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to=settings.AUTH_USER_MODEL)),
+                ('user_ptr', models.OneToOneField(to=settings.AUTH_USER_MODEL, serialize=False, primary_key=True, parent_link=True, auto_created=True)),
                 ('dni', models.IntegerField(null=True, blank=True)),
-                ('sex', models.IntegerField(default=0, verbose_name='sex', choices=[(0, 'man'), (1, 'woman')])),
+                ('sex', models.IntegerField(default=0, choices=[(0, 'man'), (1, 'woman')], verbose_name='sex')),
             ],
             options={
+                'verbose_name_plural': 'users',
                 'abstract': False,
                 'verbose_name': 'user',
-                'verbose_name_plural': 'users',
             },
             bases=('auth.user',),
             managers=[
-                (b'objects', django.contrib.auth.models.UserManager()),
+                ('objects', django.contrib.auth.models.UserManager()),
             ],
         ),
     ]

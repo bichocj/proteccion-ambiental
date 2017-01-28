@@ -1,0 +1,16 @@
+{% extends 'main/layout.html' %}
+
+{% load i18n %}
+{% load main_extras %}
+
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            {% include 'hock/form.html' with form=form_calendar width=12 %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts_plugins %}
+{% endblock %}

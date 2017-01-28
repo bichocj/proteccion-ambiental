@@ -31,7 +31,7 @@ def law(request):
 @login_required
 def requirements_list(request, pk):
     if request.POST:
-        format = Format.objects.get(pk = pk)
+        format = Format.objects.get(pk=pk)
         history = HistoryFormats()
         history.format = format
         history.document = format.document
@@ -44,10 +44,11 @@ def requirements_list(request, pk):
         company = Company.objects.get(pk=pk)
         requirements = Requirement.objects.filter(is_active=True).order_by('order')
         for requirement in requirements:
-            requirement.formats = Format.objects.filter(requirement__pk=requirement.pk, company__pk=request.user.company.pk)
+            requirement.formats = Format.objects.filter(requirement__pk=requirement.pk,
+                                                        company__pk=request.user.company.pk)
             for format in requirement.formats:
                 format.form = FormatForm(instance=format)
-                format.history = HistoryFormats.objects.filter(format = format)
+                format.history = HistoryFormats.objects.filter(format=format)
     return render(request, "main/requirements/list.html", locals())
 
 

@@ -36,8 +36,10 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'widget_tweaks',
     'accounts',
-    'files'
+    'files',
+    'fullcalendar',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -106,10 +108,10 @@ MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 STATIC_URL = '/static/'
 
-
-
 SENDGRID_KEY = ''
 DEFAULT_EMAIL = 'cecilurastastas@gmail.com'
 FROM_NAME = 'cecilurastastas@gmail.com'
 
 LOGIN_REDIRECT_URL = '/'
+
+MEMBER_GROUP = 'equipo proteccion ambiental'
