@@ -20,7 +20,7 @@
 <tbody>
 	{% for format in formats_pdf %}
 	<tr>
-		<td><a href="#">{{ format.document }}</a></td>
+		<td><a href="#">{{ format.file }}</a></td>
 		<td> 
             <div>            
                 <button type="button" class="btn btn-primary" data-toggle="modal"
@@ -56,7 +56,7 @@
                                             <tbody>
                                             {% for history in format.history %}
                                             <tr>
-                                                <td align="left"><a>{{ history.document }}</a></td>
+                                                <td align="left"><a>{{ history.file }}</a></td>
                                                 <td align="left">{{ history.date_time }}</td>
                                             </tr>
                                             {% endfor %}
@@ -90,7 +90,7 @@
 
 	{% for format in formats_xlsx %}
 	<tr>
-		<td><a href="#">{{ format.document.name }}</a></td>
+		<td><a href="#">{{ format.file }}</a></td>
 		<td>
             <div>             
                 <button type="button" class="btn btn-primary" data-toggle="modal"
@@ -127,7 +127,7 @@
                                             <tbody>
                                             {% for history in format.history %}
                                             <tr>
-                                                <td align="left"><a>{{ history.document }}</a></td>
+                                                <td align="left"><a>{{ history.file }}</a></td>
                                                 <td align="left">{{ history.date_time }}</td>
                                             </tr>
                                             {% endfor %}

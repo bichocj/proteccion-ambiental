@@ -9,7 +9,7 @@ from .models import Company, Format, Accident
 class FormatForm(ModelForm):
     class Meta:
         model = Format
-        fields = ('document',)
+        fields = ('file',)
 
 
 class CompanyForm(ModelForm):

@@ -35,10 +35,10 @@ def format_list(request, pk):
             format = Format.objects.get(pk = pk)
             history = HistoryFormats()
             history.format = format
-            history.document = format.document
+            history.file = format.file
             history.date_time = timezone.now()
             history.save()
-            format.document = request.FILES['document']
+            format.file = request.FILES['file']
             format.save()
             title = format.requirement.name
             return redirect(reverse('main:format_list', kwargs={'pk': format.requirement.pk}))
@@ -52,7 +52,7 @@ def format_list(request, pk):
         formats_pdf = list()
         formats_xlsx = list()
         for format in formats:
-            if format.document.name.endswith('.pdf'):
+            if format.file.name.endswith('.pdf'):
                 formats_pdf.append(format)
             else:
                 formats_xlsx.append(format)
