@@ -40,9 +40,10 @@ def format_list(request, pk):
             history.save()
             format.document = request.FILES['document']
             format.save()
-            return render(request, "main/requirements/format.html", locals())
+            return redirect(reverse('main:format_list', kwargs={'pk': format.requirement.pk}))
         except:
-            return render(request, "main/requirements/format.html", locals())
+            return redirect(reverse('main:format_list', kwargs={'pk': format.requirement.pk}))
+
     else:
         formats = Format.objects.filter(requirement__pk = pk)
         formats_pdf = list()
@@ -51,35 +52,15 @@ def format_list(request, pk):
             if format.document.name.endswith('.pdf'):
                 formats_pdf.append(format)
             else:
-                formats_xlsx.append(formats)
+                formats_xlsx.append(format)
             format.form = FormatForm(instance=format)
             format.history = HistoryFormats.objects.filter(format = format)
-            print(format.document)
         return render(request, "main/requirements/format.html", locals())
 
 @login_required
 def requirements_list(request, pk):
-    if request.POST:
-        try:
-            format = Format.objects.get(pk = pk)
-            history = HistoryFormats()
-            history.format = format
-            history.document = format.document
-            history.date_time = timezone.now()
-            history.save()
-            format.document = request.FILES['document']
-            format.save()
-            return redirect(reverse('main:requirements_list', kwargs={'pk': format.company.pk}))
-        except KeyError:
-            return redirect(reverse('main:requirements_list', kwargs={'pk': format.company.pk}))
-    else:
-        company = Company.objects.get(pk=pk)
-        requirements = Requirement.objects.filter(is_active=True).order_by('order')
-        for requirement in requirements:
-            requirement.formats = Format.objects.filter(requirement__pk=requirement.pk, company__pk=request.user.company.pk)
-            for format in requirement.formats:
-                format.form = FormatForm(instance=format)
-                format.history = HistoryFormats.objects.filter(format = format)
+    company = Company.objects.get(pk=pk)
+    requirements = Requirement.objects.filter(is_active=True).order_by('order')
     return render(request, "main/requirements/list.html", locals())
 
 
