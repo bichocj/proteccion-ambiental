@@ -17,7 +17,8 @@ def calendar_list(request):
     return render(request, "fullcalendar/list.html", locals())
 
 
-def new_calendar(request):
+def calendar_new(request):
+    title = _('new calendar')
     if request.POST:
         form = CalendarModelForm(request.POST)
         if form.is_valid():
@@ -29,8 +30,7 @@ def new_calendar(request):
     else:
         form = CalendarModelForm()
 
-    # breadcrumb = generate_breadcrumb_relations(links, 'new_calendar')
-    return render(request, "fullcalendar/new_calendar.html", locals())
+    return render(request, "main/layout_form.html", locals())
 
 
 def view_calendar(request, slug, calendar_id):
@@ -125,7 +125,7 @@ def get_event(request):
             'description': event.description,
             'observation': event.observation,
             'member': event.member.id,
-            'member_fullname': event.member.person.name + ' ' + event.member.person.surname
+            'member_fullname': event.member.first_name + ' ' + event.member.last_name
         }
     else:
         response['success'] = False

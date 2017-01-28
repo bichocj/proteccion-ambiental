@@ -7,11 +7,6 @@ from django.conf import settings
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('auth', '0010_auto_20170117_2251'),
-    ]
-
     operations = [
         migrations.CreateModel(
             name='Accessibility',

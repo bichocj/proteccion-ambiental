@@ -8,9 +8,6 @@ from django.conf import settings
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('auth', '0010_auto_20170117_2251'),
-    ]
 
     operations = [
         migrations.CreateModel(
