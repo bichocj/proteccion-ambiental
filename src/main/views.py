@@ -30,15 +30,31 @@ def law(request):
 
 @login_required
 def format_list(request, pk):
-    formats = Format.objects.filter(requirement__pk = pk)
-    formats_pdf = list()
-    formats_xlsx = list()
-    for f in formats:
-        if f.document.name.endswith('.pdf'):
-            formats_pdf.add(f)
-        else:
-            formats_xlsx.add(f) 
-
+    if request.POST:
+        try:
+            format = Format.objects.get(pk = pk)
+            history = HistoryFormats()
+            history.format = format
+            history.document = format.document
+            history.date_time = timezone.now()
+            history.save()
+            format.document = request.FILES['document']
+            format.save()
+            return render(request, "main/requirements/format.html", locals())
+        except:
+            return render(request, "main/requirements/format.html", locals())
+    else:
+        formats = Format.objects.filter(requirement__pk = pk)
+        formats_pdf = list()
+        formats_xlsx = list()
+        for f in formats:
+            if f.document.name.endswith('.pdf'):
+                formats_pdf.add(f)
+            else:
+                formats_xlsx.add(f) 
+            format.form = FormatForm(instance=format)
+            format.history = HistoryFormats.objects.filter(format = format)
+        return render(request, "main/requirements/format.html", locals())
 
 @login_required
 def requirements_list(request, pk):
