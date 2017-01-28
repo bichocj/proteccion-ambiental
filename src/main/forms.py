@@ -2,7 +2,7 @@ from django import forms
 from django.forms import ModelForm
 
 from .functions import add_form_control_class, add_form_text
-from .models import Company, Format
+from .models import Company, Format, Accident
 
 
 class FormatForm(ModelForm):
@@ -20,3 +20,8 @@ class CompanyForm(ModelForm):
         super(CompanyForm, self).__init__(*args, **kwargs)
         add_form_text(self, ('ruc',))
         add_form_control_class(self.fields)
+
+class AccidentForm(ModelForm):
+    class Meta:
+        model = Accident
+        fields = ('title','content','type_accident','date')
