@@ -29,6 +29,18 @@ def law(request):
 
 
 @login_required
+def format_list(request, pk):
+    formats = Format.objects.filter(requirement__pk = pk)
+    formats_pdf = list()
+    formats_xlsx = list()
+    for f in formats:
+        if f.document.name.endswith('.pdf'):
+            formats_pdf.add(f)
+        else:
+            formats_xlsx.add(f) 
+
+
+@login_required
 def requirements_list(request, pk):
     if request.POST:
         try: 
@@ -92,11 +104,3 @@ def agreement(request):
 def reports(request, pk):
     company = Company.objects.get(pk=pk)
     return render(request, "main/reports.html", locals())
-
-# @login_required
-# def upload_file(request, pk):
-#    newdoc = Format(document = request.FILES['document'])
-#    newdoc.save(form)
-#    return redirect("home")
-#    form = UploadForm()
-#        return render(request, 'index.html', locals())
