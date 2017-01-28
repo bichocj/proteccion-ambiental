@@ -31,7 +31,7 @@
                 <form action="." method="post">
                     {% csrf_token %}
                     {% for field in form %}
-                    {% include 'main/hook/field_with_label.html' with field=field %}
+                    {% include 'main/hooks/field_with_label.html' with field=field %}
                     {% endfor %}
                     <input type="submit" value="{% trans 'login'|capfirst %}">
                     <a href="{% url 'accounts:password_reset' %}">{% trans 'Reset password' %}</a>

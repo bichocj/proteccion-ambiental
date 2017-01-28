@@ -1,3 +1,4 @@
+import datetime
 from django import forms
 from django.forms import ModelForm
 
@@ -21,7 +22,16 @@ class CompanyForm(ModelForm):
         add_form_text(self, ('ruc',))
         add_form_control_class(self.fields)
 
-class AccidentForm(ModelForm):
+
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
+
+class AccidentForm(forms.ModelForm):
     class Meta:
         model = Accident
-        fields = ('title','content','type_accident','date')
+        fields = ('title', 'content', 'type_accident', 'date')
+        widgets = {
+            'date': DateInput(),
+        }
+

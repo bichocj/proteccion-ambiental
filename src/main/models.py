@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
@@ -41,9 +43,9 @@ class Accident(models.Model):
     )
     title = models.CharField(max_length=100, null=False, blank=False)
     content = models.TextField(null=True, blank=True)
-    type_accident = models.CharField(_('type accident'), max_length=2, choices=TYPE_ACCIDENT_CHOICES, null=True,
+    type_accident = models.CharField(_('type accident'), max_length=10, choices=TYPE_ACCIDENT_CHOICES, null=True,
                                      default=HIGH_WORK)  # NOQA
-    date = models.DateField(_('date'),null=False)
+    date = models.DateField(_('date'),null=False, default=datetime.now())
     company = models.ForeignKey(Company, null=False, blank=False)
 
 

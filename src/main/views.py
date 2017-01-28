@@ -110,7 +110,11 @@ def new_company(request):
 def accidents(request, pk):
     company = Company.objects.get(pk=pk)
     if request.POST:
-        pass
+        form=AccidentForm(request.POST)
+        if form.is_valid():
+            form.save()
+        else:
+            message='Review all information . . .'
     else:
         form=AccidentForm()
     return render(request, "main/accidents.html", locals())
