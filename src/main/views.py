@@ -29,34 +29,68 @@ def law(request):
 
 
 @login_required
+def format_list(request, pk):
+    if request.POST:
+        try:
+            format = Format.objects.get(pk = pk)
+            history = HistoryFormats()
+            history.format = format
+            history.document = format.document
+            history.date_time = timezone.now()
+            history.save()
+            format.document = request.FILES['document']
+            format.save()
+            return render(request, "main/requirements/format.html", locals())
+        except:
+            return render(request, "main/requirements/format.html", locals())
+    else:
+        formats = Format.objects.filter(requirement__pk = pk)
+        formats_pdf = list()
+        formats_xlsx = list()
+        for f in formats:
+            if f.document.name.endswith('.pdf'):
+                formats_pdf.add(f)
+            else:
+                formats_xlsx.add(f)
+            format.form = FormatForm(instance=format)
+            format.history = HistoryFormats.objects.filter(format = format)
+        return render(request, "main/requirements/format.html", locals())
+
+@login_required
 def requirements_list(request, pk):
     if request.POST:
-        format = Format.objects.get(pk=pk)
-        history = HistoryFormats()
-        history.format = format
-        history.document = format.document
-        history.date_time = timezone.now()
-        history.save()
-        format.document = request.FILES['document']
-        format.save()
-        return redirect(reverse('main:requirements_list', kwargs={'pk': format.company.pk}))
+        try:
+            format = Format.objects.get(pk = pk)
+            history = HistoryFormats()
+            history.format = format
+            history.document = format.document
+            history.date_time = timezone.now()
+            history.save()
+            format.document = request.FILES['document']
+            format.save()
+            return redirect(reverse('main:requirements_list', kwargs={'pk': format.company.pk}))
+        except KeyError:
+            return redirect(reverse('main:requirements_list', kwargs={'pk': format.company.pk}))
     else:
         company = Company.objects.get(pk=pk)
         requirements = Requirement.objects.filter(is_active=True).order_by('order')
         for requirement in requirements:
-            requirement.formats = Format.objects.filter(requirement__pk=requirement.pk,
-                                                        company__pk=request.user.company.pk)
+            requirement.formats = Format.objects.filter(requirement__pk=requirement.pk, company__pk=request.user.company.pk)
             for format in requirement.formats:
                 format.form = FormatForm(instance=format)
-                format.history = HistoryFormats.objects.filter(format=format)
+                format.history = HistoryFormats.objects.filter(format = format)
     return render(request, "main/requirements/list.html", locals())
 
 
 @login_required
-def calendar(request, pk):
+def calendar_service(request, pk):
     company = Company.objects.get(pk=pk)
-    return render(request, "main/calendar.html", locals())
+    return render(request, "main/calendars/service.html", locals())
 
+@login_required
+def calendar_training(request, pk):
+    company = Company.objects.get(pk=pk)
+    return render(request, "main/calendars/trainings.html", locals())
 
 @login_required
 def new_company(request):
@@ -86,11 +120,3 @@ def agreement(request):
 def reports(request, pk):
     company = Company.objects.get(pk=pk)
     return render(request, "main/reports.html", locals())
-
-# @login_required
-# def upload_file(request, pk):
-#    newdoc = Format(document = request.FILES['document'])
-#    newdoc.save(form)
-#    return redirect("home")
-#    form = UploadForm()
-#        return render(request, 'index.html', locals())
