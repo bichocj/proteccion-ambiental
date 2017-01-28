@@ -31,7 +31,6 @@ class Meeting(models.Model):
 
 
 class Accident(models.Model):
-    code = models.CharField(max_length=50, null=False, blank=False)
     title = models.CharField(max_length=100, null=False, blank=False)
     content = models.TextField(null=True, blank=True)
     #	type_accident = models.IntegerField("type", choises=TYPE, default = )
@@ -73,7 +72,7 @@ class Requirement(models.Model):
 
 class Format(models.Model):
     requirement = models.ForeignKey(Requirement)
-    document = models.FileField(upload_to="formatos/%Y/%m/%d", null=False, blank=False)
+    file = models.FileField(upload_to="formatos/%Y/%m/%d", null=False, blank=False)
     company = models.ForeignKey(Company, null=False, blank=False)
 
 
@@ -87,7 +86,7 @@ class Calendar(models.Model):
 class HistoryFormats(models.Model):
 #    requirement = models.ForeignKey(Requirement, null = True, blank = True)
     format = models.ForeignKey(Format, null = True, blank = True)
-    document = models.FileField(upload_to="history/%Y/%m/%d", null=True, blank=True)
+    file = models.FileField(upload_to="history/%Y/%m/%d", null=True, blank=True)
 #    company = models.ForeignKey(Company, null=True,
 #                                blank=True)  # Clase Compania, el formato es completado de una compania
     date_time = models.DateTimeField()  # La fecha en el que se hizo la modificacion del formato
