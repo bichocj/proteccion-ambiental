@@ -11,8 +11,19 @@
                     <a href="{% url 'main:requirements_list' user.company.pk %}">Requisitos</a>
                 </li>
                 <li class="{% if 'calendar' in request.path %}active{% endif %}">
-                    <a href="{% url 'main:calendar' user.company.pk %}">Calendario</a>
+                    <a data-toggle= "collapse" href="#collapseExample" aria-expanded="false" area-controls="collapseExample">Calendario</a>
                 </li>
+                <div class = "collapse" id="collapseExample">
+                    <div class="well">
+                        <li class="{% if 'calendar' in request.path %}active{% endif %}">
+                        <a href="{% url 'main:calendar_training' user.company.pk %}">Capacitaciones</a>
+                        </li>
+                        <br>
+                        <li class="{% if 'calendar' in request.path %}active{% endif %}">
+                        <a href="{% url 'main:calendar_service' user.company.pk %}">Servicios de la Empresa</a>
+                        </li> 
+                    </div>
+                </div>
                 <li class="{% if 'accidents' in request.path %}active{% endif %}">
                     <a href="{% url 'main:accidents' user.company.pk %}">Accidentes</a>
                 </li>
