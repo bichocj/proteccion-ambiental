@@ -22,7 +22,6 @@ class Company(models.Model):
 
 class Employee(User):
     code = models.CharField(max_length=50, null=False, blank=False)
-    name = models.CharField(max_length=100, null=False, blank=False)
     company = models.ForeignKey(Company, null=False, blank=False)
     time = models.IntegerField()
 
