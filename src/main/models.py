@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 
 
-
 class Product(models.Model):
     code = models.CharField(max_length=50, null=False, blank=False)
     quantity = models.IntegerField(null=False, blank=False)
@@ -28,7 +27,6 @@ class Employee(User):
     time = models.IntegerField()
 
 
-
 class Meeting(models.Model):
     date = models.DateTimeField()
     title = models.CharField(max_length=100, null=True, blank=True)
@@ -38,14 +36,14 @@ class Accident(models.Model):
     HIGH_WORK = 'HIGH_WORK'
     INTOXICATION = 'INTOXICATION'
     TYPE_ACCIDENT_CHOICES = (
-        (HIGH_WORK,'HIGH_WORK'),
-        (INTOXICATION,'INTOXICATION')
+        (HIGH_WORK, 'HIGH_WORK'),
+        (INTOXICATION, 'INTOXICATION')
     )
     title = models.CharField(max_length=100, null=False, blank=False)
     content = models.TextField(null=True, blank=True)
     type_accident = models.CharField(_('type accident'), max_length=10, choices=TYPE_ACCIDENT_CHOICES, null=True,
                                      default=HIGH_WORK)  # NOQA
-    date = models.DateField(_('date'),null=False, default=datetime.now())
+    date = models.DateField(_('date'), null=False, default=datetime.now())
     company = models.ForeignKey(Company, null=False, blank=False)
 
 
@@ -84,25 +82,17 @@ class Requirement(models.Model):
 
 class Format(models.Model):
     requirement = models.ForeignKey(Requirement)
-    document = models.FileField(upload_to="formatos/%Y/%m/%d", null=False, blank=False)
+    file = models.FileField(upload_to="formatos/%Y/%m/%d", null=False, blank=False)
     company = models.ForeignKey(Company, null=False, blank=False)
-
-
-class Calendar(models.Model):
-    company = models.ForeignKey(Company, null=False, blank=False)
-
-
-# type_calendar = models.IntegerField("type", choises =TYPE, default = )
 
 
 class HistoryFormats(models.Model):
-#    requirement = models.ForeignKey(Requirement, null = True, blank = True)
-    format = models.ForeignKey(Format, null = True, blank = True)
-    document = models.FileField(upload_to="history/%Y/%m/%d", null=True, blank=True)
-#    company = models.ForeignKey(Company, null=True,
-#                                blank=True)  # Clase Compania, el formato es completado de una compania
+    #    requirement = models.ForeignKey(Requirement, null = True, blank = True)
+    format = models.ForeignKey(Format, null=True, blank=True)
+    file = models.FileField(upload_to="history/%Y/%m/%d", null=True, blank=True)
+    #    company = models.ForeignKey(Company, null=True,
+    #                                blank=True)  # Clase Compania, el formato es completado de una compania
     date_time = models.DateTimeField()  # La fecha en el que se hizo la modificacion del formato
-
 
 
 class UseProduct(models.Model):
