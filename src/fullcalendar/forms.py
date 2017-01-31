@@ -7,6 +7,8 @@ from fullcalendar.models import Calendar, Events
 from main.functions import add_form_control_class, add_class_time_picker
 from django.utils.translation import ugettext as _
 
+from main.models import Company
+
 __author__ = 'jona'
 
 
@@ -25,6 +27,10 @@ class UserModelMultipleChoiceField(ModelMultipleChoiceField):
             name = obj.first_name + " " + obj.last_name
         else:
             name = obj.username
+        try:
+            name += " | " + obj.company.name
+        except Company.DoesNotExist:
+            pass
         return name
 
 
@@ -32,10 +38,11 @@ class CalendarModelForm(ModelForm):
     form_meta = {'title': _("Calendar")}
 
     group = get_member_group()
+    members = get_users_of_member_group()
     workers = User.objects.exclude(groups__in=(group,))
 
     title = forms.CharField(max_length=100)
-    assigned = UserModelChoiceField(workers, empty_label="", label=_('assigned to'))
+    assigned = UserModelChoiceField(members, empty_label="", label=_('assigned to'))
     users = UserModelMultipleChoiceField(workers, label=_('shared with'))
 
     class Meta:

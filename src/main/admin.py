@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Calendar, Format, Report, Task, Accident, Meeting, HistoryFormats, Company, Requirement, Employee
+
+from .models import Format, Report, Task, Accident, Meeting, HistoryFormats, Company, Requirement, Employee
 
 
 class FormatAdmin(admin.ModelAdmin):
@@ -7,7 +8,6 @@ class FormatAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Employee)
-admin.site.register(Calendar)
 admin.site.register(Requirement)
 admin.site.register(Format, FormatAdmin)
 admin.site.register(Report)

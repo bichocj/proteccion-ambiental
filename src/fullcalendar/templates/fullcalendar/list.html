@@ -1,33 +1,48 @@
 {% extends 'main/layout.html' %}
 {% load static %}
 {% block more_styles %}
+<link rel="stylesheet" type="text/css" href="{% static 'main/css/compiled/tables.css'%}"/>
 {% endblock %}
 {% block content %}
 
 <div id="pad-wrapper" class="users-list">
-    <div class="row header">
-        <h3>Calendarios</h3>
+    <div class="table-wrapper products-table">
+        <div class="row header">
+            <h3>Calendarios</h3>
+            <div class="col-md-10 col-sm-12 col-xs-12 pull-right">
+                <a href="{% url 'fullcalendar:new' %}" class="btn-flat success pull-right">
+                    <span>&#43;</span>
+                    Nuevo Calendario
+                </a>
+            </div>
+        </div>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Nombre</th>
+                <th></th>
+                <!--<th><span class="line"></span>Formato</th>-->
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for calendar in calendars %}
+            <tr>
+                <td><b>{{calendar.title}}</b></td>
+                <td>
+                    <ul class="actions">
+                        <li><a href="{% url 'fullcalendar:view_calendar' calendar.slug calendar.pk %}">Ver</a></li>
+                        <li><a href="#">Edit</a></li>
+                        <li class="last"><a href="#">Delete</a></li>
+                    </ul>
+                </td>
+            </tr>
+            {% endfor %}
+
+            </tbody>
+
+        </table>
     </div>
-    <table class="table table-hover">
-        <thead>
-        <tr>
-            <th>Nombre</th>
-            <!--<th><span class="line"></span>Formato</th>-->
-        </tr>
-        </thead>
-        <tbody>
-
-        {% for calendar in calendars %}
-        <tr>
-            <td><b>{{calendar.name}}</b></td>
-            <!--<td></td>-->
-        </tr>
-        {% endfor %}
-
-        </tbody>
-
-    </table>
-
 </div>
 
 {% endblock %}
@@ -37,5 +52,10 @@
 $( function() {
     active_menu('.calendar');
 });
+
+
+
+
+
 </script>
 {% endblock%}

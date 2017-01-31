@@ -35,9 +35,9 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'widget_tweaks',
     'accounts',
     'main',
-    'widget_tweaks',
     'fullcalendar',
 )
 
@@ -89,9 +89,9 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Lima'
 
 USE_I18N = True
 
@@ -114,3 +114,4 @@ FROM_NAME = 'cecilurastastas@gmail.com'
 LOGIN_REDIRECT_URL = '/'
 
 MEMBER_GROUP = 'equipo proteccion ambiental'
+COMPANY_TEMPLATE_RUC = '1'

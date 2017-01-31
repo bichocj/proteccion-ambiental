@@ -1,5 +1,5 @@
 {% extends 'main/layout.html' %}
-{% block body %}
+{% block content %}
 
 
 <div class=" main">
@@ -30,8 +30,8 @@
                 
                	<tr>
                     <td><a href="{% url 'main:panel' c.pk %}">{{ c.name }}</a></td>
-                    <td>{{ c.ruc }}</a></td>
-                    <td>{{ c.address }}</a></td>
+                    <td>{{ c.ruc }}</td>
+                    <td>{{ c.address }}</td>
               	</tr>
    
               	{% endfor %}

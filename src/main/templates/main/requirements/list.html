@@ -12,7 +12,6 @@
         <thead>
         <tr>
             <th>Requerimiento</th>
-            <th><span class="line"></span>Formato</th>
         </tr>
         </thead>
         <tbody>
@@ -20,63 +19,6 @@
         {% for requirement in requirements %}
         <tr>
             <td><a href="{% url 'main:format_list' requirement.pk %}"><b>{{requirement.name}}</b></a></td>
-            <td>
-                <ul class="list-group">
-
-                    {% for format in requirement.formats %}
-                    <li class="list-group-item">
-                        <a href="#">{{ format.document }}</a>
-                        <div align="right">
-                            <button type="button" class="btn btn-primary" data-toggle="modal"
-                                    data-target="#formatForm{{format.pk}}"
-                                    data-whatever="r4">Actualizar
-                            </button>
-
-                        </div>
-                        <div class="modal fade" id="formatForm{{format.pk}}" tabindex="-1" role="dialog"
-                             aria-labelledby="exampleModalLabel">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal"
-                                                aria-label="Close"><span
-                                                aria-hidden="true">&times;</span></button>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <form action="{% url 'main:requirements_list' format.pk %}" method="post"
-                                              enctype="multipart/form-data">{% csrf_token %}
-                                            {{ format.form.as_p }}
-                                            <input type="submit" class="btn btn-primary" value="Subir">
-                                        </form>
-                                        <hr>
-                                        <table class="table">
-                                            <thead>
-                                            <tr>
-                                                <td align="left"><b>Documento</b></td>
-
-                                                <td align="left"><b>Fecha de modificación</b></td>
-                                            </tr>
-                                            </thead>
-
-                                            <tbody>
-                                            {% for history in format.history %}
-                                            <tr>
-                                                <td align="left"><a>{{ history.document }}</a></td>
-                                                <td align="left">{{ history.date_time }}</td>
-                                            </tr>
-                                            {% endfor %}
-                                            </tbody>
-                                        </table>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    {% endfor %}
-
-                </ul>
-            </td>
         </tr>
         {% endfor %}
 

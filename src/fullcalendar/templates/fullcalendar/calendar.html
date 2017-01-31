@@ -5,10 +5,19 @@
 {% load widget_tweaks %}
 
 {% block more_styles %}
+
+<!-- this page specific styles -->
+
+
 <link rel="stylesheet" type="text/css"
       href="{% static 'fullcalendar/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css' %}"/>
-<link href="{% static 'fullcalendar/plugins/fullcalendar/fullcalendar.min.css' %}" rel="stylesheet"/>
+<link href="{% static 'fullcalendar/fullcalendar/fullcalendar.css'%}" rel="stylesheet"/>
+<link href="https://fullcalendar.io/js/fullcalendar-3.1.0/fullcalendar.print.min.css" rel="stylesheet" media='print'/>
 <link href="{% static 'fullcalendar/fullcalendar/lib/cupertino/jquery-ui.min.css' %}" rel="stylesheet"/>
+
+<!--<link href="{% static 'main/css/lib/fullcalendar.css'%}" rel='stylesheet'/>-->
+<!--<link href="{% static 'main/css/lib/fullcalendar.print.css'%}" rel='stylesheet' media='print'/>-->
+<!--<link rel="stylesheet" href="css/compiled/calendar.css" type="text/css" media="screen"/>-->
 {% endblock %}
 
 {% block page_toolbar %}
@@ -21,25 +30,11 @@
 {% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-12">
-        <div class="portlet box green-meadow calendar">
-            <div class="portlet-title">
-                <div class="caption">
-                    <i class="fa fa-gift"></i>{% trans "calendar"|capfirst %}
-                </div>
-            </div>
-            <div class="portlet-body">
-                <div class="row">
-                    <div class="col-md-12 col-sm-12">
-                        <div id="calendar" class="has-toolbar">
-                        </div>
-                    </div>
-                </div>
-                <!-- END CALENDAR PORTLET-->
-            </div>
-        </div>
+<div id="pad-wrapper" class="new-user">
+    <div class="col-md-12 text-center">
+        <h3>calendario <b>{{calendar.title}}</b></h3>
     </div>
+    <div id='calendar'></div>
 </div>
 <div class="modal fade" id="event" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
@@ -117,18 +112,20 @@
 {% endblock %}
 
 {% block more_scripts %}
-<script src="{% static 'fullcalendar/plugins/moment.min.js' %}"></script>
+<script src="https://fullcalendar.io/js/fullcalendar-3.1.0/lib/moment.min.js"></script>
 <script type="text/javascript"
         src="{% static 'fullcalendar/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js' %}"></script>
-<script src="{% static 'fullcalendar/plugins/fullcalendar/fullcalendar.js' %}"></script>
+<!--<script src="{% static 'main/js/fullcalendar.min.js' %}"></script>-->
+<script src="https://fullcalendar.io/js/fullcalendar-3.1.0/fullcalendar.min.js"></script>
+<script src="https://fullcalendar.io/js/fullcalendar-3.1.0/locale/es.js"></script>
 <script>
         $(document).ready(function () {
             var format = 'DD/MM/YYYY hh:mm a';
             $('#calendar').fullCalendar({
                 header: {
-                    left: '',
+                    left: 'month,agendaWeek,agendaDay,listWeek',
                     center: 'title',
-                    right: 'prev,next today,month,agendaWeek,agendaDay'
+                    right: 'today prev,next'
                 },
                 {% if calendar.max_time and calendar.min_time %}
                     maxTime: "{{ calendar.max_time }}" ,
@@ -279,7 +276,11 @@
                 minLength: 3,
                 appendTo: "#event-form"
             });
+
+            active_menu('.calendar');
         });
+
+
 
 </script>
 {% endblock %}

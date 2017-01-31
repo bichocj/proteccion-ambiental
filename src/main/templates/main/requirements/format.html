@@ -2,71 +2,162 @@
 
 {% block content %}
 
-<br>
-<br>
-<br>
-<div class="row">
-<div class="col-sm-1"></div>
+    <div id="pad-wrapper" class="users-list">
+        <div class="row header">
+            <h3>{{ title }}</h3>
+        </div>
+        {% if message %}
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <strong>Error!</strong> {{ message }} {{ response }}
+            </div>
+        {% else %}
+            <div class="col-md-5">
+                <table class="table table-bordered">
 
-<div class="col-md-5">
-<table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <td><b>Formatos PDF</b></td>
+                        <td><b>Opciones</b></td>
+                    </tr>
+                    </thead>
 
-<thead>
-	<tr>
-		<td><b>Formatos PDF</b></td>
-		<td><b>Opciones</b></td>
-	</tr>	
-</thead>
+                    <tbody>
+                    {% for format in formats_pdf %}
+                        <tr>
+                            <td><a href="#">{{ format.file }}</a></td>
+                            <td>
+                                <div>
+                                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                                            data-target="#formatForm{{ format.pk }}"
+                                            data-whatever="r4">Actualizar
+                                    </button>
+                                </div>
+                                <div class="modal fade" id="formatForm{{ format.pk }}" tabindex="-1" role="dialog"
+                                     aria-labelledby="exampleModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close"><span
+                                                        aria-hidden="true">&times;</span></button>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <form action="{% url 'main:format_list' format.pk %}" method="post"
+                                                      enctype="multipart/form-data">{% csrf_token %}
+                                                    {{ format.form.as_p }}
+                                                    <input type="submit" class="btn btn-primary" value="Subir">
+                                                </form>
+                                                <hr>
+                                                <table class="table">
+                                                    <thead>
+                                                    <tr>
+                                                        <td align="left"><b>Documento</b></td>
 
-<tbody>
-	{% for format in formats_pdf %}
-	<tr>
-		<td><a href="#">{{ format.document }}</a></td>
-		<td>             
-            <button type="button" class="btn btn-primary" data-toggle="modal"
-                                data-target="#formatForm{{format.pk}}"
-                                data-whatever="r4">Actualizar
-           	</button>
-		</td>
-	</tr>
-	{% endfor %}
-</tbody>
-</table>
-</div>
+                                                        <td align="left"><b>Fecha de modificación</b></td>
+                                                    </tr>
+                                                    </thead>
 
-<div class="col-sm-2"></div>
+                                                    <tbody>
+                                                    {% for history in format.history %}
+                                                        <tr>
+                                                            <td align="left"><a>{{ history.file }}</a></td>
+                                                            <td align="left">{{ history.date_time }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
 
-<div class="col-md-5">
-<table class="table table-bordered">
-<thead>
-	<tr>
-		<td><b>Formatos EXCEL</b></td>
-		<td><b>Opciones</b></td>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
 
-</thead>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
 
-<tbody>
+            <div class="col-md-1"></div>
 
-	{% for format in formats_xlsx %}
-	<tr>
-		<td><a href="#">{{ format.document }}</a></td>
-		<td>             
-            <button type="button" class="btn btn-primary" data-toggle="modal"
-                                data-target="#formatForm{{format.pk}}"
-                                data-whatever="r4">Actualizar
-           	</button>
-		</td>
-	</tr>
-	{% endfor %}
+            <div class="col-md-4">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <td><b>Formatos EXCEL</b></td>
+                        <td><b>Opciones</b></td>
 
-</tbody>
+                    </thead>
 
-</table>
+                    <tbody>
 
-</div>
+                    {% for format in formats_xlsx %}
+                        <tr>
+                            <td><a href="#">{{ format.file }}</a></td>
+                            <td>
+                                <div>
+                                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                                            data-target="#formatForm{{ format.pk }}"
+                                            data-whatever="r4">Actualizar
+                                    </button>
+                                </div>
 
-<div class="col-sm-1"></div>
-</div>
+                                <div class="modal fade" id="formatForm{{ format.pk }}" tabindex="-1" role="dialog"
+                                     aria-labelledby="exampleModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close"><span
+                                                        aria-hidden="true">&times;</span></button>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <form action="{% url 'main:format_list' format.pk %}" method="post"
+                                                      enctype="multipart/form-data">{% csrf_token %}
+                                                    {{ format.form.as_p }}
+                                                    <input type="submit" class="btn btn-primary" value="Subir">
+                                                </form>
+                                                <hr>
+                                                <table class="table">
+                                                    <thead>
+                                                    <tr>
+                                                        <td align="left"><b>Documento</b></td>
+
+                                                        <td align="left"><b>Fecha de modificación</b></td>
+                                                    </tr>
+                                                    </thead>
+
+                                                    <tbody>
+                                                    {% for history in format.history %}
+                                                        <tr>
+                                                            <td align="left"><a>{{ history.file }}</a></td>
+                                                            <td align="left">{{ history.date_time }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+
+
+                </table>
+
+            </div>
+
+            <div class="col-sm-1"></div>
+        {% endif %}
+
+    </div>
 
 
 {% endblock %}
