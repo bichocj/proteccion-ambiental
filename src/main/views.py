@@ -51,13 +51,16 @@ def format_list(request, pk):
         formats = Format.objects.filter(requirement = requirement)
         formats_pdf = list()
         formats_xlsx = list()
-        for format in formats:
-            if format.file.name.endswith('.pdf'):
-                formats_pdf.append(format)
-            else:
-                formats_xlsx.append(format)
-            format.form = FormatForm(instance=format)
-            format.history = HistoryFormats.objects.filter(format = format)
+        if formats.count() != 0:
+            for format in formats:
+                if format.file.name.endswith('.pdf'):
+                    formats_pdf.append(format)
+                else:
+                    formats_xlsx.append(format)
+                format.form = FormatForm(instance=format)
+                format.history = HistoryFormats.objects.filter(format = format)
+        else:
+            message= ' Usted no tiene formatos'
         return render(request, "main/requirements/format.html", locals())
 
 @login_required
