@@ -32,16 +32,15 @@ class Meeting(models.Model):
 
 
 class Accident(models.Model):
-    HIGH_WORK = 'HIGH_WORK'
-    INTOXICATION = 'INTOXICATION'
+    HIGH_WORK = 1
+    INTOXICATION = 2
     TYPE_ACCIDENT_CHOICES = (
         (HIGH_WORK, 'HIGH_WORK'),
         (INTOXICATION, 'INTOXICATION')
     )
     title = models.CharField(max_length=100, null=False, blank=False)
     content = models.TextField(null=True, blank=True)
-    type_accident = models.CharField(_('type accident'), max_length=10, choices=TYPE_ACCIDENT_CHOICES, null=True,
-                                     default=HIGH_WORK)  # NOQA
+    type_accident = models.IntegerField(_('type accident'), choices=TYPE_ACCIDENT_CHOICES, default=HIGH_WORK)  # NOQA
     date = models.DateField(_('date'), null=False, default=datetime.now())
     company = models.ForeignKey(Company, null=False, blank=False)
 

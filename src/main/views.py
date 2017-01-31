@@ -1,10 +1,7 @@
-import shutil
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
-
-from proteccion_ambiental.settings import COMPANY_TEMPLATE_RUC
-from .models import Company, Format, Requirement, HistoryFormats
-from .forms import CompanyForm, FormatForm
+from .models import Company, Format, Requirement, HistoryFormats, Accident
+from .forms import CompanyForm, FormatForm, AccidentForm
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 
@@ -16,23 +13,26 @@ def home(request):
 
 # panel de oshas
 @login_required
-def panel(request, pk):
-    company = Company.objects.get(pk=pk)
+def panel(request, company_pk):
+    company = Company.objects.get(pk=company_pk)
     return render(request, 'main/panel.html', locals())
 
 
 # panel de ley de seguridad ambiental
 @login_required
 def law(request):
+    # if user is admin
     companies = Company.objects.all()
+    # else
+    # companies = Company.objects.get(su empresa)
     return render(request, "main/ley_seguridad.html", locals())
 
 
 @login_required
-def format_list(request, pk):
+def format_list(request, requirement_pk):
     if request.POST:
         try:
-            format = Format.objects.get(pk=pk)
+            format = Format.objects.get(pk=requirement_pk)
             history = HistoryFormats()
             history.format = format
             history.file = format.file
@@ -41,12 +41,12 @@ def format_list(request, pk):
             format.file = request.FILES['file']
             format.save()
             title = format.requirement.name
-            return redirect(reverse('main:format_list', kwargs={'pk': format.requirement.pk}))
+            return redirect(reverse('main:format_list', kwargs={'requirement_pk': format.requirement.pk}))
         except:
-            return redirect(reverse('main:format_list', kwargs={'pk': format.requirement.pk}))
+            return redirect(reverse('main:format_list', kwargs={'requirement_pk': format.requirement.pk}))
 
     else:
-        requirement = Requirement.objects.get(pk=pk)
+        requirement = Requirement.objects.get(pk=requirement_pk)
         title = requirement.name
         formats = Format.objects.filter(requirement=requirement)
         formats_pdf = list()
@@ -65,21 +65,21 @@ def format_list(request, pk):
 
 
 @login_required
-def requirements_list(request, pk):
-    company = Company.objects.get(pk=pk)
+def requirements_list(request, company_pk):
+    company = Company.objects.get(pk=company_pk)
     requirements = Requirement.objects.filter(is_active=True).order_by('order')
     return render(request, "main/requirements/list.html", locals())
 
 
 @login_required
-def calendar_service(request, pk):
-    company = Company.objects.get(pk=pk)
+def calendar_service(request, company_pk):
+    company = Company.objects.get(pk=company_pk)
     return render(request, "main/calendars/service.html", locals())
 
 
 @login_required
-def calendar_training(request, pk):
-    company = Company.objects.get(pk=pk)
+def calendar_training(request, company_pk):
+    company = Company.objects.get(pk=company_pk)
     return render(request, "main/calendars/trainings.html", locals())
 
 
@@ -105,9 +105,28 @@ def new_company(request):
 
 
 @login_required
-def accidents(request, pk):
-    company = Company.objects.get(pk=pk)
-    return render(request, "main/accidents.html", locals())
+def accident_list(request, company_pk):
+    accidents = Accident.objects.filter(company=company_pk)
+    return render(request, "main/accidents/list.html", locals())
+
+
+@login_required
+def accident_new(request, company_pk):
+    title = 'nuevo accidente'
+    active_item_menu = 'accidents'
+    company = Company.objects.get(pk=company_pk)
+    if request.POST:
+        form = AccidentForm(request.POST)
+        if form.is_valid():
+            accident = form.save(commit=False)
+            accident.company = company
+            accident.save()
+            return redirect(reverse('main:accident_list', kwargs={"company_pk": company.pk}))
+        else:
+            message = 'Review all information . . .'
+    else:
+        form = AccidentForm()
+    return render(request, "main/layout_form.html", locals())
 
 
 @login_required
@@ -116,6 +135,6 @@ def agreement(request):
 
 
 @login_required
-def reports(request, pk):
-    company = Company.objects.get(pk=pk)
+def reports(request, company_pk):
+    company = Company.objects.get(pk=company_pk)
     return render(request, "main/reports.html", locals())

@@ -3,3 +3,13 @@
 {% block content %}
 {% include 'main/hooks/form.html' %}
 {% endblock %}
+
+{% if active_item_menu %}
+{% block more_scripts %}
+<script>
+$( function() {
+    active_menu('.{{active_item_menu}}');
+});
+</script>
+{% endblock%}
+{% endif %}
