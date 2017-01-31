@@ -45,6 +45,8 @@ class Accident(models.Model):
     company = models.ForeignKey(Company, null=False, blank=False)
 
 
+
+
 class Task(models.Model):
     code = models.CharField(max_length=50, null=False, blank=False)
     title = models.CharField(max_length=100, null=True, blank=True)
@@ -87,7 +89,11 @@ class Format(models.Model):
 class HistoryFormats(models.Model):
     #    requirement = models.ForeignKey(Requirement, null = True, blank = True)
     format = models.ForeignKey(Format, null=True, blank=True)
+<<<<<<< HEAD
+    document = models.FileField(upload_to="history/%Y/%m/%d", null=True, blank=True)
+=======
     file = models.FileField(upload_to="history/%Y/%m/%d", null=True, blank=True)
+>>>>>>> 60195b390c0ecf3a4c75cc3bcea20e8914f6c751
     #    company = models.ForeignKey(Company, null=True,
     #                                blank=True)  # Clase Compania, el formato es completado de una compania
     date_time = models.DateTimeField()  # La fecha en el que se hizo la modificacion del formato

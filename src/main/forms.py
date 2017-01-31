@@ -35,3 +35,4 @@ class AccidentForm(forms.ModelForm):
             'date': DateInput(),
         }
 
+
