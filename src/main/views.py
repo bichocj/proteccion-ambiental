@@ -1,6 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
-from .models import Company, Format, Requirement, HistoryFormats
+from .models import Company, Format, Requirement, HistoryFormats, Accident
 from .forms import CompanyForm, FormatForm, AccidentForm
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
@@ -32,7 +32,7 @@ def law(request):
 def format_list(request, pk):
     if request.POST:
         try:
-            format = Format.objects.get(pk = pk)
+            format = Format.objects.get(pk=pk)
             history = HistoryFormats()
             history.format = format
             history.document = format.document
@@ -44,7 +44,7 @@ def format_list(request, pk):
         except:
             return render(request, "main/requirements/format.html", locals())
     else:
-        formats = Format.objects.filter(requirement__pk = pk)
+        formats = Format.objects.filter(requirement__pk=pk)
         formats_pdf = list()
         formats_xlsx = list()
         for format in formats:
@@ -53,15 +53,16 @@ def format_list(request, pk):
             else:
                 formats_xlsx.append(formats)
             format.form = FormatForm(instance=format)
-            format.history = HistoryFormats.objects.filter(format = format)
+            format.history = HistoryFormats.objects.filter(format=format)
             print(format.document)
         return render(request, "main/requirements/format.html", locals())
+
 
 @login_required
 def requirements_list(request, pk):
     if request.POST:
         try:
-            format = Format.objects.get(pk = pk)
+            format = Format.objects.get(pk=pk)
             history = HistoryFormats()
             history.format = format
             history.document = format.document
@@ -76,10 +77,11 @@ def requirements_list(request, pk):
         company = Company.objects.get(pk=pk)
         requirements = Requirement.objects.filter(is_active=True).order_by('order')
         for requirement in requirements:
-            requirement.formats = Format.objects.filter(requirement__pk=requirement.pk, company__pk=request.user.company.pk)
+            requirement.formats = Format.objects.filter(requirement__pk=requirement.pk,
+                                                        company__pk=request.user.company.pk)
             for format in requirement.formats:
                 format.form = FormatForm(instance=format)
-                format.history = HistoryFormats.objects.filter(format = format)
+                format.history = HistoryFormats.objects.filter(format=format)
     return render(request, "main/requirements/list.html", locals())
 
 
@@ -88,10 +90,12 @@ def calendar_service(request, pk):
     company = Company.objects.get(pk=pk)
     return render(request, "main/calendars/service.html", locals())
 
+
 @login_required
 def calendar_training(request, pk):
     company = Company.objects.get(pk=pk)
     return render(request, "main/calendars/trainings.html", locals())
+
 
 @login_required
 def new_company(request):
@@ -110,13 +114,19 @@ def new_company(request):
 def accidents(request, pk):
     company = Company.objects.get(pk=pk)
     if request.POST:
-        form=AccidentForm(request.POST)
+        form = AccidentForm(request.POST)
         if form.is_valid():
-            form.save()
+            accident = Accident()
+            accident.title=form.data['title']
+            accident.content=form.data['content']
+            accident.type_accident=form.data['type_accident']
+            accident.date=form.data['date']
+            accident.company = company
+            accident.save()
         else:
-            message='Review all information . . .'
+            message = 'Review all information . . .'
     else:
-        form=AccidentForm()
+        form = AccidentForm()
     return render(request, "main/accidents.html", locals())
 
 
