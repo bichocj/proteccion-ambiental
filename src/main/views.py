@@ -1,7 +1,8 @@
+import shutil
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 from .models import Company, Format, Requirement, HistoryFormats
-from .forms import CompanyForm, FormatForm, AccidentForm
+from .forms import CompanyForm, FormatForm
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 
@@ -9,6 +10,8 @@ from django.utils import timezone
 @login_required
 def home(request):
     return render(request, 'main/home.html')
+
+
 
 
 # panel de oshas
@@ -21,10 +24,7 @@ def panel(request, pk):
 # panel de ley de seguridad ambiental
 @login_required
 def law(request):
-    # if user is admin
     companies = Company.objects.all()
-    # else
-    # companies = Company.objects.get(su empresa)
     return render(request, "main/ley_seguridad.html", locals())
 
 
@@ -78,12 +78,24 @@ def calendar_training(request, pk):
     return render(request, "main/calendars/trainings.html", locals())
 
 @login_required
+def new_new_company(request):
+    if request.POST:
+        form = CompanyForm(request.POST)
+        if form.is_valid():
+            company = form.save()
+            
+
+
+
+@login_required
 def new_company(request):
     title = "Nueva empresa"
     if request.POST:
         form = CompanyForm(request.POST)
         if form.is_valid():
-            form.save()
+            company = form.save()
+            format = Format()
+            format.company = company
             return redirect(reverse('main:law'))
     else:
         form = CompanyForm()
@@ -93,14 +105,6 @@ def new_company(request):
 @login_required
 def accidents(request, pk):
     company = Company.objects.get(pk=pk)
-    if request.POST:
-        form=AccidentForm(request.POST)
-        if form.is_valid():
-            form.save()
-        else:
-            message='Review all information . . .'
-    else:
-        form=AccidentForm()
     return render(request, "main/accidents.html", locals())
 
 
