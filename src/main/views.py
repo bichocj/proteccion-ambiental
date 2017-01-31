@@ -1,5 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
+
+from proteccion_ambiental import settings
 from .models import Company, Format, Requirement, HistoryFormats, Accident
 from .forms import CompanyForm, FormatForm, AccidentForm
 from django.contrib.auth.decorators import login_required
@@ -54,9 +56,11 @@ def format_list(request, requirement_pk):
         if formats.count() != 0:
             for format in formats:
                 if format.file.name.endswith('.pdf'):
+                    format.file.path_re=settings.MEDIA_URL+format.file.name
                     formats_pdf.append(format)
                 else:
                     formats_xlsx.append(format)
+
                 format.form = FormatForm(instance=format)
                 format.history = HistoryFormats.objects.filter(format=format)
         else:
@@ -140,7 +144,7 @@ def accident_new(request, company_pk):
     active_item_menu = 'accidents'
     company = Company.objects.get(pk=company_pk)
     if request.POST:
-        form = AccidentForm(request.POST)
+        form = AccidentForm(request.POST,request.FILES)
         if form.is_valid():
             accident = form.save(commit=False)
             accident.company = company

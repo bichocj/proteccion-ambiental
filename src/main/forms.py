@@ -28,9 +28,10 @@ class DateInput(forms.DateInput):
 
 
 class AccidentForm(forms.ModelForm):
+    evidence=forms.FileField()
     class Meta:
         model = Accident
-        fields = ('title', 'content', 'type_accident', 'date')
+        fields = ('title', 'content', 'type_accident', 'date','evidence')
         widgets = {
             'date': DateInput(),
         }

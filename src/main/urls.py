@@ -1,6 +1,8 @@
 from django.conf.urls import patterns, url
 from django.utils.translation import ugettext as _
 
+from proteccion_ambiental import settings
+
 urlpatterns = patterns('main.views',
                url(r'^$', 'home', name='home'),
                url(r'^panel/(?P<company_pk>\d+)/$', 'panel', name='panel'),
@@ -14,3 +16,6 @@ urlpatterns = patterns('main.views',
                url(r'^law/$', 'law', name='law'),
 
            )
+urlpatterns += patterns('',
+    (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+)
