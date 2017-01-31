@@ -78,28 +78,25 @@ def calendar_training(request, pk):
     return render(request, "main/calendars/trainings.html", locals())
 
 @login_required
-def new_new_company(request):
-    if request.POST:
-        form = CompanyForm(request.POST)
-        if form.is_valid():
-            company = form.save()
-            
-
-
-
-@login_required
 def new_company(request):
     title = "Nueva empresa"
     if request.POST:
         form = CompanyForm(request.POST)
         if form.is_valid():
+            comp = Company.objects.get(ruc = ruc)
+            formats = Format.objects.filter(company = comp)
             company = form.save()
-            format = Format()
-            format.company = company
-            return redirect(reverse('main:law'))
+            for f in formats:
+                format = Format()
+                format.requirement = f.requirement
+                format.file = f.file
+                format.company = company
+                format.save()
+        return redirect(reverse('main:law'))
     else:
         form = CompanyForm()
     return render(request, "main/hook/form.html", locals())
+
 
 
 @login_required
