@@ -1,3 +1,4 @@
+
 import shutil
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
@@ -10,9 +11,6 @@ from django.utils import timezone
 @login_required
 def home(request):
     return render(request, 'main/home.html')
-
-
-
 
 # panel de oshas
 @login_required
@@ -86,7 +84,7 @@ def new_company(request):
     if request.POST:
         form = CompanyForm(request.POST)
         if form.is_valid():
-            comp = Company.objects.get(ruc = ruc)
+            comp = Company.objects.get(ruc = '0')
             formats = Format.objects.filter(company = comp)
             company = form.save()
             for f in formats:
@@ -98,7 +96,7 @@ def new_company(request):
         return redirect(reverse('main:law'))
     else:
         form = CompanyForm()
-    return render(request, "main/hook/form.html", locals())
+    return render(request, "main/hooks/form.html", locals())
 
 
 
