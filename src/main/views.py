@@ -1,7 +1,8 @@
-
 import shutil
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
+
+from proteccion_ambiental.settings import COMPANY_TEMPLATE_RUC
 from .models import Company, Format, Requirement, HistoryFormats
 from .forms import CompanyForm, FormatForm
 from django.contrib.auth.decorators import login_required
@@ -11,6 +12,7 @@ from django.utils import timezone
 @login_required
 def home(request):
     return render(request, 'main/home.html')
+
 
 # panel de oshas
 @login_required
@@ -30,7 +32,7 @@ def law(request):
 def format_list(request, pk):
     if request.POST:
         try:
-            format = Format.objects.get(pk = pk)
+            format = Format.objects.get(pk=pk)
             history = HistoryFormats()
             history.format = format
             history.file = format.file
@@ -44,9 +46,9 @@ def format_list(request, pk):
             return redirect(reverse('main:format_list', kwargs={'pk': format.requirement.pk}))
 
     else:
-        requirement = Requirement.objects.get(pk = pk)
+        requirement = Requirement.objects.get(pk=pk)
         title = requirement.name
-        formats = Format.objects.filter(requirement = requirement)
+        formats = Format.objects.filter(requirement=requirement)
         formats_pdf = list()
         formats_xlsx = list()
         if formats.count() != 0:
@@ -56,10 +58,11 @@ def format_list(request, pk):
                 else:
                     formats_xlsx.append(format)
                 format.form = FormatForm(instance=format)
-                format.history = HistoryFormats.objects.filter(format = format)
+                format.history = HistoryFormats.objects.filter(format=format)
         else:
-            message= ' Usted no tiene formatos'
+            message = ' Usted no tiene formatos'
         return render(request, "main/requirements/format.html", locals())
+
 
 @login_required
 def requirements_list(request, pk):
@@ -73,10 +76,12 @@ def calendar_service(request, pk):
     company = Company.objects.get(pk=pk)
     return render(request, "main/calendars/service.html", locals())
 
+
 @login_required
 def calendar_training(request, pk):
     company = Company.objects.get(pk=pk)
     return render(request, "main/calendars/trainings.html", locals())
+
 
 @login_required
 def new_company(request):
@@ -84,8 +89,8 @@ def new_company(request):
     if request.POST:
         form = CompanyForm(request.POST)
         if form.is_valid():
-            comp = Company.objects.get(ruc = '0')
-            formats = Format.objects.filter(company = comp)
+            comp = Company.objects.get(ruc=COMPANY_TEMPLATE_RUC)
+            formats = Format.objects.filter(company=comp)
             company = form.save()
             for f in formats:
                 format = Format()
@@ -96,8 +101,7 @@ def new_company(request):
         return redirect(reverse('main:law'))
     else:
         form = CompanyForm()
-    return render(request, "main/hooks/form.html", locals())
-
+    return render(request, "main/layout_form.html", locals())
 
 
 @login_required

@@ -114,3 +114,4 @@ FROM_NAME = 'cecilurastastas@gmail.com'
 LOGIN_REDIRECT_URL = '/'
 
 MEMBER_GROUP = 'equipo proteccion ambiental'
+COMPANY_TEMPLATE_RUC = '1'
