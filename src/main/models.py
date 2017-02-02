@@ -12,8 +12,8 @@ class Product(models.Model):
 
 
 class Company(models.Model):
-    ruc = models.IntegerField(null=False, blank=False)
-    name = models.CharField(max_length=100, null=False, blank=False)
+    ruc = models.IntegerField(max_length=11, null=False, blank=False, unique=True)
+    name = models.CharField(max_length=100, null=False, blank=False, unique=True)
     address = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):
@@ -23,7 +23,10 @@ class Company(models.Model):
 class Employee(User):
     code = models.CharField(max_length=50, null=False, blank=False)
     company = models.ForeignKey(Company, null=False, blank=False)
-    time = models.IntegerField()
+    time = models.IntegerField(default=0)
+
+
+Company.user = property(lambda e: Employee.objects.filter(company=e).first())
 
 
 class Meeting(models.Model):

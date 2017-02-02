@@ -1,7 +1,9 @@
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
+
+from proteccion_ambiental.settings import COMPANY_TEMPLATE_RUC
 from .models import Company, Format, Requirement, HistoryFormats, Accident
-from .forms import CompanyForm, FormatForm, AccidentForm
+from .forms import CompanyForm, FormatForm, AccidentForm, EmployeeForm
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 
@@ -20,12 +22,12 @@ def panel(request, company_pk):
 
 # panel de ley de seguridad ambiental
 @login_required
-def law(request):
+def company_list(request):
     # if user is admin
     companies = Company.objects.all()
     # else
     # companies = Company.objects.get(su empresa)
-    return render(request, "main/ley_seguridad.html", locals())
+    return render(request, "main/company/list.html", locals())
 
 
 @login_required
@@ -84,24 +86,29 @@ def calendar_training(request, company_pk):
 
 
 @login_required
-def new_company(request):
+def company_new(request):
     title = "Nueva empresa"
     if request.POST:
-        form = CompanyForm(request.POST)
-        if form.is_valid():
+        company_form = CompanyForm(request.POST)
+        employee_form = EmployeeForm(request.POST)
+        if company_form.is_valid() and employee_form.is_valid():
             comp = Company.objects.get(ruc=COMPANY_TEMPLATE_RUC)
             formats = Format.objects.filter(company=comp)
-            company = form.save()
+            company = company_form.save()
             for f in formats:
                 format = Format()
                 format.requirement = f.requirement
                 format.file = f.file
                 format.company = company
                 format.save()
-        return redirect(reverse('main:law'))
+            employee = employee_form.save(commit=False)
+            employee.company = company
+            employee.save()
+            return redirect(reverse('main:law'))
     else:
-        form = CompanyForm()
-    return render(request, "main/layout_form.html", locals())
+        company_form = CompanyForm()
+        employee_form = EmployeeForm()
+    return render(request, "main/company/form.html", locals())
 
 
 @login_required

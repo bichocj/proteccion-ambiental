@@ -3,6 +3,16 @@
 {% block sidebar %}
 <div id="sidebar-nav">
     <ul id="dashboard-menu">
+        <li class="">
+            <a style="color: #000;"><i class="icon-home"></i>
+                <span>{{user.company.name}}</span>
+            </a>
+        </li>
+        <!--<li class="">-->
+        <!--<br>-->
+        <!--<br>-->
+        <!--<br>-->
+        <!--</li>-->
         <li class="requirement">
             <a href="{% url 'main:requirements_list' user.company.pk %}">
                 <i class="icon-tasks"></i>
