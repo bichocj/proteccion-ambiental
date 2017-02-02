@@ -1,7 +1,5 @@
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
-
-from proteccion_ambiental.settings import COMPANY_TEMPLATE_RUC
 from .models import Company, Format, Requirement, HistoryFormats, Accident
 from .forms import CompanyForm, FormatForm, AccidentForm, EmployeeForm
 from django.contrib.auth.decorators import login_required
@@ -67,6 +65,31 @@ def format_list(request, requirement_pk):
 
 
 @login_required
+def requirements_list(request, pk):
+    if request.POST:
+        try:
+            format = Format.objects.get(pk=pk)
+            history = HistoryFormats()
+            history.format = format
+            history.document = format.document
+            history.date_time = timezone.now()
+            history.save()
+            format.document = request.FILES['document']
+            format.save()
+            return redirect(reverse('main:requirements_list', kwargs={'pk': format.company.pk}))
+        except KeyError:
+            return redirect(reverse('main:requirements_list', kwargs={'pk': format.company.pk}))
+    else:
+        company = Company.objects.get(pk=pk)
+        requirements = Requirement.objects.filter(is_active=True).order_by('order')
+        for requirement in requirements:
+            requirement.formats = Format.objects.filter(requirement__pk=requirement.pk,
+                                                        company__pk=request.user.company.pk)
+            for format in requirement.formats:
+                format.form = FormatForm(instance=format)
+                format.history = HistoryFormats.objects.filter(format=format)
+
+
 def requirements_list(request, company_pk):
     company = Company.objects.get(pk=company_pk)
     requirements = Requirement.objects.filter(is_active=True).order_by('order')
@@ -118,12 +141,46 @@ def accident_list(request, company_pk):
 
 
 @login_required
+def accident_edit(request, accident_pk):
+    accident = Accident.objects.get(pk=accident_pk)
+    if request.POST:
+        form = AccidentForm(request.POST, request.FILES)
+        if form.is_valid():
+            accident.title=form.instance.title
+            accident.content=form.instance.content
+            accident.type_accident=form.instance.type_accident
+            accident.date=form.instance.date
+            accident.evidence =form.files['evidence']
+            accident.save()
+            return redirect(reverse('main:accident_list', kwargs={"company_pk": accident.company.pk}))
+        return redirect(reverse('main:accident_list', kwargs={"company_pk": accident.company.pk}))
+    form = AccidentForm({'title':accident.title, 'content':accident.title, 'type_accident':accident.type_accident, 'date':accident.date})
+    if form.is_valid():
+        return render(request, "main/layout_form.html", locals())
+    else:
+        message = 'ERROR: Bad Request ... !'
+        return redirect(reverse('main:accident_list', kwargs={"company_pk": accident.company.pk}))
+
+@login_required
+def accident_delete(request, accident_pk):
+    if request.POST:
+        return render(request, "main/accidents/list.html", locals())
+
+    accident = Accident.objects.get(pk=accident_pk)
+    if not accident is None:
+        accident.delete()
+        return redirect(reverse('main:accident_list', kwargs={"company_pk": accident.company.pk}))
+    else:
+        message = 'ERROR: Bad Request ... !'
+        return redirect(reverse('main:accident_list', kwargs={"company_pk": accident.company.pk}))
+
+@login_required
 def accident_new(request, company_pk):
     title = 'nuevo accidente'
     active_item_menu = 'accidents'
     company = Company.objects.get(pk=company_pk)
     if request.POST:
-        form = AccidentForm(request.POST)
+        form = AccidentForm(request.POST, request.FILES)
         if form.is_valid():
             accident = form.save(commit=False)
             accident.company = company

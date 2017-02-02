@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 
 from django.db import models
@@ -34,6 +35,16 @@ class Meeting(models.Model):
     title = models.CharField(max_length=100, null=True, blank=True)
 
 
+def directiry_path(filename):
+    path = os.path.dirname(__file__)
+    return path + filename
+
+
+class Evidence(models.Model):
+    filename = models.CharField(max_length=50, null=False)
+    file = models.FileField()
+
+
 class Accident(models.Model):
     HIGH_WORK = 1
     INTOXICATION = 2
@@ -46,6 +57,7 @@ class Accident(models.Model):
     type_accident = models.IntegerField(_('type accident'), choices=TYPE_ACCIDENT_CHOICES, default=HIGH_WORK)  # NOQA
     date = models.DateField(_('date'), null=False, default=datetime.now())
     company = models.ForeignKey(Company, null=False, blank=False)
+    evidence = models.FileField(_('evidence'),upload_to="accident/",null=True)
 
 
 class Task(models.Model):
@@ -72,7 +84,7 @@ class Report(models.Model):
 
 
 class Requirement(models.Model):
-    name = models.CharField(max_length=50, null=False, blank=False)
+    name = models.CharField(max_length=100, null=False, blank=False)
     description = models.CharField(max_length=50, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     order = models.IntegerField(default=0)
@@ -90,6 +102,7 @@ class Format(models.Model):
 class HistoryFormats(models.Model):
     #    requirement = models.ForeignKey(Requirement, null = True, blank = True)
     format = models.ForeignKey(Format, null=True, blank=True)
+
     file = models.FileField(upload_to="history/%Y/%m/%d", null=True, blank=True)
     #    company = models.ForeignKey(Company, null=True,
     #                                blank=True)  # Clase Compania, el formato es completado de una compania

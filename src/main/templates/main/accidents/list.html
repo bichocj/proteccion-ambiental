@@ -15,6 +15,11 @@
                 </a>
             </div>
         </div>
+        {% if message %}
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <strong>Error!</strong> {{ message }} {{ response }}
+            </div>
+        {% endif %}
         <table class="table table-hover">
             <thead>
             <tr>
@@ -33,8 +38,8 @@
                 <td>{{accident.get_type_accident_display}}</td>
                 <td>
                     <ul class="actions">
-                        <li><a href="#">Edit</a></li>
-                        <li class="last"><a href="#">Delete</a></li>
+                        <li><a href="{% url 'main:accident_edit' accident.pk %}">Edit</a></li>
+                        <li class="last"><a href="{% url 'main:accident_delete' accident.pk %}">Delete</a></li>
                     </ul>
                 </td>
             </tr>
