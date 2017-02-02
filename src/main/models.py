@@ -81,7 +81,7 @@ class Report(models.Model):
 
 
 class Requirement(models.Model):
-    name = models.CharField(max_length=50, null=False, blank=False)
+    name = models.CharField(max_length=100, null=False, blank=False)
     description = models.CharField(max_length=50, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     order = models.IntegerField(default=0)
