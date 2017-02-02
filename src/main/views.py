@@ -65,7 +65,7 @@ def format_list(request, requirement_pk):
                 format.history = HistoryFormats.objects.filter(format=format)
         else:
             message = ' Usted no tiene formatos'
-        return render(request, "main/requirements/format.html", locals())
+        return render(request, "main/requirements/formats/format.html", locals())
 
 
 @login_required
@@ -140,25 +140,41 @@ def accident_list(request, company_pk):
 
 
 @login_required
+def format_new_other(request, requirement_pk):
+    pass
+
+
+@login_required
+def format_new_pdf(request, requirement_pk):
+    requirement=Requirement.objects.get(pk=requirement_pk)
+    if request.POST:
+        pass
+    else:
+        return render(request,'main/requirements/formats/new_format_pdf.html',locals())
+
+
+@login_required
 def accident_edit(request, accident_pk):
     accident = Accident.objects.get(pk=accident_pk)
     if request.POST:
         form = AccidentForm(request.POST, request.FILES)
         if form.is_valid():
-            accident.title=form.instance.title
-            accident.content=form.instance.content
-            accident.type_accident=form.instance.type_accident
-            accident.date=form.instance.date
-            accident.evidence =form.files['evidence']
+            accident.title = form.instance.title
+            accident.content = form.instance.content
+            accident.type_accident = form.instance.type_accident
+            accident.date = form.instance.date
+            accident.evidence = form.files['evidence']
             accident.save()
             return redirect(reverse('main:accident_list', kwargs={"company_pk": accident.company.pk}))
         return redirect(reverse('main:accident_list', kwargs={"company_pk": accident.company.pk}))
-    form = AccidentForm({'title':accident.title, 'content':accident.title, 'type_accident':accident.type_accident, 'date':accident.date})
+    form = AccidentForm({'title': accident.title, 'content': accident.title, 'type_accident': accident.type_accident,
+                         'date': accident.date})
     if form.is_valid():
         return render(request, "main/layout_form.html", locals())
     else:
         message = 'ERROR: Bad Request ... !'
         return redirect(reverse('main:accident_list', kwargs={"company_pk": accident.company.pk}))
+
 
 @login_required
 def accident_delete(request, accident_pk):
@@ -172,6 +188,7 @@ def accident_delete(request, accident_pk):
     else:
         message = 'ERROR: Bad Request ... !'
         return redirect(reverse('main:accident_list', kwargs={"company_pk": accident.company.pk}))
+
 
 @login_required
 def accident_new(request, company_pk):

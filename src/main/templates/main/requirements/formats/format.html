@@ -12,6 +12,12 @@
             </div>
         {% else %}
             <div class="col-md-5">
+                <div class="col-md-10 col-sm-12 col-xs-12 pull-right">
+                    <a href="{% url 'main:format_new_pdf' user.company.pk %}" class="btn-flat success pull-right">
+                        <span>&#43;</span>
+                        Nuevo Formato Pdf
+                    </a>
+                </div>
                 <table class="table table-bordered">
 
                     <thead>
@@ -82,6 +88,12 @@
             <div class="col-md-1"></div>
 
             <div class="col-md-4">
+                <div class="col-md-10 col-sm-12 col-xs-12 pull-right">
+                    <a href="{% url 'main:format_new_other' user.company.pk %}" class="btn-flat success pull-right">
+                        <span>&#43;</span>
+                        Nuevo Formato
+                    </a>
+                </div>
                 <table class="table table-bordered">
                     <thead>
                     <tr>
