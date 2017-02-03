@@ -1,5 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
+
+from proteccion_ambiental.settings import COMPANY_TEMPLATE_RUC
 from .models import Company, Format, Requirement, HistoryFormats, Accident
 from .forms import CompanyForm, FormatForm, AccidentForm, EmployeeForm
 from django.contrib.auth.decorators import login_required

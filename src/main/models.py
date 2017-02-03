@@ -13,7 +13,7 @@ class Product(models.Model):
 
 
 class Company(models.Model):
-    ruc = models.IntegerField(max_length=11, null=False, blank=False, unique=True)
+    ruc = models.IntegerField(null=False, blank=False, unique=True)
     name = models.CharField(max_length=100, null=False, blank=False, unique=True)
     address = models.CharField(max_length=200, null=True, blank=True)
 
