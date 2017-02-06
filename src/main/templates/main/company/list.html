@@ -1,7 +1,12 @@
-{% extends 'main/layout.html' %}
+{% extends 'main/layout_with_out_nav.html' %}
 {% load static %}
 {% block more_styles %}
 <link rel="stylesheet" type="text/css" href="{% static 'main/css/compiled/tables.css'%}"/>
+<style>
+    .content{
+        margin-left:0px;
+    }
+</style>
 {% endblock %}
 {% block content %}
 
@@ -34,8 +39,9 @@
                 <td>{{company.user.get_full_name}} | {{company.user.email }}</td>
                 <td>
                     <ul class="actions">
-                        <li><a href="#">Edit</a></li>
-                        <li class="last"><a href="#">Delete</a></li>
+                        <li><a href="{% url 'main:panel' company.slug %}">Ver</a></li>
+                        <li><a href="#">Editar</a></li>
+                        <li class="last"><a href="#">Eliminar</a></li>
                     </ul>
                 </td>
             </tr>

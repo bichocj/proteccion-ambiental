@@ -115,3 +115,4 @@ LOGIN_REDIRECT_URL = '/'
 
 MEMBER_GROUP = 'equipo proteccion ambiental'
 COMPANY_TEMPLATE_RUC = '1'
+COMPANY_JRA_SLUG = 'jra'

@@ -15,6 +15,7 @@ class Product(models.Model):
 class Company(models.Model):
     ruc = models.IntegerField(null=False, blank=False, unique=True)
     name = models.CharField(max_length=100, null=False, blank=False, unique=True)
+    slug = models.SlugField(_('slug'), max_length=100, blank=True, null=True, unique=True)
     address = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):

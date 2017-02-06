@@ -1,7 +1,7 @@
 from django.core.urlresolvers import reverse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
-from proteccion_ambiental.settings import COMPANY_TEMPLATE_RUC
+from proteccion_ambiental.settings import COMPANY_TEMPLATE_RUC, COMPANY_JRA_SLUG
 from .models import Company, Format, Requirement, HistoryFormats, Accident
 from .forms import CompanyForm, FormatForm, AccidentForm, EmployeeForm
 from django.contrib.auth.decorators import login_required
@@ -10,13 +10,14 @@ from django.utils import timezone
 
 @login_required
 def home(request):
-    return render(request, 'main/home.html')
+    company_jra_slug = COMPANY_JRA_SLUG
+    return render(request, 'main/home.html', locals())
 
 
 # panel de oshas
 @login_required
-def panel(request, company_pk):
-    company = Company.objects.get(pk=company_pk)
+def panel(request, company_slug):
+    company = get_object_or_404(Company, slug=company_slug)
     return render(request, 'main/panel.html', locals())
 
 
@@ -31,7 +32,8 @@ def company_list(request):
 
 
 @login_required
-def format_list(request, requirement_pk):
+def format_list(request, company_slug, requirement_pk):
+    company = get_object_or_404(Company, slug=company_slug)
     if request.POST:
         try:
             format = Format.objects.get(pk=requirement_pk)
@@ -67,46 +69,21 @@ def format_list(request, requirement_pk):
 
 
 @login_required
-def requirements_list(request, pk):
-    if request.POST:
-        try:
-            format = Format.objects.get(pk=pk)
-            history = HistoryFormats()
-            history.format = format
-            history.document = format.document
-            history.date_time = timezone.now()
-            history.save()
-            format.document = request.FILES['document']
-            format.save()
-            return redirect(reverse('main:requirements_list', kwargs={'pk': format.company.pk}))
-        except KeyError:
-            return redirect(reverse('main:requirements_list', kwargs={'pk': format.company.pk}))
-    else:
-        company = Company.objects.get(pk=pk)
-        requirements = Requirement.objects.filter(is_active=True).order_by('order')
-        for requirement in requirements:
-            requirement.formats = Format.objects.filter(requirement__pk=requirement.pk,
-                                                        company__pk=request.user.company.pk)
-            for format in requirement.formats:
-                format.form = FormatForm(instance=format)
-                format.history = HistoryFormats.objects.filter(format=format)
-
-
-def requirements_list(request, company_pk):
-    company = Company.objects.get(pk=company_pk)
+def requirements_list(request, company_slug):
+    company = get_object_or_404(Company, slug=company_slug)
     requirements = Requirement.objects.filter(is_active=True).order_by('order')
     return render(request, "main/requirements/list.html", locals())
 
 
 @login_required
-def calendar_service(request, company_pk):
-    company = Company.objects.get(pk=company_pk)
+def calendar_service(request, company_slug):
+    company = get_object_or_404(Company, slug=company_slug)
     return render(request, "main/calendars/service.html", locals())
 
 
 @login_required
-def calendar_training(request, company_pk):
-    company = Company.objects.get(pk=company_pk)
+def calendar_training(request, company_slug):
+    company = get_object_or_404(Company, slug=company_slug)
     return render(request, "main/calendars/trainings.html", locals())
 
 
@@ -137,8 +114,9 @@ def company_new(request):
 
 
 @login_required
-def accident_list(request, company_pk):
-    accidents = Accident.objects.filter(company=company_pk)
+def accident_list(request, company_slug):
+    company = get_object_or_404(Company, slug=company_slug)
+    accidents = Accident.objects.filter(company=company)
     return render(request, "main/accidents/list.html", locals())
 
 
@@ -148,16 +126,18 @@ def format_new_other(request, requirement_pk):
 
 
 @login_required
-def format_new_pdf(request, requirement_pk):
-    requirement=Requirement.objects.get(pk=requirement_pk)
+def format_new_pdf(request, company_slug, requirement_pk):
+    company = get_object_or_404(Company, slug=company_slug)
+    requirement = Requirement.objects.get(pk=requirement_pk)
     if request.POST:
         pass
     else:
-        return render(request,'main/requirements/formats/new_format_pdf.html',locals())
+        return render(request, 'main/requirements/formats/new_format_pdf.html', locals())
 
 
 @login_required
-def accident_edit(request, accident_pk):
+def accident_edit(request, company_slug, accident_pk):
+    company = get_object_or_404(Company, slug=company_slug)
     accident = Accident.objects.get(pk=accident_pk)
     if request.POST:
         form = AccidentForm(request.POST, request.FILES)
@@ -168,43 +148,44 @@ def accident_edit(request, accident_pk):
             accident.date = form.instance.date
             accident.evidence = form.files['evidence']
             accident.save()
-            return redirect(reverse('main:accident_list', kwargs={"company_pk": accident.company.pk}))
-        return redirect(reverse('main:accident_list', kwargs={"company_pk": accident.company.pk}))
+            return redirect(reverse('main:accident_list', kwargs={"company_slug": accident.company.pk}))
+        return redirect(reverse('main:accident_list', kwargs={"company_slug": accident.company.pk}))
     form = AccidentForm({'title': accident.title, 'content': accident.title, 'type_accident': accident.type_accident,
                          'date': accident.date})
     if form.is_valid():
         return render(request, "main/layout_form.html", locals())
     else:
         message = 'ERROR: Bad Request ... !'
-        return redirect(reverse('main:accident_list', kwargs={"company_pk": accident.company.pk}))
+        return redirect(reverse('main:accident_list', kwargs={"company_slug": accident.company.pk}))
 
 
 @login_required
-def accident_delete(request, accident_pk):
+def accident_delete(request, company_slug, accident_pk):
+    company = get_object_or_404(Company, slug=company_slug)
     if request.POST:
         return render(request, "main/accidents/list.html", locals())
 
     accident = Accident.objects.get(pk=accident_pk)
     if not accident is None:
         accident.delete()
-        return redirect(reverse('main:accident_list', kwargs={"company_pk": accident.company.pk}))
+        return redirect(reverse('main:accident_list', kwargs={"company_slug": accident.company.slug}))
     else:
         message = 'ERROR: Bad Request ... !'
-        return redirect(reverse('main:accident_list', kwargs={"company_pk": accident.company.pk}))
+        return redirect(reverse('main:accident_list', kwargs={"company_slug": accident.company.slug}))
 
 
 @login_required
-def accident_new(request, company_pk):
+def accident_new(request, company_slug):
+    company = get_object_or_404(Company, slug=company_slug)
     title = 'nuevo accidente'
     active_item_menu = 'accidents'
-    company = Company.objects.get(pk=company_pk)
     if request.POST:
         form = AccidentForm(request.POST, request.FILES)
         if form.is_valid():
             accident = form.save(commit=False)
             accident.company = company
             accident.save()
-            return redirect(reverse('main:accident_list', kwargs={"company_pk": company.pk}))
+            return redirect(reverse('main:accident_list', kwargs={"company_slug": company.slug}))
         else:
             message = 'Review all information . . .'
     else:
@@ -213,11 +194,12 @@ def accident_new(request, company_pk):
 
 
 @login_required
-def agreement(request):
+def agreement(request, company_slug):
+    company = get_object_or_404(Company, slug=company_slug)
     return render(request, "main/agreement.html", locals())
 
 
 @login_required
-def reports(request, company_pk):
-    company = Company.objects.get(pk=company_pk)
+def reports(request, company_slug):
+    company = get_object_or_404(Company, slug=company_slug)
     return render(request, "main/reports.html", locals())
