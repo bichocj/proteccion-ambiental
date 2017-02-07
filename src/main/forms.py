@@ -8,9 +8,10 @@ from .models import Company, Format, Accident, Employee
 
 
 class FormatForm(ModelForm):
+    file= forms.FileField(required=False)
     class Meta:
         model = Format
-        fields = ('file',)
+        fields = ['file']
 
 
 class CompanyForm(ModelForm):

@@ -45,19 +45,19 @@ def format_list(request, company_slug, requirement_pk):
             format.file = request.FILES['file']
             format.save()
             title = format.requirement.name
-            return redirect(reverse('main:format_list', kwargs={'requirement_pk': format.requirement.pk}))
+            return redirect(reverse('main:format_list', kwargs={'company_slug':company_slug,'requirement_pk': format.requirement.pk}))
         except:
-            return redirect(reverse('main:format_list', kwargs={'requirement_pk': format.requirement.pk}))
+            return redirect(reverse('main:format_list', kwargs={'company_slug':company_slug,'requirement_pk': format.requirement.pk}))
 
     else:
         requirement = Requirement.objects.get(pk=requirement_pk)
         title = requirement.name
-        formats = Format.objects.filter(requirement=requirement)
+        formats = Format.objects.filter(company=company,requirement=requirement)
         formats_pdf = list()
         formats_xlsx = list()
         if formats.count() != 0:
             for format in formats:
-                if format.file.name.endswith('.pdf'):
+                if format.type_format == Format.PLANES:
                     formats_pdf.append(format)
                 else:
                     formats_xlsx.append(format)
@@ -106,7 +106,7 @@ def company_new(request):
             employee = employee_form.save(commit=False)
             employee.company = company
             employee.save()
-            return redirect(reverse('main:law'))
+            return redirect(reverse('main:company_list'))
     else:
         company_form = CompanyForm()
         employee_form = EmployeeForm()
@@ -121,8 +121,18 @@ def accident_list(request, company_slug):
 
 
 @login_required
-def format_new_other(request, requirement_pk):
-    pass
+def format_new_other(request, company_slug, requirement_pk):
+    company = get_object_or_404(Company, slug=company_slug)
+    requirement = Requirement.objects.get(pk=requirement_pk)
+    is_other=True
+    if request.POST:
+        format=Format(company=company,requirement=requirement,file=request.FILES['file'])
+        format.type_format=Format.REGISTERS
+        format.save()
+        return redirect(reverse('main:format_list', kwargs={"company_slug": company_slug,"requirement_pk":requirement_pk}))            
+    else:
+        form=FormatForm()
+        return render(request, 'main/requirements/formats/new_format.html', locals())
 
 
 @login_required
@@ -130,9 +140,13 @@ def format_new_pdf(request, company_slug, requirement_pk):
     company = get_object_or_404(Company, slug=company_slug)
     requirement = Requirement.objects.get(pk=requirement_pk)
     if request.POST:
-        pass
+        format=Format(company=company,requirement=requirement,file=request.FILES['file'])
+        format.type_format=Format.PLANES
+        format.save()
+        return redirect(reverse('main:format_list', kwargs={"company_slug": company_slug,"requirement_pk":requirement_pk}))            
     else:
-        return render(request, 'main/requirements/formats/new_format_pdf.html', locals())
+        form=FormatForm()
+    return render(request, 'main/requirements/formats/new_format.html', locals())
 
 
 @login_required

@@ -47,15 +47,15 @@ class Evidence(models.Model):
 
 
 class Accident(models.Model):
-    HIGH_WORK = 1
-    INTOXICATION = 2
+    ACCIDENT = 1
+    INCIDENT = 2
     TYPE_ACCIDENT_CHOICES = (
-        (HIGH_WORK, 'HIGH_WORK'),
-        (INTOXICATION, 'INTOXICATION')
+        (ACCIDENT, 'ACCIDENT'),
+        (INCIDENT, 'INCIDENT')
     )
     title = models.CharField(max_length=100, null=False, blank=False)
     content = models.TextField(null=True, blank=True)
-    type_accident = models.IntegerField(_('type accident'), choices=TYPE_ACCIDENT_CHOICES, default=HIGH_WORK)  # NOQA
+    type_accident = models.IntegerField(_('type accident'), choices=TYPE_ACCIDENT_CHOICES, default=ACCIDENT)  # NOQA
     date = models.DateField(_('date'), null=False, default=datetime.now())
     company = models.ForeignKey(Company, null=False, blank=False)
     evidence = models.FileField(_('evidence'),upload_to="accident/",null=True)
@@ -95,8 +95,15 @@ class Requirement(models.Model):
 
 
 class Format(models.Model):
+    PLANES = 1
+    REGISTERS = 2
+    TYPE_FORMAT_CHOICES = (
+        (PLANES, 'PLANES'),
+        (REGISTERS, 'REGISTERS')
+    )
     requirement = models.ForeignKey(Requirement)
-    file = models.FileField(upload_to="formatos/%Y/%m/%d", null=False, blank=False)
+    file = models.FileField(upload_to="formatos/", null=False, blank=False)
+    type_format=models.IntegerField(choices=TYPE_FORMAT_CHOICES,default=PLANES,null=True)#is if format is planes or registros
     company = models.ForeignKey(Company, null=False, blank=False)
 
 

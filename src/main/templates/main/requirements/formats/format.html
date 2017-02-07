@@ -10,12 +10,12 @@
             <div class="alert alert-danger alert-dismissible" role="alert">
                 <strong>Error!</strong> {{ message }} {{ response }}
             </div>
-        {% else %}
+        {% endif %}
             <div class="col-md-5">
                 <div class="col-md-10 col-sm-12 col-xs-12 pull-right">
-                    <a href="{% url 'main:format_new_pdf' user.company.pk %}" class="btn-flat success pull-right">
+                    <a href="{% url 'main:format_new_pdf' company.slug requirement_pk %}" class="btn-flat success pull-right">
                         <span>&#43;</span>
-                        Nuevo Formato Pdf
+                        Nuevo Formato
                     </a>
                 </div>
                 <table class="table table-bordered">
@@ -48,7 +48,7 @@
                                                         aria-hidden="true">&times;</span></button>
                                             </div>
                                             <div class="modal-footer">
-                                                <form action="{% url 'main:format_list' format.pk %}" method="post"
+                                                <form action="{% url 'main:format_list' company.slug format.pk %}" method="post"
                                                       enctype="multipart/form-data">{% csrf_token %}
                                                     {{ format.form.as_p }}
                                                     <input type="submit" class="btn btn-primary" value="Subir">
@@ -89,7 +89,7 @@
 
             <div class="col-md-4">
                 <div class="col-md-10 col-sm-12 col-xs-12 pull-right">
-                    <a href="{% url 'main:format_new_other' user.company.pk %}" class="btn-flat success pull-right">
+                    <a href="{% url 'main:format_new_other' company.slug requirement_pk %}" class="btn-flat success pull-right">
                         <span>&#43;</span>
                         Nuevo Formato
                     </a>
@@ -125,7 +125,7 @@
                                                         aria-hidden="true">&times;</span></button>
                                             </div>
                                             <div class="modal-footer">
-                                                <form action="{% url 'main:format_list' format.pk %}" method="post"
+                                                <form action="{% url 'main:format_list' company.slug format.pk %}" method="post"
                                                       enctype="multipart/form-data">{% csrf_token %}
                                                     {{ format.form.as_p }}
                                                     <input type="submit" class="btn btn-primary" value="Subir">
@@ -167,7 +167,7 @@
             </div>
 
             <div class="col-sm-1"></div>
-        {% endif %}
+        
 
     </div>
 

@@ -1,0 +1,23 @@
+{% extends 'main/layout.html' %}
+{% load i18n %}
+{% block content %}
+    <div class="col-md-12" style="text-align: center;">
+    {% if is_other %}
+        <h1>Registros y Evidencias</h1>
+        <h2>Subir Formato</h2>
+    {% else %}
+        <h1>Planes, Programas y Procedimientos</h1>
+        <h2>Subir Formato</h2>
+    {% endif %}
+    </div>
+    <div class="col-md-12">
+    {% if message %}
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <strong>Error!</strong> {{ message }} {{ response }}
+            </div>
+        {% endif %}
+        {% include 'main/hooks/form.html' %}
+
+{% endblock %}
+
+

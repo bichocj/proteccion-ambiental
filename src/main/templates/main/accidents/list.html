@@ -9,7 +9,7 @@
         <div class="row header">
             <h3>Accidentes</h3>
             <div class="col-md-10 col-sm-12 col-xs-12 pull-right">
-                <a href="{% url 'main:accident_new' user.company.pk %}" class="btn-flat success pull-right">
+                <a href="{% url 'main:accident_new' company.slug %}" class="btn-flat success pull-right">
                     <span>&#43;</span>
                     Nuevo Accidente
                 </a>
@@ -38,8 +38,8 @@
                 <td>{{accident.get_type_accident_display}}</td>
                 <td>
                     <ul class="actions">
-                        <li><a href="{% url 'main:accident_edit' accident.pk %}">Edit</a></li>
-                        <li class="last"><a href="{% url 'main:accident_delete' accident.pk %}">Delete</a></li>
+                        <li><a href="{% url 'main:accident_edit' company.slug accident.pk %}">Edit</a></li>
+                        <li class="last"><a href="{% url 'main:accident_delete' company.slug accident.pk %}">Delete</a></li>
                     </ul>
                 </td>
             </tr>

@@ -18,7 +18,7 @@
 
         {% for requirement in requirements %}
         <tr>
-            <td><a href="{% url 'main:format_list' requirement.pk %}"><b>{{requirement.name}}</b></a></td>
+            <td><a href="{% url 'main:format_list' company.slug requirement.pk %}"><b>{{requirement.name}}</b></a></td>
         </tr>
         {% endfor %}
 
