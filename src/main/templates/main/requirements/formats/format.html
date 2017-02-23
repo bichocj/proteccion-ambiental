@@ -1,4 +1,5 @@
-{% extends 'main/panel.html' %}
+{% extends 'main/requirements/list.html' %}
+
 
 {% block content %}
 
@@ -12,7 +13,7 @@
             </div>
         {% endif %}
             <div class="col-md-5">
-                <div class="col-md-10 col-sm-12 col-xs-12 pull-right">
+                <div class="pull-right">
                     <a href="{% url 'main:format_new_pdf' company.slug requirement_pk %}" class="btn-flat success pull-right">
                         <span>&#43;</span>
                         Nuevo Formato
@@ -30,7 +31,7 @@
                     <tbody>
                     {% for format in formats_pdf %}
                         <tr>
-                            <td><a href="{{ format.file.path_re }}">{{ format.file }}</a></td>
+                            <td><a href="{{ format.url }}" download="{{ format.file }}">{{ format.file }}</a></td>
                             <td>
                                 <div>
                                     <button type="button" class="btn btn-primary" data-toggle="modal"
@@ -85,10 +86,10 @@
                 </table>
             </div>
 
-            <div class="col-md-1"></div>
+            <div class="col-md-2"></div>
 
-            <div class="col-md-4">
-                <div class="col-md-10 col-sm-12 col-xs-12 pull-right">
+            <div class="col-md-5">
+                <div class="pull-right">
                     <a href="{% url 'main:format_new_other' company.slug requirement_pk %}" class="btn-flat success pull-right">
                         <span>&#43;</span>
                         Nuevo Formato
@@ -106,7 +107,7 @@
 
                     {% for format in formats_xlsx %}
                         <tr>
-                            <td><a href="#">{{ format.file }}</a></td>
+                            <td><a href="{{ format.url }}">{{ format.file }}</a></td>
                             <td>
                                 <div>
                                     <button type="button" class="btn btn-primary" data-toggle="modal"

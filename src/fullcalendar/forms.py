@@ -42,7 +42,6 @@ class CalendarModelForm(ModelForm):
     workers = User.objects.exclude(groups__in=(group,))
 
     title = forms.CharField(max_length=100)
-    assigned = UserModelChoiceField(members, empty_label="", label=_('assigned to'))
     users = UserModelMultipleChoiceField(workers, label=_('shared with'))
 
     class Meta:
@@ -52,7 +51,7 @@ class CalendarModelForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(CalendarModelForm, self).__init__(*args, **kwargs)
         add_form_control_class(self.fields)
-        add_class_time_picker(self, ['max_time', 'min_time'])
+
 
 
 class EventsModelForm(ModelForm):

@@ -13,8 +13,15 @@
 <div id="pad-wrapper" class="users-list">
     <div class="table-wrapper products-table">
         <div class="row header">
-            <h3>Empresas</h3>
-            <div class="col-md-10 col-sm-12 col-xs-12 pull-right">
+            <div class="col-md-12"><h3>Empresas</h3></div>
+
+            <div class="col-md-6 col-sm-12 col-xs-12 pull-left">
+                <a href="{% url 'main:configuration_global' %}" class="btn-flat success pull-left">
+
+                    Configuracion Global
+                </a>
+            </div>
+            <div class="col-md-6 col-sm-12 col-xs-12 pull-right">
                 <a href="{% url 'main:company_new' %}" class="btn-flat success pull-right">
                     <span>&#43;</span>
                     Nuevo Empresa

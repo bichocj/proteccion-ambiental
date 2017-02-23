@@ -1,12 +1,9 @@
-{% extends 'main/layout.html' %}
+{% extends 'main/accidents/list.html' %}
 {% block sidebar %}
     <div id="sidebar-nav">
          <ul id="dashboard-menu">
-            <li class="active">
-                <div class="pointer">
-                        <div class="arrow"></div>
-                        <div class="arrow_border"></div>
-                    </div>
+            <li >
+
                 <a href="{% url 'main:panel' company_slug %}"><i class="icon-home"></i>
                     <span>{{company.name}}</span>
                 </a>
@@ -23,7 +20,11 @@
                     <span>Calendarios</span>
                 </a>
             </li>
-            <li >
+            <li class="active">
+                <div class="pointer">
+                        <div class="arrow"></div>
+                        <div class="arrow_border"></div>
+                    </div>
                 <a href="{% url 'main:accident_list' company.slug %}">
                     <i class="icon-heart-empty"></i>
                     <span>Accidentes</span>
@@ -35,7 +36,7 @@
                     <span>Acuerdo SST</span>
                 </a>
             </li>
-            <li>
+            <li class="{% if 'reports' in request.path %}active{% endif %}">
                 <a href="{% url 'main:reports' company.slug %}">
                     <i class="icon-signal"></i>
                     <span>Reportes</span>
@@ -43,9 +44,26 @@
             </li>
         </ul>
     </div>
-
 {% endblock %}
 {% block content %}
-    enterprise info
+    <div class="col-md-12" style="text-align: center"><h1>Accidents</h1></div>
+     <div class="col-md-6">
+        {% if message %}
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <strong>Error!</strong> {{ message }} {{ response }}
+            </div>
+        {% endif %}
+        <form action="." method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+            {% include 'main/hooks/field_with_label.html' with field=field %}
+            {% endfor %}
+
+            <button type="submit">Save</button>
+        </form>
+    </div>
+    <div class="col md-6">
+
+    </div>
 
 {% endblock %}

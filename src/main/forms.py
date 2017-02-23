@@ -4,11 +4,12 @@ from django.forms import ModelForm, HiddenInput
 from django.utils.translation import ugettext, ugettext_lazy as _
 
 from .functions import add_form_control_class, add_form_text
-from .models import Company, Format, Accident, Employee
+from .models import Company, Format, Accident, Employee, Requirement
 
 
 class FormatForm(ModelForm):
-    file= forms.FileField(required=False)
+    file = forms.FileField(required=False)
+
     class Meta:
         model = Format
         fields = ['file']
@@ -17,7 +18,7 @@ class FormatForm(ModelForm):
 class CompanyForm(ModelForm):
     class Meta:
         model = Company
-        fields = '__all__'
+        exclude=['is_pricnipal']
 
     def __init__(self, *args, **kwargs):
         super(CompanyForm, self).__init__(*args, **kwargs)
@@ -71,10 +72,20 @@ class DateInput(forms.DateInput):
 
 
 class AccidentForm(ModelForm):
-    evidence= forms.FileField(required=False)
     class Meta:
         model = Accident
         fields = ['title', 'content', 'type_accident', 'date', 'evidence']
-        widgets = {
-            'date': DateInput(),
-        }
+
+    def __init__(self, *args, **kwargs):
+        super(AccidentForm, self).__init__(*args, **kwargs)
+        _instance = kwargs.pop('instance', None)
+
+
+class RequirementForm(ModelForm):
+    class Meta:
+        model = Requirement
+        fields = ['name', 'description']
+
+    def __init__(self, *args, **kwargs):
+        super(RequirementForm, self).__init__(*args, **kwargs)
+        _instance = kwargs.pop('instance', None)

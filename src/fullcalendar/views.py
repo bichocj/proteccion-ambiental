@@ -1,5 +1,6 @@
 import datetime
 from django import http
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, get_object_or_404, redirect
@@ -11,31 +12,39 @@ from fullcalendar.models import Calendar, Events
 # from main.functions import generate_breadcrumb_relations
 from django.utils.translation import ugettext as _
 
+from main.models import Company
 
-def calendar_list(request):
+
+@login_required
+def calendar_list(request, company_slug):
     calendars = Calendar.objects.all()
+    company = get_object_or_404(Company, slug=company_slug)
     return render(request, "fullcalendar/list.html", locals())
 
 
-def calendar_new(request):
+@login_required
+def calendar_new(request, company_slug):
     title = _('new calendar')
+    company = get_object_or_404(Company, slug=company_slug)
     if request.POST:
         form = CalendarModelForm(request.POST)
         if form.is_valid():
             calendar = form.save(commit=False)
             calendar.created_by = request.user
+            calendar.company = company
             calendar.save()
             form.save_m2m()
-            return redirect(reverse('fullcalendar:view_calendar', args=[calendar.slug, calendar.id]))
+            return redirect(reverse('fullcalendar:view_calendar', args=[company_slug, calendar.slug, calendar.id]))
     else:
         form = CalendarModelForm()
 
     return render(request, "main/layout_form.html", locals())
 
 
-def view_calendar(request, slug, calendar_id):
+def view_calendar(request, company_slug, slug, calendar_id):
     try:
-        calendar = Calendar.objects.get(slug=slug, id=calendar_id)
+        company = get_object_or_404(Company, slug=company_slug)
+        calendar = Calendar.objects.get(company=company, slug=slug, id=calendar_id)
     except ObjectDoesNotExist:
         calendar = get_object_or_404(Calendar, id=calendar_id)
     form_event = EventsModelForm()

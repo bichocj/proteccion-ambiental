@@ -3,14 +3,17 @@ from django.db import models
 from django.template import defaultfilters
 from django.utils.translation import ugettext as _
 
+from main.models import Company
+from proteccion_ambiental.settings import COMPANY_JRA_SLUG
+
+
+
 
 class Calendar(models.Model):
     title = models.CharField(_('title'), max_length=200, null=False, blank=None)
+    company = models.ForeignKey(Company, related_name="company", null=False)
     slug = models.SlugField(max_length=100)
-    assigned = models.ForeignKey(User, null=True, verbose_name=_('assigned to'))
     users = models.ManyToManyField(User, related_name="users", verbose_name=_('shared with'))
-    min_time = models.TimeField(_('since hour'), null=True, blank=True)
-    max_time = models.TimeField(_('until hour'), null=True, blank=True)
     created_by = models.ForeignKey(User, related_name="created_by")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -46,7 +49,6 @@ class Calendar(models.Model):
 class Accessibility(models.Model):
     calendar = models.ForeignKey(Calendar)
     group = models.ForeignKey(Group)
-
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -1,12 +1,10 @@
 {% extends 'main/layout.html' %}
+{% block styles %}
+{% endblock %}
 {% block sidebar %}
     <div id="sidebar-nav">
          <ul id="dashboard-menu">
-            <li class="active">
-                <div class="pointer">
-                        <div class="arrow"></div>
-                        <div class="arrow_border"></div>
-                    </div>
+            <li>
                 <a href="{% url 'main:panel' company_slug %}"><i class="icon-home"></i>
                     <span>{{company.name}}</span>
                 </a>
@@ -35,7 +33,11 @@
                     <span>Acuerdo SST</span>
                 </a>
             </li>
-            <li>
+            <li class="active">
+                <div class="pointer">
+                        <div class="arrow"></div>
+                        <div class="arrow_border"></div>
+                    </div>
                 <a href="{% url 'main:reports' company.slug %}">
                     <i class="icon-signal"></i>
                     <span>Reportes</span>
@@ -43,9 +45,9 @@
             </li>
         </ul>
     </div>
-
 {% endblock %}
 {% block content %}
-    enterprise info
 
+{% endblock %}
+{% block scripts %}
 {% endblock %}

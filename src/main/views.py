@@ -2,8 +2,8 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 
 from proteccion_ambiental.settings import COMPANY_TEMPLATE_RUC, COMPANY_JRA_SLUG
-from .models import Company, Format, Requirement, HistoryFormats, Accident
-from .forms import CompanyForm, FormatForm, AccidentForm, EmployeeForm
+from .models import Company, Format, Requirement, HistoryFormats, Accident, Company_Requirement
+from .forms import CompanyForm, FormatForm, AccidentForm, EmployeeForm, RequirementForm
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 
@@ -16,6 +16,12 @@ def home(request):
 
 # panel de oshas
 @login_required
+def configuration(request, company_slug):
+    company = get_object_or_404(Company, slug=company_slug)
+    return render(request, 'main/configuration.html', locals())
+
+
+@login_required
 def panel(request, company_slug):
     company = get_object_or_404(Company, slug=company_slug)
     return render(request, 'main/panel.html', locals())
@@ -25,9 +31,13 @@ def panel(request, company_slug):
 @login_required
 def company_list(request):
     # if user is admin
-    companies = Company.objects.all()
+    companias = Company.objects.all()
     # else
     # companies = Company.objects.get(su empresa)
+    companies = list()
+    for c in companias:
+        if not c.slug == 'jra':
+            companies.append(c)
     return render(request, "main/company/list.html", locals())
 
 
@@ -45,14 +55,16 @@ def format_list(request, company_slug, requirement_pk):
             format.file = request.FILES['file']
             format.save()
             title = format.requirement.name
-            return redirect(reverse('main:format_list', kwargs={'company_slug':company_slug,'requirement_pk': format.requirement.pk}))
+            return redirect(reverse('main:format_list',
+                                    kwargs={'company_slug': company_slug, 'requirement_pk': format.requirement.pk}))
         except:
-            return redirect(reverse('main:format_list', kwargs={'company_slug':company_slug,'requirement_pk': format.requirement.pk}))
+            return redirect(reverse('main:format_list',
+                                    kwargs={'company_slug': company_slug, 'requirement_pk': format.requirement.pk}))
 
     else:
         requirement = Requirement.objects.get(pk=requirement_pk)
         title = requirement.name
-        formats = Format.objects.filter(company=company,requirement=requirement)
+        formats = Format.objects.filter(company=company, requirement=requirement)
         formats_pdf = list()
         formats_xlsx = list()
         if formats.count() != 0:
@@ -71,7 +83,9 @@ def format_list(request, company_slug, requirement_pk):
 @login_required
 def requirements_list(request, company_slug):
     company = get_object_or_404(Company, slug=company_slug)
-    requirements = Requirement.objects.filter(is_active=True).order_by('order')
+    requirements = list()
+    for r in Company_Requirement.objects.filter(company=company.pk):
+        requirements.append(r.requirement)
     return render(request, "main/requirements/list.html", locals())
 
 
@@ -88,25 +102,66 @@ def calendar_training(request, company_slug):
 
 
 @login_required
+def configuration_global(request):
+    requirements = Requirement.objects.filter(type_requirement=Requirement.ENTERPRISE)
+    return render(request, 'main/configuration_global.html', locals())
+
+
+@login_required
+def requirement_new(request, company_slug):
+    company = Company.objects.get(slug=company_slug)
+    if request.POST:
+        form = RequirementForm(request.POST)
+        if form.is_valid():
+            requirement = form.save()
+            requirement.type_requirement = Requirement.PROTECTION
+            requirement.save()
+            cr = Company_Requirement(company=company, requirement=requirement)
+            cr.save()
+            return redirect(reverse('main:requirements_list', kwargs={"company_slug": company.slug}))
+    else:
+        form = RequirementForm()
+        return render(request, 'main/requirements/new_requirement.html', locals())
+
+
+@login_required
+def global_requirement_new(request):
+    global_config = True
+    if request.POST:
+        form = RequirementForm(request.POST)
+        if form.is_valid():
+            requirement = form.save()
+            requirement.type_requirement = Requirement.ENTERPRISE
+            requirement.save()
+            return redirect(reverse('main:configuration_global'))
+    else:
+        requirement_form = RequirementForm()
+    return render(request, 'main/requirements_enterprise/new_requirement.html', locals())
+
+
+@login_required
 def company_new(request):
     title = "Nueva empresa"
     if request.POST:
         company_form = CompanyForm(request.POST)
         employee_form = EmployeeForm(request.POST)
         if company_form.is_valid() and employee_form.is_valid():
-            comp = Company.objects.get(ruc=COMPANY_TEMPLATE_RUC)
-            formats = Format.objects.filter(company=comp)
-            company = company_form.save()
-            for f in formats:
-                format = Format()
-                format.requirement = f.requirement
-                format.file = f.file
-                format.company = company
-                format.save()
-            employee = employee_form.save(commit=False)
-            employee.company = company
-            employee.save()
-            return redirect(reverse('main:company_list'))
+            if not company_form.data['slug'] == 'jra':
+                company = company_form.save()
+                requirements = Requirement.objects.filter(type_requirement=Requirement.ENTERPRISE)
+                for requirement in requirements:
+                    cr = Company_Requirement(company=company, requirement=requirement)
+                    cr.save()
+                employee = employee_form.save(commit=False)
+                employee.company = company
+                employee.save()
+                return redirect(reverse('main:company_list'))
+            else:
+                message = 'ERROR: Slug prohibido . . .!'
+                return render(request, "main/company/form.html", locals())
+        else:
+            message = 'ERROR: Revise la informacion...!'
+            return render(request, "main/company/form.html", locals())
     else:
         company_form = CompanyForm()
         employee_form = EmployeeForm()
@@ -124,14 +179,15 @@ def accident_list(request, company_slug):
 def format_new_other(request, company_slug, requirement_pk):
     company = get_object_or_404(Company, slug=company_slug)
     requirement = Requirement.objects.get(pk=requirement_pk)
-    is_other=True
+    is_other = True
     if request.POST:
-        format=Format(company=company,requirement=requirement,file=request.FILES['file'])
-        format.type_format=Format.REGISTERS
+        format = Format(company=company, requirement=requirement, file=request.FILES['file'])
+        format.type_format = Format.REGISTERS
         format.save()
-        return redirect(reverse('main:format_list', kwargs={"company_slug": company_slug,"requirement_pk":requirement_pk}))            
+        return redirect(
+            reverse('main:format_list', kwargs={"company_slug": company_slug, "requirement_pk": requirement_pk}))
     else:
-        form=FormatForm()
+        form = FormatForm()
         return render(request, 'main/requirements/formats/new_format.html', locals())
 
 
@@ -140,12 +196,13 @@ def format_new_pdf(request, company_slug, requirement_pk):
     company = get_object_or_404(Company, slug=company_slug)
     requirement = Requirement.objects.get(pk=requirement_pk)
     if request.POST:
-        format=Format(company=company,requirement=requirement,file=request.FILES['file'])
-        format.type_format=Format.PLANES
+        format = Format(company=company, requirement=requirement, file=request.FILES['file'])
+        format.type_format = Format.PLANES
         format.save()
-        return redirect(reverse('main:format_list', kwargs={"company_slug": company_slug,"requirement_pk":requirement_pk}))            
+        return redirect(
+            reverse('main:format_list', kwargs={"company_slug": company_slug, "requirement_pk": requirement_pk}))
     else:
-        form=FormatForm()
+        form = FormatForm()
     return render(request, 'main/requirements/formats/new_format.html', locals())
 
 
@@ -153,6 +210,7 @@ def format_new_pdf(request, company_slug, requirement_pk):
 def accident_edit(request, company_slug, accident_pk):
     company = get_object_or_404(Company, slug=company_slug)
     accident = Accident.objects.get(pk=accident_pk)
+    title = 'editar accidente'
     if request.POST:
         form = AccidentForm(request.POST, request.FILES)
         if form.is_valid():
@@ -164,13 +222,9 @@ def accident_edit(request, company_slug, accident_pk):
             accident.save()
             return redirect(reverse('main:accident_list', kwargs={"company_slug": accident.company.pk}))
         return redirect(reverse('main:accident_list', kwargs={"company_slug": accident.company.pk}))
-    form = AccidentForm({'title': accident.title, 'content': accident.title, 'type_accident': accident.type_accident,
-                         'date': accident.date})
-    if form.is_valid():
-        return render(request, "main/layout_form.html", locals())
-    else:
-        message = 'ERROR: Bad Request ... !'
-        return redirect(reverse('main:accident_list', kwargs={"company_slug": accident.company.pk}))
+    form = AccidentForm(instance=accident)
+
+    return render(request, "main/accidents/accidents.html", locals())
 
 
 @login_required
@@ -204,7 +258,7 @@ def accident_new(request, company_slug):
             message = 'Review all information . . .'
     else:
         form = AccidentForm()
-    return render(request, "main/layout_form.html", locals())
+    return render(request, "main/accidents/accidents.html", locals())
 
 
 @login_required
@@ -216,4 +270,4 @@ def agreement(request, company_slug):
 @login_required
 def reports(request, company_slug):
     company = get_object_or_404(Company, slug=company_slug)
-    return render(request, "main/reports.html", locals())
+    return render(request, "main/reports/reports.html", locals())

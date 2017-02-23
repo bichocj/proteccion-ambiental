@@ -26,6 +26,19 @@
             <span class="help-block">{{ error }}</span>
         {% endfor %}
     {% endif %}
+{% elif field|is_selectable %}
+    <div class="input-with-label text-left">
+        <span>{{ field.label }} :</span>
+        <div class="select-option">
+            <i class="ti-angle-down"></i>
+            {{ field }}
+        </div>
+        {% if field.errors %}
+            {% for error in field.errors %}
+                <span class="help-block">{{ error }}</span>
+            {% endfor %}
+        {% endif %}
+    </div>
 {% else %}
     <div class="input-with-label text-left">
         <span>{{ field.label }} :</span>
@@ -37,5 +50,4 @@
             {% endfor %}
         {% endif %}
     </div>
-
 {% endif %}

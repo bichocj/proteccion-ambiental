@@ -17,9 +17,30 @@ class Company(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False, unique=True)
     slug = models.SlugField(_('slug'), max_length=100, blank=True, null=True, unique=True)
     address = models.CharField(max_length=200, null=True, blank=True)
+    is_pricnipal=models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
+
+class Requirement(models.Model):
+    PROTECTION = 0
+    ENTERPRISE = 1
+    type_choice = (
+        (PROTECTION, PROTECTION),
+        (ENTERPRISE, ENTERPRISE)
+    )
+    name = models.CharField(max_length=100, null=False, blank=False)
+    description = models.CharField(max_length=50, null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+    type_requirement = models.IntegerField(default=PROTECTION, choices=type_choice, null=False)
+
+    def __str__(self):
+        return self.name
+
+
+class Company_Requirement(models.Model):
+    company = models.ForeignKey(Company, null=False)
+    requirement = models.ForeignKey(Requirement, null=False)
 
 
 class Employee(User):
@@ -58,7 +79,7 @@ class Accident(models.Model):
     type_accident = models.IntegerField(_('type accident'), choices=TYPE_ACCIDENT_CHOICES, default=ACCIDENT)  # NOQA
     date = models.DateField(_('date'), null=False, default=datetime.now())
     company = models.ForeignKey(Company, null=False, blank=False)
-    evidence = models.FileField(_('evidence'),upload_to="accident/",null=True)
+    evidence = models.FileField(_('evidence'), upload_to="accident/", null=True)
 
 
 class Task(models.Model):
@@ -84,14 +105,7 @@ class Report(models.Model):
     company = models.ForeignKey(Company, null=False, blank=False)
 
 
-class Requirement(models.Model):
-    name = models.CharField(max_length=100, null=False, blank=False)
-    description = models.CharField(max_length=50, null=True, blank=True)
-    is_active = models.BooleanField(default=True)
-    order = models.IntegerField(default=0)
 
-    def __str__(self):
-        return self.name
 
 
 class Format(models.Model):
@@ -103,7 +117,8 @@ class Format(models.Model):
     )
     requirement = models.ForeignKey(Requirement)
     file = models.FileField(upload_to="formatos/", null=False, blank=False)
-    type_format=models.IntegerField(choices=TYPE_FORMAT_CHOICES,default=PLANES,null=True)#is if format is planes or registros
+    type_format = models.IntegerField(choices=TYPE_FORMAT_CHOICES, default=PLANES,
+                                      null=True)  # is if format is planes or registros
     company = models.ForeignKey(Company, null=False, blank=False)
 
 

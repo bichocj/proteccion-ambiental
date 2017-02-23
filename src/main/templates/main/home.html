@@ -1,6 +1,5 @@
 {% extends 'main/layout_with_out_nav.html' %}
-
-{% block more_styles %}
+{% block styles %}
 <style>
     .content{
         margin-left:0px;
@@ -11,6 +10,7 @@
 {% block content %}
 {% if user.is_authenticated %}
 <div class="container-fluid">
+    
     <div class="row">
         <br>
         <br>

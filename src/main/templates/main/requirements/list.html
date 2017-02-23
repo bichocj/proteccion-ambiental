@@ -2,11 +2,64 @@
 {% load static %}
 {% block more_styles %}
 {% endblock %}
+{% block sidebar %}
+    <div id="sidebar-nav">
+         <ul id="dashboard-menu">
+            <li >
+
+                <a href="{% url 'main:panel' company_slug %}"><i class="icon-home"></i>
+                    <span>{{company.name}}</span>
+                </a>
+            </li>
+            <li class="active">
+                <div class="pointer">
+                        <div class="arrow"></div>
+                        <div class="arrow_border"></div>
+                    </div>
+                <a href="{% url 'main:requirements_list'  company.slug %}">
+                    <i class="icon-tasks"></i>
+                    <span>Requisitos</span>
+                </a>
+            </li>
+            <li >
+                <a href="{% url 'fullcalendar:list' company.slug %}">
+                    <i class="icon-calendar-empty"></i>
+                    <span>Calendarios</span>
+                </a>
+            </li>
+            <li >
+                <a href="{% url 'main:accident_list' company.slug %}">
+                    <i class="icon-heart-empty"></i>
+                    <span>Accidentes</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="icon-comments-alt"></i>
+                    <span>Acuerdo SST</span>
+                </a>
+            </li>
+            <li class="{% if 'reports' in request.path %}active{% endif %}">
+                <a href="{% url 'main:reports' company.slug %}">
+                    <i class="icon-signal"></i>
+                    <span>Reportes</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+{% endblock %}
 {% block content %}
 
 <div id="pad-wrapper" class="users-list">
     <div class="row header">
         <h3>Requerimientos</h3>
+    </div>
+    <div id="pad-wrapper" class="users-list">
+     <div class="col-md-6 col-sm-12 col-xs-12 pull-right">
+        <a href="{% url 'main:requirement_new' company.slug%}" class="btn-flat success pull-right">
+            <span>&#43;</span>
+            Nuevo Requerimiento
+        </a>
     </div>
     <table class="table table-hover">
         <thead>
@@ -32,8 +85,6 @@
 
 {% block more_scripts %}
 <script>
-$( function() {
-    active_menu('.requirement');
-});
+
 </script>
 {% endblock%}

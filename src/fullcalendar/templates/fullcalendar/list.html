@@ -10,7 +10,7 @@
         <div class="row header">
             <h3>Calendarios</h3>
             <div class="col-md-10 col-sm-12 col-xs-12 pull-right">
-                <a href="{% url 'fullcalendar:new' %}" class="btn-flat success pull-right">
+                <a href="{% url 'fullcalendar:new' company.slug %}" class="btn-flat success pull-right">
                     <span>&#43;</span>
                     Nuevo Calendario
                 </a>
@@ -31,7 +31,7 @@
                 <td><b>{{calendar.title}}</b></td>
                 <td>
                     <ul class="actions">
-                        <li><a href="{% url 'fullcalendar:view_calendar' calendar.slug calendar.pk %}">Ver</a></li>
+                        <li><a href="{% url 'fullcalendar:view_calendar' company.slug calendar.slug calendar.pk %}">Ver</a></li>
                         <li><a href="#">Edit</a></li>
                         <li class="last"><a href="#">Delete</a></li>
                     </ul>

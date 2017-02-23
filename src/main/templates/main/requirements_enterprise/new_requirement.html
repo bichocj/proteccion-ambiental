@@ -1,32 +1,20 @@
-{% extends 'main/panel.html' %}
+{% extends 'main/layout_with_out_nav.html' %}
 
 {% block content %}
-    <div class="col-md-12" style="text-align: center"><h1>Accidents</h1></div>
+<div class="col-md-12" style="text-align: center"><h1>Nuevo Requerimiento</h1></div>
      <div class="col-md-6">
         {% if message %}
             <div class="alert alert-danger alert-dismissible" role="alert">
                 <strong>Error!</strong> {{ message }} {{ response }}
             </div>
         {% endif %}
-        <form action="" method="post">
+        <form action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            {% for field in form %}
+            {% for field in requirement_form %}
             {% include 'main/hooks/field_with_label.html' with field=field %}
             {% endfor %}
 
             <button type="submit">Save</button>
         </form>
     </div>
-    <div class="col md-6">
-
-    </div>
-
-<div id="pad-wrapper" class="users-list">
-    <div class="row header">
-        <h3>Accidentes</h3>
-    </div>
-
-    <br>
-</div>
-
 {% endblock %}

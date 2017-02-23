@@ -3,9 +3,9 @@ __author__ = 'jona'
 from django.conf.urls import url, patterns
 
 urlpatterns = patterns('fullcalendar.views',
-                       url(r'^list/$', "calendar_list", name="list"),
-                       url(r'^new/$', "calendar_new", name="new"),
-                       url(r'^view/(?P<slug>[-\w]+)/(?P<calendar_id>\d+)/$', "view_calendar", name="view_calendar"),
+                       url(r'^(?P<company_slug>\w+)/list/$', "calendar_list", name="list"),
+                       url(r'^(?P<company_slug>\w+)/new/$', "calendar_new", name="new"),
+                       url(r'^(?P<company_slug>\w+)/view/(?P<slug>[-\w]+)/(?P<calendar_id>\d+)/$', "view_calendar", name="view_calendar"),
                        url(r'^events/(?P<calendar_id>\d+)/$', "events_json", name="events_json"),
                        url(r'^event/save/(?P<slug>[-\w]+)$', "save_event", name="save_event"),
                        url(r'^event/$', "get_event", name="get_event"),
