@@ -1,7 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 
-from proteccion_ambiental.settings import COMPANY_TEMPLATE_RUC, COMPANY_JRA_SLUG
+from proteccion_ambiental.settings import COMPANY_JRA_SLUG
 from .models import Company, Format, Requirement, HistoryFormats, Accident, Company_Requirement
 from .forms import CompanyForm, FormatForm, AccidentForm, EmployeeForm, RequirementForm
 from django.contrib.auth.decorators import login_required

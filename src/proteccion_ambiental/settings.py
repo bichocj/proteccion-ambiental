@@ -113,6 +113,5 @@ FROM_NAME = 'cecilurastastas@gmail.com'
 
 LOGIN_REDIRECT_URL = '/'
 
-MEMBER_GROUP = 'equipo jra ambiental'
-COMPANY_TEMPLATE_RUC = '1'
+MEMBER_GROUP = 'equipo JRA'
 COMPANY_JRA_SLUG = 'jra'

@@ -1,19 +1,19 @@
 import datetime
+import json
+
 from django import http
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, get_object_or_404, redirect
-from django.utils import timezone
-import json
-from fullcalendar.breadcrumb import links
-from fullcalendar.forms import CalendarModelForm, EventsModelForm
-from fullcalendar.models import Calendar, Events
-# from main.functions import generate_breadcrumb_relations
 from django.utils.translation import ugettext as _
 
+from fullcalendar.forms import CalendarModelForm, EventsModelForm
+from fullcalendar.models import Calendar, Events
 from main.models import Company
 
-def calendar_list(request):
+
+def calendar_list(request, company_slug):
     calendars = Calendar.objects.all()
     company = get_object_or_404(Company, slug=company_slug)
     return render(request, "fullcalendar/list.html", locals())
@@ -44,7 +44,7 @@ def view_calendar(request, company_slug, slug, calendar_id):
         calendar = Calendar.objects.get(company=company, slug=slug, id=calendar_id)
     except ObjectDoesNotExist:
         calendar = get_object_or_404(Calendar, id=calendar_id)
-    #company = request.user.company
+    # company = request.user.company
     form = EventsModelForm()
     info = {
         'view_calendar': {
