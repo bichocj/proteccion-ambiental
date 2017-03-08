@@ -53,6 +53,10 @@ class Accessibility(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
+class EventType(models.Model):
+    name = models.CharField(_('type'), max_length=200, null=False, blank=None)
+
+
 class Events(models.Model):
     calendar = models.ForeignKey(Calendar)
     event_start = models.DateTimeField()
@@ -61,6 +65,7 @@ class Events(models.Model):
     description = models.TextField()
     observation = models.TextField(blank=True, null=True)
     member = models.ForeignKey(User)
+    type = models.ForeignKey(EventType)
     is_cancelled = models.BooleanField(default=False)
 
     created_by = models.ForeignKey(User, related_name="created_by_event")

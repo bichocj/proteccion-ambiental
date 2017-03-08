@@ -42,58 +42,18 @@
                 <h4 class="modal-title">Event</h4>
             </div>
             <div class="modal-body">
-                <form method="post" action="{% url 'fullcalendar:save_event' slug %}" id="event-form">
-                    <div class="form-group form-md-line-input has-success form-md-floating-label">
-                        <div class="input-icon">
-                            {% csrf_token %}
-                            <input type="hidden" id="id_event" name="id" value="">
-                            {{ form_event.title }}
-                            <label for="form_control_1">{% trans 'Title' %}</label>
-                            <span class="help-block"></span>
-                            <i class="fa fa-bell-o"></i>
+                <form method="post" class="form-horizontal" action="{% url 'fullcalendar:save_event' slug %}" id="event-form">
+                    {% for f in form %}
+                    <div class="form-group {% if f.errors %}has-error{% endif %}">
+                        <label for="id_{{f.name}}" class="col-sm-2 control-label">{{ f.label|capfirst }}</label>
+                        <div class="col-sm-10">
+                            {{ f }}
+                            {% for error in f.errors %}
+                            <p class="help-block">{{ error }}</p>
+                            {% endfor %}
                         </div>
                     </div>
-                    <div class="form-group form-md-line-input has-success form-md-floating-label">
-                        <div class="input-group">
-                            <div class="input-group-control">
-                                {{ form_event.event_start|add_class:"datetime" }}
-                                <label for="form_control_1">{% trans 'Start' %}</label>
-                            </div>
-                        <span class="input-group-btn btn-right">
-                            <span class="glyphicon glyphicon-minus"></span>
-                        </span>
-
-                            <div class="input-group-control">
-                                {{ form_event.event_end|add_class:"datetime" }}
-                                <label for="form_control_1">{% trans 'End' %}</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group form-md-line-input has-success form-md-floating-label">
-                        <div class="input-icon">
-                            <input class="form-control" id="id_member" maxlength="100" type="text">
-                            <input name="member" type="hidden">
-                            <label for="form_control_1">{% trans 'Member' %}</label>
-                            <span class="help-block"></span>
-                            <i class="fa fa-bell-o"></i>
-                        </div>
-                    </div>
-                    <div class="form-group form-md-line-input has-success form-md-floating-label">
-                        <div class="input-icon">
-                            {{ form_event.description }}
-                            <label for="form_control_1">{% trans 'Description' %}</label>
-                            <span class="help-block"></span>
-                            <i class="fa fa-bell-o"></i>
-                        </div>
-                    </div>
-                    <div class="form-group form-md-line-input has-success form-md-floating-label">
-                        <div class="input-icon">
-                            {{ form_event.observation }}
-                            <label for="form_control_1">{% trans 'Observation' %}</label>
-                            <span class="help-block"></span>
-                            <i class="fa fa-bell-o"></i>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </form>
             </div>
             <div class="modal-footer">
@@ -277,6 +237,7 @@
 
             active_menu('.calendar');
         });
+
 
 
 

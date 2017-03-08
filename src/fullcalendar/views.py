@@ -1,6 +1,5 @@
 import datetime
 from django import http
-from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, get_object_or_404, redirect
@@ -14,9 +13,7 @@ from django.utils.translation import ugettext as _
 
 from main.models import Company
 
-
-@login_required
-def calendar_list(request, company_slug):
+def calendar_list(request):
     calendars = Calendar.objects.all()
     company = get_object_or_404(Company, slug=company_slug)
     return render(request, "fullcalendar/list.html", locals())
@@ -47,7 +44,8 @@ def view_calendar(request, company_slug, slug, calendar_id):
         calendar = Calendar.objects.get(company=company, slug=slug, id=calendar_id)
     except ObjectDoesNotExist:
         calendar = get_object_or_404(Calendar, id=calendar_id)
-    form_event = EventsModelForm()
+    #company = request.user.company
+    form = EventsModelForm()
     info = {
         'view_calendar': {
             'name': calendar.title,
@@ -61,6 +59,7 @@ def view_calendar(request, company_slug, slug, calendar_id):
 
 def events_json(request, calendar_id):
     calendar = get_object_or_404(Calendar, id=calendar_id)
+    company = request.user.company
     events_l = Events.objects.filter(calendar=calendar)
 
     events_list = []
@@ -170,6 +169,7 @@ def update_event(request):
 
 
 def settings_calendar(request, slug):
+    company = request.user.company
     instance = get_object_or_404(Calendar, slug=slug)
 
     info = {
@@ -182,7 +182,7 @@ def settings_calendar(request, slug):
         }
     }
 
-    breadcrumb = generate_breadcrumb_relations(links, 'settings_calendar', info)
+    # breadcrumb = generate_breadcrumb_relations(links, 'settings_calendar', info)
     if request.POST:
         form = CalendarModelForm(request.POST, instance=instance)
         if form.is_valid():
