@@ -3,3 +3,4 @@ media
 archivos
 *.pyc
 .idea/
+*/__pycache__/

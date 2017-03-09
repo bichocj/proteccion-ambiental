@@ -18,7 +18,7 @@ class FormatForm(ModelForm):
 class CompanyForm(ModelForm):
     class Meta:
         model = Company
-        fields = '__all__'
+        exclude = ('slug',)
 
     def __init__(self, *args, **kwargs):
         super(CompanyForm, self).__init__(*args, **kwargs)

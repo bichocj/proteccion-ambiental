@@ -1,4 +1,5 @@
 {% extends 'main/layout_with_out_nav.html' %}
+{% load i18n %}
 
 {% block content %}
 <div id="pad-wrapper" class="new-user">
@@ -28,7 +29,7 @@
                 </div>
                 {% endfor %}
                 <hr>
-                <h3>Usuario</h3>
+                <h3>{% trans 'company user'|capfirst %}</h3>
                 <br>
                 {% for f in employee_form %}
                 <div class="form-group {% if f.errors %}has-error{% endif %}">

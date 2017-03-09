@@ -3,6 +3,7 @@ from datetime import datetime
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.text import slugify
 from django.utils.translation import ugettext as _
 
 
@@ -14,12 +15,18 @@ class Product(models.Model):
 
 class Company(models.Model):
     ruc = models.IntegerField(null=False, blank=False, unique=True)
-    name = models.CharField(max_length=100, null=False, blank=False, unique=True)
+    name = models.CharField(_('company name'), max_length=100, null=False, blank=False, unique=True)
+    short_name = models.CharField(_('short name'), max_length=100, null=False, blank=False, unique=True)
     slug = models.SlugField(_('slug'), max_length=100, blank=True, null=True, unique=True)
-    address = models.CharField(max_length=200, null=True, blank=True)
+    address = models.CharField(_('address'), max_length=200, null=True, blank=True)
 
     def __str__(self):
         return self.name
+
+    def save(self, **kwargs):
+        self.slug = slugify(self.short_name)
+        super(Company, self).save(**kwargs)
+
 
 class Requirement(models.Model):
     PROTECTION = 0
@@ -102,9 +109,6 @@ class Report(models.Model):
     title = models.CharField(max_length=100, null=True, blank=True)
     content = models.TextField(null=True, blank=True)
     company = models.ForeignKey(Company, null=False, blank=False)
-
-
-
 
 
 class Format(models.Model):

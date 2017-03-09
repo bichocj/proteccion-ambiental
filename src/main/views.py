@@ -102,9 +102,9 @@ def calendar_training(request, company_slug):
 
 
 @login_required
-def configuration_global(request):
+def config_requirements_list(request):
     requirements = Requirement.objects.filter(type_requirement=Requirement.ENTERPRISE)
-    return render(request, 'main/configuration_global.html', locals())
+    return render(request, 'main/config/requirements_list.html', locals())
 
 
 @login_required
@@ -125,7 +125,7 @@ def requirement_new(request, company_slug):
 
 
 @login_required
-def global_requirement_new(request):
+def config_requirement_new(request):
     global_config = True
     if request.POST:
         form = RequirementForm(request.POST)
@@ -133,10 +133,10 @@ def global_requirement_new(request):
             requirement = form.save()
             requirement.type_requirement = Requirement.ENTERPRISE
             requirement.save()
-            return redirect(reverse('main:configuration_global'))
+            return redirect(reverse('main:config_requirements_list'))
     else:
         requirement_form = RequirementForm()
-    return render(request, 'main/requirements_enterprise/new_requirement.html', locals())
+    return render(request, 'main/config/requirement_new.html', locals())
 
 
 @login_required
@@ -146,19 +146,15 @@ def company_new(request):
         company_form = CompanyForm(request.POST)
         employee_form = EmployeeForm(request.POST)
         if company_form.is_valid() and employee_form.is_valid():
-            if not company_form.data['slug'] == 'jra':
-                company = company_form.save()
-                requirements = Requirement.objects.filter(type_requirement=Requirement.ENTERPRISE)
-                for requirement in requirements:
-                    cr = Company_Requirement(company=company, requirement=requirement)
-                    cr.save()
-                employee = employee_form.save(commit=False)
-                employee.company = company
-                employee.save()
-                return redirect(reverse('main:company_list'))
-            else:
-                message = 'ERROR: Slug prohibido . . .!'
-                return render(request, "main/company/form.html", locals())
+            company = company_form.save()
+            requirements = Requirement.objects.filter(type_requirement=Requirement.ENTERPRISE)
+            for requirement in requirements:
+                cr = Company_Requirement(company=company, requirement=requirement)
+                cr.save()
+            employee = employee_form.save(commit=False)
+            employee.company = company
+            employee.save()
+            return redirect(reverse('main:company_list'))
         else:
             message = 'ERROR: Revise la informacion...!'
             return render(request, "main/company/form.html", locals())
