@@ -70,12 +70,12 @@
 <div class="login-wrapper" >
 
         <a href="index.html">
-            <img class="logo" src="img/logo-white.png" alt="logo" />
+            <img class="logo" src="{% static 'main/img/logo.png' %}" alt="logo" />
         </a>
 
         <div class="box">
             <div class="content-wrap">
-                <h6>Log in</h6>
+                <h6>{% trans 'login'|capfirst %}</h6>
                 {% if form.errors %}
                 <span class="help-block">{{ form.non_field_errors }}</span>
                 {% endif %}
@@ -86,24 +86,12 @@
                     {% include 'main/hooks/field_with_label.html' with field=field %}
                     {% endfor %}
 
-
-
-
-
-                <a href="{% url 'accounts:password_reset' %}" class="forgot">Forgot password?</a>
-                <div class="remember">
-                    <input id="remember-me" type="checkbox">
-                    <label for="remember-me">Remember me</label>
-                </div>
+                <a href="{% url 'accounts:password_reset' %}" class="forgot">{% trans 'Reset Password' %}</a>
                 <input type="submit" class="btn-glow primary login" value="{% trans 'login'|capfirst %}">
                 </form>
             </div>
         </div>
 
-        <div class="no-account">
-            <p>Don't have an account?</p>
-            <a href="signup.html">Sign up</a>
-        </div>
     </div>
 
 

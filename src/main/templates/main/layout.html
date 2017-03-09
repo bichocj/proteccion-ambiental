@@ -14,7 +14,7 @@
          <ul id="dashboard-menu">
             <li>
                 <a href="{% url 'main:panel' company_slug %}"><i class="icon-home"></i>
-                    <span>{{company.name}}</span>
+                    <span>{{company.short_name|upper}}</span>
                 </a>
             </li>
             <li>

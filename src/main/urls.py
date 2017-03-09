@@ -29,6 +29,7 @@ urlpatterns = patterns('main.views',
                        url(r'^(?P<company_slug>[-\w]+)/agreement/$', 'agreement', name='agreement'),
                        url(r'^company-new/$', 'company_new', name='company_new'),
                        url(r'^company-list/$', 'company_list', name='company_list'),
+                       url(r'^company-edit/(?P<company_slug>[-\w]+)/$', 'company_edit', name='company_edit'),
 
                        )
 urlpatterns += patterns('',

@@ -1,6 +1,6 @@
 {% extends 'main/layout_with_out_nav.html' %}
 {% load static %}
-{% block more_styles %}
+{% block styles %}
 <link rel="stylesheet" type="text/css" href="{% static 'main/css/compiled/tables.css'%}"/>
 <style>
     .content{
@@ -40,7 +40,7 @@
                 <td>
                     <ul class="actions">
                         <li><a href="{% url 'main:panel' company.slug %}">Ver</a></li>
-                        <li><a href="#">Editar</a></li>
+                        <li><a href="{% url 'main:company_edit' company.slug %}">Editar</a></li>
                         <li class="last"><a href="#">Eliminar</a></li>
                     </ul>
                 </td>

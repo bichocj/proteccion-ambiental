@@ -2,54 +2,55 @@
 {% load i18n %}
 
 {% block content %}
-<div id="pad-wrapper" class="new-user">
-    <div class="row header">
-        <div class="col-md-12">
-            <h3>{{title|capfirst}}</h3>
+    <div id="pad-wrapper" class="new-user">
+        <div class="row header">
+            <div class="col-md-12">
+                <h3>{{ title|capfirst }}</h3>
+            </div>
         </div>
-    </div>
-    <div class="row form-wrapper">
-        <div class="col-md-9 with-sidebar">
-            {% if message %}
-                <div class="alert alert-danger alert-dismissible" role="alert">
-                    <strong>Error!</strong> {{ message }} {{ response }}
-                </div>
-            {% endif %}
-            <form action="." method="post" class="form-horizontal" enctype="multipart/form-data">
-                {% csrf_token %}
-                {% for f in company_form %}
-                <div class="form-group {% if f.errors %}has-error{% endif %}">
-                    <label for="id_{{f.name}}" class="col-sm-2 control-label">{{ f.label|capfirst }}</label>
-                    <div class="col-sm-10">
-                        {{ f }}
-                        {% for error in f.errors %}
-                        <p class="help-block">{{ error }}</p>
-                        {% endfor %}
+        <div class="row form-wrapper">
+            <div class="col-md-9 with-sidebar">
+                {% if message %}
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <strong>Error!</strong> {{ message }} {{ response }}
                     </div>
-                </div>
-                {% endfor %}
-                <hr>
-                <h3>{% trans 'company user'|capfirst %}</h3>
-                <br>
-                {% for f in employee_form %}
-                <div class="form-group {% if f.errors %}has-error{% endif %}">
-                    <label for="id_{{f.name}}" class="col-sm-2 control-label">{{ f.label|capfirst }}</label>
-                    <div class="col-sm-10">
-                        {{ f }}
-                        {% for error in f.errors %}
-                        <p class="help-block">{{ error }}</p>
-                        {% endfor %}
+                {% endif %}
+                <form action="." method="post" class="form-horizontal" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% for f in company_form %}
+                        <div class="form-group {% if f.errors %}has-error{% endif %}">
+                            <label for="id_{{ f.name }}" class="col-sm-2 control-label">{{ f.label|capfirst }}</label>
+                            <div class="col-sm-10">
+                                {{ f }}
+                                {% for error in f.errors %}
+                                    <p class="help-block">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <hr>
+                    <h3>{% trans 'company user'|capfirst %}</h3>
+                    <br>
+                    {% for f in employee_form %}
+                        <div class="form-group {% if f.errors %}has-error{% endif %}">
+                            <label for="id_{{ f.name }}" class="col-sm-2 control-label">{{ f.label|capfirst }}</label>
+                            <div class="col-sm-10">
+                                {{ f }}
+                                {% for error in f.errors %}
+                                    <p class="help-block">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div class="pull-right">
+                        <input type="submit" class="btn btn-primary" class="pull-right"
+                               value="{{ save_text|default:'Guardar' }}"
+                               name="_save">
                     </div>
-                </div>
-                {% endfor %}
-                <div class="pull-right">
-                    <input type="submit" class="btn btn-primary" class="pull-right" value="{{save_text|default:'Guardar'}}"
-                           name="_save">
-                </div>
-            </form>
+                </form>
 
+            </div>
         </div>
     </div>
-</div>
 
 {% endblock %}

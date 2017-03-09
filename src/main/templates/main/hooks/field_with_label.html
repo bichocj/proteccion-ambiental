@@ -5,7 +5,7 @@
 {% if field|is_checkbox %}
     <div class="clearfix"></div>
     <div>
-        <span>{{ field.label }}</span>
+        <span>{{ field.label|capfirst }}</span>
 
         <div class="checkbox-option pull-right {% if field.data %}checked{% endif %}">
             <div class="inner"></div>
@@ -28,7 +28,7 @@
     {% endif %}
 {% elif field|is_selectable %}
     <div class="input-with-label text-left">
-        <span>{{ field.label }} :</span>
+        <span>{{ field.label|capfirst }} :</span>
         <div class="select-option">
             <i class="ti-angle-down"></i>
             {{ field }}
@@ -41,7 +41,7 @@
     </div>
 {% else %}
     <div class="input-with-label text-left">
-        <span>{{ field.label }} :</span>
+        <span>{{ field.label|capfirst }} :</span>
         {{ field }}
 
         {% if field.errors %}

@@ -1,51 +1,40 @@
 {% extends 'main/layout.html' %}
-{% block sidebar %}
-    <div id="sidebar-nav">
-         <ul id="dashboard-menu">
-            <li class="active">
-                <div class="pointer">
-                        <div class="arrow"></div>
-                        <div class="arrow_border"></div>
-                    </div>
-                <a href="{% url 'main:panel' company_slug %}"><i class="icon-home"></i>
-                    <span>{{company.name}}</span>
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'main:requirements_list' company.slug %}">
-                    <i class="icon-tasks"></i>
-                    <span>Requisitos</span>
-                </a>
-            </li>
-            <li >
-                <a href="{% url 'fullcalendar:list' company.slug %}">
-                    <i class="icon-calendar-empty"></i>
-                    <span>Calendarios</span>
-                </a>
-            </li>
-            <li >
-                <a href="{% url 'main:accident_list' company.slug %}">
-                    <i class="icon-heart-empty"></i>
-                    <span>Accidentes</span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <i class="icon-comments-alt"></i>
-                    <span>Acuerdo SST</span>
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'main:reports' company.slug %}">
-                    <i class="icon-signal"></i>
-                    <span>Reportes</span>
-                </a>
-            </li>
-        </ul>
-    </div>
+{% load static %}
+{% load i18n %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'main/css/compiled/user-profile.css' %}" type="text/css" media="screen"/>
 
 {% endblock %}
 {% block content %}
-    enterprise info
+
+
+    <div id="pad-wrapper" class="user-profile">
+        <!-- header -->
+        <div class="row header">
+            <div class="col-md-8">
+                <img src="{% static 'main/img/contact-profile.png' %}" alt="contact" class="avatar img-circle"/>
+                <h3 class="name">{{ company.name }}</h3>
+                <span class="area">{{ company.short_name }}</span>
+            </div>
+        </div>
+
+        <div class="row profile">
+            <!-- bio, new note & orders column -->
+            <div class="col-md-9 bio">
+                <div class="profile-box">
+                    <!-- biography -->
+                    <div class="col-md-12 section">
+                        <h6>{% trans 'address'|capfirst %}</h6>
+                        <p>{{ company.address }}</p>
+                    </div>
+
+                    <div class="col-md-12 section">
+                        <h6>{% trans 'contact'|capfirst %}</h6>
+                        <p>{{ company.user }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

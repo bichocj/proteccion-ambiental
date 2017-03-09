@@ -1,0 +1,18 @@
+<form action="{{ action|default:'.' }}" method="post" class="form-horizontal" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% for f in form %}
+        <div class="form-group {% if f.errors %}has-error{% endif %}">
+            <label for="id_{{ f.name }}" class="col-sm-2 control-label">{{ f.label|capfirst }}</label>
+            <div class="col-sm-10">
+                {{ f }}
+                {% for error in f.errors %}
+                    <p class="help-block">{{ error }}</p>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+
+    <div class="pull-right">
+        <input type="submit" class="btn btn-primary pull-right" value="{{  save_text|default:'save' }}" name="_save">
+    </div>
+</form>

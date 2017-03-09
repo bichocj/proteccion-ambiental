@@ -148,4 +148,3 @@ class Work(models.Model):
 
 
 User.company = property(lambda e: Company.objects.get(employee__pk=e.pk))  # NOQA
-# Requirement.formats = property(lambda e: Format.objects.filter(requirement__pk=e.pk, company__pk=User.company.pk))  # NOQA

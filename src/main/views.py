@@ -6,6 +6,7 @@ from .models import Company, Format, Requirement, HistoryFormats, Accident, Comp
 from .forms import CompanyForm, FormatForm, AccidentForm, EmployeeForm, RequirementForm
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.utils.translation import ugettext as _
 
 
 @login_required
@@ -39,6 +40,56 @@ def company_list(request):
         if not c.slug == 'jra':
             companies.append(c)
     return render(request, "main/company/list.html", locals())
+
+
+@login_required
+def company_new(request):
+    title = _('new company')
+    if request.POST:
+        company_form = CompanyForm(request.POST)
+        employee_form = EmployeeForm(request.POST)
+        if company_form.is_valid() and employee_form.is_valid():
+            company = company_form.save()
+            requirements = Requirement.objects.filter(type_requirement=Requirement.ENTERPRISE)
+            for requirement in requirements:
+                cr = Company_Requirement(company=company, requirement=requirement)
+                cr.save()
+            employee = employee_form.save(commit=False)
+            employee.company = company
+            employee.save()
+            return redirect(reverse('main:company_list'))
+        else:
+            message = 'ERROR: Revise la informacion...!'
+            return render(request, "main/company/form.html", locals())
+    else:
+        company_form = CompanyForm()
+        employee_form = EmployeeForm()
+    return render(request, "main/company/form.html", locals())
+
+
+@login_required
+def company_edit(request, company_slug):
+    title = _('edit company')
+    company = get_object_or_404(Company, slug=company_slug)
+    if request.POST:
+        update_action = request.GET.get('update')
+        if update_action == 'company':
+            company_form = CompanyForm(request.POST, instance=company)
+            employee_form = EmployeeForm(instance=company.user)
+            if company_form.is_valid():
+                company = company_form.save()
+                return redirect(reverse('main:company_list'))
+        if update_action == 'contact':
+            employee_form = EmployeeForm(request.POST, instance=company.user)
+            company_form = CompanyForm(instance=company)
+            if employee_form.is_valid():
+                employee = employee_form.save()
+                return redirect(reverse('main:company_list'))
+    else:
+        company_form = CompanyForm(instance=company)
+        employee_form = EmployeeForm(instance=company.user)
+
+    return render(request, "main/company/edit.html", locals())
 
 
 @login_required
@@ -137,31 +188,6 @@ def config_requirement_new(request):
     else:
         requirement_form = RequirementForm()
     return render(request, 'main/config/requirement_new.html', locals())
-
-
-@login_required
-def company_new(request):
-    title = "Nueva empresa"
-    if request.POST:
-        company_form = CompanyForm(request.POST)
-        employee_form = EmployeeForm(request.POST)
-        if company_form.is_valid() and employee_form.is_valid():
-            company = company_form.save()
-            requirements = Requirement.objects.filter(type_requirement=Requirement.ENTERPRISE)
-            for requirement in requirements:
-                cr = Company_Requirement(company=company, requirement=requirement)
-                cr.save()
-            employee = employee_form.save(commit=False)
-            employee.company = company
-            employee.save()
-            return redirect(reverse('main:company_list'))
-        else:
-            message = 'ERROR: Revise la informacion...!'
-            return render(request, "main/company/form.html", locals())
-    else:
-        company_form = CompanyForm()
-        employee_form = EmployeeForm()
-    return render(request, "main/company/form.html", locals())
 
 
 @login_required

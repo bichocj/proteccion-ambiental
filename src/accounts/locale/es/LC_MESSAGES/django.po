@@ -100,7 +100,6 @@ msgid "Login"
 msgstr "ingresar"
 
 #: templates/accounts/password_reset.html:56
-#, fuzzy
 #| msgid "Reset password"
 msgid "Reset Password"
 msgstr "Recuperar contraseña"

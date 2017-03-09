@@ -1,0 +1,46 @@
+{% extends 'main/layout_with_out_nav.html' %}
+{% load i18n %}
+
+{% block content %}
+    <div id="pad-wrapper" class="new-user">
+        <div class="row header">
+            <div class="col-md-12">
+                <h3>{{ title|capfirst }}</h3>
+            </div>
+        </div>
+        <div class="row form-wrapper">
+            <div class="col-md-9 with-sidebar">
+                <div class="row ctrls">
+                    <ul class="nav nav-tabs">
+                        <li class="{% if update_action != 'contact' %}active{% endif %}"><a href="#home">{% trans 'company'|capfirst %}</a></li>
+                        <li class="{% if update_action == 'contact' %}active{% endif %}"><a href="#profile">{% trans 'contact'|capfirst %}</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane {% if update_action != 'contact' %}active{% endif %}" id="home">
+                            <br>
+                            {% trans "update company" as button_name %}
+                            {% include 'main/hooks/_form.html' with form=company_form action='.?update=company' save_text=button_name%}
+                        </div>
+                        <div class="tab-pane {% if update_action == 'contact' %}active{% endif %}" id="profile">
+                            <br>
+                            {% trans "update contact" as button_name %}
+                            {% include 'main/hooks/_form.html' with form=employee_form action='.?update=contact' save_text=button_name%}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block scripts %}
+    <script>
+        $(function () {
+            $('.nav-tabs a').click(function (e) {
+                e.preventDefault();
+                $(this).tab('show');
+            });
+        });
+    </script>
+{% endblock %}
