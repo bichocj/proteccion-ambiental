@@ -17,7 +17,7 @@ def home(request):
 
 # panel de oshas
 @login_required
-def configuration(request, company_slug):
+def config(request, company_slug):
     company = get_object_or_404(Company, slug=company_slug)
     return render(request, 'main/configuration.html', locals())
 
@@ -46,7 +46,7 @@ def company_list(request):
 def company_new(request):
     title = _('new company')
     if request.POST:
-        company_form = CompanyForm(request.POST)
+        company_form = CompanyForm(request.POST, request.FILES)
         employee_form = EmployeeForm(request.POST)
         if company_form.is_valid() and employee_form.is_valid():
             company = company_form.save()
@@ -54,6 +54,16 @@ def company_new(request):
             for requirement in requirements:
                 cr = Company_Requirement(company=company, requirement=requirement)
                 cr.save()
+                for f in requirement.format_set.filter(company=None):
+                    hs = f.historyformats_set.all()
+                    f.pk = None
+                    f.company = company
+                    f.save()
+                    for h in hs:
+                        h.pk = None
+                        h.format = f
+                        h.save()
+
             employee = employee_form.save(commit=False)
             employee.company = company
             employee.save()
@@ -74,13 +84,13 @@ def company_edit(request, company_slug):
     if request.POST:
         update_action = request.GET.get('update')
         if update_action == 'company':
-            company_form = CompanyForm(request.POST, instance=company)
+            company_form = CompanyForm(request.POST, request.FILES, instance=company)
             employee_form = EmployeeForm(instance=company.user)
             if company_form.is_valid():
                 company = company_form.save()
                 return redirect(reverse('main:company_list'))
         if update_action == 'contact':
-            employee_form = EmployeeForm(request.POST, instance=company.user)
+            employee_form = EmployeeForm(request.POST, request.FILES, instance=company.user)
             company_form = CompanyForm(instance=company)
             if employee_form.is_valid():
                 employee = employee_form.save()
@@ -95,40 +105,44 @@ def company_edit(request, company_slug):
 @login_required
 def format_list(request, company_slug, requirement_pk):
     company = get_object_or_404(Company, slug=company_slug)
+    requirement = Requirement.objects.get(pk=requirement_pk)
+    title = requirement.name
+    formats = Format.objects.filter(company=company, requirement=requirement)
+    formats_pdf = list()
+    formats_xlsx = list()
+    if formats.count() != 0:
+        for format in formats:
+            if format.type_format == Format.PLANES:
+                formats_pdf.append(format)
+            else:
+                formats_xlsx.append(format)
+            format.form = FormatForm(instance=format)
+            format.history = HistoryFormats.objects.filter(format=format)
+    else:
+        message = ' Usted no tiene formatos'
+    return render(request, "main/requirements/formats/list.html", locals())
+
+
+@login_required
+def format_update(request, company_slug, requirement_pk, format_pk):
+    company = get_object_or_404(Company, slug=company_slug)
+    requirement = get_object_or_404(Requirement, pk=requirement_pk)
+    format = get_object_or_404(Format, pk=format_pk, company=company)
+    title = 'Requirement : {0} , updating format {1}'.format(requirement.name, format.name)
+
     if request.POST:
-        try:
-            format = Format.objects.get(pk=requirement_pk)
+        form = FormatForm(request.POST, request.FILES, instance=format)
+        if form.is_valid():
             history = HistoryFormats()
             history.format = format
             history.file = format.file
-            history.date_time = timezone.now()
             history.save()
-            format.file = request.FILES['file']
-            format.save()
-            title = format.requirement.name
-            return redirect(reverse('main:format_list',
-                                    kwargs={'company_slug': company_slug, 'requirement_pk': format.requirement.pk}))
-        except:
-            return redirect(reverse('main:format_list',
-                                    kwargs={'company_slug': company_slug, 'requirement_pk': format.requirement.pk}))
-
+            form.save()
+            return redirect(
+                reverse('main:format_list', kwargs={"company_slug": company_slug, "requirement_pk": requirement_pk}))
     else:
-        requirement = Requirement.objects.get(pk=requirement_pk)
-        title = requirement.name
-        formats = Format.objects.filter(company=company, requirement=requirement)
-        formats_pdf = list()
-        formats_xlsx = list()
-        if formats.count() != 0:
-            for format in formats:
-                if format.type_format == Format.PLANES:
-                    formats_pdf.append(format)
-                else:
-                    formats_xlsx.append(format)
-                format.form = FormatForm(instance=format)
-                format.history = HistoryFormats.objects.filter(format=format)
-        else:
-            message = ' Usted no tiene formatos'
-        return render(request, "main/requirements/formats/format.html", locals())
+        form = FormatForm(instance=format)
+    return render(request, 'main/layout_form.html', locals())
 
 
 @login_required
@@ -155,12 +169,74 @@ def calendar_training(request, company_slug):
 @login_required
 def config_requirements_list(request):
     requirements = Requirement.objects.filter(type_requirement=Requirement.ENTERPRISE)
-    return render(request, 'main/config/requirements_list.html', locals())
+    return render(request, 'main/config/requirements/list.html', locals())
+
+
+@login_required
+def config_requirement_format_list(request, requirement_pk):
+    requirement = Requirement.objects.get(pk=requirement_pk)
+    title = _('requirement') + ' : ' + requirement.name
+    formats = Format.objects.filter(requirement=requirement, company=None)
+    formats_pdf = list()
+    formats_xlsx = list()
+    if formats.count() > 0:
+        for format in formats:
+            if format.type_format == Format.PLANES:
+                formats_pdf.append(format)
+            else:
+                formats_xlsx.append(format)
+            format.form = FormatForm(instance=format)
+            format.history = HistoryFormats.objects.filter(format=format)
+    else:
+        message = ' Usted no tiene formatos'
+    return render(request, "main/config/requirements/formats/list.html", locals())
+
+
+@login_required
+def config_requirement_format_update(request, requirement_pk, format_pk):
+    requirement = get_object_or_404(Requirement, pk=requirement_pk)
+    format = get_object_or_404(Format, pk=format_pk)
+    title = 'Requirement : {0} , updating format {1}'.format(requirement.name, format.name)
+
+    if request.POST:
+        form = FormatForm(request.POST, request.FILES, instance=format)
+        if form.is_valid():
+            history = HistoryFormats()
+            history.format = format
+            history.file = format.file
+            history.save()
+
+            form.save()
+
+            return redirect(reverse('main:config_requirement_format_list', kwargs={"requirement_pk": requirement_pk}))
+    else:
+        form = FormatForm(instance=format)
+    return render(request, 'main/layout_with_out_nav_form.html', locals())
+
+
+@login_required
+def config_requirement_format_new(request, requirement_pk):
+    requirement = Requirement.objects.get(pk=requirement_pk)
+    title = request.GET.get('title', '')
+    title = '<b>Nuevo Formato</b> de {1} ,<br>para el requerimiento {0}'.format(requirement.name, title)
+
+    if request.POST:
+        form = FormatForm(request.POST, request.FILES)
+        if form.is_valid():
+            format = form.save(commit=False)
+            format.requirement = requirement
+            format.save()
+        return redirect(
+            reverse('main:config_requirement_format_list', kwargs={"requirement_pk": requirement_pk}))
+    else:
+        form = FormatForm()
+    return render(request, 'main/layout_with_out_nav_form.html', locals())
 
 
 @login_required
 def requirement_new(request, company_slug):
-    company = Company.objects.get(slug=company_slug)
+    company = get_object_or_404(Company, slug=company_slug)
+    title = 'new requirement'
     if request.POST:
         form = RequirementForm(request.POST)
         if form.is_valid():
@@ -172,7 +248,7 @@ def requirement_new(request, company_slug):
             return redirect(reverse('main:requirements_list', kwargs={"company_slug": company.slug}))
     else:
         form = RequirementForm()
-        return render(request, 'main/requirements/new_requirement.html', locals())
+        return render(request, 'main/layout_form.html', locals())
 
 
 @login_required
@@ -187,7 +263,7 @@ def config_requirement_new(request):
             return redirect(reverse('main:config_requirements_list'))
     else:
         requirement_form = RequirementForm()
-    return render(request, 'main/config/requirement_new.html', locals())
+    return render(request, 'main/config/requirements/new.html', locals())
 
 
 @login_required
@@ -201,7 +277,8 @@ def accident_list(request, company_slug):
 def format_new_other(request, company_slug, requirement_pk):
     company = get_object_or_404(Company, slug=company_slug)
     requirement = Requirement.objects.get(pk=requirement_pk)
-    is_other = True
+    title = '<b>{0}:</b> Nuevo formato de Registros y Evidencias'.format(requirement.name)
+
     if request.POST:
         format = Format(company=company, requirement=requirement, file=request.FILES['file'])
         format.type_format = Format.REGISTERS
@@ -210,22 +287,28 @@ def format_new_other(request, company_slug, requirement_pk):
             reverse('main:format_list', kwargs={"company_slug": company_slug, "requirement_pk": requirement_pk}))
     else:
         form = FormatForm()
-        return render(request, 'main/requirements/formats/new_format.html', locals())
+        return render(request, 'main/layout_form.html', locals())
 
 
 @login_required
-def format_new_pdf(request, company_slug, requirement_pk):
+def format_new(request, company_slug, requirement_pk):
     company = get_object_or_404(Company, slug=company_slug)
-    requirement = Requirement.objects.get(pk=requirement_pk)
+    requirement = get_object_or_404(Requirement, pk=requirement_pk)
+    title = request.GET.get('title', '')
+    title = '<b>Nuevo Formato</b> de {1} ,<br>para el requerimiento {0}'.format(requirement.name, title)
+
     if request.POST:
-        format = Format(company=company, requirement=requirement, file=request.FILES['file'])
-        format.type_format = Format.PLANES
-        format.save()
+        form = FormatForm(request.POST, request.FILES)
+        if form.is_valid():
+            format = form.save(commit=False)
+            format.requirement = requirement
+            format.company = company
+            format.save()
         return redirect(
             reverse('main:format_list', kwargs={"company_slug": company_slug, "requirement_pk": requirement_pk}))
     else:
         form = FormatForm()
-    return render(request, 'main/requirements/formats/new_format.html', locals())
+    return render(request, 'main/layout_form.html', locals())
 
 
 @login_required

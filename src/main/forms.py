@@ -8,11 +8,15 @@ from .models import Company, Format, Accident, Employee, Requirement
 
 
 class FormatForm(ModelForm):
-    file = forms.FileField(required=False)
+    # file = forms.FileField(required=True)
 
     class Meta:
         model = Format
-        fields = ['file']
+        fields = ['name', 'file', 'type_format']
+
+    def __init__(self, *args, **kwargs):
+        super(FormatForm, self).__init__(*args, **kwargs)
+        add_form_control_class(self.fields)
 
 
 class CompanyForm(ModelForm):
@@ -89,3 +93,4 @@ class RequirementForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(RequirementForm, self).__init__(*args, **kwargs)
         _instance = kwargs.pop('instance', None)
+        add_form_control_class(self.fields)

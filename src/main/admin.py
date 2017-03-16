@@ -4,7 +4,7 @@ from .models import Format, Report, Task, Accident, Meeting, HistoryFormats, Com
 
 
 class FormatAdmin(admin.ModelAdmin):
-    list_display = ('requirement', 'company')
+    list_display = ('requirement', 'company','type_format')
 
 
 admin.site.register(Employee)

@@ -1,13 +1,11 @@
 {% load i18n %}
 <div id="pad-wrapper" class="new-user">
     <div class="row header">
-        <div class="col-md-12">
-            <h3>{{ title|capfirst }}</h3>
-        </div>
+        <h3>{{ title|safe|capfirst }}</h3>
     </div>
     <div class="row form-wrapper">
         <div class="col-md-9 with-sidebar">
-            {% include 'main/hooks/_form.html' with form=form1 %}
+            {% include 'main/hooks/_form.html' with form=form %}
         </div>
     </div>
 </div>

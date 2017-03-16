@@ -10,9 +10,15 @@
 
     <div id="pad-wrapper" class="user-profile">
         <!-- header -->
+
+        <div class="pull-right">
+            <a class="btn btn-default" href="{% url 'main:company_edit' company.slug %}">{% trans 'edit' %}</a>
+        </div>
         <div class="row header">
-            <div class="col-md-8">
-                <img src="{% static 'main/img/contact-profile.png' %}" alt="contact" class="avatar img-circle"/>
+            <div class="col-md-12">
+                {% if company.logo %}
+                    <img src="{{ company.logo.url }}" alt="contact" class="avatar" style="max-width: 200px;"/>
+                {% endif %}
                 <h3 class="name">{{ company.name }}</h3>
                 <span class="area">{{ company.short_name }}</span>
             </div>
@@ -20,7 +26,7 @@
 
         <div class="row profile">
             <!-- bio, new note & orders column -->
-            <div class="col-md-9 bio">
+            <div class="col-md-12">
                 <div class="profile-box">
                     <!-- biography -->
                     <div class="col-md-12 section">

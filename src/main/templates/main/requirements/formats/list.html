@@ -1,0 +1,180 @@
+{% extends 'main/layout.html' %}
+{% load i18n %}
+
+{% block content %}
+
+    <div id="pad-wrapper" class="users-list">
+        <div class="row header">
+            <h3>{{ title|title }}</h3>
+        </div>
+        <div class="row">
+            {% if message %}
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <strong>Error!</strong> {{ message }} {{ response }}
+                </div>
+            {% endif %}
+            <div class="col-md-5">
+                <div class="pull-right">
+                    <a href="{% url 'main:format_new' company_slug requirement_pk %}" class="btn-flat success pull-right">
+                        <span>&#43;</span>
+                        Nuevo Formato
+                    </a>
+                </div>
+                <table class="table table-bordered">
+
+                    <thead>
+                    <tr>
+                        <td><b>Planes, Programas y Procedimientos</b></td>
+                        <td><b>Opciones</b></td>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for format in formats_pdf %}
+                        <tr>
+                            <td><a href="{{ format.url }}" download="{{ format.file }}"><i class="icon-download"></i> {{ format.name }}</a></td>
+                            <td>
+                                <div>
+                                    <button type="button" class="btn btn-default" data-toggle="modal"
+                                            data-target="#formatForm{{ format.pk }}"
+                                            data-whatever="r4">Historial
+                                    </button>
+                                    <a href="{% url 'main:format_update' company_slug requirement_pk format.pk %}"
+                                       class="btn btn-default">Actualizar
+                                    </a>
+                                </div>
+                                <div class="modal fade" id="formatForm{{ format.pk }}" tabindex="-1" role="dialog"
+                                     aria-labelledby="exampleModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                {% trans 'format' %}: {{ format.name }}
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close"><span
+                                                        aria-hidden="true">&times;</span></button>
+                                            </div>
+                                            <div class="modal-body">
+
+                                                {% if format.history %}
+                                                    <table class="table">
+                                                        <thead>
+                                                        <tr>
+                                                            <td align="left"><b>Documento</b></td>
+
+                                                            <td align="left"><b>Fecha de modificación</b></td>
+                                                        </tr>
+                                                        </thead>
+
+                                                        <tbody>
+                                                        {% for history in format.history %}
+                                                            <tr>
+                                                                <td align="left"><a href="{{ history.file.url }}" target='_blank'>{{ history.file }}</a></td>
+                                                                <td align="left">{{ history.date_time }}</td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                {% else %}
+                                                    No hay datos historicos
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="col-md-1"></div>
+
+            <div class="col-md-5">
+                <div class="pull-right">
+                    <a href="{% url 'main:format_new' company_slug requirement_pk %}" class="btn-flat success pull-right">
+                        <span>&#43;</span>
+                        Nuevo Formato
+                    </a>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <td><b>Registros y Evidencias</b></td>
+                        <td><b>Opciones</b></td>
+
+                    </thead>
+
+                    <tbody>
+
+                    {% for format in formats_xlsx %}
+                        <tr>
+                            <td><a href="{{ format.url }}"> <i class="icon-download"></i> {{ format.name }}</a></td>
+                            <td>
+                                <div>
+                                    <button type="button" class="btn btn-default" data-toggle="modal"
+                                            data-target="#formatForm{{ format.pk }}"
+                                            data-whatever="r4">Historial
+                                    </button>
+                                    <a href="{% url 'main:format_update' company_slug requirement_pk format.pk %}"
+                                       class="btn btn-default">Actualizar</a>
+                                </div>
+
+                                <div class="modal fade" id="formatForm{{ format.pk }}" tabindex="-1" role="dialog"
+                                     aria-labelledby="exampleModalLabel">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                {% trans 'format' %}: {{ format.name }}
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close"><span
+                                                        aria-hidden="true">&times;</span></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                {% if format.history %}
+                                                    <table class="table">
+                                                        <thead>
+                                                        <tr>
+                                                            <td align="left"><b>Documento</b></td>
+
+                                                            <td align="left"><b>Fecha de modificación</b></td>
+                                                        </tr>
+                                                        </thead>
+
+                                                        <tbody>
+                                                        {% for history in format.history %}
+                                                            <tr>
+                                                                <td align="left"><a href="{{ history.file.url }}" target='_blank'>{{ history.file }}</a></td>
+                                                                <td align="left">{{ history.date_time }}</td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                        </tbody>
+                                                    </table>
+                                                {% else %}
+                                                    No hay datos historicos
+                                                {% endif %}
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+{% endblock %}

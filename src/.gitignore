@@ -4,3 +4,7 @@ archivos
 *.pyc
 .idea/
 */__pycache__/
+accounts/migrations/__pycache__/
+fullcalendar/migrations/__pycache__/
+main/migrations/__pycache__/
+main/templatetags/__pycache__/

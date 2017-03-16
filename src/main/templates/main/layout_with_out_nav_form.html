@@ -1,0 +1,11 @@
+{% extends 'main/layout_with_out_nav.html' %}
+{% load i18n %}
+{% block content %}
+{% include 'main/hooks/form.html' %}
+{% endblock %}
+
+{% if active_item_menu %}
+{% block more_scripts %}
+
+{% endblock%}
+{% endif %}

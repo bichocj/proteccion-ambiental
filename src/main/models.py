@@ -1,8 +1,8 @@
 import os
 from datetime import datetime
 
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
 from django.utils.text import slugify
 from django.utils.translation import ugettext as _
 
@@ -13,11 +13,18 @@ class Product(models.Model):
     description = models.CharField(max_length=100, null=False, blank=False)
 
 
+def upload_image_to(instance, filename):
+    filename = os.path.splitext(filename)
+    filename = str(instance.ruc) + filename[1]
+    return filename
+
+
 class Company(models.Model):
     ruc = models.IntegerField(null=False, blank=False, unique=True)
     name = models.CharField(_('company name'), max_length=100, null=False, blank=False, unique=True)
     short_name = models.CharField(_('short name'), max_length=100, null=False, blank=False, unique=True)
     slug = models.SlugField(_('slug'), max_length=100, blank=True, null=True, unique=True)
+    logo = models.ImageField(_('logo'), upload_to=upload_image_to, blank=True, null=True)
     address = models.CharField(_('address'), max_length=200, null=True, blank=True)
 
     def __str__(self):
@@ -83,7 +90,7 @@ class Accident(models.Model):
     title = models.CharField(max_length=100, null=False, blank=False)
     content = models.TextField(null=True, blank=True)
     type_accident = models.IntegerField(_('type accident'), choices=TYPE_ACCIDENT_CHOICES, default=ACCIDENT)  # NOQA
-    date = models.DateField(_('date'), null=False, default=datetime.now())
+    date = models.DateField(_('date'), null=False, default=datetime.now)
     company = models.ForeignKey(Company, null=False, blank=False)
     evidence = models.FileField(_('evidence'), upload_to="accident/", null=True)
 
@@ -122,17 +129,15 @@ class Format(models.Model):
     file = models.FileField(upload_to="formatos/", null=False, blank=False)
     type_format = models.IntegerField(choices=TYPE_FORMAT_CHOICES, default=PLANES,
                                       null=True)  # is if format is planes or registros
-    company = models.ForeignKey(Company, null=False, blank=False)
+    company = models.ForeignKey(Company, null=True, blank=True)
+    name = models.CharField(_('name'), max_length=100, null=False, blank=False)
+
 
 
 class HistoryFormats(models.Model):
-    #    requirement = models.ForeignKey(Requirement, null = True, blank = True)
     format = models.ForeignKey(Format, null=True, blank=True)
-
     file = models.FileField(upload_to="history/%Y/%m/%d", null=True, blank=True)
-    #    company = models.ForeignKey(Company, null=True,
-    #                                blank=True)  # Clase Compania, el formato es completado de una compania
-    date_time = models.DateTimeField()  # La fecha en el que se hizo la modificacion del formato
+    date_time = models.DateTimeField(default=datetime.now())
 
 
 class UseProduct(models.Model):
