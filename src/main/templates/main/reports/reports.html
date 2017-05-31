@@ -2,6 +2,18 @@
 {% block styles %}
 {% endblock %}
 {% block content %}
+    <div id="pad-wrapper">
+            <!-- grid examples -->
+            <div class="grid-wrapper">
+                <div class="row show-grid text-center">
+                                <div class="col-md-6"><a href="{% url 'main:mensual_report' company_slug%}" class="btn-flat">Reporte Mensual</a></div>
+                                <div class="col-md-6"><a href="" class="btn-flat info">Reporte Anual</a></div>
+                            </div>
+            </div>
+    </div>
+
+
+
 
 {% endblock %}
 {% block scripts %}

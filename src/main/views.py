@@ -1,9 +1,14 @@
+import datetime
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 
+from accounts.forms import WorkerForm
+from accounts.models import Worker
+from indices.forms import IndexForm
+from indices.models import Index
 from proteccion_ambiental.settings import COMPANY_JRA_SLUG
-from .models import Company, Format, Requirement, HistoryFormats, Accident, Company_Requirement
-from .forms import CompanyForm, FormatForm, AccidentForm, EmployeeForm, RequirementForm
+from .models import Company, Format, Requirement, HistoryFormats, Accident, Company_Requirement, LegalRequirement
+from .forms import CompanyForm, FormatForm, AccidentForm, EmployeeForm, RequirementForm, LegalRequirementForm
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.utils.translation import ugettext as _
@@ -19,6 +24,7 @@ def home(request):
 @login_required
 def config(request, company_slug):
     company = get_object_or_404(Company, slug=company_slug)
+
     return render(request, 'main/configuration.html', locals())
 
 
@@ -124,6 +130,144 @@ def format_list(request, company_slug, requirement_pk):
 
 
 @login_required
+def indices(request, company_slug):
+    company = Company.objects.get(slug=company_slug)
+    edit = None
+    indices = None
+    success = False
+    try:
+        indices = Index.objects.get(company=company)
+        edit = True
+    except Index.DoesNotExist:
+        edit = False
+    if not edit:
+        if request.POST:
+            form = IndexForm(request.POST)
+            if form.is_valid():
+                index = form.save(commit=False)
+                index.company = company
+                index.save()
+                message = 'Se guardo sus indices'
+                success = True
+            else:
+                message = 'Revisa la informacion'
+        else:
+            form = IndexForm()
+    else:
+        if request.POST:
+            form = IndexForm(request.POST, instance=indices)
+            if form.is_valid():
+                form.save()
+                message = 'Se actualizo sus indices'
+                success = True
+            else:
+                message = 'Revisa la informacion'
+        else:
+            form = IndexForm(instance=indices)
+    return render(request, 'main/indeces/list.html', locals())
+
+
+@login_required
+def workers(request, company_slug):
+    company = Company.objects.get(slug=company_slug)
+    workers_company = Worker.objects.filter(company=company)
+    return render(request, 'main/workers/list.html', locals())
+
+
+@login_required
+def worker_new(request, company_slug):
+    title = 'Nuevo Trabajador Legal'
+    company = Company.objects.get(slug=company_slug)
+    if request.POST:
+        form = WorkerForm(request.POST)
+        if form.is_valid():
+            worker = form.save(commit=False)
+            worker.company = company
+            worker.save()
+            return redirect(reverse('main:workers', kwargs={'company_slug': company_slug}))
+        else:
+            message = 'Revisa la informacion'
+    else:
+        form = WorkerForm()
+    return render(request, 'main/layout_form.html', locals())
+
+
+@login_required
+def worker_edit(request, company_slug, worker_pk):
+    title = 'Editar Trabajador'
+    company = Company.objects.get(slug=company_slug)
+    worker = Worker.objects.get(pk=worker_pk)
+    if request.POST:
+        form = WorkerForm(request.POST, instance=worker)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('main:workers', kwargs={'company_slug': company_slug}))
+        else:
+            message = 'Revisa la informacion'
+    else:
+        form = WorkerForm(instance=worker)
+    return render(request, 'main/layout_form.html', locals())
+
+
+@login_required
+def worker_delete(request, company_slug, worker_pk):
+    company = Company.objects.get(slug=company_slug)
+    worker = Worker.objects.get(pk=worker_pk)
+    worker.delete()
+    return redirect(reverse('main:workers', kwargs={'company_slug': company_slug}))
+
+
+@login_required
+def legal_requirement(request, company_slug):
+    company = Company.objects.get(slug=company_slug)
+    legal_requirements = LegalRequirement.objects.filter(entitie=company)
+    return render(request, 'main/legal_requirement/list.html', locals())
+
+
+@login_required
+def legal_requirement_new(request, company_slug):
+    title = 'Nuevo Requisito Legal'
+    company = Company.objects.get(slug=company_slug)
+    if request.POST:
+        form = LegalRequirementForm(request.POST)
+        if form.is_valid():
+            legalRequirement = form.save(commit=False)
+            legalRequirement.entitie = company
+            legalRequirement.save()
+            return redirect(reverse('main:legal_requirement', kwargs={'company_slug': company_slug}))
+        else:
+            message = 'Revisa la informacion'
+    else:
+        form = LegalRequirementForm()
+    return render(request, 'main/layout_form.html', locals())
+
+
+@login_required
+def legal_requirement_edit(request, company_slug, requirement_pk):
+    title = 'Editar Requisito Legal'
+    company = Company.objects.get(slug=company_slug)
+    legalRequirement = LegalRequirement.objects.get(pk=requirement_pk)
+    if request.POST:
+        form = LegalRequirementForm(request.POST, instance=legalRequirement)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('main:legal_requirement', kwargs={'company_slug': company_slug}))
+        else:
+            message = 'Revisa la informacion'
+    else:
+        form = LegalRequirementForm(instance=legalRequirement)
+    return render(request, 'main/layout_form.html', locals())
+
+
+@login_required
+def legal_requirement_delete(request, company_slug, requirement_pk):
+    company = Company.objects.get(slug=company_slug)
+    legalRequirement = LegalRequirement.objects.get(pk=requirement_pk)
+    legalRequirement.delete()
+    return redirect(reverse('main:legal_requirement', kwargs={'company_slug': company_slug}))
+
+
+@login_required
 def format_update(request, company_slug, requirement_pk, format_pk):
     company = get_object_or_404(Company, slug=company_slug)
     requirement = get_object_or_404(Requirement, pk=requirement_pk)
@@ -164,6 +308,11 @@ def calendar_service(request, company_slug):
 def calendar_training(request, company_slug):
     company = get_object_or_404(Company, slug=company_slug)
     return render(request, "main/calendars/trainings.html", locals())
+
+
+@login_required
+def config_indices_list(request):
+    return render(request, 'main/config/indices/list.html')
 
 
 @login_required
@@ -212,6 +361,14 @@ def config_requirement_format_update(request, requirement_pk, format_pk):
     else:
         form = FormatForm(instance=format)
     return render(request, 'main/layout_with_out_nav_form.html', locals())
+
+
+def mensual_report(request, company_slug):
+    company = Company.objects.get(slug=company_slug)
+    if company_slug == 'jra':
+        title = 'REPORTE MENSUAL SEGURIDAD Y SALUD OCUPACIONAL'
+    date_now = datetime.date.today()
+    return render(request, 'main/reports/reports_mensual.html', locals())
 
 
 @login_required

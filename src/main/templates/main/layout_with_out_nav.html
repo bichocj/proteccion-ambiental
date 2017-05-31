@@ -16,11 +16,16 @@
 
     <!-- libraries -->
     <link href="{% static 'main/css/lib/font-awesome.css' %}" type="text/css" rel="stylesheet"/>
+    <link href="{% static 'main/css/lib/select2.css'%}" type="text/css" rel="stylesheet" />
+    <link href="{% static 'main/css/lib/uniform.default.css' %}" type="text/css" rel="stylesheet" />
+
 
     <!-- global styles -->
     <link rel="stylesheet" type="text/css" href="{% static 'main/css/compiled/layout.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'main/css/compiled/elements.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'main/css/compiled/icons.css' %}"/>
+    <link rel="stylesheet" href="{% static 'main/css/compiled/form-showcase.css' %}" type="text/css" media="screen" />
+
 
     <!-- this page specific styles -->
 {#    <link rel="stylesheet" href="{% static 'main/css/compiled/index.css' %}" type="text/css" media="screen"/>#}
@@ -76,6 +81,7 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li><a href="{% url 'main:config_requirements_list' %}">{% trans 'requirements'|capfirst %}</a></li>
+                    <li><a href="{% url 'main:config_indices_list' %}">Indices</a></li>
                 </ul>
             </li>
         {% endif %}
@@ -98,7 +104,7 @@
 {% endblock %}
 
 
-<div class="content">
+<div class="content" style="min-height: 720px;">
     {% block content %}
 
     {% endblock %}
@@ -108,6 +114,31 @@
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script src="{% static 'main/js/bootstrap.min.js' %}"></script>
 <script src="{% static 'main/js/jquery-ui-1.10.2.custom.min.js' %}"></script>
+<script src="js/wysihtml5-0.3.0.js"></script>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="{% static 'main/js/bootstrap.datepicker.js' %}"></script>
+<script src="{% static 'main/js/jquery.uniform.min.js' %}"></script>
+<script src="{% static 'main/js/select2.min.js'%}"></script>
+<script src="{% static 'main/js/theme.js' %}"></script>
+
+<!-- call this page plugins -->
+<script type="text/javascript">
+    $(function () {
+
+        // add uniform plugin styles to html elements
+        $("input:checkbox, input:radio").uniform();
+
+        // select2 plugin for select elements
+        $(".select2").select2({
+            placeholder: "Select a State"
+        });
+
+        // datepicker plugin
+        $('.input-datepicker').datepicker().on('changeDate', function (ev) {
+            $(this).datepicker('hide');
+        });
+    });
+</script>
 <!-- knob -->
 
 

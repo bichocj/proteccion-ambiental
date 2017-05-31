@@ -6,6 +6,10 @@ from django.db import models
 from django.utils.text import slugify
 from django.utils.translation import ugettext as _
 
+# from accounts.models import Worker
+
+
+
 
 class Product(models.Model):
     code = models.CharField(max_length=50, null=False, blank=False)
@@ -51,6 +55,16 @@ class Requirement(models.Model):
         return self.name
 
 
+class LegalRequirement(models.Model):
+    normativa = models.CharField(max_length=50, null=False, blank=False)
+    datepublication = models.DateTimeField(default=datetime.now)
+    entitie = models.ForeignKey(Company)
+    title = models.CharField(max_length=200, null=False, blank=False)
+    apply = models.TextField(null=False, blank=False)
+    actual_month = models.CharField(max_length=100, null=False, blank=False)
+    # responsable = models.ForeignKey(Worker)
+
+
 class Company_Requirement(models.Model):
     company = models.ForeignKey(Company, null=False)
     requirement = models.ForeignKey(Requirement, null=False)
@@ -81,18 +95,27 @@ class Evidence(models.Model):
 
 
 class Accident(models.Model):
-    ACCIDENT = 1
-    INCIDENT = 2
+    ACCIDENT_1 = 1
+    ACCIDENT_2 = 2
+    ACCIDENT_3 = 3
+    ACCIDENT_4 = 4
+    ACCIDENT_5 = 5
+    ACCIDENT_6 = 6
     TYPE_ACCIDENT_CHOICES = (
-        (ACCIDENT, 'ACCIDENT'),
-        (INCIDENT, 'INCIDENT')
+        (ACCIDENT_1, 'ACCIDENTES CON PRIMEROS AXILIOS'),
+        (ACCIDENT_2, 'ACCCIDENTE CON ATENCION MEDICA'),
+        (ACCIDENT_3, 'ACCIDENTES CON TIEMPO PERDIDO'),
+        (ACCIDENT_4, 'ACCIDENTES FATALES'),
+        (ACCIDENT_5, 'INCIDENTES PELIGROS'),
+        (ACCIDENT_6, 'ENFERMEDADES OCUPACIONALES'),
     )
-    title = models.CharField(max_length=100, null=False, blank=False)
-    content = models.TextField(null=True, blank=True)
-    type_accident = models.IntegerField(_('type accident'), choices=TYPE_ACCIDENT_CHOICES, default=ACCIDENT)  # NOQA
-    date = models.DateField(_('date'), null=False, default=datetime.now)
+    title = models.CharField(_('Titulo'), max_length=100, null=False, blank=False)
+    content = models.TextField(_('Descripcion'), null=True, blank=True)
+    type_accident = models.IntegerField(_('Tipo de Accidente'), choices=TYPE_ACCIDENT_CHOICES,
+                                        default=ACCIDENT_1)  # NOQA
+    date = models.DateField(_('Fecha'), null=False, default=datetime.now)
     company = models.ForeignKey(Company, null=False, blank=False)
-    evidence = models.FileField(_('evidence'), upload_to="accident/", null=True)
+    evidence = models.FileField(_('Evidencia'), upload_to="accident/", null=True)
 
 
 class Task(models.Model):
@@ -131,7 +154,6 @@ class Format(models.Model):
                                       null=True)  # is if format is planes or registros
     company = models.ForeignKey(Company, null=True, blank=True)
     name = models.CharField(_('name'), max_length=100, null=False, blank=False)
-
 
 
 class HistoryFormats(models.Model):

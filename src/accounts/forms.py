@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.forms import ModelForm
 from django.utils.translation import ugettext as _
 
-from accounts.models import Person
+from accounts.models import Person, Worker
 from main.functions import add_form_control_class
 
 
@@ -19,6 +19,17 @@ class PasswordChangeFormEdited(PasswordChangeForm):
             {'class': 'form-control input_reset_password', 'placeholder': self.fields['new_password1'].label})
         self.fields['new_password2'].widget.attrs.update(
             {'class': 'form-control input_reset_password', 'placeholder': self.fields['new_password2'].label})
+
+
+class WorkerForm(ModelForm):
+    class Meta:
+        model = Worker
+        fields = ['name', 'code','cargo']
+
+    def __init__(self, *args, **kwargs):
+        super(WorkerForm, self).__init__(*args, **kwargs)
+        _instance = kwargs.pop('instance', None)
+        add_form_control_class(self.fields)
 
 
 class PasswordResetFormEdited(PasswordResetForm):

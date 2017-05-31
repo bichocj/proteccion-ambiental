@@ -37,8 +37,11 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'widget_tweaks',
     'accounts',
-    'main',
+    'indices',
     'fullcalendar',
+    'acuerdos_sst',
+    'main',
+
 )
 
 MIDDLEWARE_CLASSES = (
@@ -77,7 +80,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'proteccion_ambiental.wsgi.application'
 
 # Database
-# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
+# https://docs.djangopromainject.com/en/1.8/ref/settings/#databases
 
 DATABASES = {
     'default': {

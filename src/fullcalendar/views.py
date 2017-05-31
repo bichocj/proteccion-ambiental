@@ -41,6 +41,7 @@ def calendar_new(request, company_slug):
 def view_calendar(request, company_slug, slug, calendar_id):
     try:
         company = get_object_or_404(Company, slug=company_slug)
+        print('sluug', slug)
         calendar = Calendar.objects.get(company=company, slug=slug, id=calendar_id)
     except ObjectDoesNotExist:
         calendar = get_object_or_404(Calendar, id=calendar_id)
@@ -59,11 +60,8 @@ def view_calendar(request, company_slug, slug, calendar_id):
 
 def events_json(request, calendar_id):
     calendar = get_object_or_404(Calendar, id=calendar_id)
-    company = request.user.company
     events_l = Events.objects.filter(calendar=calendar)
-
     events_list = []
-
     for event in events_l:
         event_start = event.event_start
         event_end = event.event_end
@@ -85,6 +83,7 @@ def events_json(request, calendar_id):
 
 
 def save_event(request, slug):
+    print('hola save')
     response = {}
     if request.POST:
         if request.POST.get('id'):
@@ -132,8 +131,12 @@ def get_event(request):
             'title': event.title,
             'description': event.description,
             'observation': event.observation,
-            'member': event.member.id,
-            'member_fullname': event.member.first_name + ' ' + event.member.last_name
+            'state': event.state,
+            'type': event.type,
+            'hours_worked': event.hours_worked,
+            'number_workers': event.number_workers
+            # 'member': event.member.id,
+            # 'member_fullname': event.member.first_name + ' ' + event.member.last_name
         }
     else:
         response['success'] = False
@@ -142,6 +145,7 @@ def get_event(request):
 
 
 def update_event(request):
+    print('hola update')
     response = {}
     if request.POST:
         event_id = request.POST.get('id')
@@ -160,7 +164,9 @@ def update_event(request):
             'title': event.title,
             'description': event.description,
             'observation': event.observation,
-            'member': event.member.id
+            'hours_worked': event.hours_worked,
+            'number_workers': event.number_workers
+            # 'member': event.member.id
         }
     else:
         response['success'] = False

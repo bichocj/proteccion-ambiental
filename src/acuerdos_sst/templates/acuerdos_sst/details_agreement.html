@@ -1,0 +1,144 @@
+{% extends 'acuerdos_sst/list.html' %}
+{% load static %}
+{% block styles %}
+    <link href="{% static 'main/css/bootstrap/bootstrap.css' %}" rel="stylesheet" />
+    <link href="{% static 'main/css/bootstrap/bootstrap-overrides.css' %}" type="text/css" rel="stylesheet" />
+
+    <!-- global styles -->
+    <link rel="stylesheet" type="text/css" href="{% static 'main/css/compiled/layout.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'main/css/compiled/elements.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'main/css/compiled/icons.css' %}" />
+
+    <!-- libraries -->
+    <link rel="stylesheet" type="text/css" href="{% static 'main/css/lib/font-awesome.css' %}" />
+
+    <!-- this page specific styles -->
+    <link rel="stylesheet" href="{% static 'main/css/compiled/new-user.css' %}" type="text/css" media="screen" />
+        <link rel="stylesheet" href="{% static 'main/css/compiled/form-showcase.css' %}" type="text/css" media="screen" />
+        <link href="{% static 'main/css/lib/bootstrap.datepicker.css' %}" type="text/css" rel="stylesheet" />
+
+
+
+    <!-- open sans font -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css' />
+{%  endblock %}
+{% block content %}
+
+    <div id="main-stats">
+
+            <div class="">
+                <div class="col-md-6 col-sm-6 stat">
+                <div id="pad-wrapper" class="new-user">
+            <div class="row header">
+                <div class="col-md-12">
+                    <h3>DETALLES DE ACUERDO {{ agreement.title }}</h3>
+                </div>
+            </div>
+
+        </div>
+                    <div class="data">
+
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+
+                                <th><span class="line"></span>Descripcion</th>
+                                <th><span class="line"></span>Fecha Inicio</th>
+                                <th><span class="line"></span>Fecha Maxima</th>
+                                <th><span class="line"></span>Estado</th>
+                                <th><span class="line"></span>Evidencia</th>
+                                <th><span class="line"></span>Opciones</th>
+                                <!--<th><span class="line"></span>Formato</th>-->
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for agreement in agreements_details %}
+                            <tr>
+                                <td>{{agreement.description}}</td>
+                                <td>{{agreement.date_until}}</td>
+                                <td>{{agreement.date_start}}</td>
+                                <td>{{agreement.get_state_display}}</td>
+                                <td><a href="{{ agreement.evidence.url }}" download="{{ agreement.evidence.file }}"><i class="icon-download"></i> {{ agreement.evidence.name}}</a></td>
+                                <td>
+                                         <ul class="actions">
+                                            <li><a href="{% url 'acuerdos_sst:agreement_detail_edit' company.slug agreement_pk agreement.pk %}">Edit</a></li>
+                                            <li class="last"><a href="{% url 'acuerdos_sst:agreement_detail_delete' company.slug agreement_pk agreement.pk %}">Delete</a></li>
+                                        </ul>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <div class="col-md-6 col-sm-6 stat">
+                 <div id="pad-wrapper" class="new-user">
+            <div class="row header">
+                <div class="col-md-12">
+                    <h3>{{ title }}</h3>
+                </div>
+            </div>
+
+        </div>
+                    <div class="data">
+
+                        {% if message %}
+                            <div class="alert alert-danger alert-dismissible" role="alert">
+                                <strong>Error!</strong> {{ message }} {{ response }}
+                            </div>
+                        {% endif %}
+                         <div class="row form-wrapper">
+                            <!-- left column -->
+                            <div class="col-md-12">
+                                <form action="." method="post" class="form-horizontal" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {% for field in form %}
+                                {% include 'main/hooks/field_with_label.html' with field=field %}
+                                {% endfor %}
+
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-8">
+                                      <button type="submit" class="btn btn-glow">Agregar </button>
+                                    </div>
+                                </div>
+
+                                </form>
+                            </div>
+                         </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+
+
+{% endblock %}
+{% block scripts %}
+     <script src="{% static 'main/js/wysihtml5-0.3.0.js' %}"></script>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="{% static 'main/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'main/js/bootstrap.datepicker.js' %}"></script>
+    <script src="{% static 'main/js/jquery.uniform.min.js' %}"></script>
+    <script src="{% static 'main/js/select2.min.js' %}"></script>
+    <script src="{% static 'main/js/theme.js' %}"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            // add uniform plugin styles to html elements
+            $("input:checkbox, input:radio").uniform();
+
+            // select2 plugin for select elements
+            $(".select2").select2({
+                placeholder: "Select a State"
+            });
+
+            // datepicker plugin
+            $('.input-datepicker').datepicker().on('changeDate', function (ev) {
+                $(this).datepicker('hide');
+            });
+        });
+    </script>
+
+{% endblock %}

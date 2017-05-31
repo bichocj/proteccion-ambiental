@@ -4,7 +4,7 @@ from django.forms import ModelForm, HiddenInput
 from django.utils.translation import ugettext, ugettext_lazy as _
 
 from .functions import add_form_control_class, add_form_text
-from .models import Company, Format, Accident, Employee, Requirement
+from .models import Company, Format, Accident, Employee, Requirement, LegalRequirement
 
 
 class FormatForm(ModelForm):
@@ -75,6 +75,19 @@ class DateInput(forms.DateInput):
     input_type = 'date'
 
 
+class LegalRequirementForm(ModelForm):
+    class Meta:
+        model = LegalRequirement
+        fields = ['normativa', 'datepublication', 'title', 'apply']
+
+    def __init__(self, *args, **kwargs):
+        super(LegalRequirementForm, self).__init__(*args, **kwargs)
+        _instance = kwargs.pop('instance', None)
+        add_form_control_class(self.fields)
+        self.fields['datepublication'].widget.attrs['class'] = 'form-control input-datepicker'
+
+
+
 class AccidentForm(ModelForm):
     class Meta:
         model = Accident
@@ -83,6 +96,11 @@ class AccidentForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(AccidentForm, self).__init__(*args, **kwargs)
         _instance = kwargs.pop('instance', None)
+        self.fields['title'].widget.attrs['class'] = 'form-control'
+        self.fields['content'].widget.attrs['class'] = 'form-control'
+        self.fields['type_accident'].widget.attrs['class'] = 'form-control'
+        self.fields['date'].widget.attrs['class'] = 'form-control input-datepicker'
+        self.fields['evidence'].widget.attrs['class'] = 'form-control'
 
 
 class RequirementForm(ModelForm):

@@ -1,0 +1,38 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+{% load i18n %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'main/css/compiled/user-profile.css' %}" type="text/css" media="screen"/>
+
+{% endblock %}
+{% block content %}
+    <div id="Mensual">
+        <h1>{{ title }}</h1>
+            <div class="row header">
+                    <div class="col-md-12">
+                        {% if company.logo %}
+                            <img src="{{ company.logo.url }}" alt="contact" class="avatar" style="max-width: 200px;"/>
+                        {% endif %}
+                        <h3 class="name">{{ company.name }}</h3>
+                        <span class="area">{{ company.short_name }}</span>
+                    </div>
+            </div>
+
+            <div class="row profile">
+                <!-- bio, new note & orders column -->
+                <div class="col-md-12">
+                    <div class="profile-box">
+                        <!-- biography -->
+                        <div class="col-md-12 section">
+                            <h6>{% trans 'address'|capfirst %}</h6>
+                            <p>{{ company.address }}</p>
+                        </div>
+                        <div>{{ date_now }}</div>
+                    </div>
+                </div>
+            </div>
+
+    </div>
+{% endblock %}
+{% block scripts %}
+{% endblock %}

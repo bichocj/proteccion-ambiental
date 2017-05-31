@@ -1,0 +1,13 @@
+<form action="{{ action|default:'.' }}" method="post" class="form-horizontal" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% for f in form %}
+        <label class="checkbox">
+          {{ f }} {{ f.label|capfirst }}
+        </label>
+
+    {% endfor %}
+
+    <div class="pull-right">
+        <input type="submit" class="btn btn-primary pull-right" value="{{  save_text|default:'save' }}" name="_save">
+    </div>
+</form>

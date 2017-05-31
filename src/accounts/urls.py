@@ -7,6 +7,7 @@ urlpatterns = patterns('accounts.views',
                        url(r'^message/(?P<code>[-\w]+)/$', 'message', name='message'),
                        url(r'^profile/password/reset/$', 'password_reset', name='password_reset'),
                        url(r'^get-members/$', 'get_members', name='get_members'),
+                       url(r'^workers/(?P<company_slug>[-\w]+)/$', 'admin_workes', name='admin_workes'),
                        )
 
 urlpatterns += patterns('django.contrib.auth.views',

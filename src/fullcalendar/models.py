@@ -6,13 +6,46 @@ from django.utils.translation import ugettext as _
 from main.models import Company
 from proteccion_ambiental.settings import COMPANY_JRA_SLUG
 
+INDUCCION = 1
+CAPACITACION_DE_LEY = 2
+CAPACITACION = 3
+ESPECIFICA = 4
+CAPACITACION_DE_SALUD_OCUPACIONAL = 5
+ENTRENAMIENTO = 6
 
+type_capacitation = (
+    (INDUCCION, 'INDUCCION'),
+    (CAPACITACION_DE_LEY, 'CAPACITACION DE LEY'),
+    (CAPACITACION, 'CAPACITACION'),
+    (ESPECIFICA, 'ESPECIFICA'),
+    (CAPACITACION_DE_SALUD_OCUPACIONAL, 'CAPACITACION DE SALUD OCUPACIONAL'),
+    (ENTRENAMIENTO, 'ENTRENAMIENTO'),
+)
+
+INSPECCION_DE_SEGURIDAD = 1
+INSPECCION_DE_SALUD = 2
+INSPECCION_OBSERVACION_PLANEADA = 3
+type_inspeccion = (
+    (INSPECCION_DE_SEGURIDAD, 'INSPECCION DE SEGURIDAD'),
+    (INSPECCION_DE_SALUD, 'INSPECCION DE SALUD'),
+    (INSPECCION_OBSERVACION_PLANEADA, 'INSPECCION OBSERVACION PLANEADA'),
+
+)
 
 
 class Calendar(models.Model):
-    title = models.CharField(_('title'), max_length=200, null=False, blank=None)
-    company = models.ForeignKey(Company, related_name="company", null=False)
+    CAPACITATION = 1
+    INSPECTION = 2
+    SIMULATION = 3
+    OTRO = 4
+    types_calendar = ((CAPACITATION, 'CAPACITACION'),
+                      (INSPECTION, 'INSPECCION'),
+                      (SIMULATION, 'SIMULACRO'),
+                      (OTRO, 'OTRO'))
+    title = models.CharField(_('Titulo'), max_length=200, null=False, blank=None)
+    company = models.ForeignKey(Company, null=False)
     slug = models.SlugField(max_length=100)
+    type = models.IntegerField(choices=types_calendar, null=False, default=OTRO)
     users = models.ManyToManyField(User, related_name="users", verbose_name=_('shared with'))
     created_by = models.ForeignKey(User, related_name="created_by")
     created_at = models.DateTimeField(auto_now_add=True)
@@ -54,20 +87,45 @@ class Accessibility(models.Model):
 
 
 class EventType(models.Model):
-    name = models.CharField(_('type'), max_length=200, null=False, blank=None)
+    CAPACITATION = 1
+    INSPECTION = 2
+    SIMULATION = 3
+    types_event = ((CAPACITATION, 'CAPACITACION'),
+                   (INSPECTION, 'INSPECCION'),
+                   (SIMULATION, 'SIMULACRO'),)
+    name = models.IntegerField(choices=types_event, default=CAPACITATION, null=False)
 
 
 class Events(models.Model):
+    CAPACITATION = 1
+    INSPECTION = 2
+    SIMULATION = 3
+    OTRO = 4
+    REALIZADO = 2
+    PENDIENTE = 1
+    types_event = ((CAPACITATION, 'CAPACITACION'),
+                   (INSPECTION, 'INSPECCION'),
+                   (SIMULATION, 'SIMULACRO'),
+                   (OTRO, 'OTRO'))
+    state_event = ((REALIZADO, 'REALIZADO'),
+                   (PENDIENTE, 'PENDIENTE'),
+                   )
     calendar = models.ForeignKey(Calendar)
     event_start = models.DateTimeField()
     event_end = models.DateTimeField()
     title = models.CharField(max_length=200)
     description = models.TextField()
     observation = models.TextField(blank=True, null=True)
-    member = models.ForeignKey(User)
-    type = models.ForeignKey(EventType)
+    type = models.IntegerField(_('Tipo Evento'), choices=types_event, default=CAPACITATION, null=False)
+    state = models.IntegerField(_('Estado'), choices=state_event, default=PENDIENTE, null=False)
+
     is_cancelled = models.BooleanField(default=False)
+    hours_worked = models.FloatField(_('Horas Trabajadas: '), null=True, blank=True)
+    number_workers = models.IntegerField(_('Numero de Trabajadores: '), null=True, blank=True)
 
     created_by = models.ForeignKey(User, related_name="created_by_event")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    type_capacitations = models.IntegerField(choices=type_capacitation, null=True)
+    type_inspeccion = models.IntegerField(choices=type_inspeccion, null=True)

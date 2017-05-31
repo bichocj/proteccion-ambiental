@@ -18,6 +18,7 @@ from sendgrid.helpers.mail import *
 
 from accounts.forms import PasswordResetFormEdited
 from accounts.functions import get_member_group
+from main.models import Company
 from proteccion_ambiental.settings import DEFAULT_EMAIL, SENDGRID_KEY, FROM_NAME
 from main.functions import send_email
 
@@ -81,6 +82,12 @@ def password_reset(request):
         form = PasswordResetFormEdited()
 
     return render(request, 'accounts/password_reset.html', locals())
+
+
+@login_required
+def admin_workes(request, company_slug):
+    company = Company.objects.get(pk=company_slug)
+    return
 
 
 @csrf_exempt

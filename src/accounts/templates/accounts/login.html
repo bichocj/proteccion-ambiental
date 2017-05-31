@@ -81,9 +81,17 @@
                 {% endif %}
 
                 <form action="." method="post">
-                    {% csrf_token %}
-                    {% for field in form %}
-                    {% include 'main/hooks/field_with_label.html' with field=field %}
+                   {% csrf_token %}
+                    {% for f in form %}
+                        <div class="form-group {% if f.errors %}has-error{% endif %}">
+                            <label for="id_{{ f.name }}" class="col-sm-3 control-label">{{ f.label|capfirst }}:</label>
+                            <div class="col-sm-9">
+                                {{ f }}
+                                {% for error in f.errors %}
+                                    <p class="help-block">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        </div>
                     {% endfor %}
 
                 <a href="{% url 'accounts:password_reset' %}" class="forgot">{% trans 'Reset Password' %}</a>
