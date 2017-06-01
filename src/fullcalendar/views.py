@@ -103,6 +103,9 @@ def save_event(request, slug):
                 event.type_inspeccions = None
             if event.calendar.type == Calendar.INSPECTION:
                 event.type_capacitations = None
+            if event.calendar.type == Calendar.OTRO:
+                event.type_inspeccions = None
+                event.type_capacitations = None
             print(request.POST)
             print(event.type_inspeccions)
             event.save()
