@@ -32,7 +32,7 @@
 
             {% for calendar in calendars %}
             <tr>
-                <td><b>{{calendar.title}}</b></td>
+                <td><a href="{% url 'fullcalendar:view_calendar' company.slug calendar.slug calendar.pk %}"><b>{{calendar.title}}</b></a></td>
                 {% if request.user.is_superuser %}
                 <td>
                     <ul class="actions">
