@@ -23,7 +23,7 @@ def calendar_list(request, company_slug):
 def calendar_new(request, company_slug):
     title = _('new calendar')
     company = get_object_or_404(Company, slug=company_slug)
-    calendar=True
+    calendar = True
     if request.POST:
         form = CalendarModelForm(request.POST)
         if form.is_valid():
@@ -40,7 +40,7 @@ def calendar_new(request, company_slug):
 
 
 def view_calendar(request, company_slug, slug, calendar_id):
-    calendar=True
+    calendar = True
     try:
         company = get_object_or_404(Company, slug=company_slug)
         print('sluug', slug)
@@ -85,7 +85,6 @@ def events_json(request, calendar_id):
 
 
 def save_event(request, slug):
-    print('hola save')
     response = {}
     if request.POST:
         if request.POST.get('id'):
@@ -99,6 +98,7 @@ def save_event(request, slug):
             event.calendar = calendar
             event.created_by = request.user
             event.save()
+            print(event.responsable.name)
             response['success'] = True
             response['message'] = _("Save Success")
             response['id'] = event.id
@@ -124,7 +124,7 @@ def get_event(request):
     if request.POST:
         event_id = request.POST.get('id')
         event = get_object_or_404(Events, id=event_id)
-
+        print(event.responsable.name)
         response['success'] = True
         response['data'] = {
             'event': event.id,
@@ -136,7 +136,10 @@ def get_event(request):
             'state': event.state,
             'type': event.type,
             'hours_worked': event.hours_worked,
-            'number_workers': event.number_workers
+            'number_workers': event.number_workers,
+            'responsable': event.responsable.name,
+            'type_capacitations': event.type_capacitations,
+            'type_inspeccion': event.type_inspeccion
             # 'member': event.member.id,
             # 'member_fullname': event.member.first_name + ' ' + event.member.last_name
         }

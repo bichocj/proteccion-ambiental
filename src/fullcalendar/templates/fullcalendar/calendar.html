@@ -47,15 +47,21 @@
                 <form method="post" class="form-horizontal" action="{% url 'fullcalendar:save_event' slug %}" id="event-form">
                     {% for f in form %}
                         {% csrf_token %}
+
                     <div class="form-group {% if f.errors %}has-error{% endif %}">
                         <label for="id_{{f.name}}" class="col-sm-2 control-label">{{ f.label|capfirst }}</label>
                         <div class="col-sm-10">
+
                             {{ f }}
+                        <p id="id_{{f.name}}_input" style="color: #002a80;font-size: 15px;" hidden>hola</p>
+
                             {% for error in f.errors %}
                             <p class="help-block">{{ error }}</p>
                             {% endfor %}
                         </div>
+
                     </div>
+                        <p id="id_{{f.name}}_input" hidden>hola</p>
                     {% endfor %}
                 </form>
             </div>
@@ -77,7 +83,7 @@
      <script src="{% static 'main/js/jquery-ui-1.10.2.custom.min.js' %}"></script>
       <script src="{% static 'main/js/bootstrap.min.js' %}"></script>
 <script src="https://fullcalendar.io/js/fullcalendar-3.1.0/lib/moment.min.js"></script>
-     <script src="{% static 'fullcalendar/' %}js/theme.js"></script>
+     <script src="{% static 'main/js/theme.js' %}"></script>
 <script type="text/javascript" src="{% static 'fullcalendar/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js' %}"></script>
 <!--<script src="{% static 'main/js/fullcalendar.min.js' %}"></script>-->
 <script src="https://fullcalendar.io/js/fullcalendar-3.1.0/fullcalendar.min.js"></script>
@@ -125,9 +131,12 @@
                                         $('#id_' + index).val(
                                                 moment(value).format(format)
                                         ).addClass('edited');
-                                    } else if (index == 'member') {
+                                    } else if (index == 'responsable') {
                                         $('#event-form [name=member]').val(value);
-                                        $('#id_member').val(response.data.member_fullname).addClass('edited');
+                                        console.log(response.data.responsable);
+                                         $('#id_responsable_input').text('Reponsable Seleccionado: '+value);
+                                        $('#id_responsable_input').show();
+
                                     } else {
                                         $('#id_' + index).val(value).addClass('edited');
                                     }

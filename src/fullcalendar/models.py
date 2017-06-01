@@ -3,7 +3,7 @@ from django.db import models
 from django.template import defaultfilters
 from django.utils.translation import ugettext as _
 
-from main.models import Company
+from main.models import Company, Worker
 from proteccion_ambiental.settings import COMPANY_JRA_SLUG
 
 INDUCCION = 1
@@ -42,10 +42,10 @@ class Calendar(models.Model):
                       (INSPECTION, 'INSPECCION'),
                       (SIMULATION, 'SIMULACRO'),
                       (OTRO, 'OTRO'))
-    title = models.CharField(_('Titulo'), max_length=200, null=False, blank=None)
+    title = models.CharField(_('Nombre'), max_length=200, null=False, blank=None)
     company = models.ForeignKey(Company, null=False)
     slug = models.SlugField(max_length=100)
-    type = models.IntegerField(choices=types_calendar, null=False, default=OTRO)
+    type = models.IntegerField(_('Tipo'), choices=types_calendar, null=False, default=OTRO)
     users = models.ManyToManyField(User, related_name="users", verbose_name=_('shared with'))
     created_by = models.ForeignKey(User, related_name="created_by")
     created_at = models.DateTimeField(auto_now_add=True)
@@ -118,6 +118,7 @@ class Events(models.Model):
     observation = models.TextField(blank=True, null=True)
     type = models.IntegerField(_('Tipo Evento'), choices=types_event, default=CAPACITATION, null=False)
     state = models.IntegerField(_('Estado'), choices=state_event, default=PENDIENTE, null=False)
+    responsable = models.ForeignKey(Worker, null=False)
 
     is_cancelled = models.BooleanField(default=False)
     hours_worked = models.FloatField(_('Horas Trabajadas: '), null=True, blank=True)
@@ -127,5 +128,5 @@ class Events(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    type_capacitations = models.IntegerField(choices=type_capacitation, null=True)
-    type_inspeccion = models.IntegerField(choices=type_inspeccion, null=True)
+    type_capacitations = models.IntegerField(_('Tipo Capacitacion'), choices=type_capacitation, null=True, blank=True)
+    type_inspeccion = models.IntegerField(_('TIpo Inspeccion'), choices=type_inspeccion, null=True, blank=True)
