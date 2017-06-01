@@ -60,9 +60,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="/">
-            <img src="{% static 'main/img/logo.png' %}" style="max-height: 34px;" alt="Pro"/>
-        </a>
+        {% if company.logo %}
+             <img src="{{ company.logo.url }}" alt="contact" class="avatar" style="max-width: 50px; margin-left: 50px;"/>
+        {% else %}
+            <h3 style="color: white; margin-left: 50px;margin-top: 5px;">JRA</h3>
+        {% endif %}
+
     </div>
 
     <ul class="nav navbar-nav pull-right hidden-xs">
