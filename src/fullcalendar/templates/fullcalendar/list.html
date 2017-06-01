@@ -1,62 +1,68 @@
 {% extends 'main/layout.html' %}
 {% load static %}
 {% block more_styles %}
-<link rel="stylesheet" type="text/css" href="{% static 'main/css/compiled/tables.css'%}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'main/css/compiled/tables.css' %}"/>
 {% endblock %}
 {% block content %}
 
-<div id="pad-wrapper" class="users-list">
-    <div class="table-wrapper products-table">
-        <div class="row header">
-            <h3>Calendarios</h3>
-            {% if request.user.is_superuser %}
-            <div class="col-md-10 col-sm-12 col-xs-12 pull-right">
-                <a href="{% url 'fullcalendar:new' company.slug %}" class="btn-flat success pull-right">
-                    <span>&#43;</span>
-                    Nuevo Calendario
-                </a>
-            </div>
-            {% endif %}
-        </div>
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th>Nombre</th>
+    <div id="pad-wrapper" class="users-list">
+        <div class="table-wrapper products-table">
+            <div class="row header">
+                <h3>Calendarios</h3>
                 {% if request.user.is_superuser %}
-                <th>Opciones</th>
+                    <div class="col-md-10 col-sm-12 col-xs-12 pull-right">
+                        <a href="{% url 'fullcalendar:new' company.slug %}" class="btn-flat success pull-right">
+                            <span>&#43;</span>
+                            Nuevo Calendario
+                        </a>
+                    </div>
                 {% endif %}
-                <!--<th><span class="line"></span>Formato</th>-->
-            </tr>
-            </thead>
-            <tbody>
+            </div>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Tipo</th>
+                    {% if request.user.is_superuser %}
+                        <th>Opciones</th>
+                    {% endif %}
+                    <!--<th><span class="line"></span>Formato</th>-->
+                </tr>
+                </thead>
+                <tbody>
 
-            {% for calendar in calendars %}
-            <tr>
-                <td><a href="{% url 'fullcalendar:view_calendar' company.slug calendar.slug calendar.pk %}"><b>{{calendar.title}}</b></a></td>
-                {% if request.user.is_superuser %}
-                <td>
-                    <ul class="actions">
-                        <li><a href="{% url 'fullcalendar:view_calendar' company.slug calendar.slug calendar.pk %}">Ver</a></li>
-                        <li><a href="#">Edit</a></li>
-                        <li class="last"><a href="#">Delete</a></li>
-                    </ul>
-                </td>
-            {% endif %}
-            </tr>
-            {% endfor %}
+                {% for calendar in calendars %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'fullcalendar:view_calendar' company.slug calendar.slug calendar.pk %}"><b>{{ calendar.title }}</b></a>
+                        </td>
+                        <td>{{ calendar.get_type_display }}</td>
+                        {% if request.user.is_superuser %}
+                            <td>
+                                <ul class="actions">
+                                    <li>
+                                        <a href="{% url 'fullcalendar:view_calendar' company.slug calendar.slug calendar.pk %}">Ver</a>
+                                    </li>
+                                    <li><a href="{% url 'fullcalendar:edit' company.slug calendar.pk%}">Editar</a></li>
+                                    <li class="last"><a href="{% url 'fullcalendar:delete' company.slug calendar.pk%}">Eliminar</a></li>
+                                </ul>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
 
-            </tbody>
+                </tbody>
 
-        </table>
+            </table>
+        </div>
     </div>
-</div>
 
 {% endblock %}
 
 {% block more_scripts %}
-<script>
-$( function() {
-    active_menu('.calendar');
-});
-</script>
-{% endblock%}
+    <script>
+        $(function () {
+            active_menu('.calendar');
+        });
+    </script>
+{% endblock %}

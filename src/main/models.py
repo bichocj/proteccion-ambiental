@@ -47,11 +47,11 @@ class Company(models.Model):
 
 
 class Worker(models.Model):
-    name = models.CharField(max_length=100, null=False, blank=False)
-    code = models.IntegerField(null=False, blank=False)
+    name = models.CharField(_('Nombre'), max_length=100, null=False, blank=False)
+    code = models.CharField(_('Codigo'), max_length=100, null=False, blank=False)
     company = models.ForeignKey(Company, null=False)
-    cargo = models.IntegerField(choices=cargos, default=RECURSOS_HUMANOS, null=False)
-    is_active = models.BooleanField(default=True, null=False)
+    cargo = models.IntegerField(_('Cargo'), choices=cargos, default=RECURSOS_HUMANOS, null=False)
+    is_active = models.BooleanField(_('Esta Activo?'),default=True, null=False)
 
     def __str__(self):
         return self.name
@@ -70,8 +70,8 @@ class Requirement(models.Model):
         (PROTECTION, PROTECTION),
         (ENTERPRISE, ENTERPRISE)
     )
-    name = models.CharField(max_length=100, null=False, blank=False)
-    description = models.CharField(max_length=200, null=True, blank=True)
+    name = models.CharField(_('Nombre Requerimiento'), max_length=100, null=False, blank=False)
+    description = models.CharField(_('Descripcion'), max_length=200, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     type_requirement = models.IntegerField(default=PROTECTION, choices=type_choice, null=False)
 

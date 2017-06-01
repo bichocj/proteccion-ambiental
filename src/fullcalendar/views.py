@@ -21,7 +21,7 @@ def calendar_list(request, company_slug):
 
 @login_required
 def calendar_new(request, company_slug):
-    title = _('new calendar')
+    title = _('Nuevo Calendario')
     company = get_object_or_404(Company, slug=company_slug)
     calendar = True
     if request.POST:
@@ -33,12 +33,41 @@ def calendar_new(request, company_slug):
             calendar.save()
             form.save_m2m()
             return redirect(reverse('fullcalendar:view_calendar', args=[company_slug, calendar.slug, calendar.id]))
+        else:
+            message = 'Revisa la informacion'
     else:
         form = CalendarModelForm()
 
     return render(request, "main/layout_form.html", locals())
 
 
+@login_required
+def calendar_edit(request, company_slug, calendar_id):
+    title = _('Editar Calendario')
+    company = get_object_or_404(Company, slug=company_slug)
+    calendar = Calendar.objects.get(pk=calendar_id)
+    if request.POST:
+        form = CalendarModelForm(request.POST, instance=calendar)
+        if form.is_valid():
+            calendar.save()
+            return redirect(reverse('fullcalendar:calendar_list', args=[company_slug]))
+        else:
+            message = 'Revisa la informacion'
+    else:
+        form = CalendarModelForm(instance=calendar)
+
+    return render(request, "main/layout_form.html", locals())
+
+
+@login_required
+def calendar_delete(request, company_slug, calendar_id):
+    company = get_object_or_404(Company, slug=company_slug)
+    calendar = Calendar.objects.get(pk=calendar_id)
+    calendar.delete()
+    return redirect(reverse('fullcalendar:calendar_list', args=[company_slug]))
+
+
+@login_required
 def view_calendar(request, company_slug, slug, calendar_id):
     calendar = True
     try:

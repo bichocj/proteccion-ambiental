@@ -49,8 +49,8 @@
                         {% if request.user.is_superuser %}
                             <td class="text-left">
                                 <ul>
-                                    <li><a href="{% url 'main:worker_edit' company.slug worker.pk %}">Edit</a></li>
-                                    <li class="last"><a href="{% url 'main:worker_delete' company.slug worker.pk %}">Delete</a>
+                                    <li><a href="{% url 'main:worker_edit' company.slug worker.pk %}">Editar</a></li>
+                                    <li class="last"><a href="{% url 'main:worker_delete' company.slug worker.pk %}">Eliminar</a>
                                     </li>
                                 </ul>
                             </td>

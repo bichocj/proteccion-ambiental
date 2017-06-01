@@ -40,8 +40,8 @@ class CalendarModelForm(ModelForm):
     group = get_member_group()
     members = get_users_of_member_group()
     workers = User.objects.all()
-    assigned = UserModelChoiceField(workers, empty_label="", label=_('Asignar a:'))
-    users = UserModelMultipleChoiceField(workers, label=_('Compartir con:'), widget=forms.CheckboxSelectMultiple)
+    assigned = UserModelChoiceField(workers, empty_label="", label=_('Asignar a'))
+    users = UserModelMultipleChoiceField(workers, label=_('Compartir con'), widget=forms.CheckboxSelectMultiple)
 
     class Meta:
         model = Calendar
@@ -58,10 +58,10 @@ class EventsModelForm(ModelForm):
     form_met = {'title': _('Event')}
 
     title = forms.CharField(max_length=100)
-    event_start = forms.DateTimeField(input_formats=['%d/%m/%Y %I:%M %p'], label=_('Comienza: '))
+    event_start = forms.DateTimeField(input_formats=['%d/%m/%Y %I:%M %p'], label=_('Comienza '))
     event_end = forms.DateTimeField(input_formats=['%d/%m/%Y %I:%M %p'], label=('Termina '))
     description = forms.CharField(widget=forms.Textarea(attrs={'rows': 2, 'cols': 15}), required=False,
-                                  label=_('Descripcion: '))
+                                  label=_('Descripcion '))
     observation = forms.CharField(widget=forms.Textarea(attrs={'rows': 2, 'cols': 15}), required=False)
     type_capacitations = forms.ChoiceField(choices=Events.type_capacitation, label='Tipo de Capacitacion',
                                            widget=forms.HiddenInput(), required=False)

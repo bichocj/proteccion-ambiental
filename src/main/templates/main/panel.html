@@ -12,7 +12,7 @@
         <!-- header -->
         {% if request.user.is_superuser %}
         <div class="pull-right">
-            <a class="btn btn-default" href="{% url 'main:company_edit' company.slug %}">{% trans 'edit' %}</a>
+            <a class="btn btn-default" href="{% url 'main:company_edit' company.slug %}">Editar</a>
         </div>
         {% endif %}
         <div class="row header">
