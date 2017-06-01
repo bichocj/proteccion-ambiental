@@ -28,9 +28,10 @@
                     <th>Codigo</th>
                     <th><span class="line"></span>Nombre</th>
                     <th><span class="line"></span>Cargo</th>
+                    <th class="text-center"><span class="line"></span>Activo</th>
                     {% if request.user.is_superuser %}
-                    <th><span class="line"></span>Opciones</th>
-                {% endif %}
+                        <th><span class="line"></span>Opciones</th>
+                    {% endif %}
                     <!--<th><span class="line"></span>Formato</th>-->
                 </tr>
                 </thead>
@@ -40,9 +41,14 @@
                         <td>{{ worker.code }}</td>
                         <td>{{ worker.name }}</td>
                         <td>{{ worker.get_cargo_display }}</td>
+                        {% if worker.is_active %}
+                            <td class="text-center"><i class="icon-ok"></i></td>
+                        {% else %}
+                            <td class="text-center"><i class="icon-minus"></i></td>
+                        {% endif %}
                         {% if request.user.is_superuser %}
-                            <td>
-                                <ul class="actions">
+                            <td class="text-left">
+                                <ul>
                                     <li><a href="{% url 'main:worker_edit' company.slug worker.pk %}">Edit</a></li>
                                     <li class="last"><a href="{% url 'main:worker_delete' company.slug worker.pk %}">Delete</a>
                                     </li>
