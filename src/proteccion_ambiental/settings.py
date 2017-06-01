@@ -117,4 +117,4 @@ FROM_NAME = 'cecilurastastas@gmail.com'
 LOGIN_REDIRECT_URL = '/'
 
 MEMBER_GROUP = 'equipo JRA'
-COMPANY_JRA_SLUG = 'jra'
+COMPANY_JRA_SLUG = 'pro_tam'
