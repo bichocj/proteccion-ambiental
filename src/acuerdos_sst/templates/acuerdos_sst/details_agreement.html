@@ -39,7 +39,11 @@
                                 <td>{{agreement.date_until}}</td>
                                 <td>{{agreement.date_start}}</td>
                                 <td>{{agreement.get_state_display}}</td>
+                                {% if agreement.evidence %}
                                 <td><a href="{{ agreement.evidence.url }}" download="{{ agreement.evidence.file }}"><i class="icon-download"></i> {{ agreement.evidence.name}}</a></td>
+                                    {% else %}
+                                    <td>Sin evidencia</td>
+                                {% endif %}
                                 <td>
                                          <ul class="actions">
                                             <li><a href="{% url 'acuerdos_sst:agreement_detail_edit' company.slug agreement_pk agreement.pk %}">Edit</a></li>

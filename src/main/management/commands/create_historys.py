@@ -17,7 +17,7 @@ class Command(BaseCommand):
                     history = HistoryFormats()
                     history.format = format
                     history.file = format.file
-                    history.date_time=datetime.now()
+                    history.date_time = datetime.now()
                     history.save()
             except HistoryFormats.DoesNotExist:
                 history = HistoryFormats()

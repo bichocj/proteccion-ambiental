@@ -1,4 +1,4 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, forms
 
 from acuerdos_sst.models import Agreement, AgreementDetail
 
@@ -17,9 +17,11 @@ class AgreementForm(ModelForm):
 
 
 class AgreementDetailForm(ModelForm):
+    evidence = forms.FileField(required=False)
+
     class Meta:
         model = AgreementDetail
-        fields = ['description',  'date_start', 'date_until','state', 'evidence']
+        fields = ['description', 'date_start', 'date_until', 'state', 'evidence']
 
     def __init__(self, *args, **kwargs):
         super(AgreementDetailForm, self).__init__(*args, **kwargs)
