@@ -51,6 +51,7 @@ class Worker(models.Model):
     code = models.IntegerField(null=False, blank=False)
     company = models.ForeignKey(Company, null=False)
     cargo = models.IntegerField(choices=cargos, default=RECURSOS_HUMANOS, null=False)
+    is_active = models.BooleanField(default=True, null=False)
 
     def __str__(self):
         return self.name
@@ -130,7 +131,7 @@ class MedicControl(models.Model):
     company = models.ForeignKey(Company, null=False, blank=False)
     worker = models.ForeignKey(Worker)
     state = models.IntegerField(choices=medic_states, default=NO_APTO, null=False, blank=False)
-    date = models.DateField(null=False,default=datetime.now)
+    date = models.DateField(null=False, default=datetime.now)
     evidence = models.FileField(_('Evidencia'), upload_to="examen_medico/", null=True)
 
 

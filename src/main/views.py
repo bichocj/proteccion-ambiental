@@ -108,7 +108,12 @@ def company_edit(request, company_slug):
             employee_form = EmployeeForm(request.POST, request.FILES, instance=company.user)
             company_form = CompanyForm(instance=company)
             if employee_form.is_valid():
-                employee = employee_form.save()
+                if company.user:
+                    employee = employee_form.save()
+                else:
+                    employee = employee_form.save(commit=False)
+                    employee.company = company
+                    employee.save()
                 return redirect(reverse('main:company_list'))
     else:
         company_form = CompanyForm(instance=company)
