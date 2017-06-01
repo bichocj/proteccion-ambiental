@@ -530,6 +530,7 @@ def format_new_other(request, company_slug, requirement_pk):
     if request.POST:
         format = Format(company=company, requirement=requirement, file=request.FILES['file'])
         format.type_format = Format.REGISTERS
+        format.file.name = u'%s' % format.file.name
         format.save()
         return redirect(
             reverse('main:format_list', kwargs={"company_slug": company_slug, "requirement_pk": requirement_pk}))
