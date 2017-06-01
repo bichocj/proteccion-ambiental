@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 
-from accounts.forms import WorkerForm
+from accounts.forms import WorkerForm, WorkerEditForm
 from main.models import Worker, Employee
 from indices.forms import IndexForm
 from indices.models import Index
@@ -272,14 +272,14 @@ def worker_edit(request, company_slug, worker_pk):
     company = Company.objects.get(slug=company_slug)
     worker = Worker.objects.get(pk=worker_pk)
     if request.POST:
-        form = WorkerForm(request.POST, instance=worker)
+        form = WorkerEditForm(request.POST, instance=worker)
         if form.is_valid():
             form.save()
             return redirect(reverse('main:workers', kwargs={'company_slug': company_slug}))
         else:
             message = 'Revisa la informacion'
     else:
-        form = WorkerForm(instance=worker)
+        form = WorkerEditForm(instance=worker)
     return render(request, 'main/layout_form.html', locals())
 
 

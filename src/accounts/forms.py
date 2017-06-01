@@ -32,6 +32,16 @@ class WorkerForm(ModelForm):
         _instance = kwargs.pop('instance', None)
         add_form_control_class(self.fields)
 
+class WorkerEditForm (ModelForm):
+    class Meta:
+        model = Worker
+        fields = ['name', 'code','cargo','is_active']
+
+    def __init__(self, *args, **kwargs):
+        super(WorkerEditForm, self).__init__(*args, **kwargs)
+        _instance = kwargs.pop('instance', None)
+        add_form_control_class(self.fields)
+
 
 class PasswordResetFormEdited(PasswordResetForm):
     meta = {'title': _('Reset password'), 'button': _('Reset'), 'action': '',
