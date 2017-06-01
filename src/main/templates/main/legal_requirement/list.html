@@ -24,7 +24,7 @@
             <th>Normativa</th>
             <th>Fecha Publicacion</th>
             <th>Titulo Dispositivo</th>
-            <th>Mes</th>
+
             {% if request.user.is_superuser %}
             <th>Opciones</th>
             {% endif %}
@@ -37,12 +37,12 @@
             <td><b>{{requirement.normativa}}</b></td>
             <td><b>{{requirement.datepublication}}</b></td>
             <td><b>{{requirement.title}}</b></td>
-            <td><b>{{requirement.actual_month}}</b></td>
+
             {% if request.user.is_superuser %}
             <td>
                 <ul class="actions">
-                    <li><a href="{% url 'main:legal_requirement_edit' company.slug requirement.pk %}">Edit</a></li>
-                    <li class="last"><a href="{% url 'main:legal_requirement_delete' company.slug requirement.pk %}">Delete</a></li>
+                    <li><a href="{% url 'main:legal_requirement_edit' company.slug requirement.pk %}">Editar</a></li>
+                    <li class="last"><a href="{% url 'main:legal_requirement_delete' company.slug requirement.pk %}">Eliminar</a></li>
                 </ul>
             </td>
         {% endif %}

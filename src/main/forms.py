@@ -5,7 +5,7 @@ from django.forms import ModelForm, HiddenInput
 from django.utils.translation import ugettext, ugettext_lazy as _
 
 from .functions import add_form_control_class, add_form_text
-from .models import Company, Format, Accident, Employee, Requirement, LegalRequirement, MedicControl
+from .models import Company, Format, Accident, Employee, Requirement, LegalRequirement, MedicControl, Worker
 
 
 class FormatForm(ModelForm):
@@ -87,7 +87,11 @@ class LegalRequirementForm(ModelForm):
         add_form_control_class(self.fields)
         self.fields['datepublication'].widget.attrs['class'] = 'form-control input-datepicker'
 
+
 class MedicControlForm(ModelForm):
+    worker = forms.ModelChoiceField(queryset=Worker.objects.all(),label='Trabajador')
+    evidence = forms.FileField(required=False)
+
     class Meta:
         model = MedicControl
         fields = ['worker', 'state', 'date', 'evidence']
@@ -97,7 +101,6 @@ class MedicControlForm(ModelForm):
         _instance = kwargs.pop('instance', None)
         add_form_control_class(self.fields)
         self.fields['date'].widget.attrs['class'] = 'form-control input-datepicker'
-
 
 
 class AccidentForm(ModelForm):

@@ -25,6 +25,7 @@
             <tr>
                 <th>Trabajador</th>
                 <th><span class="line"></span>Estado</th>
+                <th><span class="line"></span>Fecha</th>
                 <!--<th><span class="line"></span>Formato</th>-->
             </tr>
             </thead>
@@ -33,10 +34,11 @@
             <tr>
                 <td>{{medic.worker.name}}</td>
                 <td>{{medic.get_state_display}}</td>
+                <td>{{ medic.date }}</td>
                 <td>
                     <ul class="actions">
-                        <li><a href="{% url 'main:medic_exam_edit' company.slug medic.pk %}">Edit</a></li>
-                        <li class="last"><a href="{% url 'main:medic_exam_delete' company.slug medic.pk %}">Delete</a></li>
+                        <li><a href="{% url 'main:medic_exam_edit' company.slug medic.pk %}">Editar</a></li>
+                        <li class="last"><a href="{% url 'main:medic_exam_delete' company.slug medic.pk %}">Eliminar</a></li>
                     </ul>
                 </td>
             </tr>

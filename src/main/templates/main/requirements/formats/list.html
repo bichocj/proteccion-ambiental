@@ -48,6 +48,8 @@
                                     </a>
                                 </div>
                             {% endif %}
+                        {% if request.user.is_superuser %}
+
                                 <div class="modal fade" id="formatForm{{ format.pk }}" tabindex="-1" role="dialog"
                                      aria-labelledby="exampleModalLabel">
                                     <div class="modal-dialog" role="document">
@@ -86,6 +88,7 @@
                                         </div>
                                     </div>
                                 </div>
+                        {% endif %}
                             </td>
 
                         </tr>
@@ -131,6 +134,7 @@
                                        class="btn btn-default">Actualizar</a>
                                 </div>
                             {% endif %}
+                            {% if request.user.is_superuser %}
 
                                 <div class="modal fade" id="formatForm{{ format.pk }}" tabindex="-1" role="dialog"
                                      aria-labelledby="exampleModalLabel">
@@ -170,6 +174,7 @@
                                         </div>
                                     </div>
                                 </div>
+                        {% endif %}
                             </td>
 
                         </tr>

@@ -131,8 +131,8 @@ class MedicControl(models.Model):
     )
     company = models.ForeignKey(Company, null=False, blank=False)
     worker = models.ForeignKey(Worker)
-    state = models.IntegerField(choices=medic_states, default=NO_APTO, null=False, blank=False)
-    date = models.DateField(null=False, default=datetime.now)
+    state = models.IntegerField(_('Estado'),choices=medic_states, default=NO_APTO, null=False, blank=False)
+    date = models.DateField(_('Fecha'),null=False, default=datetime.now)
     evidence = models.FileField(_('Evidencia'), upload_to="examen_medico/", null=True)
 
 

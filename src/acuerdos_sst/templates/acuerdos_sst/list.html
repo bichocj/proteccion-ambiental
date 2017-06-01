@@ -43,9 +43,9 @@
                 {% if request.user.is_superuser %}
                 <td>
 
-                    <ul class="actions">
-                        <li><a href="{% url 'acuerdos_sst:agreement_detail' company.slug agreement.pk %}">Edit</a></li>
-                        <li class="last"><a href="{% url 'acuerdos_sst:agreement_delete' company.slug agreement.pk %}">Delete</a></li>
+                    <ul >
+                        <li><a href="{% url 'acuerdos_sst:agreement_detail' company.slug agreement.pk %}">Editar</a></li>
+                        <li class="last"><a href="{% url 'acuerdos_sst:agreement_delete' company.slug agreement.pk %}">Eliminar</a></li>
                     </ul>
 
                 </td>
