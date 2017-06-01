@@ -192,11 +192,11 @@ class Format(models.Model):
         (REGISTERS, 'Registros y Evidencias')
     )
     requirement = models.ForeignKey(Requirement)
-    file = models.FileField(upload_to="formatos/", null=False, blank=False)
-    type_format = models.IntegerField(choices=TYPE_FORMAT_CHOICES, default=PLANES,
+    file = models.FileField(_('Archivo'),upload_to="formatos/", null=False, blank=False)
+    type_format = models.IntegerField(_('Tipo'),choices=TYPE_FORMAT_CHOICES, default=PLANES,
                                       null=True)  # is if format is planes or registros
     company = models.ForeignKey(Company, null=True, blank=True)
-    name = models.CharField(_('name'), max_length=100, null=False, blank=False)
+    name = models.CharField(_('Nombre'), max_length=100, null=False, blank=False)
 
 
 class HistoryFormats(models.Model):
