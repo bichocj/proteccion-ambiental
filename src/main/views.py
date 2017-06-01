@@ -467,7 +467,7 @@ def config_requirement_format_new(request, requirement_pk):
 @login_required
 def requirement_new(request, company_slug):
     company = get_object_or_404(Company, slug=company_slug)
-    title = 'new requirement'
+    title = 'Nuevo Requerimiento'
     if request.POST:
         form = RequirementForm(request.POST)
         if form.is_valid():
@@ -479,6 +479,21 @@ def requirement_new(request, company_slug):
             return redirect(reverse('main:requirements_list', kwargs={"company_slug": company.slug}))
     else:
         form = RequirementForm()
+        return render(request, 'main/layout_form.html', locals())
+
+
+@login_required
+def requirement_edit(request, company_slug, requirement_pk):
+    company = get_object_or_404(Company, slug=company_slug)
+    company_requirement = Company_Requirement.objects.get(pk=requirement_pk)
+    title = 'Editar Requerimiento'
+    if request.POST:
+        form = RequirementForm(request.POST, instance=company_requirement.requirement)
+        if form.is_valid():
+            requirement = form.save()
+            return redirect(reverse('main:requirements_list', kwargs={"company_slug": company.slug}))
+    else:
+        form = RequirementForm(instance=company_requirement.requirement)
         return render(request, 'main/layout_form.html', locals())
 
 
