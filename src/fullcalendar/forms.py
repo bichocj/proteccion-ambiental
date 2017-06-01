@@ -57,20 +57,32 @@ class CalendarModelForm(ModelForm):
 class EventsModelForm(ModelForm):
     form_met = {'title': _('Event')}
 
-
-
     title = forms.CharField(max_length=100)
     event_start = forms.DateTimeField(input_formats=['%d/%m/%Y %I:%M %p'], label=_('Comienza: '))
     event_end = forms.DateTimeField(input_formats=['%d/%m/%Y %I:%M %p'], label=('Termina '))
-    description = forms.CharField(widget=forms.Textarea(attrs={'rows': 2, 'cols': 15}), required=False, label=_('Descripcion: '))
+    description = forms.CharField(widget=forms.Textarea(attrs={'rows': 2, 'cols': 15}), required=False,
+                                  label=_('Descripcion: '))
     observation = forms.CharField(widget=forms.Textarea(attrs={'rows': 2, 'cols': 15}), required=False)
-
+    type_capacitations = forms.ChoiceField(choices=Events.type_capacitation, label='Tipo de Capacitacion',
+                                           widget=forms.HiddenInput(), required=False)
+    type_inspeccions = forms.ChoiceField(choices=Events.type_inspeccion, label='Tipo de Inspeccion',
+                                         widget=forms.HiddenInput(), required=False)
 
     class Meta:
         model = Events
         exclude = ("is_cancelled", "created_by", "calendar")
 
     def __init__(self, *args, **kwargs):
+        calendar = kwargs.pop('calendar', None)
         super(EventsModelForm, self).__init__(*args, **kwargs)
-        add_form_control_class(self.fields)
+        _instance = kwargs.pop('instance', None)
         add_class_time_picker(self, ['event_start', 'event_end'])
+        # if _instance and _instance.calendar.type == Calendar.CAPACITATION:
+        #     self.fields['type_capacitations'] = forms.ChoiceField(choices=Events.type_capacitation)
+        if calendar and calendar.type == Calendar.CAPACITATION:
+            self.fields['type_capacitations'] = forms.ChoiceField(choices=Events.type_capacitation,
+                                                                  label='Tipo de Capacitacion', required=True,initial=-1,widget=forms.Select())
+        if calendar and calendar.type == Calendar.INSPECTION:
+            self.fields['type_inspeccions'] = forms.ChoiceField(choices=Events.type_inspeccion,
+                                                                label='Tipo de Inspeccion', required=True,initial=-1,widget=forms.Select())
+        add_form_control_class(self.fields)

@@ -3,6 +3,7 @@
 {% load static %}
 {% load i18n %}
 {% load widget_tweaks %}
+{% load main_extras %}
 
 {% block styles %}
 
@@ -47,7 +48,7 @@
                 <form method="post" class="form-horizontal" action="{% url 'fullcalendar:save_event' slug %}" id="event-form">
                     {% for f in form %}
                         {% csrf_token %}
-
+                {% if not f|is_hidden %}
                     <div class="form-group {% if f.errors %}has-error{% endif %}">
                         <label for="id_{{f.name}}" class="col-sm-2 control-label">{{ f.label|capfirst }}</label>
                         <div class="col-sm-10">
@@ -61,7 +62,9 @@
                         </div>
 
                     </div>
-                        <p id="id_{{f.name}}_input" hidden>hola</p>
+                {% endif %}
+
+
                     {% endfor %}
                 </form>
             </div>
@@ -125,21 +128,22 @@
                         method: 'POST',
                         dataType: 'json',
                         success: function (response) {
+                            console.log(response.data);
                             if (response.success) {
                                 $.each(response.data, function (index, value) {
                                     if (index == 'event_start' || index == 'event_end') {
                                         $('#id_' + index).val(
                                                 moment(value).format(format)
                                         ).addClass('edited');
-                                    } else if (index == 'responsable') {
-                                        $('#event-form [name=member]').val(value);
+                                    } else {if (index == 'responsable') {
                                         console.log(response.data.responsable);
-                                         $('#id_responsable_input').text('Reponsable Seleccionado: '+value);
+                                        $('#id_responsable_input').text('Reponsable Seleccionado: ' + value);
                                         $('#id_responsable_input').show();
 
                                     } else {
                                         $('#id_' + index).val(value).addClass('edited');
-                                    }
+
+                                    }}
                                 });
                                 $('#event').modal('show');
 
@@ -227,7 +231,7 @@
                 todayBtn: true
             });
 
-            $("#id_member").autocomplete({
+            $("#id_responsable").autocomplete({
                 source: function (request, response) {
                     $.get("{% url 'accounts:get_members' %}", {
                         pattern: request.term

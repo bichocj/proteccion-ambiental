@@ -6,32 +6,6 @@ from django.utils.translation import ugettext as _
 from main.models import Company, Worker
 from proteccion_ambiental.settings import COMPANY_JRA_SLUG
 
-INDUCCION = 1
-CAPACITACION_DE_LEY = 2
-CAPACITACION = 3
-ESPECIFICA = 4
-CAPACITACION_DE_SALUD_OCUPACIONAL = 5
-ENTRENAMIENTO = 6
-
-type_capacitation = (
-    (INDUCCION, 'INDUCCION'),
-    (CAPACITACION_DE_LEY, 'CAPACITACION DE LEY'),
-    (CAPACITACION, 'CAPACITACION'),
-    (ESPECIFICA, 'ESPECIFICA'),
-    (CAPACITACION_DE_SALUD_OCUPACIONAL, 'CAPACITACION DE SALUD OCUPACIONAL'),
-    (ENTRENAMIENTO, 'ENTRENAMIENTO'),
-)
-
-INSPECCION_DE_SEGURIDAD = 1
-INSPECCION_DE_SALUD = 2
-INSPECCION_OBSERVACION_PLANEADA = 3
-type_inspeccion = (
-    (INSPECCION_DE_SEGURIDAD, 'INSPECCION DE SEGURIDAD'),
-    (INSPECCION_DE_SALUD, 'INSPECCION DE SALUD'),
-    (INSPECCION_OBSERVACION_PLANEADA, 'INSPECCION OBSERVACION PLANEADA'),
-
-)
-
 
 class Calendar(models.Model):
     CAPACITATION = 1
@@ -110,6 +84,31 @@ class Events(models.Model):
     state_event = ((REALIZADO, 'REALIZADO'),
                    (PENDIENTE, 'PENDIENTE'),
                    )
+    INDUCCION = 1
+    CAPACITACION_DE_LEY = 2
+    CAPACITACION = 3
+    ESPECIFICA = 4
+    CAPACITACION_DE_SALUD_OCUPACIONAL = 5
+    ENTRENAMIENTO = 6
+
+    type_capacitation = (
+        (INDUCCION, 'INDUCCION'),
+        (CAPACITACION_DE_LEY, 'CAPACITACION DE LEY'),
+        (CAPACITACION, 'CAPACITACION'),
+        (ESPECIFICA, 'ESPECIFICA'),
+        (CAPACITACION_DE_SALUD_OCUPACIONAL, 'CAPACITACION DE SALUD OCUPACIONAL'),
+        (ENTRENAMIENTO, 'ENTRENAMIENTO'),
+    )
+
+    INSPECCION_DE_SEGURIDAD = 1
+    INSPECCION_DE_SALUD = 2
+    INSPECCION_OBSERVACION_PLANEADA = 3
+    type_inspeccion = (
+        (INSPECCION_DE_SEGURIDAD, 'INSPECCION DE SEGURIDAD'),
+        (INSPECCION_DE_SALUD, 'INSPECCION DE SALUD'),
+        (INSPECCION_OBSERVACION_PLANEADA, 'INSPECCION OBSERVACION PLANEADA'),
+
+    )
     calendar = models.ForeignKey(Calendar)
     event_start = models.DateTimeField()
     event_end = models.DateTimeField()
@@ -128,5 +127,7 @@ class Events(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    type_capacitations = models.IntegerField(_('Tipo Capacitacion'), choices=type_capacitation, null=True, blank=True)
-    type_inspeccion = models.IntegerField(_('TIpo Inspeccion'), choices=type_inspeccion, null=True, blank=True)
+    type_capacitations = models.IntegerField(_('Tipo Capacitacion'), choices=type_capacitation, null=True, blank=True,
+                                             default=-1)
+    type_inspeccions = models.IntegerField(_('TIpo Inspeccion'), choices=type_inspeccion, null=True, blank=True,
+                                           default=-1)

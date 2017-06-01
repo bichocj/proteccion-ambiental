@@ -48,7 +48,7 @@ def view_calendar(request, company_slug, slug, calendar_id):
     except ObjectDoesNotExist:
         calendar = get_object_or_404(Calendar, id=calendar_id)
     # company = request.user.company
-    form = EventsModelForm()
+    form = EventsModelForm(calendar=calendar)
     info = {
         'view_calendar': {
             'name': calendar.title,
@@ -92,12 +92,21 @@ def save_event(request, slug):
             form = EventsModelForm(request.POST, instance=e)
         else:
             form = EventsModelForm(request.POST)
+        print('gogogo')
         if form.is_valid():
+            print('gogogox2')
             calendar = get_object_or_404(Calendar, slug=slug)
             event = form.save(commit=False)
             event.calendar = calendar
             event.created_by = request.user
+            if event.calendar.type == Calendar.CAPACITATION:
+                event.type_inspeccions = None
+            if event.calendar.type == Calendar.INSPECTION:
+                event.type_capacitations = None
+            print(request.POST)
+            print(event.type_inspeccions)
             event.save()
+            print('gogogox4')
             print(event.responsable.name)
             response['success'] = True
             response['message'] = _("Save Success")
@@ -124,7 +133,6 @@ def get_event(request):
     if request.POST:
         event_id = request.POST.get('id')
         event = get_object_or_404(Events, id=event_id)
-        print(event.responsable.name)
         response['success'] = True
         response['data'] = {
             'event': event.id,
@@ -139,10 +147,12 @@ def get_event(request):
             'number_workers': event.number_workers,
             'responsable': event.responsable.name,
             'type_capacitations': event.type_capacitations,
-            'type_inspeccion': event.type_inspeccion
+
             # 'member': event.member.id,
             # 'member_fullname': event.member.first_name + ' ' + event.member.last_name
         }
+
+        # 'type_inspeccion': event.type_inspeccion
     else:
         response['success'] = False
         response['message'] = _("Invalid request")
@@ -150,7 +160,6 @@ def get_event(request):
 
 
 def update_event(request):
-    print('hola update')
     response = {}
     if request.POST:
         event_id = request.POST.get('id')
