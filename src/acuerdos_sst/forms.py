@@ -19,7 +19,7 @@ class AgreementForm(ModelForm):
 class AgreementDetailForm(ModelForm):
     class Meta:
         model = AgreementDetail
-        fields = ['description', 'date_until', 'date_start', 'state', 'evidence']
+        fields = ['description',  'date_start', 'date_until','state', 'evidence']
 
     def __init__(self, *args, **kwargs):
         super(AgreementDetailForm, self).__init__(*args, **kwargs)

@@ -23,6 +23,7 @@ def calendar_list(request, company_slug):
 def calendar_new(request, company_slug):
     title = _('new calendar')
     company = get_object_or_404(Company, slug=company_slug)
+    calendar=True
     if request.POST:
         form = CalendarModelForm(request.POST)
         if form.is_valid():
@@ -39,6 +40,7 @@ def calendar_new(request, company_slug):
 
 
 def view_calendar(request, company_slug, slug, calendar_id):
+    calendar=True
     try:
         company = get_object_or_404(Company, slug=company_slug)
         print('sluug', slug)

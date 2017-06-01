@@ -110,18 +110,21 @@
 </div>
 
 
+
+
+<!-- call this page plugins -->
+
+<!-- knob -->
+{% if not calendar %}
 <script src="http://code.jquery.com/jquery-latest.js"></script>
 <script src="{% static 'main/js/bootstrap.min.js' %}"></script>
 <script src="{% static 'main/js/jquery-ui-1.10.2.custom.min.js' %}"></script>
-<script src="js/wysihtml5-0.3.0.js"></script>
-<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="{% static 'main/js/wysihtml5-0.3.0.js' %}"></script>
 <script src="{% static 'main/js/bootstrap.datepicker.js' %}"></script>
 <script src="{% static 'main/js/jquery.uniform.min.js' %}"></script>
 <script src="{% static 'main/js/select2.min.js'%}"></script>
 <script src="{% static 'main/js/theme.js' %}"></script>
-
-<!-- call this page plugins -->
-<script type="text/javascript">
+    <script type="text/javascript">
     $(function () {
 
         // add uniform plugin styles to html elements
@@ -138,11 +141,11 @@
         });
     });
 </script>
-<!-- knob -->
-
-
+{% endif %}
 {% block scripts %}
 
+{% endblock %}
+{% block more_scripts %}
 {% endblock %}
 </body>
 
