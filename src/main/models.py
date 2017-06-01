@@ -52,7 +52,7 @@ class Worker(models.Model):
     code = models.CharField(_('Codigo'), max_length=100, null=False, blank=False)
     company = models.ForeignKey(Company, null=False)
     cargo = models.IntegerField(_('Cargo'), choices=cargos, default=RECURSOS_HUMANOS, null=False)
-    is_active = models.BooleanField(_('Esta Activo?'),default=True, null=False)
+    is_active = models.BooleanField(_('Esta Activo?'), default=True, null=False)
 
     def __str__(self):
         return self.name
@@ -82,10 +82,10 @@ class Requirement(models.Model):
 
 class LegalRequirement(models.Model):
     normativa = models.CharField(max_length=50, null=False, blank=False)
-    datepublication = models.DateTimeField(default=datetime.now)
+    datepublication = models.DateField(_('Fecha Publicacion'), default=datetime.now)
     entitie = models.ForeignKey(Company)
-    title = models.CharField(max_length=200, null=False, blank=False)
-    apply = models.TextField(null=False, blank=False)
+    title = models.CharField(_('Titulo'), max_length=200, null=False, blank=False)
+    apply = models.TextField(_('Aplica'), null=False, blank=False)
     actual_month = models.CharField(max_length=100, null=False, blank=False)
     # responsable = models.ForeignKey(Worker)
 
@@ -192,8 +192,8 @@ class Format(models.Model):
         (REGISTERS, 'Registros y Evidencias')
     )
     requirement = models.ForeignKey(Requirement)
-    file = models.FileField(_('Archivo'),upload_to="formatos/", null=False, blank=False)
-    type_format = models.IntegerField(_('Tipo'),choices=TYPE_FORMAT_CHOICES, default=PLANES,
+    file = models.FileField(_('Archivo'), upload_to="formatos/", null=False, blank=False)
+    type_format = models.IntegerField(_('Tipo'), choices=TYPE_FORMAT_CHOICES, default=PLANES,
                                       null=True)  # is if format is planes or registros
     company = models.ForeignKey(Company, null=True, blank=True)
     name = models.CharField(_('Nombre'), max_length=100, null=False, blank=False)

@@ -79,7 +79,7 @@ class DateInput(forms.DateInput):
 class LegalRequirementForm(ModelForm):
     class Meta:
         model = LegalRequirement
-        fields = ['normativa', 'datepublication', 'title', 'apply']
+        fields = ['title', 'normativa', 'datepublication', 'apply']
 
     def __init__(self, *args, **kwargs):
         super(LegalRequirementForm, self).__init__(*args, **kwargs)
