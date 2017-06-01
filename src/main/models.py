@@ -9,12 +9,19 @@ from django.utils.translation import ugettext as _
 # from accounts.models import Worker
 
 
+GERENTE = 0
+SUPERVISOR = 1
+ASESOR_EXTERNO = 2
+RECURSOS_HUMANOS = 3
+COMITE = 4
 
-
-class Product(models.Model):
-    code = models.CharField(max_length=50, null=False, blank=False)
-    quantity = models.IntegerField(null=False, blank=False)
-    description = models.CharField(max_length=100, null=False, blank=False)
+cargos = (
+    (GERENTE, 'GERENTE'),
+    (SUPERVISOR, 'SUPERVISOR'),
+    (ASESOR_EXTERNO, 'ASESOR EXTERNO'),
+    (RECURSOS_HUMANOS, 'RECURSOS HUMANOS'),
+    (COMITE, 'COMITE')
+)
 
 
 def upload_image_to(instance, filename):
@@ -37,6 +44,22 @@ class Company(models.Model):
     def save(self, **kwargs):
         self.slug = slugify(self.short_name)
         super(Company, self).save(**kwargs)
+
+
+class Worker(models.Model):
+    name = models.CharField(max_length=100, null=False, blank=False)
+    code = models.IntegerField(null=False, blank=False)
+    company = models.ForeignKey(Company, null=False)
+    cargo = models.IntegerField(choices=cargos, default=RECURSOS_HUMANOS, null=False)
+
+    def __str__(self):
+        return self.name
+
+
+class Product(models.Model):
+    code = models.CharField(max_length=50, null=False, blank=False)
+    quantity = models.IntegerField(null=False, blank=False)
+    description = models.CharField(max_length=100, null=False, blank=False)
 
 
 class Requirement(models.Model):
@@ -94,6 +117,23 @@ class Evidence(models.Model):
     file = models.FileField()
 
 
+class MedicControl(models.Model):
+    APTO = 0
+    APTO_CON_RESTRICCION = 1
+    NO_APTO = 2
+    medic_states = (
+        (APTO, 'APTO'),
+        (APTO_CON_RESTRICCION, 'APTO CON RESTRICCION'),
+        (NO_APTO, 'NO APTO')
+
+    )
+    company = models.ForeignKey(Company, null=False, blank=False)
+    worker = models.ForeignKey(Worker)
+    state = models.IntegerField(choices=medic_states, default=NO_APTO, null=False, blank=False)
+    date = models.DateField(null=False,default=datetime.now)
+    evidence = models.FileField(_('Evidencia'), upload_to="examen_medico/", null=True)
+
+
 class Accident(models.Model):
     ACCIDENT_1 = 1
     ACCIDENT_2 = 2
@@ -114,6 +154,7 @@ class Accident(models.Model):
     type_accident = models.IntegerField(_('Tipo de Accidente'), choices=TYPE_ACCIDENT_CHOICES,
                                         default=ACCIDENT_1)  # NOQA
     date = models.DateField(_('Fecha'), null=False, default=datetime.now)
+    lose_days = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     company = models.ForeignKey(Company, null=False, blank=False)
     evidence = models.FileField(_('Evidencia'), upload_to="accident/", null=True)
 
@@ -145,8 +186,8 @@ class Format(models.Model):
     PLANES = 1
     REGISTERS = 2
     TYPE_FORMAT_CHOICES = (
-        (PLANES, 'PLANES'),
-        (REGISTERS, 'REGISTERS')
+        (PLANES, 'Planes, Programas y Procedimientos'),
+        (REGISTERS, 'Registros y Evidencias')
     )
     requirement = models.ForeignKey(Requirement)
     file = models.FileField(upload_to="formatos/", null=False, blank=False)

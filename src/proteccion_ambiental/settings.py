@@ -36,11 +36,11 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'widget_tweaks',
+    'main',
     'accounts',
     'indices',
     'fullcalendar',
     'acuerdos_sst',
-    'main',
 
 )
 

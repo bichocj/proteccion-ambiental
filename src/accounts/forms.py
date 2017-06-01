@@ -3,7 +3,8 @@ from django.contrib.auth.models import User
 from django.forms import ModelForm
 from django.utils.translation import ugettext as _
 
-from accounts.models import Person, Worker
+from accounts.models import Person
+from main.models import Worker
 from main.functions import add_form_control_class
 
 

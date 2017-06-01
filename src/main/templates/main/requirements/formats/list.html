@@ -14,25 +14,29 @@
                 </div>
             {% endif %}
             <div class="col-md-5">
+            {% if request.user.is_superuser %}
                 <div class="pull-right">
                     <a href="{% url 'main:format_new' company_slug requirement_pk %}" class="btn-flat success pull-right">
                         <span>&#43;</span>
                         Nuevo Formato
                     </a>
                 </div>
+            {% endif %}
                 <table class="table table-bordered">
 
                     <thead>
                     <tr>
                         <td><b>Planes, Programas y Procedimientos</b></td>
+                        {% if request.user.is_superuser %}
                         <td><b>Opciones</b></td>
+                        {% endif %}
                     </tr>
                     </thead>
 
                     <tbody>
                     {% for format in formats_pdf %}
                         <tr>
-                            <td><a href="{{ format.url }}" download="{{ format.file }}"><i class="icon-download"></i> {{ format.name }}</a></td>
+                            <td><a href="{{ format.url }}" download="{{ format.file }}"><i class="icon-download"></i> {{ format.name }}</a></td>{% if request.user.is_superuser %}
                             <td>
                                 <div>
                                     <button type="button" class="btn btn-default" data-toggle="modal"
@@ -43,6 +47,7 @@
                                        class="btn btn-default">Actualizar
                                     </a>
                                 </div>
+                            {% endif %}
                                 <div class="modal fade" id="formatForm{{ format.pk }}" tabindex="-1" role="dialog"
                                      aria-labelledby="exampleModalLabel">
                                     <div class="modal-dialog" role="document">
@@ -92,17 +97,21 @@
             <div class="col-md-1"></div>
 
             <div class="col-md-5">
+            {% if request.user.is_superuser %}
                 <div class="pull-right">
                     <a href="{% url 'main:format_new' company_slug requirement_pk %}" class="btn-flat success pull-right">
                         <span>&#43;</span>
                         Nuevo Formato
                     </a>
                 </div>
+            {% endif %}
                 <table class="table table-bordered">
                     <thead>
                     <tr>
                         <td><b>Registros y Evidencias</b></td>
+                        {% if request.user.is_superuser %}
                         <td><b>Opciones</b></td>
+                    {% endif %}
 
                     </thead>
 
@@ -111,6 +120,7 @@
                     {% for format in formats_xlsx %}
                         <tr>
                             <td><a href="{{ format.url }}"> <i class="icon-download"></i> {{ format.name }}</a></td>
+                        {% if request.user.is_superuser %}
                             <td>
                                 <div>
                                     <button type="button" class="btn btn-default" data-toggle="modal"
@@ -120,6 +130,7 @@
                                     <a href="{% url 'main:format_update' company_slug requirement_pk format.pk %}"
                                        class="btn btn-default">Actualizar</a>
                                 </div>
+                            {% endif %}
 
                                 <div class="modal fade" id="formatForm{{ format.pk }}" tabindex="-1" role="dialog"
                                      aria-labelledby="exampleModalLabel">

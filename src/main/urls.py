@@ -24,6 +24,14 @@ urlpatterns = [
 
     url(r'^(?P<company_slug>[-\w]+)/indices/$', views.indices, name='indices'),
 
+    url(r'^(?P<company_slug>[-\w]+)/medic_exams/$', views.medic_exam, name='medic_exam'),
+    url(r'^(?P<company_slug>[-\w]+)/medic_exams/new/$', views.medic_exam_new,
+        name='medic_exam_new'),
+    url(r'^(?P<company_slug>[-\w]+)/medic_exams/(?P<medic_pk>\d+)/edit/$', views.medic_exam_edit,
+        name='medic_exam_edit'),
+    url(r'^(?P<company_slug>[-\w]+)/medic_exams/(?P<medic_pk>\d+)/delete/$',
+        views.medic_exam_delete, name='medic_exam_delete'),
+
     url(r'^(?P<company_slug>[-\w]+)/workers/$', views.workers, name='workers'),
     url(r'^(?P<company_slug>[-\w]+)/workers/new/$', views.worker_new,
         name='worker_new'),

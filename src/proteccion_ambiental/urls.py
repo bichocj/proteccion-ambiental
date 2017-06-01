@@ -10,7 +10,6 @@ urlpatterns = [
                   url(r'^calendario/', include('fullcalendar.urls', namespace="fullcalendar")),
                   url(r'^acuerdos/', include('acuerdos_sst.urls', namespace="acuerdos_sst")),
                   url(r'^indices/', include('indices.urls', namespace="indices")),
-
                   url(r'^admin/', admin.site.urls),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

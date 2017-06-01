@@ -7,15 +7,13 @@
     <div id="pad-wrapper" class="users-list">
     <div class="table-wrapper products-table">
         <div class="row header">
-            <h3>ACUERDOS DE COMITE</h3>
-            {% if request.user.is_superuser %}
+            <h3>CONTROL MEDICO</h3>
             <div class="col-md-10 col-sm-12 col-xs-12 pull-right">
-                <a href="{% url 'acuerdos_sst:agreement_new' company.slug %}" class="btn-flat success pull-right">
+                <a href="{% url 'main:medic_exam_new' company.slug %}" class="btn-flat success pull-right">
                     <span>&#43;</span>
-                    Nuevo Acuerdo
+                    Nuevo Examen Medico
                 </a>
             </div>
-            {% endif %}
         </div>
         {% if message %}
             <div class="alert alert-danger alert-dismissible" role="alert">
@@ -25,31 +23,22 @@
         <table class="table table-hover">
             <thead>
             <tr>
-                <th>Acuerdo</th>
-                <th><span class="line"></span>Fecha Acuerdo</th>
+                <th>Trabajador</th>
                 <th><span class="line"></span>Estado</th>
-                {% if request.user.is_superuser %}
-                <th><span class="line"></span>Opciones</th>
-                {% endif %}
                 <!--<th><span class="line"></span>Formato</th>-->
             </tr>
             </thead>
             <tbody>
-            {% for agreement in agreements %}
+            {% for medic in medic_controls %}
             <tr>
-                <td>{{agreement.title}}</td>
-                <td>{{agreement.content}}</td>
-                <td>{{agreement.date}}</td>
-                {% if request.user.is_superuser %}
+                <td>{{medic.worker.name}}</td>
+                <td>{{medic.get_state_display}}</td>
                 <td>
-
                     <ul class="actions">
-                        <li><a href="{% url 'acuerdos_sst:agreement_detail' company.slug agreement.pk %}">Edit</a></li>
-                        <li class="last"><a href="{% url 'acuerdos_sst:agreement_delete' company.slug agreement.pk %}">Delete</a></li>
+                        <li><a href="{% url 'main:medic_exam_edit' company.slug worker.pk %}">Edit</a></li>
+                        <li class="last"><a href="{% url 'main:medic_exam_delete' company.slug worker.pk %}">Delete</a></li>
                     </ul>
-
                 </td>
-            {% endif %}
             </tr>
             {% endfor %}
             </tbody>

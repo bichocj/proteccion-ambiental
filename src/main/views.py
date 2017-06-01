@@ -1,14 +1,18 @@
 import datetime
+
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect, get_object_or_404
 
 from accounts.forms import WorkerForm
-from accounts.models import Worker
+from main.models import Worker, Employee
 from indices.forms import IndexForm
 from indices.models import Index
 from proteccion_ambiental.settings import COMPANY_JRA_SLUG
-from .models import Company, Format, Requirement, HistoryFormats, Accident, Company_Requirement, LegalRequirement
-from .forms import CompanyForm, FormatForm, AccidentForm, EmployeeForm, RequirementForm, LegalRequirementForm
+from .models import Company, Format, Requirement, HistoryFormats, Accident, Company_Requirement, LegalRequirement, \
+    MedicControl
+from .forms import CompanyForm, FormatForm, AccidentForm, EmployeeForm, RequirementForm, LegalRequirementForm, \
+    MedicControlForm
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.utils.translation import ugettext as _
@@ -37,14 +41,19 @@ def panel(request, company_slug):
 # panel de ley de seguridad ambiental
 @login_required
 def company_list(request):
-    # if user is admin
-    companias = Company.objects.all()
-    # else
-    # companies = Company.objects.get(su empresa)
-    companies = list()
-    for c in companias:
-        if not c.slug == 'jra':
-            companies.append(c)
+    user = request.user
+    if user.is_superuser or User.objects.filter(pk=user.pk, groups__name='Doctor').exists():
+        companias = Company.objects.all()
+        companies = list()
+        for c in companias:
+            if not c.slug == 'jra':
+                companies.append(c)
+    else:
+        employee = Employee.objects.get(user_ptr_id=user.pk)
+        company = employee.company
+        companies = list()
+        companies.append(company)
+
     return render(request, "main/company/list.html", locals())
 
 
@@ -165,6 +174,58 @@ def indices(request, company_slug):
         else:
             form = IndexForm(instance=indices)
     return render(request, 'main/indeces/list.html', locals())
+
+
+@login_required
+def medic_exam(request, company_slug):
+    company = Company.objects.get(slug=company_slug)
+    medic_controls = MedicControl.objects.filter(company=company)
+    return render(request, 'main/medic_control/list.html', locals())
+
+
+@login_required
+def medic_exam_new(request, company_slug):
+    title = 'Nuevo Control Medico'
+    company = Company.objects.get(slug=company_slug)
+    if request.POST:
+        form = MedicControlForm(request.POST, request.FILES)
+        if form.is_valid():
+            medic_control = form.save(commit=False)
+            medic_control.company = company
+            medic_control.save()
+            return redirect(reverse('main:medic_exam', kwargs={'company_slug': company_slug}))
+        else:
+            message = 'Revisa la informacion'
+    else:
+        form = MedicControlForm()
+    return render(request, 'main/layout_form.html', locals())
+
+
+@login_required
+def medic_exam_edit(request, company_slug, medic_pk):
+    title = 'Nuevo Control Medico'
+    company = Company.objects.get(slug=company_slug)
+    medic_control = MedicControl.objects.get(pk=medic_pk)
+    if request.POST:
+        form = MedicControlForm(request.POST, request.FILES, instance=medic_control)
+        if form.is_valid():
+            medic_control = form.save(commit=False)
+            medic_control.company = company
+            medic_control.save()
+            return redirect(reverse('main:medic_exam', kwargs={'company_slug': company_slug}))
+        else:
+            message = 'Revisa la informacion'
+    else:
+        form = MedicControlForm(instance=medic_control)
+    return render(request, 'main/layout_form.html', locals())
+
+
+@login_required
+def medic_exam_delete(request, company_slug, medic_pk):
+    company = Company.objects.get(slug=company_slug)
+    medic_control = MedicControl.objects.get(pk=medic_pk)
+    medic_control.delete()
+    return redirect(reverse('main:medic_exam', kwargs={'company_slug': company_slug}))
 
 
 @login_required
@@ -427,6 +488,7 @@ def config_requirement_new(request):
 def accident_list(request, company_slug):
     company = get_object_or_404(Company, slug=company_slug)
     accidents = Accident.objects.filter(company=company)
+    print(request.user.is_superuser)
     return render(request, "main/accidents/list.html", locals())
 
 

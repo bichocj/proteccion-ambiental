@@ -4,6 +4,34 @@ from django.utils.translation import ugettext as _
 from main.models import Company
 
 
+class Indice_reconocimiento_trabajador(models.Model):
+    name = models.CharField(max_length=100, null=False, default='INDICE DE RECONOCIMIENTO DEL TRABAJADOR')
+    num_trabajadores = models.IntegerField(null=False, blank=False)
+    num_reconocidos = models.IntegerField(null=False, blank=False)
+
+
+class Indice_disponibilidad_ingeniero_sst(models.Model):
+    name = models.CharField(max_length=100, null=False, default='INDICE DISPONIBILIDAD INGENIERO SST')
+    num_horas = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+
+
+class Indice_Frecuencia(models.Model):
+    COEF_MENOR = 200000
+    COEF_MAYOR = 1000000
+    name = models.CharField(max_length=100, null=False, default='INDICE DE FRECUENCIA')
+    num_horas = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+
+
+class Indice_de_Severidad(models.Model):
+    name = models.CharField(max_length=100, null=False, default='INDICE DE SEVERIDAD')
+    num_accidents = models.IntegerField(null=False, blank=False)
+
+class Indice_Medico(models.Model):
+    name = models.CharField(max_length=100, null=False, default='INDICE DE EXAMEN MEDICO OCUPACIONAL')
+
+    num_examenes=models.IntegerField(null=True,blank=True)
+
+
 # //INDICE DE MEJORAS
 # VA EN OTROS INDICADORES(OTRO TAB)
 # COMO ACUERDO SST
@@ -23,6 +51,7 @@ class Index_de_charlas(models.Model):
 
 
 class Indice_Reporte_Incidente(models.Model):
+    # Sale de  incidentes peligrosos
     name = models.CharField(max_length=100, null=False, default='INCIDE DE REPORTE DE INCIDENTES')
 
     num_incidentes_peligrosos = models.IntegerField(null=False, blank=False)

@@ -6,8 +6,9 @@
         </label>
 
     {% endfor %}
-
+{% if request.user.is_superuser %}
     <div class="pull-right">
         <input type="submit" class="btn btn-primary pull-right" value="{{  save_text|default:'save' }}" name="_save">
     </div>
+{% endif %}
 </form>

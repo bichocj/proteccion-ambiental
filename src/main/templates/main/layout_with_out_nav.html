@@ -13,7 +13,7 @@
 
     <link href="{% static 'main/css/bootstrap/bootstrap.css' %}" type="text/css" rel="stylesheet"/>
     <link href="{% static 'main/css/bootstrap/bootstrap-overrides.css' %}" type="text/css" rel="stylesheet"/>
-
+     <link href="{% static 'main/css/lib/bootstrap.datepicker.css'%}" type="text/css" rel="stylesheet" />
     <!-- libraries -->
     <link href="{% static 'main/css/lib/font-awesome.css' %}" type="text/css" rel="stylesheet"/>
     <link href="{% static 'main/css/lib/select2.css'%}" type="text/css" rel="stylesheet" />
@@ -81,7 +81,6 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li><a href="{% url 'main:config_requirements_list' %}">{% trans 'requirements'|capfirst %}</a></li>
-                    <li><a href="{% url 'main:config_indices_list' %}">Indices</a></li>
                 </ul>
             </li>
         {% endif %}
