@@ -35,8 +35,8 @@
                 <td>{{medic.get_state_display}}</td>
                 <td>
                     <ul class="actions">
-                        <li><a href="{% url 'main:medic_exam_edit' company.slug worker.pk %}">Edit</a></li>
-                        <li class="last"><a href="{% url 'main:medic_exam_delete' company.slug worker.pk %}">Delete</a></li>
+                        <li><a href="{% url 'main:medic_exam_edit' company.slug medic.pk %}">Edit</a></li>
+                        <li class="last"><a href="{% url 'main:medic_exam_delete' company.slug medic.pk %}">Delete</a></li>
                     </ul>
                 </td>
             </tr>
