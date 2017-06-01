@@ -51,7 +51,8 @@ urlpatterns = [
     url(r'^(?P<company_slug>[-\w]+)/panel/$', views.panel, name='panel'),
     url(r'^(?P<company_slug>[-\w]+)/requirements/$', views.requirements_list, name='requirements_list'),
     url(r'^(?P<company_slug>[-\w]+)/requirements/new/$', views.requirement_new, name='requirement_new'),
-    url(r'^(?P<company_slug>[-\w]+)/requirement/(?P<requirement_pk>\d+)/formats/$', views.format_list,
+    url(r'^(?P<company_slug>[-\w]+)/requirements/edit/(?P<requirement_pk>\d+)/$', views.requirement_edit, name='requirement_edit'),
+url(r'^(?P<company_slug>[-\w]+)/requirement/(?P<requirement_pk>\d+)/formats/$', views.format_list,
         name='format_list'),
 
     url(r'^(?P<company_slug>[-\w]+)/requirement/(?P<requirement_pk>\d+)/format/(?P<format_pk>\d+)/update/',
