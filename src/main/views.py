@@ -21,6 +21,14 @@ from django.utils.translation import ugettext as _
 @login_required
 def home(request):
     company_jra_slug = COMPANY_JRA_SLUG
+    user = request.user
+    try:
+        employee = Employee.objects.get(user_ptr_id=user.pk)
+    except Employee.DoesNotExist:
+        employee = None
+    show = False
+    if employee and employee.company.slug == company_jra_slug:
+        show = True
     return render(request, 'main/home.html', locals())
 
 
@@ -46,7 +54,7 @@ def company_list(request):
         companias = Company.objects.all()
         companies = list()
         for c in companias:
-            if not c.slug == 'jra':
+            if not c.slug == COMPANY_JRA_SLUG:
                 companies.append(c)
     else:
         employee = Employee.objects.get(user_ptr_id=user.pk)
