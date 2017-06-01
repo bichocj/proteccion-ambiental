@@ -348,7 +348,18 @@ def format_update(request, company_slug, requirement_pk, format_pk):
     requirement = get_object_or_404(Requirement, pk=requirement_pk)
     format = get_object_or_404(Format, pk=format_pk, company=company)
     title = 'Requirement : {0} , updating format {1}'.format(requirement.name, format.name)
-
+    try:
+        history = HistoryFormats.objects.filter(format=format)
+        if history.count() <=0:
+            history = HistoryFormats()
+            history.format = format
+            history.file = format.file
+            history.save()
+    except HistoryFormats.DoesNotExist:
+        history = HistoryFormats()
+        history.format = format
+        history.file = format.file
+        history.save()
     if request.POST:
         form = FormatForm(request.POST, request.FILES, instance=format)
         if form.is_valid():
@@ -531,6 +542,12 @@ def format_new_other(request, company_slug, requirement_pk):
         format = Format(company=company, requirement=requirement, file=request.FILES['file'])
         format.type_format = Format.REGISTERS
         format.file.name = u'%s' % format.file.name
+
+        history = HistoryFormats()
+        history.format = format
+        history.file = format.file
+        history.save()
+
         format.save()
         return redirect(
             reverse('main:format_list', kwargs={"company_slug": company_slug, "requirement_pk": requirement_pk}))
@@ -553,6 +570,11 @@ def format_new(request, company_slug, requirement_pk):
             format.requirement = requirement
             format.company = company
             format.save()
+            history = HistoryFormats()
+            history.format = format
+            history.file = format.file
+            history.save()
+
         return redirect(
             reverse('main:format_list', kwargs={"company_slug": company_slug, "requirement_pk": requirement_pk}))
     else:
