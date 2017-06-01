@@ -71,7 +71,7 @@ class Requirement(models.Model):
         (ENTERPRISE, ENTERPRISE)
     )
     name = models.CharField(max_length=100, null=False, blank=False)
-    description = models.CharField(max_length=50, null=True, blank=True)
+    description = models.CharField(max_length=200, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     type_requirement = models.IntegerField(default=PROTECTION, choices=type_choice, null=False)
 
