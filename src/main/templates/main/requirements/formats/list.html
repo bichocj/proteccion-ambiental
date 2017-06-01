@@ -36,7 +36,7 @@
                     <tbody>
                     {% for format in formats_pdf %}
                         <tr>
-                            <td><a href="{{ format.url }}" download="{{ format.file }}"><i class="icon-download"></i> {{ format.name }}</a></td>{% if request.user.is_superuser %}
+                            <td><a href="{{ format.file.url }}" download="{{ format.file.file }}"><i class="icon-download"></i> {{ format.name }}</a></td>{% if request.user.is_superuser %}
                             <td>
                                 <div>
                                     <button type="button" class="btn btn-default" data-toggle="modal"
@@ -122,7 +122,7 @@
 
                     {% for format in formats_xlsx %}
                         <tr>
-                            <td><a href="{{ format.url }}"> <i class="icon-download"></i> {{ format.name }}</a></td>
+                            <td><a href="{{ format.file.url }}" download="{{ format.file.file }}"> <i class="icon-download"></i> {{ format.name }}</a></td>
                         {% if request.user.is_superuser %}
                             <td>
                                 <div>
