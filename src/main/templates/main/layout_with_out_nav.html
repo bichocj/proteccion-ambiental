@@ -84,7 +84,11 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li><a href="{% url 'main:config_requirements_list' %}">{% trans 'requirements'|capfirst %}</a></li>
+                    {% if company_slug %}
+                        <li><a href="{% url 'main:indices' company.slug %}">{% trans 'indices'|capfirst %}</a></li>
+                    {% endif %}
                 </ul>
+
             </li>
         {% endif %}
         <li class="dropdown">
