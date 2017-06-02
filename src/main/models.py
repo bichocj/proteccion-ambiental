@@ -143,13 +143,15 @@ class Accident(models.Model):
     ACCIDENT_4 = 4
     ACCIDENT_5 = 5
     ACCIDENT_6 = 6
+    ACCIDENT_7 = 7
     TYPE_ACCIDENT_CHOICES = (
-        (ACCIDENT_1, 'ACCIDENTES CON PRIMEROS AXILIOS'),
+        (ACCIDENT_1, 'ACCIDENTES CON PRIMEROS AUXILIOS'),
         (ACCIDENT_2, 'ACCCIDENTE CON ATENCION MEDICA'),
         (ACCIDENT_3, 'ACCIDENTES CON TIEMPO PERDIDO'),
         (ACCIDENT_4, 'ACCIDENTES FATALES'),
         (ACCIDENT_5, 'INCIDENTES PELIGROS'),
         (ACCIDENT_6, 'ENFERMEDADES OCUPACIONALES'),
+        ((ACCIDENT_7, 'ACTOS INSEGUROS'),)
     )
     title = models.CharField(_('Titulo'), max_length=100, null=False, blank=False)
     content = models.TextField(_('Descripcion'), null=True, blank=True)
