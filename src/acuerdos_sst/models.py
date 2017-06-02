@@ -25,8 +25,8 @@ class AgreementDetail(models.Model):
     )
     agreement = models.ForeignKey(Agreement)
     description = models.TextField(_('Description'), null=False, blank=False)
-    date_until = models.DateField(_('Realizar antes de'), null=True)
-    date_start = models.DateField(_('Comenzar'), null=True)
+    date_until = models.DateField(_('Fecha maxima'), null=True)
+    date_start = models.DateField(_('Fecha inicio'), null=True)
     state = models.IntegerField(_('Estado'), choices=status, default=TO_DO)
     evidence = models.FileField(_('Evidencia'), upload_to="acuerdos/", null=True)
 
