@@ -12,7 +12,7 @@
                 <div id="pad-wrapper" class="new-user">
             <div class="row header">
                 <div class="col-md-12">
-                    <h3>DETALLES DE ACUERDO {{ agreement.title }}</h3>
+                    <h3>{{ agreement.title }}</h3>
                 </div>
             </div>
 
@@ -46,8 +46,8 @@
                                 {% endif %}
                                 <td>
                                          <ul class="actions">
-                                            <li><a href="{% url 'acuerdos_sst:agreement_detail_edit' company.slug agreement_pk agreement.pk %}">Edit</a></li>
-                                            <li class="last"><a href="{% url 'acuerdos_sst:agreement_detail_delete' company.slug agreement_pk agreement.pk %}">Delete</a></li>
+                                            <li><a href="{% url 'acuerdos_sst:agreement_detail_edit' company.slug agreement_pk agreement.pk %}">Editar</a></li>
+                                            <li class="last"><a href="{% url 'acuerdos_sst:agreement_detail_delete' company.slug agreement_pk agreement.pk %}">Eliminar</a></li>
                                         </ul>
                                 </td>
                             </tr>
