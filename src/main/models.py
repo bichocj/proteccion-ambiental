@@ -151,7 +151,7 @@ class Accident(models.Model):
         (ACCIDENT_4, 'ACCIDENTES FATALES'),
         (ACCIDENT_5, 'INCIDENTES PELIGROS'),
         (ACCIDENT_6, 'ENFERMEDADES OCUPACIONALES'),
-        ((ACCIDENT_7, 'ACTOS INSEGUROS'),)
+        (ACCIDENT_7, 'ACTOS INSEGUROS'),
     )
     title = models.CharField(_('Titulo'), max_length=100, null=False, blank=False)
     content = models.TextField(_('Descripcion'), null=True, blank=True)
