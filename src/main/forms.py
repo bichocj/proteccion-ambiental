@@ -104,6 +104,8 @@ class MedicControlForm(ModelForm):
 
 
 class AccidentForm(ModelForm):
+    worker = forms.ModelChoiceField(queryset=Worker.objects.all(), label='Trabajador')
+
     class Meta:
         model = Accident
         fields = ['title', 'content', 'type_accident', 'worker', 'date', 'evidence']
