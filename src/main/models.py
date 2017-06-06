@@ -49,7 +49,7 @@ class Company(models.Model):
 
 class Worker(models.Model):
     name = models.CharField(_('Nombres'), max_length=100, null=False, blank=False)
-    last_name = models.CharField(_('Apellidos'), max_length=100, null=False, blank=False, default='')
+    last_name = models.CharField(_('Apellidos'), max_length=100, null=True, blank=True, default='')
     code = models.CharField(_('Codigo'), max_length=100, null=False, blank=False)
     company = models.ForeignKey(Company, null=False)
     cargo = models.IntegerField(_('Cargo'), choices=cargos, default=RECURSOS_HUMANOS, null=False)
