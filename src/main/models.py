@@ -161,7 +161,7 @@ class Accident(models.Model):
     date = models.DateField(_('Fecha'), null=False, default=datetime.now)
     lose_days = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     company = models.ForeignKey(Company, null=False, blank=False)
-    worker = models.ForeignKey(Worker,default=None)
+    worker = models.ForeignKey(_('Trabajador'),Worker,default=None)
     evidence = models.FileField(_('Evidencia'), upload_to="accident/", null=True)
 
 
