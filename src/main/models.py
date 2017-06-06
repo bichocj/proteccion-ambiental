@@ -32,12 +32,12 @@ def upload_image_to(instance, filename):
 
 
 class Company(models.Model):
-    ruc = models.IntegerField(null=False, blank=False, unique=True)
-    name = models.CharField(_('company name'), max_length=100, null=False, blank=False, unique=True)
-    short_name = models.CharField(_('short name'), max_length=100, null=False, blank=False, unique=True)
+    ruc = models.IntegerField(_('R.U.C.'), null=False, blank=False, unique=True)
+    name = models.CharField(_('Nombre Compañia'), max_length=100, null=False, blank=False, unique=True)
+    short_name = models.CharField(_('Nombre Corto'), max_length=100, null=False, blank=False, unique=True)
     slug = models.SlugField(_('slug'), max_length=100, blank=True, null=True, unique=True)
-    logo = models.ImageField(_('logo'), upload_to=upload_image_to, blank=True, null=True)
-    address = models.CharField(_('address'), max_length=200, null=True, blank=True)
+    logo = models.ImageField(_('Logo'), upload_to=upload_image_to, blank=True, null=True)
+    address = models.CharField(_('Dirección'), max_length=200, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -48,11 +48,12 @@ class Company(models.Model):
 
 
 class Worker(models.Model):
-    name = models.CharField(_('Nombre'), max_length=100, null=False, blank=False)
+    name = models.CharField(_('Nombres'), max_length=100, null=False, blank=False)
+    last_name = models.CharField(_('Apellidos'), max_length=100, null=False, blank=False)
     code = models.CharField(_('Codigo'), max_length=100, null=False, blank=False)
     company = models.ForeignKey(Company, null=False)
     cargo = models.IntegerField(_('Cargo'), choices=cargos, default=RECURSOS_HUMANOS, null=False)
-    is_active = models.BooleanField(_('Esta Activo?'), default=True, null=False)
+    estado = models.BooleanField(_('Estado'), default=True, null=False)
 
     def __str__(self):
         return self.name
@@ -96,7 +97,7 @@ class Company_Requirement(models.Model):
 
 
 class Employee(User):
-    code = models.CharField(max_length=50, null=False, blank=False)
+    code = models.CharField(_('Codigo'), max_length=50, null=False, blank=False)
     company = models.ForeignKey(Company, null=False, blank=False)
     time = models.IntegerField(default=0)
 
@@ -131,8 +132,8 @@ class MedicControl(models.Model):
     )
     company = models.ForeignKey(Company, null=False, blank=False)
     worker = models.ForeignKey(Worker)
-    state = models.IntegerField(_('Estado'),choices=medic_states, default=NO_APTO, null=False, blank=False)
-    date = models.DateField(_('Fecha'),null=False, default=datetime.now)
+    state = models.IntegerField(_('Estado'), choices=medic_states, default=NO_APTO, null=False, blank=False)
+    date = models.DateField(_('Fecha'), null=False, default=datetime.now)
     evidence = models.FileField(_('Evidencia'), upload_to="examen_medico/", null=True)
 
 
@@ -160,6 +161,7 @@ class Accident(models.Model):
     date = models.DateField(_('Fecha'), null=False, default=datetime.now)
     lose_days = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     company = models.ForeignKey(Company, null=False, blank=False)
+    worker = models.ForeignKey(Worker,default=None)
     evidence = models.FileField(_('Evidencia'), upload_to="accident/", null=True)
 
 

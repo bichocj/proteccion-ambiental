@@ -37,6 +37,8 @@ urlpatterns = [
         name='worker_new'),
     url(r'^(?P<company_slug>[-\w]+)/workers/(?P<worker_pk>\d+)/edit/$', views.worker_edit,
         name='worker_edit'),
+    url(r'^(?P<company_slug>[-\w]+)/workers/(?P<worker_pk>\d+)/record/$', views.worker_record,
+        name='worker_record'),
     url(r'^(?P<company_slug>[-\w]+)/workers/(?P<worker_pk>\d+)/delete/$',
         views.worker_delete, name='worker_delete'),
 

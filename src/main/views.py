@@ -3,6 +3,7 @@ import datetime
 
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 
 from accounts.forms import WorkerForm, WorkerEditForm
@@ -68,7 +69,7 @@ def company_list(request):
 
 @login_required
 def company_new(request):
-    title = _('new company')
+    title = _('Nueva Compañía')
     if request.POST:
         company_form = CompanyForm(request.POST, request.FILES)
         employee_form = EmployeeForm(request.POST)
@@ -245,6 +246,8 @@ def medic_exam_delete(request, company_slug, medic_pk):
 @login_required
 def workers(request, company_slug):
     company = Company.objects.get(slug=company_slug)
+    print('slug', company.slug)
+    worker_view = True
     workers_company = Worker.objects.filter(company=company)
     return render(request, 'main/workers/list.html', locals())
 
@@ -268,6 +271,58 @@ def worker_new(request, company_slug):
 
 
 @login_required
+def worker_record(request, company_slug, worker_pk):
+    company = Company.objects.get(slug=company_slug)
+    worker = Worker.objects.get(pk=worker_pk)
+    year_actual = datetime.date.today().year
+    numbers = list()
+    pos = 0
+    for key, value in Accident.TYPE_ACCIDENT_CHOICES:
+        options = dict()
+        options['one'] = Accident.objects.filter(Q(worker=worker), Q(type_accident=key),
+                                                 Q(date__year=year_actual),
+                                                 Q(date__month=1)).count()
+        options['two'] = Accident.objects.filter(Q(worker=worker), Q(type_accident=key),
+                                                 Q(date__year=year_actual),
+                                                 Q(date__month=2)).count()
+        options['three'] = Accident.objects.filter(Q(worker=worker), Q(type_accident=key),
+                                                 Q(date__year=year_actual),
+                                                 Q(date__month=3)).count()
+        options['four'] = Accident.objects.filter(Q(worker=worker), Q(type_accident=key),
+                                                   Q(date__year=year_actual),
+                                                   Q(date__month=4)).count()
+        options['five'] = Accident.objects.filter(Q(worker=worker), Q(type_accident=key),
+                                                  Q(date__year=year_actual),
+                                                  Q(date__month=5)).count()
+        options['six'] = Accident.objects.filter(Q(worker=worker), Q(type_accident=key),
+                                                 Q(date__year=year_actual),
+                                                 Q(date__month=6)).count()
+        options['seven'] = Accident.objects.filter(Q(worker=worker), Q(type_accident=key),
+                                                   Q(date__year=year_actual),
+                                                   Q(date__month=7)).count()
+        options['eight'] = Accident.objects.filter(Q(worker=worker), Q(type_accident=key),
+                                                   Q(date__year=year_actual),
+                                                   Q(date__month=8)).count()
+        options['nine'] = Accident.objects.filter(Q(worker=worker), Q(type_accident=key),
+                                                  Q(date__year=year_actual),
+                                                  Q(date__month=9)).count()
+        options['ten'] = Accident.objects.filter(Q(worker=worker), Q(type_accident=key),
+                                                 Q(date__year=year_actual),
+                                                 Q(date__month=10)).count()
+        options['eleven'] = Accident.objects.filter(Q(worker=worker), Q(type_accident=key),
+                                                    Q(date__year=year_actual),
+                                                    Q(date__month=11)).count()
+        options['twelve'] = Accident.objects.filter(Q(worker=worker), Q(type_accident=key),
+                                                    Q(date__year=year_actual),
+                                                    Q(date__month=12)).count()
+        options['pos'] = pos
+        pos += 1
+        print(options)
+        numbers.append(options)
+    return render(request, 'main/workers/record.html', locals())
+
+
+@login_required
 def worker_edit(request, company_slug, worker_pk):
     title = 'Editar Trabajador'
     company = Company.objects.get(slug=company_slug)
@@ -276,7 +331,8 @@ def worker_edit(request, company_slug, worker_pk):
         form = WorkerEditForm(request.POST, instance=worker)
         if form.is_valid():
             form.save()
-            return redirect(reverse('main:workers', kwargs={'company_slug': company_slug}))
+            print(company_slug)
+            return redirect(reverse('main:workers', kwargs={'company_slug': company.slug}))
         else:
             message = 'Revisa la informacion'
     else:
@@ -350,7 +406,7 @@ def format_update(request, company_slug, requirement_pk, format_pk):
     title = 'Requirement : {0} , updating format {1}'.format(requirement.name, format.name)
     try:
         history = HistoryFormats.objects.filter(format=format)
-        if history.count() <=0:
+        if history.count() <= 0:
             history = HistoryFormats()
             history.format = format
             history.file = format.file
@@ -588,16 +644,13 @@ def accident_edit(request, company_slug, accident_pk):
     accident = Accident.objects.get(pk=accident_pk)
     title = 'editar accidente'
     if request.POST:
-        form = AccidentForm(request.POST, request.FILES)
+        form = AccidentForm(request.POST, request.FILES, instance=accident)
         if form.is_valid():
-            accident.title = form.instance.title
-            accident.content = form.instance.content
-            accident.type_accident = form.instance.type_accident
-            accident.date = form.instance.date
-            accident.evidence = form.files['evidence']
-            accident.save()
-            return redirect(reverse('main:accident_list', kwargs={"company_slug": accident.company.pk}))
-        return redirect(reverse('main:accident_list', kwargs={"company_slug": accident.company.pk}))
+
+            form.save()
+            return redirect(reverse('main:accident_list', kwargs={"company_slug": company.slug}))
+        else:
+            message = 'Revise la informacion'
     form = AccidentForm(instance=accident)
 
     return render(request, "main/accidents/accidents.html", locals())

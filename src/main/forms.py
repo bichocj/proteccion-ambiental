@@ -45,7 +45,7 @@ class EmployeeForm(ModelForm):
 
     class Meta:
         model = Employee
-        fields = ('code', 'first_name', 'last_name', 'email', 'password1', 'password2', 'username')
+        fields = ('code', 'email', 'password1', 'password2', 'username')
 
     def __init__(self, *args, **kwargs):
         super(EmployeeForm, self).__init__(*args, **kwargs)
@@ -89,7 +89,7 @@ class LegalRequirementForm(ModelForm):
 
 
 class MedicControlForm(ModelForm):
-    worker = forms.ModelChoiceField(queryset=Worker.objects.all(),label='Trabajador')
+    worker = forms.ModelChoiceField(queryset=Worker.objects.all(), label='Trabajador')
     evidence = forms.FileField(required=False)
 
     class Meta:
@@ -106,16 +106,13 @@ class MedicControlForm(ModelForm):
 class AccidentForm(ModelForm):
     class Meta:
         model = Accident
-        fields = ['title', 'content', 'type_accident', 'date', 'evidence']
+        fields = ['title', 'content', 'type_accident', 'worker', 'date', 'evidence']
 
     def __init__(self, *args, **kwargs):
         super(AccidentForm, self).__init__(*args, **kwargs)
         _instance = kwargs.pop('instance', None)
-        self.fields['title'].widget.attrs['class'] = 'form-control'
-        self.fields['content'].widget.attrs['class'] = 'form-control'
-        self.fields['type_accident'].widget.attrs['class'] = 'form-control'
+        add_form_control_class(self.fields)
         self.fields['date'].widget.attrs['class'] = 'form-control input-datepicker'
-        self.fields['evidence'].widget.attrs['class'] = 'form-control'
 
 
 class RequirementForm(ModelForm):

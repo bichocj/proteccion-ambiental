@@ -1,11 +1,14 @@
 {% extends 'main/layout.html' %}
 {% load static %}
 {% block styles %}
-    <link rel="stylesheet" type="text/css" href="{% static 'main/css/compiled/tables.css' %}"/>
+    <link href="{% static 'main/css/lib/jquery.dataTables.css' %}" type="text/css" rel="stylesheet" />
+
+    <!-- this page specific styles -->
+    <link rel="stylesheet" href=" {% static 'main/css/compiled/datatables.css' %}" type="text/css" media="screen" />
+
 {% endblock %}
 {% block content %}
-    <div id="pad-wrapper" class="users-list">
-        <div class="table-wrapper products-table">
+    <div id="pad-wrapper" class="datatables-page">
             <div class="row header">
                 <h3>TRABAJADORES</h3>
                 {% if request.user.is_superuser %}
@@ -22,11 +25,13 @@
                     <strong>Error!</strong> {{ message }} {{ response }}
                 </div>
             {% endif %}
-            <table class="table table-hover">
+        <div class="row">
+            <table id="example">
                 <thead>
                 <tr>
                     <th>Codigo</th>
-                    <th><span class="line"></span>Nombre</th>
+                    <th tabindex="0" rowspan="1" colspan="1">Nombres</th>
+                    <th tabindex="0" rowspan="1" colspan="1">Apellidos</th>
                     <th><span class="line"></span>Cargo</th>
                     <th class="text-center"><span class="line"></span>Activo</th>
                     {% if request.user.is_superuser %}
@@ -40,17 +45,19 @@
                     <tr>
                         <td>{{ worker.code }}</td>
                         <td>{{ worker.name }}</td>
+                        <td>{{ worker.last_name }}</td>
                         <td>{{ worker.get_cargo_display }}</td>
-                        {% if worker.is_active %}
-                            <td class="text-center"><i class="icon-ok"></i></td>
+                        {% if worker.estado %}
+                            <td class="text-center">Activo</td>
                         {% else %}
-                            <td class="text-center"><i class="icon-minus"></i></td>
+                            <td class="text-center">Cesado</td>
                         {% endif %}
                         {% if request.user.is_superuser %}
                             <td class="text-left">
                                 <ul>
                                     <li><a href="{% url 'main:worker_edit' company.slug worker.pk %}">Editar</a></li>
-                                    <li class="last"><a href="{% url 'main:worker_delete' company.slug worker.pk %}">Eliminar</a>
+                                    <li class="last"><a href="{% url 'main:worker_delete' company.slug worker.pk %}">Eliminar</a></li>
+                                        <li class="last"><a href="{% url 'main:worker_record' company.slug worker.pk %}">Indice Seguridad</a>
                                     </li>
                                 </ul>
                             </td>
@@ -61,7 +68,21 @@
             </table>
         </div>
     </div>
+
 {% endblock %}
 
 {% block scripts %}
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="{% static 'main/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'main/js/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'main/js/theme.js'%}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#example').dataTable({
+                "sPaginationType": "full_numbers"
+            });
+        });
+    </script>
+
 {% endblock %}

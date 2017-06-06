@@ -25,7 +25,7 @@ class PasswordChangeFormEdited(PasswordChangeForm):
 class WorkerForm(ModelForm):
     class Meta:
         model = Worker
-        fields = ['code', 'name', 'cargo']
+        fields = ['code', 'name', 'last_name', 'cargo']
 
     def __init__(self, *args, **kwargs):
         super(WorkerForm, self).__init__(*args, **kwargs)
@@ -36,7 +36,7 @@ class WorkerForm(ModelForm):
 class WorkerEditForm(ModelForm):
     class Meta:
         model = Worker
-        fields = ['name', 'code', 'cargo', 'is_active']
+        fields = ['name', 'last_name', 'code', 'cargo', 'estado']
 
     def __init__(self, *args, **kwargs):
         super(WorkerEditForm, self).__init__(*args, **kwargs)
