@@ -49,14 +49,14 @@ class Company(models.Model):
 
 class Worker(models.Model):
     name = models.CharField(_('Nombres'), max_length=100, null=False, blank=False)
-    last_name = models.CharField(_('Apellidos'), max_length=100, null=False, blank=False, default=None)
+    last_name = models.CharField(_('Apellidos'), max_length=100, null=False, blank=False, default='')
     code = models.CharField(_('Codigo'), max_length=100, null=False, blank=False)
     company = models.ForeignKey(Company, null=False)
     cargo = models.IntegerField(_('Cargo'), choices=cargos, default=RECURSOS_HUMANOS, null=False)
     estado = models.BooleanField(_('Estado'), default=True, null=False)
 
     def __str__(self):
-        return self.name
+        return self.name+self.last_name
 
 
 class Product(models.Model):
