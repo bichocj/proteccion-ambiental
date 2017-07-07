@@ -4,8 +4,10 @@ from django import forms
 from django.forms import ModelForm, HiddenInput
 from django.utils.translation import ugettext, ugettext_lazy as _
 
+from fullcalendar.forms import UserModelMultipleChoiceField, WorkerModelMultipleChoiceField
 from .functions import add_form_control_class, add_form_text
-from .models import Company, Format, Accident, Employee, Requirement, LegalRequirement, MedicControl, Worker
+from .models import Company, Format, Accident, Employee, Requirement, LegalRequirement, MedicControl, Worker, \
+    AccidentDetail
 
 
 class FormatForm(ModelForm):
@@ -104,8 +106,6 @@ class MedicControlForm(ModelForm):
 
 
 class AccidentForm(ModelForm):
-    worker = forms.ModelChoiceField(queryset=Worker.objects.all(), label='Trabajador')
-
     class Meta:
         model = Accident
         fields = ['title', 'content', 'type_accident', 'worker', 'date', 'evidence']
@@ -115,6 +115,17 @@ class AccidentForm(ModelForm):
         _instance = kwargs.pop('instance', None)
         add_form_control_class(self.fields)
         self.fields['date'].widget.attrs['class'] = 'form-control input-datepicker'
+
+
+class AccidentDetailForm(ModelForm):
+    class Meta:
+        model = AccidentDetail
+        fields = ['worker']
+
+    def __init__(self, *args, **kwargs):
+        super(AccidentDetailForm, self).__init__(*args, **kwargs)
+        _instance = kwargs.pop('instance', None)
+        add_form_control_class(self.fields)
 
 
 class RequirementForm(ModelForm):

@@ -21,7 +21,7 @@ def calendar_list(request, company_slug):
 
 @login_required
 def calendar_new(request, company_slug):
-    title = _('Nuevo Calendario')
+    title = _('Nuevo Cronograma')
     company = get_object_or_404(Company, slug=company_slug)
     calendar = True
     if request.POST:
@@ -43,7 +43,7 @@ def calendar_new(request, company_slug):
 
 @login_required
 def calendar_edit(request, company_slug, calendar_id):
-    title = _('Editar Calendario')
+    title = _('Editar Cronorama')
     company = get_object_or_404(Company, slug=company_slug)
     calendar = Calendar.objects.get(pk=calendar_id)
     if request.POST:
@@ -132,11 +132,16 @@ def save_event(request, slug):
                 event.type_inspeccions = None
             if event.calendar.type == Calendar.INSPECTION:
                 event.type_capacitations = None
-            if event.calendar.type == Calendar.OTRO:
+                event.hours_worked = None
+                event.number_workers = None
+            if event.calendar.type == Calendar.OTRO or event.calendar.type == Calendar.CHARLAS or event.calendar.type == Calendar.SIMULATION:
                 event.type_inspeccions = None
                 event.type_capacitations = None
+                event.number_workers = None
+                event.hours_worked = None
             print(request.POST)
             print(event.type_inspeccions)
+            event.type = event.calendar.type
             event.save()
             print('gogogox4')
             print(event.responsable.name)

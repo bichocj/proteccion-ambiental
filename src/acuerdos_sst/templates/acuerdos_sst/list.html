@@ -57,8 +57,11 @@
 
 
                                 <ul>
+                                    <li><a
+                                            href="{% url 'acuerdos_sst:agreement_edit' company.slug agreement.pk %}">Editar</a>
+                                    </li>
                                     <li>
-                                        <a href="{% url 'acuerdos_sst:agreement_detail' company.slug agreement.pk %}">Editar</a>
+                                        <a href="{% url 'acuerdos_sst:agreement_detail' company.slug agreement.pk %}">Detalles</a>
                                     </li>
                                     <li class="last"><a
                                             href="{% url 'acuerdos_sst:agreement_delete' company.slug agreement.pk %}">Eliminar</a>

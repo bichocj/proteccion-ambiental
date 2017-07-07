@@ -16,6 +16,7 @@ def home(request, company_slug):
 
 def agreement_new(request, company_slug):
     company = Company.objects.get(slug=company_slug)
+    title = 'Nuevo Acuerdo de Comite SST'
     agreements = Agreement.objects.filter(company=company)
     if request.POST:
         form = AgreementForm(request.POST)
@@ -29,7 +30,26 @@ def agreement_new(request, company_slug):
             message = 'Revisa la informacion'
     else:
         form = AgreementForm()
-    return render(request, 'acuerdos_sst/agreement.html', locals())
+    return render(request, 'main/layout_form.html', locals())
+
+
+def agreement_edit(request, agreement_pk, company_slug):
+    company = Company.objects.get(slug=company_slug)
+    agreement = Agreement.objects.get(pk=agreement_pk)
+    title = 'Editar Acuerdo de Comite SST'
+    if request.POST:
+        form = AgreementForm(request.POST, instance=agreement)
+        if form.is_valid():
+            agreement = form.save(commit=False)
+            agreement.company = company
+            agreement.save()
+            return redirect(reverse('acuerdos_sst:agreement_detail',
+                                    kwargs={"agreement_pk": agreement.pk, "company_slug": company_slug}))
+        else:
+            message = 'Revisa la informacion'
+    else:
+        form = AgreementForm(instance=agreement)
+    return render(request, 'main/layout_form.html', locals())
 
 
 def agreement_list(request, company_slug):
@@ -63,6 +83,7 @@ def desactive_agreement(request, company_slug, agreement_pk):
     agreement.is_active = False
     agreement.save()
     return redirect(reverse('acuerdos_sst:agreement_list', kwargs={'company_slug': company_slug}))
+
 
 def cal_porcentage_progreess(agreement_pk):
     agreement = Agreement.objects.get(pk=agreement_pk)

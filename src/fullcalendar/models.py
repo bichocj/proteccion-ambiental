@@ -12,16 +12,16 @@ class Calendar(models.Model):
     INSPECTION = 2
     SIMULATION = 3
     OTRO = 4
+    CHARLAS=5
     types_calendar = ((CAPACITATION, 'CAPACITACION'),
                       (INSPECTION, 'INSPECCION'),
                       (SIMULATION, 'SIMULACRO'),
+                      (CHARLAS,'CHARLAS DE SEGURIDAD'),
                       (OTRO, 'OTRO'))
     title = models.CharField(_('Nombre'), max_length=200, null=False, blank=None)
     company = models.ForeignKey(Company, null=False)
     slug = models.SlugField(max_length=100)
     type = models.IntegerField(_('Tipo'), choices=types_calendar, null=False, default=OTRO)
-    users = models.ManyToManyField(User, related_name="users", verbose_name=_('shared with'))
-    created_by = models.ForeignKey(User, related_name="created_by")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -75,11 +75,13 @@ class Events(models.Model):
     INSPECTION = 2
     SIMULATION = 3
     OTRO = 4
+    CHARLAS=5
     REALIZADO = 2
     PENDIENTE = 1
     types_event = ((CAPACITATION, 'CAPACITACION'),
                    (INSPECTION, 'INSPECCION'),
                    (SIMULATION, 'SIMULACRO'),
+                   (CHARLAS, 'CHARLAS DE SEGURIDAD'),
                    (OTRO, 'OTRO'))
     state_event = ((REALIZADO, 'REALIZADO'),
                    (PENDIENTE, 'PENDIENTE'),
@@ -116,6 +118,7 @@ class Events(models.Model):
     type = models.IntegerField(_('Tipo Evento'), choices=types_event, default=CAPACITATION, null=False)
     state = models.IntegerField(_('Estado'), choices=state_event, default=PENDIENTE, null=False)
     responsable = models.ForeignKey(Worker, null=False)
+    evidence = models.FileField(_('Evidencia'), upload_to="eventos/", null=True)
 
     is_cancelled = models.BooleanField(default=False)
     hours_worked = models.FloatField(_('Horas Trabajadas: '), null=True, blank=True)

@@ -56,7 +56,7 @@ class Worker(models.Model):
     estado = models.BooleanField(_('Estado'), default=True, null=False)
 
     def __str__(self):
-        return self.name+self.last_name
+        return self.name + self.last_name
 
 
 class Product(models.Model):
@@ -159,10 +159,15 @@ class Accident(models.Model):
     type_accident = models.IntegerField(_('Tipo de Accidente'), choices=TYPE_ACCIDENT_CHOICES,
                                         default=ACCIDENT_1)  # NOQA
     date = models.DateField(_('Fecha'), null=False, default=datetime.now)
-    lose_days = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    lose_days = models.DecimalField(_('Dias Perdidos'), max_digits=5, decimal_places=2, null=True, blank=True)
     company = models.ForeignKey(Company, null=False, blank=False)
     worker = models.ForeignKey(Worker,default=None)
     evidence = models.FileField(_('Evidencia'), upload_to="accident/", null=True)
+
+
+class AccidentDetail(models.Model):
+    accident = models.ForeignKey(Accident)
+    worker = models.ForeignKey(Worker)
 
 
 class Task(models.Model):

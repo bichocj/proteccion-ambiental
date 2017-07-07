@@ -26,10 +26,11 @@ class Indice_de_Severidad(models.Model):
     name = models.CharField(max_length=100, null=False, default='INDICE DE SEVERIDAD')
     num_accidents = models.IntegerField(null=False, blank=False)
 
+
 class Indice_Medico(models.Model):
     name = models.CharField(max_length=100, null=False, default='INDICE DE EXAMEN MEDICO OCUPACIONAL')
 
-    num_examenes=models.IntegerField(null=True,blank=True)
+    num_examenes = models.IntegerField(null=True, blank=True)
 
 
 # //INDICE DE MEJORAS
@@ -112,12 +113,25 @@ class Index(models.Model):
     indice_charlas = models.ForeignKey(Index_de_charlas, null=True)
     indice_incidente = models.ForeignKey(Indice_Reporte_Incidente, null=True)
     indice_inpecciones = models.ForeignKey(Indice_Inspecciones, null=True)
+
+    is_using_sgsst = models.BooleanField(_('Índice de Cumplimiento del SGSST'), null=False, default=False)
+    is_using_legal = models.BooleanField(_('Índice Legal'), null=False, default=False)
+    is_using_icsst = models.BooleanField(_('Implementación CSST'), null=False, default=False)
     is_using_indice_no_conformidad = models.BooleanField(_('Indice de no Conformidades'), null=False, default=False)
-    is_using_plan_contingencia = models.BooleanField(_('Indice plan de contingencia'), null=False, default=False)
-    is_using_liderazgo = models.BooleanField(_('Indice Liderazgo Participativo'), null=False, default=False)
     is_using_medida_iperc = models.BooleanField(_('Indice de Medidas de Control IPERC'), null=False, default=False)
+    is_using_liderazgo = models.BooleanField(_('Indice Liderazgo Participativo'), null=False, default=False)
+    is_using_plan_contingencia = models.BooleanField(_('Indice de Actividades del plan de contingencia'), null=False,
+                                                     default=False)
+    is_using_mejora = models.BooleanField(_('Índice de Mejora'), null=False, default=False)
+    is_using_capacitacion = models.BooleanField(_('Índice de Capacitacion'), null=False, default=False)
+    is_using_personal_capacitado = models.BooleanField(_('Índice de Personal Capacitado'), null=False, default=False)
+    is_using_intensidad_formativa = models.BooleanField(_('Índice de Intensidad Formativa'), null=False, default=False)
     is_using_charlas = models.BooleanField(_('Indice de Charlas Periodicas de Seguridad'), null=False, default=False)
     is_using_incidentes = models.BooleanField(_('Indice de Reporte de Incidentes'), null=False, default=False)
     is_using_inspecciones = models.BooleanField(_('Indice de Inspecciones'), null=False, default=False)
-    # is_using_medida_iperc = models.BooleanField(_('Indice de medidas de control IPERC'), null=False, default=False)
-    # is_using_medida_iperc = models.BooleanField(_('Indice de medidas de control IPERC'), null=False, default=False)
+    is_using_observaciones_planeadas = models.BooleanField(_('Índice de Observaciones planeadas  de trabajo'),
+                                                           null=False, default=False)
+    is_using_auditorias = models.BooleanField(_('Índice de Auditorias'), null=False, default=False)
+    is_using_simulacros_emergencia = models.BooleanField(_('Índice de Simulacros de Emergencia'), null=False, default=False)
+    is_using_reconocimiento_trabajador = models.BooleanField(_('Índice de Cumplimiento del SGSST'), null=False, default=False)
+    is_using_sgsst = models.BooleanField(_('Índice de Cumplimiento del SGSST'), null=False, default=False)

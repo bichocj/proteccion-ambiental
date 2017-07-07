@@ -7,14 +7,14 @@ from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 
 from accounts.forms import WorkerForm, WorkerEditForm
-from main.models import Worker, Employee
+from main.models import Worker, Employee, AccidentDetail
 from indices.forms import IndexForm
 from indices.models import Index
 from proteccion_ambiental.settings import COMPANY_JRA_SLUG
 from .models import Company, Format, Requirement, HistoryFormats, Accident, Company_Requirement, LegalRequirement, \
     MedicControl
 from .forms import CompanyForm, FormatForm, AccidentForm, EmployeeForm, RequirementForm, LegalRequirementForm, \
-    MedicControlForm
+    MedicControlForm, AccidentDetailForm
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.utils.translation import ugettext as _
@@ -286,11 +286,11 @@ def worker_record(request, company_slug, worker_pk):
                                                  Q(date__year=year_actual),
                                                  Q(date__month=2)).count()
         options['three'] = Accident.objects.filter(Q(worker=worker), Q(type_accident=key),
-                                                 Q(date__year=year_actual),
-                                                 Q(date__month=3)).count()
-        options['four'] = Accident.objects.filter(Q(worker=worker), Q(type_accident=key),
                                                    Q(date__year=year_actual),
-                                                   Q(date__month=4)).count()
+                                                   Q(date__month=3)).count()
+        options['four'] = Accident.objects.filter(Q(worker=worker), Q(type_accident=key),
+                                                  Q(date__year=year_actual),
+                                                  Q(date__month=4)).count()
         options['five'] = Accident.objects.filter(Q(worker=worker), Q(type_accident=key),
                                                   Q(date__year=year_actual),
                                                   Q(date__month=5)).count()
@@ -584,6 +584,7 @@ def config_requirement_new(request):
 def accident_list(request, company_slug):
     company = get_object_or_404(Company, slug=company_slug)
     accidents = Accident.objects.filter(company=company)
+    accident_view = True
     print(request.user.is_superuser)
     return render(request, "main/accidents/list.html", locals())
 
@@ -642,17 +643,17 @@ def format_new(request, company_slug, requirement_pk):
 def accident_edit(request, company_slug, accident_pk):
     company = get_object_or_404(Company, slug=company_slug)
     accident = Accident.objects.get(pk=accident_pk)
+    details = AccidentDetail.objects.filter(accident=accident)
     title = 'editar accidente'
     if request.POST:
         form = AccidentForm(request.POST, request.FILES, instance=accident)
         if form.is_valid():
-
             form.save()
             return redirect(reverse('main:accident_list', kwargs={"company_slug": company.slug}))
         else:
             message = 'Revise la informacion'
     form = AccidentForm(instance=accident)
-
+    form_detail = AccidentDetailForm()
     return render(request, "main/accidents/accidents.html", locals())
 
 
@@ -674,19 +675,24 @@ def accident_delete(request, company_slug, accident_pk):
 @login_required
 def accident_new(request, company_slug):
     company = get_object_or_404(Company, slug=company_slug)
-    title = 'nuevo accidente'
+    title = 'NUEVO ACCIDENTES, INCIDENTES, ENFERMEDAD OCUPACIONAL Y ACTO INSEGURO'
     active_item_menu = 'accidents'
     if request.POST:
         form = AccidentForm(request.POST, request.FILES)
-        if form.is_valid():
+        form_detail = AccidentDetailForm(request.POST)
+        if form.is_valid() and form_detail.is_valid():
             accident = form.save(commit=False)
             accident.company = company
             accident.save()
+            detail = form_detail.save(commit=False)
+            detail.accident = accident
+            detail.save()
             return redirect(reverse('main:accident_list', kwargs={"company_slug": company.slug}))
         else:
             message = 'Review all information . . .'
     else:
         form = AccidentForm()
+        form_detail = AccidentDetailForm()
     return render(request, "main/accidents/accidents.html", locals())
 
 
