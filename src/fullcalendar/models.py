@@ -132,7 +132,7 @@ class Events(models.Model):
     observation = models.TextField(blank=True, null=True)
     type = models.IntegerField(_('Tipo Evento'), choices=types_event, default=CAPACITATION, null=False)
     state = models.IntegerField(_('Estado'), choices=state_event, default=PENDIENTE, null=False)
-    responsable = models.IntegerField(_('Responsable'),choices=responsables,null=False,default=ASESOR)
+    responsable = models.IntegerField(_('Responsable'), choices=responsables, null=False, default=ASESOR)
     evidence = models.FileField(_('Evidencia'), upload_to="eventos/", null=True)
 
     is_cancelled = models.BooleanField(default=False)

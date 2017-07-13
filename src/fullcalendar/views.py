@@ -142,9 +142,9 @@ def save_event(request, slug):
             print(request.POST)
             print(event.type_inspeccions)
             event.type = event.calendar.type
+            print(event.type)
             event.save()
             print('gogogox4')
-            print(event.responsable.name)
             response['success'] = True
             response['message'] = _("Save Success")
             response['id'] = event.id

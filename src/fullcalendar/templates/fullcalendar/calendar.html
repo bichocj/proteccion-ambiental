@@ -231,30 +231,8 @@
                 todayBtn: true
             });
 
-            $("#id_responsable").autocomplete({
-                source: function (request, response) {
-                    $.get("{% url 'accounts:get_members' %}", {
-                        pattern: request.term
-                    }, function (data) {
-                        var result = [];
-                        for (var i = 0; i < data.length; i++) {
-                            result.push({
-                                label: data[i].first_name + ' ' + data[i].last_name,
-                                value: data[i].first_name + ' ' + data[i].last_name,
-                                user: data[i].pk
-                            })
-                        }
-                        response(result);
-                    });
-                },
-                select: function (a, b) {
-                    $('#event-form [name=member]').val(b.item.user);
-                },
-                minLength: 3,
-                appendTo: "#event-form"
-            });
 
-            active_menu('.calendar');
+
         });
 
 
