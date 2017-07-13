@@ -12,11 +12,11 @@ class Calendar(models.Model):
     INSPECTION = 2
     SIMULATION = 3
     OTRO = 4
-    CHARLAS=5
+    CHARLAS = 5
     types_calendar = ((CAPACITATION, 'CAPACITACION'),
                       (INSPECTION, 'INSPECCION'),
                       (SIMULATION, 'SIMULACRO'),
-                      (CHARLAS,'CHARLAS DE SEGURIDAD'),
+                      (CHARLAS, 'CHARLAS DE SEGURIDAD'),
                       (OTRO, 'OTRO'))
     title = models.CharField(_('Nombre'), max_length=200, null=False, blank=None)
     company = models.ForeignKey(Company, null=False)
@@ -75,7 +75,7 @@ class Events(models.Model):
     INSPECTION = 2
     SIMULATION = 3
     OTRO = 4
-    CHARLAS=5
+    CHARLAS = 5
     REALIZADO = 2
     PENDIENTE = 1
     types_event = ((CAPACITATION, 'CAPACITACION'),
@@ -109,6 +109,21 @@ class Events(models.Model):
         (INSPECCION_OBSERVACION_PLANEADA, 'INSPECCION OBSERVACION PLANEADA'),
 
     )
+    ASESOR = 0
+    COMITE = 1
+    RRHH = 2
+    SEGURIDAD = 3
+    MEDICO = 4
+    OPERACIONES = 5
+    responsables = (
+        (ASESOR, "ASESOR EXTERNO"),
+        (COMITE, "COMITE SST"),
+        (RRHH, "RR.HH."),
+        (SEGURIDAD, "ING. SEGURIDAD"),
+        (MEDICO, "MEDICO OCUPACIONAL"),
+        (OPERACIONES, "JEFE DE OPERACIONES")
+
+    )
     calendar = models.ForeignKey(Calendar)
     event_start = models.DateTimeField()
     event_end = models.DateTimeField()
@@ -117,7 +132,7 @@ class Events(models.Model):
     observation = models.TextField(blank=True, null=True)
     type = models.IntegerField(_('Tipo Evento'), choices=types_event, default=CAPACITATION, null=False)
     state = models.IntegerField(_('Estado'), choices=state_event, default=PENDIENTE, null=False)
-    responsable = models.ForeignKey(Worker, null=False)
+    responsable = models.IntegerField(_('Responsable'),choices=responsables,null=False,default=ASESOR)
     evidence = models.FileField(_('Evidencia'), upload_to="eventos/", null=True)
 
     is_cancelled = models.BooleanField(default=False)
