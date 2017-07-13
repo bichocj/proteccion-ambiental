@@ -135,15 +135,10 @@
                                         $('#id_' + index).val(
                                                 moment(value).format(format)
                                         ).addClass('edited');
-                                    } else {if (index == 'responsable') {
-                                        console.log(response.data.responsable);
-                                        $('#id_responsable_input').text('Reponsable Seleccionado: ' + value);
-                                        $('#id_responsable_input').show();
-
                                     } else {
                                         $('#id_' + index).val(value).addClass('edited');
 
-                                    }}
+                                    }
                                 });
                                 $('#event').modal('show');
 
@@ -230,7 +225,6 @@
                 pickerPosition: "bottom-right",
                 todayBtn: true
             });
-
 
 
         });

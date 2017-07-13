@@ -182,7 +182,7 @@ def get_event(request):
             'type': event.type,
             'hours_worked': event.hours_worked,
             'number_workers': event.number_workers,
-            'responsable': event.responsable.name,
+            'responsable': event.responsable,
             'type_capacitations': event.type_capacitations,
 
             # 'member': event.member.id,
