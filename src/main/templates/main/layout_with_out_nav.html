@@ -14,32 +14,39 @@
     <link href="{% static 'main/css/bootstrap/bootstrap.css' %}" type="text/css" rel="stylesheet"/>
     <link href="{% static 'main/css/bootstrap/bootstrap-overrides.css' %}" type="text/css" rel="stylesheet"/>
 
-    <!-- libraries -->
-    <link href="{% static 'main/css/lib/font-awesome.css' %}" type="text/css" rel="stylesheet"/>
-
     <!-- global styles -->
     <link rel="stylesheet" type="text/css" href="{% static 'main/css/compiled/layout.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'main/css/compiled/elements.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'main/css/compiled/icons.css' %}"/>
 
-    <!-- this page specific styles -->
-{#    <link rel="stylesheet" href="{% static 'main/css/compiled/index.css' %}" type="text/css" media="screen"/>#}
+    <!-- libraries -->
+    <link href="{% static 'main/css/lib/font-awesome.css' %}" type="text/css" rel="stylesheet"/>
+    {% if not worker_view %}
+        <link href="{% static 'main/css/lib/bootstrap.datepicker.css' %}" type="text/css" rel="stylesheet"/>
 
-    <!-- open sans font -->
+        <link href="{% static 'main/css/lib/select2.css' %}" type="text/css" rel="stylesheet"/>
+        <link href="{% static 'main/css/lib/uniform.default.css' %}" type="text/css" rel="stylesheet"/>
+
+
+
+        <link rel="stylesheet" href="{% static 'main/css/compiled/form-showcase.css' %}" type="text/css"
+              media="screen"/>
+
+
+        <!-- this page specific styles -->
+        {#    <link rel="stylesheet" href="{% static 'main/css/compiled/index.css' %}" type="text/css" media="screen"/>#}
+
+        <!-- open sans font -->
+        <!-- libraries -->
+        <link href="{% static 'main/css/lib/jquery-ui-1.10.2.custom.css' %}" rel="stylesheet" type="text/css"/>
+    {% endif %}
+    {% block styles %}
+    {% endblock %}
+
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
           rel='stylesheet' type='text/css'/>
 
-    <!-- lato font -->
-    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic'
-          rel='stylesheet' type='text/css'/>
 
-
-    <!-- libraries -->
-    <link href="{% static 'main/css/lib/jquery-ui-1.10.2.custom.css' %}" rel="stylesheet" type="text/css"/>
-
-
-    {% block styles %}
-    {% endblock %}
     <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -55,9 +62,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="/">
-            <img src="{% static 'main/img/logo.png' %}" style="max-height: 34px;" alt="Pro"/>
-        </a>
+        {% if company.logo %}
+            <img src="{{ company.logo.url }}" alt="contact" class="avatar" style="max-height: 100px;"/>
+        {% else %}
+            <img src="{% static 'main/img/logo_proteccion.png' %}" alt="contact" class="avatar" style="max-height: 100px;"/>
+        {% endif %}
+
     </div>
 
     <ul class="nav navbar-nav pull-right hidden-xs">
@@ -71,12 +81,16 @@
         {% if request.user.is_superuser %}
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle hidden-xs hidden-sm" data-toggle="dropdown">
-                    {% trans 'system configuration' %}
+                    Configuracion Global
                     <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu">
                     <li><a href="{% url 'main:config_requirements_list' %}">{% trans 'requirements'|capfirst %}</a></li>
+                    {% if company_slug %}
+                        <li><a href="{% url 'main:indices' company.slug %}">{% trans 'indices'|capfirst %}</a></li>
+                    {% endif %}
                 </ul>
+
             </li>
         {% endif %}
         <li class="dropdown">
@@ -98,21 +112,47 @@
 {% endblock %}
 
 
-<div class="content">
+<div class="content" style="min-height: 720px;">
     {% block content %}
 
     {% endblock %}
 </div>
 
 
-<script src="http://code.jquery.com/jquery-latest.js"></script>
-<script src="{% static 'main/js/bootstrap.min.js' %}"></script>
-<script src="{% static 'main/js/jquery-ui-1.10.2.custom.min.js' %}"></script>
+<!-- call this page plugins -->
+
 <!-- knob -->
+{% if not calendar and not worker_view and not accident_view %}
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="{% static 'main/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'main/js/jquery-ui-1.10.2.custom.min.js' %}"></script>
+    <script src="{% static 'main/js/wysihtml5-0.3.0.js' %}"></script>
+    <script src="{% static 'main/js/bootstrap.datepicker.js' %}"></script>
+    <script src="{% static 'main/js/jquery.uniform.min.js' %}"></script>
+    <script src="{% static 'main/js/select2.min.js' %}"></script>
+    <script src="{% static 'main/js/theme.js' %}"></script>
+    <script type="text/javascript">
+        $(function () {
 
+            // add uniform plugin styles to html elements
+            $("input:checkbox, input:radio").uniform();
 
+            // select2 plugin for select elements
+            $(".select2").select2({
+                placeholder: "Select a State"
+            });
+
+            // datepicker plugin
+            $('.input-datepicker').datepicker().on('changeDate', function (ev) {
+                $(this).datepicker('hide');
+            });
+        });
+    </script>
+{% endif %}
 {% block scripts %}
 
+{% endblock %}
+{% block more_scripts %}
 {% endblock %}
 </body>
 

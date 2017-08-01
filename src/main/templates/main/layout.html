@@ -1,44 +1,82 @@
 {% extends 'main/layout_with_out_nav.html' %}
+{% load layout_extras %}
 {% load static %}
 {% block styles %}
 {% endblock %}
 {% block nav %}
-    <li class="settings hidden-xs hidden-sm">
-                    <a href="{% url 'main:config' company_slug %}" role="button">
-                        <i class="icon-cog"></i>
-                    </a>
-            </li>
+    <!--<li class="settings hidden-xs hidden-sm">
+        <a href="{% url 'main:config' company_slug %}" role="button">
+            <i class="icon-cog"></i>
+        </a>
+    </li>-->
+
 {% endblock %}
 {% block sidebar %}
     <div id="sidebar-nav">
-         <ul id="dashboard-menu">
+        <ul id="dashboard-menu">
             <li>
                 <a href="{% url 'main:panel' company_slug %}"><i class="icon-home"></i>
-                    <span>{{company.short_name|upper}}</span>
+                    <span>{{ company.short_name|upper }}</span>
                 </a>
             </li>
+         {% if not request.user|has_group:"Doctor"  %}
             <li>
                 <a href="{% url 'main:requirements_list' company.slug %}">
                     <i class="icon-tasks"></i>
-                    <span>Requisitos</span>
+                    <span>Requerimientos</span>
                 </a>
             </li>
-            <li >
-                <a href="{% url 'fullcalendar:list' company.slug %}">
+
+            <li>
+                <a href="{% url 'main:workers' company.slug %}">
+                    <i class="icon-group"></i>
+                    <span>Trabajadores</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'fullcalendar:calendar_list' company.slug %}">
                     <i class="icon-calendar-empty"></i>
-                    <span>Calendarios</span>
+                    <span>Programas Anuales</span>
                 </a>
             </li>
-            <li >
+            <!--<li>
+                <a href="{% url 'main:indices' company.slug %}">
+                    <i class="icon-th-large"></i>
+                    <span>Indicadores SST</span>
+                </a>
+            </li>-->
+            <!--<li>
+                <a href="{% url 'main:requirements_list' company.slug %}">
+                    <i class="icon-plus"></i>
+                    <span>Otros Indicadores</span>
+                </a>
+            </li>-->
+        {% endif %}
+           {% if request.user|has_group:"Doctor" and not request.user.is_superuser %}
+                <li>
+                    <a href="{% url 'main:medic_exam' company.slug %}">
+                        <i class="icon-heart"></i>
+                        <span>Control Medico</span>
+                    </a>
+                </li>
+            {% endif %}
+         {% if not request.user|has_group:"Doctor"  %}
+            <li>
                 <a href="{% url 'main:accident_list' company.slug %}">
-                    <i class="icon-heart-empty"></i>
+                    <i class="icon-warning-sign"></i>
                     <span>Accidentes</span>
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="{% url 'acuerdos_sst:agreement_list' company.slug %}">
                     <i class="icon-comments-alt"></i>
-                    <span>Acuerdo SST</span>
+                    <span>Comite SST</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'main:legal_requirement' company.slug %}">
+                    <i class="icon-edit"></i>
+                    <span>Requisitos Legales</span>
                 </a>
             </li>
             <li>
@@ -47,8 +85,11 @@
                     <span>Reportes</span>
                 </a>
             </li>
+        {% endif %}
         </ul>
     </div>
 {% endblock %}
 {% block scripts %}
+{% endblock %}
+{% block more_scripts %}
 {% endblock %}

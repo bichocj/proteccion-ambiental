@@ -18,6 +18,7 @@
         <br>
         <br>
         <br>
+        {% if request.user.is_superuser or show%}
         <div class="col-md-3"></div>
             <a href="{% url 'main:panel' company_jra_slug %}">
             <div class="col-md-2 circulo1" align="center" width="200" height="200">
@@ -28,6 +29,10 @@
             </div>
         </a>
 
+            {% else %}
+              <div class="col-md-3"></div>
+            {% endif %}
+    {% if not show %}
         <div class="col-md-2"></div>
 
         <a href="{% url 'main:company_list' %}">
@@ -37,7 +42,9 @@
                 <h2>Ley 29783 Seguridad y Salud en el Trabajo</h2>
             </div>
         </a>
+        {% endif %}
     </div>
+
 </div>
     {% endif %}
 {% endblock %}

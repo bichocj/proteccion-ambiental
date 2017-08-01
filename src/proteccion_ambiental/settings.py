@@ -36,9 +36,12 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'widget_tweaks',
-    'accounts',
     'main',
+    'accounts',
+    'indices',
     'fullcalendar',
+    'acuerdos_sst',
+
 )
 
 MIDDLEWARE_CLASSES = (
@@ -77,7 +80,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'proteccion_ambiental.wsgi.application'
 
 # Database
-# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
+# https://docs.djangopromainject.com/en/1.8/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -114,4 +117,4 @@ FROM_NAME = 'cecilurastastas@gmail.com'
 LOGIN_REDIRECT_URL = '/'
 
 MEMBER_GROUP = 'equipo JRA'
-COMPANY_JRA_SLUG = 'jra'
+COMPANY_JRA_SLUG = 'pro_tam'

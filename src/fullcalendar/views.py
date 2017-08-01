@@ -21,8 +21,9 @@ def calendar_list(request, company_slug):
 
 @login_required
 def calendar_new(request, company_slug):
-    title = _('new calendar')
+    title = _('Nuevo Cronograma')
     company = get_object_or_404(Company, slug=company_slug)
+    calendar = True
     if request.POST:
         form = CalendarModelForm(request.POST)
         if form.is_valid():
@@ -32,20 +33,51 @@ def calendar_new(request, company_slug):
             calendar.save()
             form.save_m2m()
             return redirect(reverse('fullcalendar:view_calendar', args=[company_slug, calendar.slug, calendar.id]))
+        else:
+            message = 'Revisa la informacion'
     else:
         form = CalendarModelForm()
 
     return render(request, "main/layout_form.html", locals())
 
 
+@login_required
+def calendar_edit(request, company_slug, calendar_id):
+    title = _('Editar Cronorama')
+    company = get_object_or_404(Company, slug=company_slug)
+    calendar = Calendar.objects.get(pk=calendar_id)
+    if request.POST:
+        form = CalendarModelForm(request.POST, instance=calendar)
+        if form.is_valid():
+            calendar.save()
+            return redirect(reverse('fullcalendar:calendar_list', args=[company_slug]))
+        else:
+            message = 'Revisa la informacion'
+    else:
+        form = CalendarModelForm(instance=calendar)
+
+    return render(request, "main/layout_form.html", locals())
+
+
+@login_required
+def calendar_delete(request, company_slug, calendar_id):
+    company = get_object_or_404(Company, slug=company_slug)
+    calendar = Calendar.objects.get(pk=calendar_id)
+    calendar.delete()
+    return redirect(reverse('fullcalendar:calendar_list', args=[company_slug]))
+
+
+@login_required
 def view_calendar(request, company_slug, slug, calendar_id):
+    calendar = True
     try:
         company = get_object_or_404(Company, slug=company_slug)
+        print('sluug', slug)
         calendar = Calendar.objects.get(company=company, slug=slug, id=calendar_id)
     except ObjectDoesNotExist:
         calendar = get_object_or_404(Calendar, id=calendar_id)
     # company = request.user.company
-    form = EventsModelForm()
+    form = EventsModelForm(calendar=calendar)
     info = {
         'view_calendar': {
             'name': calendar.title,
@@ -59,11 +91,8 @@ def view_calendar(request, company_slug, slug, calendar_id):
 
 def events_json(request, calendar_id):
     calendar = get_object_or_404(Calendar, id=calendar_id)
-    company = request.user.company
     events_l = Events.objects.filter(calendar=calendar)
-
     events_list = []
-
     for event in events_l:
         event_start = event.event_start
         event_end = event.event_end
@@ -92,12 +121,30 @@ def save_event(request, slug):
             form = EventsModelForm(request.POST, instance=e)
         else:
             form = EventsModelForm(request.POST)
+        print('gogogo')
         if form.is_valid():
+            print('gogogox2')
             calendar = get_object_or_404(Calendar, slug=slug)
             event = form.save(commit=False)
             event.calendar = calendar
             event.created_by = request.user
+            if event.calendar.type == Calendar.CAPACITATION:
+                event.type_inspeccions = None
+            if event.calendar.type == Calendar.INSPECTION:
+                event.type_capacitations = None
+                event.hours_worked = None
+                event.number_workers = None
+            if event.calendar.type == Calendar.OTRO or event.calendar.type == Calendar.CHARLAS or event.calendar.type == Calendar.SIMULATION:
+                event.type_inspeccions = None
+                event.type_capacitations = None
+                event.number_workers = None
+                event.hours_worked = None
+            print(request.POST)
+            print(event.type_inspeccions)
+            event.type = event.calendar.type
+            print(event.type)
             event.save()
+            print('gogogox4')
             response['success'] = True
             response['message'] = _("Save Success")
             response['id'] = event.id
@@ -123,7 +170,6 @@ def get_event(request):
     if request.POST:
         event_id = request.POST.get('id')
         event = get_object_or_404(Events, id=event_id)
-
         response['success'] = True
         response['data'] = {
             'event': event.id,
@@ -132,9 +178,18 @@ def get_event(request):
             'title': event.title,
             'description': event.description,
             'observation': event.observation,
-            'member': event.member.id,
-            'member_fullname': event.member.first_name + ' ' + event.member.last_name
+            'state': event.state,
+            'type': event.type,
+            'hours_worked': event.hours_worked,
+            'number_workers': event.number_workers,
+            'responsable': event.responsable,
+            'type_capacitations': event.type_capacitations,
+
+            # 'member': event.member.id,
+            # 'member_fullname': event.member.first_name + ' ' + event.member.last_name
         }
+
+        # 'type_inspeccion': event.type_inspeccion
     else:
         response['success'] = False
         response['message'] = _("Invalid request")
@@ -160,7 +215,9 @@ def update_event(request):
             'title': event.title,
             'description': event.description,
             'observation': event.observation,
-            'member': event.member.id
+            'hours_worked': event.hours_worked,
+            'number_workers': event.number_workers
+            # 'member': event.member.id
         }
     else:
         response['success'] = False

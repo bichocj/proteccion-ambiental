@@ -4,6 +4,7 @@ from django.forms import ModelForm
 from django.utils.translation import ugettext as _
 
 from accounts.models import Person
+from main.models import Worker
 from main.functions import add_form_control_class
 
 
@@ -19,6 +20,28 @@ class PasswordChangeFormEdited(PasswordChangeForm):
             {'class': 'form-control input_reset_password', 'placeholder': self.fields['new_password1'].label})
         self.fields['new_password2'].widget.attrs.update(
             {'class': 'form-control input_reset_password', 'placeholder': self.fields['new_password2'].label})
+
+
+class WorkerForm(ModelForm):
+    class Meta:
+        model = Worker
+        fields = ['code', 'name', 'last_name', 'cargo']
+
+    def __init__(self, *args, **kwargs):
+        super(WorkerForm, self).__init__(*args, **kwargs)
+        _instance = kwargs.pop('instance', None)
+        add_form_control_class(self.fields)
+
+
+class WorkerEditForm(ModelForm):
+    class Meta:
+        model = Worker
+        fields = ['name', 'last_name', 'code', 'cargo', 'estado']
+
+    def __init__(self, *args, **kwargs):
+        super(WorkerEditForm, self).__init__(*args, **kwargs)
+        _instance = kwargs.pop('instance', None)
+        add_form_control_class(self.fields)
 
 
 class PasswordResetFormEdited(PasswordResetForm):

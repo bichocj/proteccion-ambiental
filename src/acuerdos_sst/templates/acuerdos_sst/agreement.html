@@ -1,0 +1,38 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block styles %}
+{%  endblock %}
+{% block content %}
+    <div id="pad-wrapper" class="new-user">
+        <div class="row header">
+            <div class="col-md-12">
+                <h3>ACUERDOS DE COMITE</h3>
+            </div>
+        </div>
+     {% if message %}
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <strong>Error!</strong> {{ message }} {{ response }}
+            </div>
+        {% endif %}
+     <div class="row">
+        <!-- left column -->
+        <div class="col-md-12">
+            <form action="." method="post" class="form-horizontal" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+            {% include 'main/hooks/field_with_label.html' with field=field %}
+            {% endfor %}
+             <div class="pull-right">
+                <input type="submit" class="btn btn-primary pull-right" value="{{  save_text|default:'Guardar' }}" name="_save">
+            </div>
+
+        </form>
+        </div>
+     </div>
+    </div>
+
+
+{% endblock %}
+{% block scripts %}
+
+{% endblock %}

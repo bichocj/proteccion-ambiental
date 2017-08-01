@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load static %}
 <!DOCTYPE html>
-<html  style=" background-image: url({% static "main/img/bgs/9.jpg" %});">
+<html  style=" background-image: url({% static "main/img/bgs/back-green.jpg" %});">
 <head>
 
     <title>Protección Ambiental</title>
@@ -70,7 +70,7 @@
 <div class="login-wrapper" >
 
         <a href="index.html">
-            <img class="logo" src="{% static 'main/img/logo.png' %}" alt="logo" />
+            <img class="logo" src="{% static 'main/img/logo_proteccion.png' %}" alt="logo" />
         </a>
 
         <div class="box">
@@ -81,9 +81,17 @@
                 {% endif %}
 
                 <form action="." method="post">
-                    {% csrf_token %}
-                    {% for field in form %}
-                    {% include 'main/hooks/field_with_label.html' with field=field %}
+                   {% csrf_token %}
+                    {% for f in form %}
+                        <div class="form-group {% if f.errors %}has-error{% endif %}">
+                            <label for="id_{{ f.name }}" class="col-sm-3 control-label">{{ f.label|capfirst }}:</label>
+                            <div class="col-sm-9">
+                                {{ f }}
+                                {% for error in f.errors %}
+                                    <p class="help-block">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        </div>
                     {% endfor %}
 
                 <a href="{% url 'accounts:password_reset' %}" class="forgot">{% trans 'Reset Password' %}</a>

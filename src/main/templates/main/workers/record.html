@@ -1,0 +1,138 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'main/css/compiled/user-profile.css' %}" type="text/css" media="screen"/>
+    <link href="{% static 'main/css/lib/morris.css' %}" type="text/css" rel="stylesheet"/>
+    <link rel="stylesheet" href="{% static  'main/css/compiled/chart-showcase.css' %}" type="text/css" media="screen"/>
+
+{% endblock %}
+{% block content %}
+    <div id="pad-wrapper" class="datatables-page">
+        <div class="row header">
+            <h3>INDICE DE SEGURIDAD</h3>
+        </div>
+    </div>
+    <div id="pad-wrapper" class="user-profile">
+        <div class="row header">
+            <div class="col-md-8">
+                <img src="{% static 'main/img/contact-profile.png' %}" alt="contact" class="avatar img-circle"/>
+                <h3 class="name">{{ worker.name }}{{ worker.last_name }}</h3>
+                <span class="area">{{ worker.get_cargo_display }}</span><br>
+            </div>
+        </div>
+    </div>
+    <div id="pad-wrapper">
+        <div class="row section">
+            <div class="col-md-12">
+                <h4 class="title">ACCIDENTES CON PRIMEROS AUXILIOS</h4>
+            </div>
+            <div class="col-md-6 chart">
+
+                <div id="hero-bar0" style="height: 250px;width: 1000px;"></div>
+            </div>
+        </div>
+    </div>
+    <div id="pad-wrapper">
+        <div class="row section">
+            <div class="col-md-12">
+                <h4 class="title">ACCCIDENTE CON ATENCION MEDICA</h4>
+            </div>
+            <div class="col-md-6 chart">
+
+                <div id="hero-bar1" style="height: 250px;width: 1000px;"></div>
+            </div>
+        </div>
+    </div>
+    <div id="pad-wrapper">
+        <div class="row section">
+            <div class="col-md-12">
+                <h4 class="title">ACCIDENTES CON TIEMPO PERDIDO</h4>
+            </div>
+            <div class="col-md-6 chart">
+
+                <div id="hero-bar2" style="height: 250px;width: 1000px;"></div>
+            </div>
+        </div>
+    </div>
+    <div id="pad-wrapper">
+        <div class="row section">
+            <div class="col-md-12">
+                <h4 class="title">ACCIDENTES FATALES</h4>
+            </div>
+            <div class="col-md-6 chart">
+
+                <div id="hero-bar3" style="height: 250px;width: 1000px;"></div>
+            </div>
+        </div>
+    </div>
+    <div id="pad-wrapper">
+        <div class="row section">
+            <div class="col-md-12">
+                <h4 class="title">INCIDENTES PELIGROS</h4>
+            </div>
+            <div class="col-md-6 chart">
+
+                <div id="hero-bar4" style="height: 250px;width: 1000px;"></div>
+            </div>
+        </div>
+    </div>
+    <div id="pad-wrapper">
+        <div class="row section">
+            <div class="col-md-12">
+                <h4 class="title">ENFERMEDADES OCUPACIONALES</h4>
+            </div>
+            <div class="col-md-6 chart">
+
+                <div id="hero-bar5" style="height: 250px;width: 1000px;"></div>
+            </div>
+        </div>
+    </div>
+    <div id="pad-wrapper">
+        <div class="row section">
+            <div class="col-md-12">
+                <h4 class="title">ACTOS INSEGUROS</h4>
+            </div>
+            <div class="col-md-6 chart">
+
+                <div id="hero-bar6" style="height: 250px;width: 1000px;"></div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="{% static 'main/js/morris.min.js' %}"></script>
+    <script type="text/javascript">
+        {% for opt in numbers %}
+            // Morris Bar Chart
+                Morris.Bar({
+                    element: 'hero-bar'+{{ opt.pos }},
+                    data: [
+                        {device: 'Ene. '+{{ year_actual }}, sells: {{opt.one}}},
+                        {device: 'Feb. '+{{ year_actual }}, sells: {{opt.two}}},
+                        {device: 'Mar. '+{{ year_actual }}, sells: {{opt.three}}},
+                        {device: 'Abr. '+{{ year_actual }}, sells: {{opt.four}}},
+                        {device: 'May. '+{{ year_actual }}, sells: {{opt.five}}},
+                        {device: 'Jun. '+{{ year_actual }}, sells: {{opt.six}}},
+                        {device: 'Jul. '+{{ year_actual }}  , sells: {{opt.seven}}},
+                        {device: 'Agst. '+{{ year_actual }}  , sells: {{opt.eight}}},
+                        {device: 'Sept. '+{{ year_actual }}  , sells: {{opt.nine}}},
+                        {device: 'Oct. '+{{ year_actual }}  , sells: {{opt.ten}}},
+                        {device: 'Nov. '+{{ year_actual }}  , sells: {{opt.eleven}}},
+                        {device: 'Dic. '+{{ year_actual }}  , sells: {{opt.twelve}}}
+                    ],
+                    xkey: 'device',
+                    ykeys: ['sells'],
+                    labels: ['Incidentes'],
+                    barRatio: 0.4,
+                    xLabelMargin: 10,
+                    hideHover: 'auto',
+                    barColors: ["#3d88ba"]
+                });
+
+        {% endfor %}
+    </script>
+{% endblock %}

@@ -32,49 +32,66 @@ class UserModelMultipleChoiceField(ModelMultipleChoiceField):
         except Company.DoesNotExist:
             pass
         return name
+class WorkerModelMultipleChoiceField(ModelMultipleChoiceField):
+    def label_from_instance(self, obj):
+        if obj.name:
+            name = obj.name + " " + obj.last_name
+        else:
+            name = obj.code
+        return name
 
 
 class CalendarModelForm(ModelForm):
     form_meta = {'title': _("Calendar")}
 
-    group = get_member_group()
-    members = get_users_of_member_group()
-    workers = User.objects.exclude(groups__in=(group,))
-
-    title = forms.CharField(max_length=100)
-    assigned = UserModelChoiceField(members, empty_label="", label=_('assigned to'))
-    users = UserModelMultipleChoiceField(workers, label=_('shared with'),widget=forms.CheckboxSelectMultiple)
-
     class Meta:
         model = Calendar
-        exclude = ("created_by", "slug")
+        fields = ["title", "type"]
 
     def __init__(self, *args, **kwargs):
         super(CalendarModelForm, self).__init__(*args, **kwargs)
         add_form_control_class(self.fields)
-        add_class_time_picker(self, ['max_time', 'min_time'])
-        self.fields['users'].widget.attrs.update({'class': ''})
-
 
 
 class EventsModelForm(ModelForm):
     form_met = {'title': _('Event')}
 
-    members = get_users_of_member_group()
+    title = forms.CharField(max_length=100, label="Nombre")
+    event_start = forms.DateTimeField(input_formats=['%d/%m/%Y %I:%M %p'], label=_('Comienza '))
+    event_end = forms.DateTimeField(input_formats=['%d/%m/%Y %I:%M %p'], label=('Termina '))
+    description = forms.CharField(widget=forms.Textarea(attrs={'rows': 2, 'cols': 15}), required=False,
+                                  label=_('Descripcion '))
+    observation = forms.CharField(widget=forms.Textarea(attrs={'rows': 2, 'cols': 15}), required=False,
+                                  label="Observacion")
+    type_capacitations = forms.ChoiceField(choices=Events.type_capacitation, label='Tipo de Capacitacion',
+                                           widget=forms.HiddenInput(), required=False)
+    type_inspeccions = forms.ChoiceField(choices=Events.type_inspeccion, label='Tipo de Inspeccion',
+                                         widget=forms.HiddenInput(), required=False)
+    hours_worked = forms.FloatField(widget=forms.HiddenInput(), required=False)
+    number_workers = forms.IntegerField(widget=forms.HiddenInput(), required=False)
 
-    title = forms.CharField(max_length=100)
-    event_start = forms.DateTimeField(input_formats=['%d/%m/%Y %I:%M %p'])
-    event_end = forms.DateTimeField(input_formats=['%d/%m/%Y %I:%M %p'])
-    description = forms.CharField(widget=forms.Textarea(attrs={'rows': 2, 'cols': 15}), required=False)
-    observation = forms.CharField(widget=forms.Textarea(attrs={'rows': 2, 'cols': 15}), required=False)
-    member = UserModelChoiceField(members, empty_label="")
+    evidence = forms.FileField(label="Evidencia",required=False)
 
     class Meta:
         model = Events
-        exclude = ("is_cancelled", "created_by", "calendar")
+        exclude = ("is_cancelled", "created_by", "calendar", "type")
 
     def __init__(self, *args, **kwargs):
+        calendar = kwargs.pop('calendar', None)
         super(EventsModelForm, self).__init__(*args, **kwargs)
-        add_form_control_class(self.fields)
+        _instance = kwargs.pop('instance', None)
         add_class_time_picker(self, ['event_start', 'event_end'])
+        # if _instance and _instance.calendar.type == Calendar.CAPACITATION:
+        #     self.fields['type_capacitations'] = forms.ChoiceField(choices=Events.type_capacitation)
+        if calendar and calendar.type == Calendar.CAPACITATION:
+            self.fields['type_capacitations'] = forms.ChoiceField(choices=Events.type_capacitation,
+                                                                  label='Tipo de Capacitacion', required=True,
+                                                                  initial=-1, widget=forms.Select())
+            self.fields['hours_worked'] = forms.FloatField(label='Horas Trabajadas', required=False)
+            self.fields['number_workers'] = forms.IntegerField(label='Numero de Trabajadores', required=False)
 
+        if calendar and calendar.type == Calendar.INSPECTION:
+            self.fields['type_inspeccions'] = forms.ChoiceField(choices=Events.type_inspeccion,
+                                                                label='Tipo de Inspeccion', required=True, initial=-1,
+                                                                widget=forms.Select())
+        add_form_control_class(self.fields)

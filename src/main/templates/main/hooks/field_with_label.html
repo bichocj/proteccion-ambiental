@@ -26,24 +26,13 @@
             <span class="help-block">{{ error }}</span>
         {% endfor %}
     {% endif %}
-{% elif field|is_selectable %}
-    <div class="input-with-label text-left">
-        <span>{{ field.label|capfirst }} :</span>
-        <div class="select-option">
-            <i class="ti-angle-down"></i>
+
+{% else %}
+    <div class="form-group">
+        <label class="col-md-2 control-label">{{ field.label|capfirst }} :</label>
+        <div class="col-md-8">
             {{ field }}
         </div>
-        {% if field.errors %}
-            {% for error in field.errors %}
-                <span class="help-block">{{ error }}</span>
-            {% endfor %}
-        {% endif %}
-    </div>
-{% else %}
-    <div class="input-with-label text-left">
-        <span>{{ field.label|capfirst }} :</span>
-        {{ field }}
-
         {% if field.errors %}
             {% for error in field.errors %}
                 <span class="help-block">{{ error }}</span>

@@ -1,0 +1,105 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block styles %}
+
+{%  endblock %}
+{% block content %}
+
+    <div id="main-stats">
+
+            <div class="">
+                <div class="col-md-6 col-sm-6 stat">
+                <div id="pad-wrapper" class="new-user">
+            <div class="row header">
+                <div class="col-md-12">
+                    <h3>{{ agreement.title }}</h3>
+                </div>
+            </div>
+
+        </div>
+                    <div class="data">
+
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+
+                                <th><span class="line"></span>Descripcion</th>
+                                <th><span class="line"></span>Fecha Inicio</th>
+                                <th><span class="line"></span>Fecha Maxima</th>
+                                <th><span class="line"></span>Estado</th>
+                                <th><span class="line"></span>Evidencia</th>
+                                <th><span class="line"></span>Opciones</th>
+                                <!--<th><span class="line"></span>Formato</th>-->
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for agreement in agreements_details %}
+                            <tr>
+                                <td>{{agreement.description}}</td>
+                                <td>{{agreement.date_until}}</td>
+                                <td>{{agreement.date_start}}</td>
+                                <td>{{agreement.get_state_display}}</td>
+                                {% if agreement.evidence %}
+                                <td><a href="{{ agreement.evidence.url }}" download="{{ agreement.evidence.file }}"><i class="icon-download"></i> {{ agreement.evidence.name}}</a></td>
+                                    {% else %}
+                                    <td>Sin evidencia</td>
+                                {% endif %}
+                                <td>
+                                         <ul class="actions">
+                                            <li><a href="{% url 'acuerdos_sst:agreement_detail_edit' company.slug agreement_pk agreement.pk %}">Editar</a></li>
+                                            <li class="last"><a href="{% url 'acuerdos_sst:agreement_detail_delete' company.slug agreement_pk agreement.pk %}">Eliminar</a></li>
+                                        </ul>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <div class="col-md-6 col-sm-6 stat">
+                 <div id="pad-wrapper" class="new-user">
+            <div class="row header">
+                <div class="col-md-12">
+                    <h3>{{ title }}</h3>
+                </div>
+            </div>
+
+        </div>
+                    <div class="data">
+
+                        {% if message %}
+                            <div class="alert alert-danger alert-dismissible" role="alert">
+                                <strong>Error!</strong> {{ message }} {{ response }}
+                            </div>
+                        {% endif %}
+                         <div class="row form-wrapper">
+                            <!-- left column -->
+                            <div class="col-md-12">
+                                <form action="." method="post" class="form-horizontal" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {% for field in form %}
+                                {% include 'main/hooks/field_with_label.html' with field=field %}
+                                {% endfor %}
+
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-8">
+                                      <button type="submit" class="btn btn-glow">Agregar </button>
+                                    </div>
+                                </div>
+
+                                </form>
+                            </div>
+                         </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+
+
+{% endblock %}
+{% block scripts %}
+
+{% endblock %}

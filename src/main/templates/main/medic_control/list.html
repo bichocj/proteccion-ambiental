@@ -1,0 +1,53 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'main/css/compiled/tables.css'%}"/>
+{% endblock %}
+{% block content %}
+    <div id="pad-wrapper" class="users-list">
+    <div class="table-wrapper products-table">
+        <div class="row header">
+            <h3>CONTROL MEDICO</h3>
+            <div class="col-md-10 col-sm-12 col-xs-12 pull-right">
+                <a href="{% url 'main:medic_exam_new' company.slug %}" class="btn-flat success pull-right">
+                    <span>&#43;</span>
+                    Nuevo Examen Medico
+                </a>
+            </div>
+        </div>
+        {% if message %}
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <strong>Error!</strong> {{ message }} {{ response }}
+            </div>
+        {% endif %}
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Trabajador</th>
+                <th><span class="line"></span>Estado</th>
+                <th><span class="line"></span>Fecha</th>
+                <!--<th><span class="line"></span>Formato</th>-->
+            </tr>
+            </thead>
+            <tbody>
+            {% for medic in medic_controls %}
+            <tr>
+                <td>{{medic.worker.name}}</td>
+                <td>{{medic.get_state_display}}</td>
+                <td>{{ medic.date }}</td>
+                <td>
+                    <ul class="actions">
+                        <li><a href="{% url 'main:medic_exam_edit' company.slug medic.pk %}">Editar</a></li>
+                        <li class="last"><a href="{% url 'main:medic_exam_delete' company.slug medic.pk %}">Eliminar</a></li>
+                    </ul>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock%}
+
+{% block scripts %}
+{% endblock%}

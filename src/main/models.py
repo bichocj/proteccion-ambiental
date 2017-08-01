@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 from datetime import datetime
 
@@ -6,11 +7,22 @@ from django.db import models
 from django.utils.text import slugify
 from django.utils.translation import ugettext as _
 
+# from accounts.models import Worker
 
-class Product(models.Model):
-    code = models.CharField(max_length=50, null=False, blank=False)
-    quantity = models.IntegerField(null=False, blank=False)
-    description = models.CharField(max_length=100, null=False, blank=False)
+
+GERENTE = 0
+SUPERVISOR = 1
+ASESOR_EXTERNO = 2
+RECURSOS_HUMANOS = 3
+COMITE = 4
+
+cargos = (
+    (GERENTE, 'GERENTE'),
+    (SUPERVISOR, 'SUPERVISOR'),
+    (ASESOR_EXTERNO, 'ASESOR EXTERNO'),
+    (RECURSOS_HUMANOS, 'RECURSOS HUMANOS'),
+    (COMITE, 'COMITE')
+)
 
 
 def upload_image_to(instance, filename):
@@ -20,12 +32,12 @@ def upload_image_to(instance, filename):
 
 
 class Company(models.Model):
-    ruc = models.IntegerField(null=False, blank=False, unique=True)
-    name = models.CharField(_('company name'), max_length=100, null=False, blank=False, unique=True)
-    short_name = models.CharField(_('short name'), max_length=100, null=False, blank=False, unique=True)
+    ruc = models.IntegerField(_('R.U.C.'), null=False, blank=False, unique=True)
+    name = models.CharField(_('Nombre Compañia'), max_length=100, null=False, blank=False, unique=True)
+    short_name = models.CharField(_('Nombre Corto'), max_length=100, null=False, blank=False, unique=True)
     slug = models.SlugField(_('slug'), max_length=100, blank=True, null=True, unique=True)
-    logo = models.ImageField(_('logo'), upload_to=upload_image_to, blank=True, null=True)
-    address = models.CharField(_('address'), max_length=200, null=True, blank=True)
+    logo = models.ImageField(_('Logo'), upload_to=upload_image_to, blank=True, null=True)
+    address = models.CharField(_('Dirección'), max_length=200, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -35,6 +47,24 @@ class Company(models.Model):
         super(Company, self).save(**kwargs)
 
 
+class Worker(models.Model):
+    name = models.CharField(_('Nombres'), max_length=100, null=False, blank=False)
+    last_name = models.CharField(_('Apellidos'), max_length=100, null=True, blank=True, default='')
+    code = models.CharField(_('Codigo'), max_length=100, null=False, blank=False)
+    company = models.ForeignKey(Company, null=False)
+    cargo = models.IntegerField(_('Cargo'), choices=cargos, default=RECURSOS_HUMANOS, null=False)
+    estado = models.BooleanField(_('Estado'), default=True, null=False)
+
+    def __str__(self):
+        return self.name + self.last_name
+
+
+class Product(models.Model):
+    code = models.CharField(max_length=50, null=False, blank=False)
+    quantity = models.IntegerField(null=False, blank=False)
+    description = models.CharField(max_length=100, null=False, blank=False)
+
+
 class Requirement(models.Model):
     PROTECTION = 0
     ENTERPRISE = 1
@@ -42,13 +72,23 @@ class Requirement(models.Model):
         (PROTECTION, PROTECTION),
         (ENTERPRISE, ENTERPRISE)
     )
-    name = models.CharField(max_length=100, null=False, blank=False)
-    description = models.CharField(max_length=50, null=True, blank=True)
+    name = models.CharField(_('Nombre Requerimiento'), max_length=100, null=False, blank=False)
+    description = models.CharField(_('Descripcion'), max_length=200, null=True, blank=True)
     is_active = models.BooleanField(default=True)
     type_requirement = models.IntegerField(default=PROTECTION, choices=type_choice, null=False)
 
     def __str__(self):
         return self.name
+
+
+class LegalRequirement(models.Model):
+    normativa = models.CharField(max_length=50, null=False, blank=False)
+    datepublication = models.DateField(_('Fecha Publicacion'), default=datetime.now)
+    entitie = models.ForeignKey(Company)
+    title = models.CharField(_('Titulo'), max_length=200, null=False, blank=False)
+    apply = models.TextField(_('Aplica'), null=False, blank=False)
+    actual_month = models.CharField(max_length=100, null=False, blank=False)
+    # responsable = models.ForeignKey(Worker)
 
 
 class Company_Requirement(models.Model):
@@ -57,7 +97,7 @@ class Company_Requirement(models.Model):
 
 
 class Employee(User):
-    code = models.CharField(max_length=50, null=False, blank=False)
+    code = models.CharField(_('Codigo'), max_length=50, null=False, blank=False)
     company = models.ForeignKey(Company, null=False, blank=False)
     time = models.IntegerField(default=0)
 
@@ -80,19 +120,54 @@ class Evidence(models.Model):
     file = models.FileField()
 
 
-class Accident(models.Model):
-    ACCIDENT = 1
-    INCIDENT = 2
-    TYPE_ACCIDENT_CHOICES = (
-        (ACCIDENT, 'ACCIDENT'),
-        (INCIDENT, 'INCIDENT')
+class MedicControl(models.Model):
+    APTO = 0
+    APTO_CON_RESTRICCION = 1
+    NO_APTO = 2
+    medic_states = (
+        (APTO, 'APTO'),
+        (APTO_CON_RESTRICCION, 'APTO CON RESTRICCION'),
+        (NO_APTO, 'NO APTO')
+
     )
-    title = models.CharField(max_length=100, null=False, blank=False)
-    content = models.TextField(null=True, blank=True)
-    type_accident = models.IntegerField(_('type accident'), choices=TYPE_ACCIDENT_CHOICES, default=ACCIDENT)  # NOQA
-    date = models.DateField(_('date'), null=False, default=datetime.now)
     company = models.ForeignKey(Company, null=False, blank=False)
-    evidence = models.FileField(_('evidence'), upload_to="accident/", null=True)
+    worker = models.ForeignKey(Worker)
+    state = models.IntegerField(_('Estado'), choices=medic_states, default=NO_APTO, null=False, blank=False)
+    date = models.DateField(_('Fecha'), null=False, default=datetime.now)
+    evidence = models.FileField(_('Evidencia'), upload_to="examen_medico/", null=True)
+
+
+class Accident(models.Model):
+    ACCIDENT_1 = 1
+    ACCIDENT_2 = 2
+    ACCIDENT_3 = 3
+    ACCIDENT_4 = 4
+    ACCIDENT_5 = 5
+    ACCIDENT_6 = 6
+    ACCIDENT_7 = 7
+    TYPE_ACCIDENT_CHOICES = (
+        (ACCIDENT_1, 'ACCIDENTES CON PRIMEROS AUXILIOS'),
+        (ACCIDENT_2, 'ACCCIDENTE CON ATENCION MEDICA'),
+        (ACCIDENT_3, 'ACCIDENTES CON TIEMPO PERDIDO'),
+        (ACCIDENT_4, 'ACCIDENTES FATALES'),
+        (ACCIDENT_5, 'INCIDENTES PELIGROS'),
+        (ACCIDENT_6, 'ENFERMEDADES OCUPACIONALES'),
+        (ACCIDENT_7, 'ACTOS INSEGUROS'),
+    )
+    title = models.CharField(_('Titulo'), max_length=100, null=False, blank=False)
+    content = models.TextField(_('Descripcion'), null=True, blank=True)
+    type_accident = models.IntegerField(_('Tipo de Accidente'), choices=TYPE_ACCIDENT_CHOICES,
+                                        default=ACCIDENT_1)  # NOQA
+    date = models.DateField(_('Fecha'), null=False, default=datetime.now)
+    lose_days = models.DecimalField(_('Dias Perdidos'), max_digits=5, decimal_places=2, null=True, blank=True)
+    company = models.ForeignKey(Company, null=False, blank=False)
+    worker = models.ForeignKey(Worker,default=None)
+    evidence = models.FileField(_('Evidencia'), upload_to="accident/", null=True)
+
+
+class AccidentDetail(models.Model):
+    accident = models.ForeignKey(Accident)
+    worker = models.ForeignKey(Worker)
 
 
 class Task(models.Model):
@@ -122,16 +197,15 @@ class Format(models.Model):
     PLANES = 1
     REGISTERS = 2
     TYPE_FORMAT_CHOICES = (
-        (PLANES, 'PLANES'),
-        (REGISTERS, 'REGISTERS')
+        (PLANES, 'Planes, Programas y Procedimientos'),
+        (REGISTERS, 'Registros y Evidencias')
     )
     requirement = models.ForeignKey(Requirement)
-    file = models.FileField(upload_to="formatos/", null=False, blank=False)
-    type_format = models.IntegerField(choices=TYPE_FORMAT_CHOICES, default=PLANES,
+    file = models.FileField(_('Archivo'), upload_to="formatos/", null=False, blank=False)
+    type_format = models.IntegerField(_('Tipo'), choices=TYPE_FORMAT_CHOICES, default=PLANES,
                                       null=True)  # is if format is planes or registros
     company = models.ForeignKey(Company, null=True, blank=True)
-    name = models.CharField(_('name'), max_length=100, null=False, blank=False)
-
+    name = models.CharField(_('Nombre'), max_length=100, null=False, blank=False)
 
 
 class HistoryFormats(models.Model):

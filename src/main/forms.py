@@ -1,10 +1,13 @@
+# -*- coding: utf-8 -*-
 import datetime
 from django import forms
 from django.forms import ModelForm, HiddenInput
 from django.utils.translation import ugettext, ugettext_lazy as _
 
+from fullcalendar.forms import UserModelMultipleChoiceField, WorkerModelMultipleChoiceField
 from .functions import add_form_control_class, add_form_text
-from .models import Company, Format, Accident, Employee, Requirement
+from .models import Company, Format, Accident, Employee, Requirement, LegalRequirement, MedicControl, Worker, \
+    AccidentDetail
 
 
 class FormatForm(ModelForm):
@@ -44,7 +47,7 @@ class EmployeeForm(ModelForm):
 
     class Meta:
         model = Employee
-        fields = ('code', 'first_name', 'last_name', 'email', 'password1', 'password2', 'username')
+        fields = ('code', 'email', 'password1', 'password2', 'username')
 
     def __init__(self, *args, **kwargs):
         super(EmployeeForm, self).__init__(*args, **kwargs)
@@ -75,14 +78,54 @@ class DateInput(forms.DateInput):
     input_type = 'date'
 
 
+class LegalRequirementForm(ModelForm):
+    class Meta:
+        model = LegalRequirement
+        fields = ['title', 'normativa', 'datepublication', 'apply']
+
+    def __init__(self, *args, **kwargs):
+        super(LegalRequirementForm, self).__init__(*args, **kwargs)
+        _instance = kwargs.pop('instance', None)
+        add_form_control_class(self.fields)
+        self.fields['datepublication'].widget.attrs['class'] = 'form-control input-datepicker'
+
+
+class MedicControlForm(ModelForm):
+    worker = forms.ModelChoiceField(queryset=Worker.objects.all(), label='Trabajador')
+    evidence = forms.FileField(required=False)
+
+    class Meta:
+        model = MedicControl
+        fields = ['worker', 'state', 'date', 'evidence']
+
+    def __init__(self, *args, **kwargs):
+        super(MedicControlForm, self).__init__(*args, **kwargs)
+        _instance = kwargs.pop('instance', None)
+        add_form_control_class(self.fields)
+        self.fields['date'].widget.attrs['class'] = 'form-control input-datepicker'
+
+
 class AccidentForm(ModelForm):
     class Meta:
         model = Accident
-        fields = ['title', 'content', 'type_accident', 'date', 'evidence']
+        fields = ['title', 'content', 'type_accident', 'worker', 'date', 'evidence']
 
     def __init__(self, *args, **kwargs):
         super(AccidentForm, self).__init__(*args, **kwargs)
         _instance = kwargs.pop('instance', None)
+        add_form_control_class(self.fields)
+        self.fields['date'].widget.attrs['class'] = 'form-control input-datepicker'
+
+
+class AccidentDetailForm(ModelForm):
+    class Meta:
+        model = AccidentDetail
+        fields = ['worker']
+
+    def __init__(self, *args, **kwargs):
+        super(AccidentDetailForm, self).__init__(*args, **kwargs)
+        _instance = kwargs.pop('instance', None)
+        add_form_control_class(self.fields)
 
 
 class RequirementForm(ModelForm):

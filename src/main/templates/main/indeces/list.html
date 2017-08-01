@@ -1,0 +1,41 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'main/css/compiled/tables.css' %}"/>
+{% endblock %}
+{% block content %}
+<div id="pad-wrapper" class="users-list">
+    <div class="table-wrapper products-table">
+        <div class="row header">
+            <h3>INDICES</h3>
+        </div>
+        {% if message and not success %}
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <strong>Error!</strong> {{ message }} {{ response }}
+            </div>
+        {% else %}
+            {% if message and success %}
+                <div class="alert alert-success">
+                    <i class="icon-ok-sign"></i> {{ message }}
+                </div>
+            {% endif %}
+
+        {% endif %}
+        {% load i18n %}
+        <div id="pad-wrapper" class="new-user">
+            <div class="row header">
+                <h3>{{ title|safe|capfirst }}</h3>
+            </div>
+            <div class="row form-wrapper">
+                <div class="col-md-9 with-sidebar">
+                    {% include 'main/indeces/form.html' with form=form %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

@@ -1,9 +1,20 @@
+# -*- coding: utf-8 -*-
+import datetime
+
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 
+from accounts.forms import WorkerForm, WorkerEditForm
+from main.models import Worker, Employee, AccidentDetail
+from indices.forms import IndexForm
+from indices.models import Index
 from proteccion_ambiental.settings import COMPANY_JRA_SLUG
-from .models import Company, Format, Requirement, HistoryFormats, Accident, Company_Requirement
-from .forms import CompanyForm, FormatForm, AccidentForm, EmployeeForm, RequirementForm
+from .models import Company, Format, Requirement, HistoryFormats, Accident, Company_Requirement, LegalRequirement, \
+    MedicControl
+from .forms import CompanyForm, FormatForm, AccidentForm, EmployeeForm, RequirementForm, LegalRequirementForm, \
+    MedicControlForm, AccidentDetailForm
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from django.utils.translation import ugettext as _
@@ -12,6 +23,14 @@ from django.utils.translation import ugettext as _
 @login_required
 def home(request):
     company_jra_slug = COMPANY_JRA_SLUG
+    user = request.user
+    try:
+        employee = Employee.objects.get(user_ptr_id=user.pk)
+    except Employee.DoesNotExist:
+        employee = None
+    show = False
+    if employee and employee.company.slug == company_jra_slug:
+        show = True
     return render(request, 'main/home.html', locals())
 
 
@@ -19,6 +38,7 @@ def home(request):
 @login_required
 def config(request, company_slug):
     company = get_object_or_404(Company, slug=company_slug)
+
     return render(request, 'main/configuration.html', locals())
 
 
@@ -31,20 +51,25 @@ def panel(request, company_slug):
 # panel de ley de seguridad ambiental
 @login_required
 def company_list(request):
-    # if user is admin
-    companias = Company.objects.all()
-    # else
-    # companies = Company.objects.get(su empresa)
-    companies = list()
-    for c in companias:
-        if not c.slug == 'jra':
-            companies.append(c)
+    user = request.user
+    if user.is_superuser or User.objects.filter(pk=user.pk, groups__name='Doctor').exists():
+        companias = Company.objects.all()
+        companies = list()
+        for c in companias:
+            if not c.slug == COMPANY_JRA_SLUG:
+                companies.append(c)
+    else:
+        employee = Employee.objects.get(user_ptr_id=user.pk)
+        company = employee.company
+        companies = list()
+        companies.append(company)
+
     return render(request, "main/company/list.html", locals())
 
 
 @login_required
 def company_new(request):
-    title = _('new company')
+    title = _('Nueva Compañía')
     if request.POST:
         company_form = CompanyForm(request.POST, request.FILES)
         employee_form = EmployeeForm(request.POST)
@@ -93,7 +118,12 @@ def company_edit(request, company_slug):
             employee_form = EmployeeForm(request.POST, request.FILES, instance=company.user)
             company_form = CompanyForm(instance=company)
             if employee_form.is_valid():
-                employee = employee_form.save()
+                if company.user:
+                    employee = employee_form.save()
+                else:
+                    employee = employee_form.save(commit=False)
+                    employee.company = company
+                    employee.save()
                 return redirect(reverse('main:company_list'))
     else:
         company_form = CompanyForm(instance=company)
@@ -124,12 +154,268 @@ def format_list(request, company_slug, requirement_pk):
 
 
 @login_required
+def indices(request, company_slug):
+    company = Company.objects.get(slug=company_slug)
+    edit = None
+    indices = None
+    success = False
+    try:
+        indices = Index.objects.get(company=company)
+        edit = True
+    except Index.DoesNotExist:
+        edit = False
+    if not edit:
+        if request.POST:
+            form = IndexForm(request.POST)
+            if form.is_valid():
+                index = form.save(commit=False)
+                index.company = company
+                index.save()
+                message = 'Se guardo sus indices'
+                success = True
+            else:
+                message = 'Revisa la informacion'
+        else:
+            form = IndexForm()
+    else:
+        if request.POST:
+            form = IndexForm(request.POST, instance=indices)
+            if form.is_valid():
+                form.save()
+                message = 'Se actualizo sus indices'
+                success = True
+            else:
+                message = 'Revisa la informacion'
+        else:
+            form = IndexForm(instance=indices)
+    return render(request, 'main/indeces/list.html', locals())
+
+
+@login_required
+def medic_exam(request, company_slug):
+    company = Company.objects.get(slug=company_slug)
+    medic_controls = MedicControl.objects.filter(company=company)
+    return render(request, 'main/medic_control/list.html', locals())
+
+
+@login_required
+def medic_exam_new(request, company_slug):
+    title = 'Nuevo Control Medico'
+    company = Company.objects.get(slug=company_slug)
+    if request.POST:
+        form = MedicControlForm(request.POST, request.FILES)
+        if form.is_valid():
+            medic_control = form.save(commit=False)
+            medic_control.company = company
+            medic_control.save()
+            return redirect(reverse('main:medic_exam', kwargs={'company_slug': company_slug}))
+        else:
+            message = 'Revisa la informacion'
+    else:
+        form = MedicControlForm()
+    return render(request, 'main/layout_form.html', locals())
+
+
+@login_required
+def medic_exam_edit(request, company_slug, medic_pk):
+    title = 'Nuevo Control Medico'
+    company = Company.objects.get(slug=company_slug)
+    medic_control = MedicControl.objects.get(pk=medic_pk)
+    if request.POST:
+        form = MedicControlForm(request.POST, request.FILES, instance=medic_control)
+        if form.is_valid():
+            medic_control = form.save(commit=False)
+            medic_control.company = company
+            medic_control.save()
+            return redirect(reverse('main:medic_exam', kwargs={'company_slug': company_slug}))
+        else:
+            message = 'Revisa la informacion'
+    else:
+        form = MedicControlForm(instance=medic_control)
+    return render(request, 'main/layout_form.html', locals())
+
+
+@login_required
+def medic_exam_delete(request, company_slug, medic_pk):
+    company = Company.objects.get(slug=company_slug)
+    medic_control = MedicControl.objects.get(pk=medic_pk)
+    medic_control.delete()
+    return redirect(reverse('main:medic_exam', kwargs={'company_slug': company_slug}))
+
+
+@login_required
+def workers(request, company_slug):
+    company = Company.objects.get(slug=company_slug)
+    print('slug', company.slug)
+    worker_view = True
+    workers_company = Worker.objects.filter(company=company)
+    return render(request, 'main/workers/list.html', locals())
+
+
+@login_required
+def worker_new(request, company_slug):
+    title = 'Nuevo Trabajador Legal'
+    company = Company.objects.get(slug=company_slug)
+    if request.POST:
+        form = WorkerForm(request.POST)
+        if form.is_valid():
+            worker = form.save(commit=False)
+            worker.company = company
+            worker.save()
+            return redirect(reverse('main:workers', kwargs={'company_slug': company_slug}))
+        else:
+            message = 'Revisa la informacion'
+    else:
+        form = WorkerForm()
+    return render(request, 'main/layout_form.html', locals())
+
+
+@login_required
+def worker_record(request, company_slug, worker_pk):
+    company = Company.objects.get(slug=company_slug)
+    worker = Worker.objects.get(pk=worker_pk)
+    year_actual = datetime.date.today().year
+    numbers = list()
+    pos = 0
+    for key, value in Accident.TYPE_ACCIDENT_CHOICES:
+        options = dict()
+        options['one'] = Accident.objects.filter(Q(worker=worker), Q(type_accident=key),
+                                                 Q(date__year=year_actual),
+                                                 Q(date__month=1)).count()
+        options['two'] = Accident.objects.filter(Q(worker=worker), Q(type_accident=key),
+                                                 Q(date__year=year_actual),
+                                                 Q(date__month=2)).count()
+        options['three'] = Accident.objects.filter(Q(worker=worker), Q(type_accident=key),
+                                                   Q(date__year=year_actual),
+                                                   Q(date__month=3)).count()
+        options['four'] = Accident.objects.filter(Q(worker=worker), Q(type_accident=key),
+                                                  Q(date__year=year_actual),
+                                                  Q(date__month=4)).count()
+        options['five'] = Accident.objects.filter(Q(worker=worker), Q(type_accident=key),
+                                                  Q(date__year=year_actual),
+                                                  Q(date__month=5)).count()
+        options['six'] = Accident.objects.filter(Q(worker=worker), Q(type_accident=key),
+                                                 Q(date__year=year_actual),
+                                                 Q(date__month=6)).count()
+        options['seven'] = Accident.objects.filter(Q(worker=worker), Q(type_accident=key),
+                                                   Q(date__year=year_actual),
+                                                   Q(date__month=7)).count()
+        options['eight'] = Accident.objects.filter(Q(worker=worker), Q(type_accident=key),
+                                                   Q(date__year=year_actual),
+                                                   Q(date__month=8)).count()
+        options['nine'] = Accident.objects.filter(Q(worker=worker), Q(type_accident=key),
+                                                  Q(date__year=year_actual),
+                                                  Q(date__month=9)).count()
+        options['ten'] = Accident.objects.filter(Q(worker=worker), Q(type_accident=key),
+                                                 Q(date__year=year_actual),
+                                                 Q(date__month=10)).count()
+        options['eleven'] = Accident.objects.filter(Q(worker=worker), Q(type_accident=key),
+                                                    Q(date__year=year_actual),
+                                                    Q(date__month=11)).count()
+        options['twelve'] = Accident.objects.filter(Q(worker=worker), Q(type_accident=key),
+                                                    Q(date__year=year_actual),
+                                                    Q(date__month=12)).count()
+        options['pos'] = pos
+        pos += 1
+        print(options)
+        numbers.append(options)
+    return render(request, 'main/workers/record.html', locals())
+
+
+@login_required
+def worker_edit(request, company_slug, worker_pk):
+    title = 'Editar Trabajador'
+    company = Company.objects.get(slug=company_slug)
+    worker = Worker.objects.get(pk=worker_pk)
+    if request.POST:
+        form = WorkerEditForm(request.POST, instance=worker)
+        if form.is_valid():
+            form.save()
+            print(company_slug)
+            return redirect(reverse('main:workers', kwargs={'company_slug': company.slug}))
+        else:
+            message = 'Revisa la informacion'
+    else:
+        form = WorkerEditForm(instance=worker)
+    return render(request, 'main/layout_form.html', locals())
+
+
+@login_required
+def worker_delete(request, company_slug, worker_pk):
+    company = Company.objects.get(slug=company_slug)
+    worker = Worker.objects.get(pk=worker_pk)
+    worker.delete()
+    return redirect(reverse('main:workers', kwargs={'company_slug': company_slug}))
+
+
+@login_required
+def legal_requirement(request, company_slug):
+    company = Company.objects.get(slug=company_slug)
+    legal_requirements = LegalRequirement.objects.filter(entitie=company)
+    return render(request, 'main/legal_requirement/list.html', locals())
+
+
+@login_required
+def legal_requirement_new(request, company_slug):
+    title = 'Nuevo Requisito Legal'
+    company = Company.objects.get(slug=company_slug)
+    if request.POST:
+        form = LegalRequirementForm(request.POST)
+        if form.is_valid():
+            legalRequirement = form.save(commit=False)
+            legalRequirement.entitie = company
+            legalRequirement.save()
+            return redirect(reverse('main:legal_requirement', kwargs={'company_slug': company_slug}))
+        else:
+            message = 'Revisa la informacion'
+    else:
+        form = LegalRequirementForm()
+    return render(request, 'main/layout_form.html', locals())
+
+
+@login_required
+def legal_requirement_edit(request, company_slug, requirement_pk):
+    title = 'Editar Requisito Legal'
+    company = Company.objects.get(slug=company_slug)
+    legalRequirement = LegalRequirement.objects.get(pk=requirement_pk)
+    if request.POST:
+        form = LegalRequirementForm(request.POST, instance=legalRequirement)
+        if form.is_valid():
+            form.save()
+            return redirect(reverse('main:legal_requirement', kwargs={'company_slug': company_slug}))
+        else:
+            message = 'Revisa la informacion'
+    else:
+        form = LegalRequirementForm(instance=legalRequirement)
+    return render(request, 'main/layout_form.html', locals())
+
+
+@login_required
+def legal_requirement_delete(request, company_slug, requirement_pk):
+    company = Company.objects.get(slug=company_slug)
+    legalRequirement = LegalRequirement.objects.get(pk=requirement_pk)
+    legalRequirement.delete()
+    return redirect(reverse('main:legal_requirement', kwargs={'company_slug': company_slug}))
+
+
+@login_required
 def format_update(request, company_slug, requirement_pk, format_pk):
     company = get_object_or_404(Company, slug=company_slug)
     requirement = get_object_or_404(Requirement, pk=requirement_pk)
     format = get_object_or_404(Format, pk=format_pk, company=company)
     title = 'Requirement : {0} , updating format {1}'.format(requirement.name, format.name)
-
+    try:
+        history = HistoryFormats.objects.filter(format=format)
+        if history.count() <= 0:
+            history = HistoryFormats()
+            history.format = format
+            history.file = format.file
+            history.save()
+    except HistoryFormats.DoesNotExist:
+        history = HistoryFormats()
+        history.format = format
+        history.file = format.file
+        history.save()
     if request.POST:
         form = FormatForm(request.POST, request.FILES, instance=format)
         if form.is_valid():
@@ -164,6 +450,11 @@ def calendar_service(request, company_slug):
 def calendar_training(request, company_slug):
     company = get_object_or_404(Company, slug=company_slug)
     return render(request, "main/calendars/trainings.html", locals())
+
+
+@login_required
+def config_indices_list(request):
+    return render(request, 'main/config/indices/list.html')
 
 
 @login_required
@@ -214,6 +505,14 @@ def config_requirement_format_update(request, requirement_pk, format_pk):
     return render(request, 'main/layout_with_out_nav_form.html', locals())
 
 
+def mensual_report(request, company_slug):
+    company = Company.objects.get(slug=company_slug)
+    if company_slug == 'jra':
+        title = 'REPORTE MENSUAL SEGURIDAD Y SALUD OCUPACIONAL'
+    date_now = datetime.date.today()
+    return render(request, 'main/reports/reports_mensual.html', locals())
+
+
 @login_required
 def config_requirement_format_new(request, requirement_pk):
     requirement = Requirement.objects.get(pk=requirement_pk)
@@ -236,7 +535,7 @@ def config_requirement_format_new(request, requirement_pk):
 @login_required
 def requirement_new(request, company_slug):
     company = get_object_or_404(Company, slug=company_slug)
-    title = 'new requirement'
+    title = 'Nuevo Requerimiento'
     if request.POST:
         form = RequirementForm(request.POST)
         if form.is_valid():
@@ -248,6 +547,21 @@ def requirement_new(request, company_slug):
             return redirect(reverse('main:requirements_list', kwargs={"company_slug": company.slug}))
     else:
         form = RequirementForm()
+        return render(request, 'main/layout_form.html', locals())
+
+
+@login_required
+def requirement_edit(request, company_slug, requirement_pk):
+    company = get_object_or_404(Company, slug=company_slug)
+    company_requirement = Company_Requirement.objects.get(pk=requirement_pk)
+    title = 'Editar Requerimiento'
+    if request.POST:
+        form = RequirementForm(request.POST, instance=company_requirement.requirement)
+        if form.is_valid():
+            requirement = form.save()
+            return redirect(reverse('main:requirements_list', kwargs={"company_slug": company.slug}))
+    else:
+        form = RequirementForm(instance=company_requirement.requirement)
         return render(request, 'main/layout_form.html', locals())
 
 
@@ -270,6 +584,8 @@ def config_requirement_new(request):
 def accident_list(request, company_slug):
     company = get_object_or_404(Company, slug=company_slug)
     accidents = Accident.objects.filter(company=company)
+    accident_view = True
+    print(request.user.is_superuser)
     return render(request, "main/accidents/list.html", locals())
 
 
@@ -282,6 +598,13 @@ def format_new_other(request, company_slug, requirement_pk):
     if request.POST:
         format = Format(company=company, requirement=requirement, file=request.FILES['file'])
         format.type_format = Format.REGISTERS
+        format.file.name = u'%s' % format.file.name
+
+        history = HistoryFormats()
+        history.format = format
+        history.file = format.file
+        history.save()
+
         format.save()
         return redirect(
             reverse('main:format_list', kwargs={"company_slug": company_slug, "requirement_pk": requirement_pk}))
@@ -304,6 +627,11 @@ def format_new(request, company_slug, requirement_pk):
             format.requirement = requirement
             format.company = company
             format.save()
+            history = HistoryFormats()
+            history.format = format
+            history.file = format.file
+            history.save()
+
         return redirect(
             reverse('main:format_list', kwargs={"company_slug": company_slug, "requirement_pk": requirement_pk}))
     else:
@@ -315,20 +643,17 @@ def format_new(request, company_slug, requirement_pk):
 def accident_edit(request, company_slug, accident_pk):
     company = get_object_or_404(Company, slug=company_slug)
     accident = Accident.objects.get(pk=accident_pk)
+    details = AccidentDetail.objects.filter(accident=accident)
     title = 'editar accidente'
     if request.POST:
-        form = AccidentForm(request.POST, request.FILES)
+        form = AccidentForm(request.POST, request.FILES, instance=accident)
         if form.is_valid():
-            accident.title = form.instance.title
-            accident.content = form.instance.content
-            accident.type_accident = form.instance.type_accident
-            accident.date = form.instance.date
-            accident.evidence = form.files['evidence']
-            accident.save()
-            return redirect(reverse('main:accident_list', kwargs={"company_slug": accident.company.pk}))
-        return redirect(reverse('main:accident_list', kwargs={"company_slug": accident.company.pk}))
+            form.save()
+            return redirect(reverse('main:accident_list', kwargs={"company_slug": company.slug}))
+        else:
+            message = 'Revise la informacion'
     form = AccidentForm(instance=accident)
-
+    form_detail = AccidentDetailForm()
     return render(request, "main/accidents/accidents.html", locals())
 
 
@@ -350,19 +675,24 @@ def accident_delete(request, company_slug, accident_pk):
 @login_required
 def accident_new(request, company_slug):
     company = get_object_or_404(Company, slug=company_slug)
-    title = 'nuevo accidente'
+    title = 'NUEVO ACCIDENTES, INCIDENTES, ENFERMEDAD OCUPACIONAL Y ACTO INSEGURO'
     active_item_menu = 'accidents'
     if request.POST:
         form = AccidentForm(request.POST, request.FILES)
-        if form.is_valid():
+        form_detail = AccidentDetailForm(request.POST)
+        if form.is_valid() and form_detail.is_valid():
             accident = form.save(commit=False)
             accident.company = company
             accident.save()
+            detail = form_detail.save(commit=False)
+            detail.accident = accident
+            detail.save()
             return redirect(reverse('main:accident_list', kwargs={"company_slug": company.slug}))
         else:
             message = 'Review all information . . .'
     else:
         form = AccidentForm()
+        form_detail = AccidentDetailForm()
     return render(request, "main/accidents/accidents.html", locals())
 
 

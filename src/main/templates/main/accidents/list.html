@@ -1,32 +1,41 @@
 {% extends 'main/layout.html' %}
 {% load static %}
-{% block more_styles %}
+{% block styles %}
     <link rel="stylesheet" type="text/css" href="{% static 'main/css/compiled/tables.css'%}"/>
+    <link href="{% static 'main/css/lib/jquery.dataTables.css' %}" type="text/css" rel="stylesheet" />
+
+    <!-- this page specific styles -->
+    <link rel="stylesheet" href=" {% static 'main/css/compiled/datatables.css' %}" type="text/css" media="screen" />
+
 {% endblock %}
 {% block content %}
     <div id="pad-wrapper" class="users-list">
     <div class="table-wrapper products-table">
         <div class="row header">
-            <h3>Accidentes</h3>
+            <h3>ACCIDENTES, INCIDENTES, ENFERMEDAD OCUPACIONAL Y ACTO INSEGURO</h3>
+            {% if request.user.is_superuser %}
             <div class="col-md-10 col-sm-12 col-xs-12 pull-right">
                 <a href="{% url 'main:accident_new' company.slug %}" class="btn-flat success pull-right">
                     <span>&#43;</span>
                     Nuevo Accidente
                 </a>
             </div>
+            {% endif %}
         </div>
         {% if message %}
             <div class="alert alert-danger alert-dismissible" role="alert">
                 <strong>Error!</strong> {{ message }} {{ response }}
             </div>
         {% endif %}
-        <table class="table table-hover">
+        <table  id="example">
             <thead>
             <tr>
                 <th>Título</th>
                 <th><span class="line"></span>Fecha</th>
                 <th><span class="line"></span>Tipo</th>
-                <th><span class="line"></span></th>
+                {% if request.user.is_superuser %}
+                <th><span class="line"></span>Opciones</th>
+                {% endif %}
                 <!--<th><span class="line"></span>Formato</th>-->
             </tr>
             </thead>
@@ -36,12 +45,14 @@
                 <td>{{accident.title}}</td>
                 <td>{{accident.date}}</td>
                 <td>{{accident.get_type_accident_display}}</td>
+                {% if request.user.is_superuser %}
                 <td>
                     <ul class="actions">
-                        <li><a href="{% url 'main:accident_edit' company.slug accident.pk %}">Edit</a></li>
-                        <li class="last"><a href="{% url 'main:accident_delete' company.slug accident.pk %}">Delete</a></li>
+                        <li><a href="{% url 'main:accident_edit' company.slug accident.pk %}">Editar</a></li>
+                        <li class="last"><a href="{% url 'main:accident_delete' company.slug accident.pk %}">Eliminar</a></li>
                     </ul>
                 </td>
+            {% endif %}
             </tr>
             {% endfor %}
             </tbody>
@@ -50,5 +61,17 @@
 </div>
 {% endblock%}
 
-{% block more_scripts %}
+{% block scripts %}
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="{% static 'main/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'main/js/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'main/js/theme.js'%}"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#example').dataTable({
+                "sPaginationType": "full_numbers"
+            });
+        });
+    </script>
 {% endblock%}
