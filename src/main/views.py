@@ -1,15 +1,20 @@
 # -*- coding: utf-8 -*-
 import datetime
+import json
+from decimal import Decimal
 
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
+from django import http
 
 from accounts.forms import WorkerForm, WorkerEditForm
+from acuerdos_sst.models import Agreement
+from fullcalendar.models import Events
 from main.models import Worker, Employee, AccidentDetail
 from indices.forms import IndexForm
-from indices.models import Index
+from indices.models import Index, Index_Detail, ValuesDetail
 from proteccion_ambiental.settings import COMPANY_JRA_SLUG
 from .models import Company, Format, Requirement, HistoryFormats, Accident, Company_Requirement, LegalRequirement, \
     MedicControl
@@ -29,8 +34,11 @@ def home(request):
     except Employee.DoesNotExist:
         employee = None
     show = False
+    show_all = False
     if employee and employee.company.slug == company_jra_slug:
         show = True
+    if user.groups.filter(name="Doctor").exists():
+        show_all = True
     return render(request, 'main/home.html', locals())
 
 
@@ -159,6 +167,7 @@ def indices(request, company_slug):
     edit = None
     indices = None
     success = False
+    save_text = 'Guardar'
     try:
         indices = Index.objects.get(company=company)
         edit = True
@@ -360,7 +369,7 @@ def legal_requirement_new(request, company_slug):
     title = 'Nuevo Requisito Legal'
     company = Company.objects.get(slug=company_slug)
     if request.POST:
-        form = LegalRequirementForm(request.POST)
+        form = LegalRequirementForm(request.POST, request.FILES)
         if form.is_valid():
             legalRequirement = form.save(commit=False)
             legalRequirement.entitie = company
@@ -379,7 +388,7 @@ def legal_requirement_edit(request, company_slug, requirement_pk):
     company = Company.objects.get(slug=company_slug)
     legalRequirement = LegalRequirement.objects.get(pk=requirement_pk)
     if request.POST:
-        form = LegalRequirementForm(request.POST, instance=legalRequirement)
+        form = LegalRequirementForm(request.POST, request.FILES, instance=legalRequirement)
         if form.is_valid():
             form.save()
             return redirect(reverse('main:legal_requirement', kwargs={'company_slug': company_slug}))
@@ -505,12 +514,465 @@ def config_requirement_format_update(request, requirement_pk, format_pk):
     return render(request, 'main/layout_with_out_nav_form.html', locals())
 
 
+def return_month(month):
+    months = [{'mes': 'Enero', 'index': 1}, {'mes': 'Febrero', 'index': 2}, {'mes': 'Marzo', 'index': 3},
+              {'mes': 'Abril', 'index': 4}, {'mes': 'Mayo', 'index': 5}, {'mes': 'Junio', 'index': 6},
+              {'mes': 'Julio', 'index': 7},
+              {'mes': 'Agosto', 'index': 8}, {'mes': 'Septiembre', 'index': 9}, {'mes': 'Octubre', 'index': 10},
+              {'mes': 'Noviembre', 'index': 11}, {'mes': 'Diciembre', 'index': 12}]
+    return months[int(month) - 1]
+
+
+def validate_index(index):
+    if index.sgsst:
+        return False
+    if index.legal:
+        return False
+    if index.icsst:
+        return False
+    if index.indice_no_conformidad:
+        return False
+    if index.medida_iperc:
+        return False
+    if index.liderazgo:
+        return False
+    if index.plan_contingencia:
+        return False
+    if index.mejora:
+        return False
+    if index.capacitacion:
+        return False
+    if index.personal_capacitado:
+        return False
+    if index.intensidad_formativa:
+        return False
+    if index.charlas:
+        return False
+    if index.incidentes:
+        return False
+    if index.inspecciones:
+        return False
+    if index.observaciones_planeadas:
+        return False
+    if index.auditorias:
+        return False
+    if index.simulacros_emergencia:
+        return False
+    if index.reconocimiento_trabajador:
+        return False
+    if index.engenieer:
+        return False
+    if index.first_auxi:
+        return False
+    if index.medic_atention:
+        return False
+    if index.lose_time:
+        return False
+    if index.fatal_accident:
+        return False
+    if index.frecuency:
+        return False
+    if index.severity:
+        return False
+    if index.accidentality:
+        return False
+    if index.professional_sick:
+        return False
+    if index.medic_exam:
+        return False
+    if index.ap_worker:
+        return False
+    if index.ap_worker_restric:
+        return False
+    if index.exposition:
+        return False
+    if index.monitoring:
+        return False
+    if index.medidas_control:
+        return False
+    return True
+
+
+def restore_index(index):
+    index.sgsst = None
+    index.legal = None
+    index.icsst = None
+    index.indice_no_conformidad = None
+    index.medida_iperc = None
+    index.liderazgo = None
+    index.plan_contingencia = None
+    index.mejora = None
+    index.capacitacion = None
+    index.personal_capacitado = None
+    index.intensidad_formativa = None
+    index.charlas = None
+    index.incidentes = None
+    index.inspecciones = None
+    index.observaciones_planeadas = None
+    index.auditorias = None
+    index.simulacros_emergencia = None
+    index.reconocimiento_trabajador = None
+    index.engenieer = None
+    index.first_auxi = None
+    index.medic_atention = None
+    index.lose_time = None
+    index.fatal_accident = None
+    index.frecuency = None
+    index.severity = None
+    index.accidentality = None
+    index.professional_sick = None
+    index.medic_exam = None
+    index.ap_worker = None
+    index.ap_worker_restric = None
+    index.exposition = None
+    index.monitoring = None
+    index.medidas_control = None
+    index.save()
+    return index
+
+
+def restore_indices(request, company_slug, mounth):
+    index = Index.objects.get(company__slug=company_slug)
+    try:
+        indices = Index_Detail.objects.get(index=index, mounth=mounth)
+        indices = restore_index(indices)
+    except Index_Detail.DoesNotExist:
+        indices = Index_Detail(index=index, mounth=mounth)
+        indices.save()
+    return redirect(
+        reverse('main:reports', kwargs={"company_slug": company_slug}))
+
+
 def mensual_report(request, company_slug):
+    report_view = True
     company = Company.objects.get(slug=company_slug)
-    if company_slug == 'jra':
-        title = 'REPORTE MENSUAL SEGURIDAD Y SALUD OCUPACIONAL'
+    is_superuser = int(request.user.is_superuser)
+    month = return_month(request.POST['mes'])
+    workers = Worker.objects.all()
+    if workers.count() > 100:
+        indice_general = 1000000
+    else:
+        indice_general = 200000
+    index = Index.objects.get(company=company)
+    try:
+        indices = Index_Detail.objects.get(index=index, mounth=month['index'])
+    except Index_Detail.DoesNotExist:
+        indices = Index_Detail(index=index, mounth=month['index'])
+        indices.save()
+    is_empty_index = validate_index(indices)
+    display_restore_btn = 0
+    if request.user.is_superuser:
+        display_restore_btn = 1
+
+    if index.is_using_sgsst:
+        if indices.sgsst == None:
+            denominator_sgsst = Events.objects.filter(Q(calendar__company=company),
+                                                      Q(event_start__month=month['index'])).count()
+            if not denominator_sgsst:
+                denominator_sgsst = 0
+
+            numerator_sgsst = Events.objects.filter(Q(calendar__company=company), Q(state=Events.REALIZADO),
+                                                    Q(event_start__month=month['index'])).count()
+            if not numerator_sgsst:
+                numerator_sgsst = 0
+            try:
+                values = ValuesDetail.objects.get(detail=indices, key='sgsst')
+            except:
+                values = ValuesDetail(detail=indices, key='sgsst')
+            values.numerator = numerator_sgsst
+            values.denominator = denominator_sgsst
+            values.save()
+            if denominator_sgsst == 0:
+                indices.sgsst = Decimal(0)
+            else:
+                indices.sgsst = Decimal(numerator_sgsst) * Decimal(100.00) / Decimal(denominator_sgsst)
+            indices.save()
+        else:
+            try:
+                values = ValuesDetail.objects.get(detail=indices, key='sgsst')
+                print('holax3')
+            except:
+                values = ValuesDetail(detail=indices, key='sgsst')
+            print(values.numerator)
+            numerator_sgsst = values.numerator
+            print(numerator_sgsst)
+            denominator_sgsst = values.denominator
+    if index.is_using_legal:
+        if indices.legal == None:
+            denominator_legal = LegalRequirement.objects.filter(Q(entitie=company),
+                                                                Q(datepublication__month=month['index'])).count()
+            if not denominator_legal:
+                denominator_legal = 0
+            print(denominator_legal)
+            numerator_legal = LegalRequirement.objects.filter(Q(entitie=company), Q(state=LegalRequirement.CUMPLIO),
+                                                              Q(datepublication__month=month['index'])).count()
+            if not numerator_legal:
+                numerator_legal = 0
+            try:
+                values = ValuesDetail.objects.get(detail=indices, key='legal')
+            except:
+                values = ValuesDetail(detail=indices, key='legal')
+            values.numerator = numerator_legal
+            values.denominator = denominator_legal
+            values.save()
+            if denominator_legal == 0:
+                indices.legal = Decimal(0)
+            else:
+                indices.legal = Decimal(numerator_legal) * Decimal(100.00) / Decimal(denominator_legal)
+            indices.save()
+        else:
+            try:
+                values = ValuesDetail.objects.get(detail=indices, key='legal')
+            except:
+                values = ValuesDetail(detail=indices, key='legal')
+            numerator_legal = values.numerator
+            denominator_legal = values.denominator
+    if index.is_using_icsst:
+        if indices.icsst == None:
+            denominator_icsst = Agreement.objects.filter(Q(company=company),
+                                                         Q(date__month=month['index'])).count()
+            if not denominator_icsst:
+                denominator_icsst = 0
+            print(denominator_icsst)
+            numerator_icsst = Agreement.objects.filter(Q(company=company), Q(percentage=Decimal(100.0)),
+                                                       Q(date__month=month['index'])).count()
+            if not numerator_icsst:
+                numerator_icsst = 0
+            try:
+                values = ValuesDetail.objects.get(detail=indices, key='icsst')
+            except:
+                values = ValuesDetail(detail=indices, key='icsst')
+            values.numerator = numerator_icsst
+            values.denominator = denominator_icsst
+            values.save()
+            if denominator_icsst == 0:
+                indices.icsst = Decimal(0)
+            else:
+                indices.icsst = Decimal(numerator_icsst) * Decimal(100.00) / Decimal(denominator_icsst)
+            indices.save()
+        else:
+            try:
+                values = ValuesDetail.objects.get(detail=indices, key='icsst')
+            except:
+                values = ValuesDetail(detail=indices, key='icsst')
+            numerator_icsst = values.numerator
+            denominator_icsst = values.denominator
+    if index.is_using_indice_no_conformidad:
+        if indices.indice_no_conformidad == None:
+            denominator_indice_no_conformidad = Agreement.objects.filter(Q(company=company),
+                                                                         Q(date__month=month['index'])).count()
+            if not denominator_indice_no_conformidad:
+                denominator_indice_no_conformidad = 0
+            print(denominator_indice_no_conformidad)
+            numerator_indice_no_conformidad = Agreement.objects.filter(Q(company=company), Q(percentage=Decimal(100.0)),
+                                                                       Q(date__month=month['index'])).count()
+            if not numerator_indice_no_conformidad:
+                numerator_indice_no_conformidad = 0
+            try:
+                values = ValuesDetail.objects.get(detail=indices, key='indice_no_conformidad')
+            except:
+                values = ValuesDetail(detail=indices, key='indice_no_conformidad')
+            values.numerator = numerator_indice_no_conformidad
+            values.denominator = denominator_indice_no_conformidad
+            values.save()
+            if denominator_indice_no_conformidad == 0:
+                indices.indice_no_conformidad = Decimal(0)
+            else:
+                indices.indice_no_conformidad = Decimal(numerator_indice_no_conformidad) * Decimal(100.00) / Decimal(
+                    denominator_indice_no_conformidad)
+            indices.save()
+        else:
+            try:
+                values = ValuesDetail.objects.get(detail=indices, key='indice_no_conformidad')
+            except:
+                values = ValuesDetail(detail=indices, key='indice_no_conformidad')
+            numerator_indice_no_conformidad = values.numerator
+            denominator_indice_no_conformidad = values.denominator
+    if index.is_using_medida_iperc:
+        if indices.medida_iperc == None:
+            denominator_medida_iperc = Agreement.objects.filter(Q(company=company),
+                                                                Q(date__month=month['index'])).count()
+            if not denominator_medida_iperc:
+                denominator_medida_iperc = 0
+            print(denominator_medida_iperc)
+            numerator_medida_iperc = Agreement.objects.filter(Q(company=company), Q(percentage=Decimal(100.0)),
+                                                              Q(date__month=month['index'])).count()
+            if not numerator_medida_iperc:
+                numerator_medida_iperc = 0
+            try:
+                values = ValuesDetail.objects.get(detail=indices, key='medida_iperc')
+            except:
+                values = ValuesDetail(detail=indices, key='medida_iperc')
+            values.numerator = numerator_medida_iperc
+            values.denominator = denominator_medida_iperc
+            values.save()
+            if denominator_medida_iperc == 0:
+                indices.medida_iperc = Decimal(0)
+            else:
+                indices.medida_iperc = Decimal(numerator_medida_iperc) * Decimal(100.00) / Decimal(
+                    denominator_medida_iperc)
+            indices.save()
+        else:
+            try:
+                values = ValuesDetail.objects.get(detail=indices, key='medida_iperc')
+            except:
+                values = ValuesDetail(detail=indices, key='medida_iperc')
+            numerator_medida_iperc = values.numerator
+            denominator_medida_iperc = values.denominator
+    if index.is_using_liderazgo:
+        if indices.liderazgo == None:
+            denominator_liderazgo = Agreement.objects.filter(Q(company=company),
+                                                             Q(date__month=month['index'])).count()
+            if not denominator_liderazgo:
+                denominator_liderazgo = 0
+            print(denominator_liderazgo)
+            numerator_liderazgo = Agreement.objects.filter(Q(company=company), Q(percentage=Decimal(100.0)),
+                                                           Q(date__month=month['index'])).count()
+            if not numerator_liderazgo:
+                numerator_liderazgo = 0
+            try:
+                values = ValuesDetail.objects.get(detail=indices, key='liderazgo')
+            except:
+                values = ValuesDetail(detail=indices, key='liderazgo')
+            values.numerator = numerator_liderazgo
+            values.denominator = denominator_liderazgo
+            values.save()
+            if denominator_liderazgo == 0:
+                indices.liderazgo = Decimal(0)
+            else:
+                indices.liderazgo = Decimal(numerator_liderazgo) * Decimal(100.00) / Decimal(
+                    denominator_liderazgo)
+            indices.save()
+        else:
+            try:
+                values = ValuesDetail.objects.get(detail=indices, key='liderazgo')
+            except:
+                values = ValuesDetail(detail=indices, key='liderazgo')
+            numerator_liderazgo = values.numerator
+            denominator_liderazgo = values.denominator
+    if index.is_using_plan_contingencia:
+        if indices.plan_contingencia == None:
+            denominator_plan_contingencia = Agreement.objects.filter(Q(company=company),
+                                                                     Q(date__month=month['index'])).count()
+            if not denominator_plan_contingencia:
+                denominator_plan_contingencia = 0
+            print(denominator_plan_contingencia)
+            numerator_plan_contingencia = Agreement.objects.filter(Q(company=company), Q(percentage=Decimal(100.0)),
+                                                                   Q(date__month=month['index'])).count()
+            if not numerator_plan_contingencia:
+                numerator_plan_contingencia = 0
+            try:
+                values = ValuesDetail.objects.get(detail=indices, key='plan_contingencia')
+            except:
+                values = ValuesDetail(detail=indices, key='plan_contingencia')
+            values.numerator = numerator_plan_contingencia
+            values.denominator = denominator_plan_contingencia
+            values.save()
+            if denominator_plan_contingencia == 0:
+                indices.plan_contingencia = Decimal(0)
+            else:
+                indices.plan_contingencia = Decimal(numerator_plan_contingencia) * Decimal(100.00) / Decimal(
+                    denominator_plan_contingencia)
+            indices.save()
+        else:
+            try:
+                values = ValuesDetail.objects.get(detail=indices, key='plan_contingencia')
+            except:
+                values = ValuesDetail(detail=indices, key='plan_contingencia')
+            numerator_plan_contingencia = values.numerator
+            denominator_plan_contingencia = values.denominator
+    title = 'REPORTE MENSUAL SEGURIDAD Y SALUD OCUPACIONAL'
     date_now = datetime.date.today()
     return render(request, 'main/reports/reports_mensual.html', locals())
+
+
+def indices_update(request, company_slug, indice_slug):
+    company = Company.objects.get(slug=company_slug)
+    index = Index.objects.get(company=company)
+    try:
+        indices = Index_Detail.objects.get(index=index, mounth=request.POST['month'])
+    except Index_Detail.DoesNotExist:
+        indices = Index_Detail(index=index, mounth=request.POST['month'])
+        indices.save()
+    response = dict()
+    val = None
+    numerator = request.POST['numerator']
+    denominator = request.POST['denominator']
+    try:
+        values = ValuesDetail.objects.get(detail=indices, key=indice_slug)
+    except ValuesDetail.DoesNotExist:
+        values = ValuesDetail(detail=indices, key=indice_slug)
+        values.save()
+    values.numerator = numerator
+    values.denominator = denominator
+    values.save()
+    print('hola', numerator, denominator)
+    if 'sgsst' == indice_slug:
+        if denominator == 0:
+            indices.sgsst = Decimal(0)
+        else:
+            indices.sgsst = Decimal(numerator) * Decimal(100.0) / Decimal(denominator)
+        indices.save()
+        indices = Index_Detail.objects.get(index=index, mounth=request.POST['month'])
+        val = indices.sgsst
+        print(indices.sgsst)
+    if 'legal' == indice_slug:
+        if denominator == 0:
+            indices.legal = Decimal(0)
+        else:
+            indices.legal = Decimal(numerator) * Decimal(100.0) / Decimal(denominator)
+        indices.save()
+        indices = Index_Detail.objects.get(index=index, mounth=request.POST['month'])
+        val = indices.legal
+        print(indices.legal)
+    if 'icsst' == indice_slug:
+        if denominator == 0:
+            indices.icsst = Decimal(0)
+        else:
+            indices.icsst = Decimal(numerator) * Decimal(100.0) / Decimal(denominator)
+        indices.save()
+        indices = Index_Detail.objects.get(index=index, mounth=request.POST['month'])
+        val = indices.icsst
+        print(indices.icsst)
+    if 'indice_no_conformidad' == indice_slug:
+        if denominator == 0:
+            indices.indice_no_conformidad = Decimal(0)
+        else:
+            indices.indice_no_conformidad = Decimal(numerator) * Decimal(100.0) / Decimal(denominator)
+        indices.save()
+        indices = Index_Detail.objects.get(index=index, mounth=request.POST['month'])
+        val = indices.indice_no_conformidad
+        print(indices.indice_no_conformidad)
+    if 'medida_iperc' == indice_slug:
+        if denominator == 0:
+            indices.medida_iperc = Decimal(0)
+        else:
+            indices.medida_iperc = Decimal(numerator) * Decimal(100.0) / Decimal(denominator)
+        indices.save()
+        indices = Index_Detail.objects.get(index=index, mounth=request.POST['month'])
+        val = indices.medida_iperc
+        print(indices.medida_iperc)
+    if 'liderazgo' == indice_slug:
+        if denominator == 0:
+            indices.liderazgo = Decimal(0)
+        else:
+            indices.liderazgo = Decimal(numerator) * Decimal(100.0) / Decimal(denominator)
+        indices.save()
+        indices = Index_Detail.objects.get(index=index, mounth=request.POST['month'])
+        val = indices.liderazgo
+        print(indices.liderazgo)
+    if 'plan_contingencia' == indice_slug:
+        if denominator == 0:
+            indices.plan_contingencia = Decimal(0)
+        else:
+            indices.plan_contingencia = Decimal(numerator) * Decimal(100.0) / Decimal(denominator)
+        indices.save()
+        indices = Index_Detail.objects.get(index=index, mounth=request.POST['month'])
+        val = indices.plan_contingencia
+        print(indices.plan_contingencia)
+    response['success'] = True
+    response['val'] = str(val)
+    return http.HttpResponse(json.dumps(response), content_type="application/json")
 
 
 @login_required
@@ -585,7 +1047,6 @@ def accident_list(request, company_slug):
     company = get_object_or_404(Company, slug=company_slug)
     accidents = Accident.objects.filter(company=company)
     accident_view = True
-    print(request.user.is_superuser)
     return render(request, "main/accidents/list.html", locals())
 
 
@@ -646,13 +1107,13 @@ def accident_edit(request, company_slug, accident_pk):
     details = AccidentDetail.objects.filter(accident=accident)
     title = 'editar accidente'
     if request.POST:
-        form = AccidentForm(request.POST, request.FILES, instance=accident)
+        form = AccidentForm(request.POST, request.FILES, instance=accident, user=request.user)
         if form.is_valid():
             form.save()
             return redirect(reverse('main:accident_list', kwargs={"company_slug": company.slug}))
         else:
             message = 'Revise la informacion'
-    form = AccidentForm(instance=accident)
+    form = AccidentForm(instance=accident, user=request.user)
     form_detail = AccidentDetailForm()
     return render(request, "main/accidents/accidents.html", locals())
 
@@ -678,7 +1139,7 @@ def accident_new(request, company_slug):
     title = 'NUEVO ACCIDENTES, INCIDENTES, ENFERMEDAD OCUPACIONAL Y ACTO INSEGURO'
     active_item_menu = 'accidents'
     if request.POST:
-        form = AccidentForm(request.POST, request.FILES)
+        form = AccidentForm(request.POST, request.FILES, user=request.user)
         form_detail = AccidentDetailForm(request.POST)
         if form.is_valid() and form_detail.is_valid():
             accident = form.save(commit=False)
@@ -691,7 +1152,7 @@ def accident_new(request, company_slug):
         else:
             message = 'Review all information . . .'
     else:
-        form = AccidentForm()
+        form = AccidentForm(user=request.user)
         form_detail = AccidentDetailForm()
     return render(request, "main/accidents/accidents.html", locals())
 
@@ -705,4 +1166,10 @@ def agreement(request, company_slug):
 @login_required
 def reports(request, company_slug):
     company = get_object_or_404(Company, slug=company_slug)
+    months = [{'mes': 'Enero', 'index': 1}, {'mes': 'Febrero', 'index': 2}, {'mes': 'Marzo', 'index': 3},
+              {'mes': 'Abril', 'index': 4}, {'mes': 'Mayo', 'index': 5}, {'mes': 'Junio', 'index': 6},
+              {'mes': 'Julio', 'index': 7},
+              {'mes': 'Agosto', 'index': 8}, {'mes': 'Septiembre', 'index': 9}, {'mes': 'Octubre', 'index': 10},
+              {'mes': 'Noviembre', 'index': 11}, {'mes': 'Diciembre', 'index': 12}]
+    year = datetime.datetime.now().year
     return render(request, "main/reports/reports.html", locals())

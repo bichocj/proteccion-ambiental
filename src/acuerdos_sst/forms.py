@@ -1,6 +1,19 @@
 from django.forms import ModelForm, forms
 
-from acuerdos_sst.models import Agreement, AgreementDetail
+from acuerdos_sst.models import Agreement, AgreementDetail, Metting
+from main.functions import add_form_control_class
+
+
+class MettingForm(ModelForm):
+    class Meta:
+        model = Metting
+        fields = ['title','date']
+
+    def __init__(self, *args, **kwargs):
+        super(MettingForm, self).__init__(*args, **kwargs)
+        _instance = kwargs.pop('instance', None)
+        add_form_control_class(self.fields)
+        self.fields['date'].widget.attrs['class'] = 'form-control input-datepicker'
 
 
 class AgreementForm(ModelForm):

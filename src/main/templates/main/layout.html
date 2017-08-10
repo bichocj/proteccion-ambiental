@@ -33,12 +33,6 @@
                     <span>Trabajadores</span>
                 </a>
             </li>
-            <li>
-                <a href="{% url 'fullcalendar:calendar_list' company.slug %}">
-                    <i class="icon-calendar-empty"></i>
-                    <span>Programas Anuales</span>
-                </a>
-            </li>
             <!--<li>
                 <a href="{% url 'main:indices' company.slug %}">
                     <i class="icon-th-large"></i>
@@ -52,6 +46,12 @@
                 </a>
             </li>-->
         {% endif %}
+            <li>
+                <a href="{% url 'fullcalendar:calendar_list' company.slug %}">
+                    <i class="icon-calendar-empty"></i>
+                    <span>Programas Anuales</span>
+                </a>
+            </li>
            {% if request.user|has_group:"Doctor" and not request.user.is_superuser %}
                 <li>
                     <a href="{% url 'main:medic_exam' company.slug %}">
@@ -60,15 +60,16 @@
                     </a>
                 </li>
             {% endif %}
-         {% if not request.user|has_group:"Doctor"  %}
+
             <li>
                 <a href="{% url 'main:accident_list' company.slug %}">
                     <i class="icon-warning-sign"></i>
                     <span>Accidentes</span>
                 </a>
             </li>
+        {% if not request.user|has_group:"Doctor"  %}
             <li>
-                <a href="{% url 'acuerdos_sst:agreement_list' company.slug %}">
+                <a href="{% url 'acuerdos_sst:meeting_list' company.slug %}">
                     <i class="icon-comments-alt"></i>
                     <span>Comite SST</span>
                 </a>

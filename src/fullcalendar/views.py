@@ -3,8 +3,10 @@ import json
 
 from django import http
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import ugettext as _
 
@@ -14,8 +16,12 @@ from main.models import Company
 
 
 def calendar_list(request, company_slug):
-    calendars = Calendar.objects.all()
+    group = Group.objects.get(name="Doctor")
     company = get_object_or_404(Company, slug=company_slug)
+    if group in request.user.groups.all():
+        calendars = Calendar.objects.filter(Q(company=company), Q(type=Calendar.DOCTOR))
+    else:
+        calendars = Calendar.objects.filter(Q(company=company), ~Q(type=Calendar.DOCTOR))
     return render(request, "fullcalendar/list.html", locals())
 
 
@@ -25,9 +31,12 @@ def calendar_new(request, company_slug):
     company = get_object_or_404(Company, slug=company_slug)
     calendar = True
     if request.POST:
-        form = CalendarModelForm(request.POST)
+        form = CalendarModelForm(request.POST, user=request.user)
         if form.is_valid():
             calendar = form.save(commit=False)
+            group = Group.objects.get(name="Doctor")
+            if group in request.user.groups.all():
+                calendar.type = Calendar.DOCTOR
             calendar.created_by = request.user
             calendar.company = company
             calendar.save()
@@ -36,7 +45,7 @@ def calendar_new(request, company_slug):
         else:
             message = 'Revisa la informacion'
     else:
-        form = CalendarModelForm()
+        form = CalendarModelForm(user=request.user)
 
     return render(request, "main/layout_form.html", locals())
 
@@ -44,17 +53,23 @@ def calendar_new(request, company_slug):
 @login_required
 def calendar_edit(request, company_slug, calendar_id):
     title = _('Editar Cronorama')
+    group = Group.objects.get(name="Doctor")
     company = get_object_or_404(Company, slug=company_slug)
     calendar = Calendar.objects.get(pk=calendar_id)
     if request.POST:
-        form = CalendarModelForm(request.POST, instance=calendar)
+        form = CalendarModelForm(request.POST, instance=calendar, user=request.user)
         if form.is_valid():
+            calendar = form.save(commit=False)
+            if group in request.user.groups.all():
+                calendar.type = Calendar.DOCTOR
             calendar.save()
             return redirect(reverse('fullcalendar:calendar_list', args=[company_slug]))
         else:
             message = 'Revisa la informacion'
     else:
-        form = CalendarModelForm(instance=calendar)
+        if group in request.user.groups.all():
+            calendar.type = None
+        form = CalendarModelForm(instance=calendar, user=request.user)
 
     return render(request, "main/layout_form.html", locals())
 
@@ -63,6 +78,9 @@ def calendar_edit(request, company_slug, calendar_id):
 def calendar_delete(request, company_slug, calendar_id):
     company = get_object_or_404(Company, slug=company_slug)
     calendar = Calendar.objects.get(pk=calendar_id)
+    events = Events.objects.filter(calendar=calendar)
+    for e in events:
+        e.delete()
     calendar.delete()
     return redirect(reverse('fullcalendar:calendar_list', args=[company_slug]))
 
@@ -70,12 +88,15 @@ def calendar_delete(request, company_slug, calendar_id):
 @login_required
 def view_calendar(request, company_slug, slug, calendar_id):
     calendar = True
+    company = None
     try:
         company = get_object_or_404(Company, slug=company_slug)
         print('sluug', slug)
         calendar = Calendar.objects.get(company=company, slug=slug, id=calendar_id)
     except ObjectDoesNotExist:
         calendar = get_object_or_404(Calendar, id=calendar_id)
+    dones = Events.objects.filter(state=Events.REALIZADO, calendar=calendar).count()
+    not_do = Events.objects.filter(calendar=calendar).count() - dones
     # company = request.user.company
     form = EventsModelForm(calendar=calendar)
     info = {
@@ -116,11 +137,12 @@ def events_json(request, calendar_id):
 def save_event(request, slug):
     response = {}
     if request.POST:
+        print(request.FILES)
         if request.POST.get('id'):
             e = get_object_or_404(Events, pk=request.POST.get('id'))
-            form = EventsModelForm(request.POST, instance=e)
+            form = EventsModelForm(request.POST, request.FILES, instance=e)
         else:
-            form = EventsModelForm(request.POST)
+            form = EventsModelForm(request.POST, request.FILES)
         print('gogogo')
         if form.is_valid():
             print('gogogox2')
@@ -134,17 +156,13 @@ def save_event(request, slug):
                 event.type_capacitations = None
                 event.hours_worked = None
                 event.number_workers = None
-            if event.calendar.type == Calendar.OTRO or event.calendar.type == Calendar.CHARLAS or event.calendar.type == Calendar.SIMULATION:
+            if event.calendar.type == Calendar.OTRO or event.calendar.type == Calendar.CHARLAS or event.calendar.type == Calendar.SIMULATION or event.calendar.type == Calendar.DOCTOR:
                 event.type_inspeccions = None
                 event.type_capacitations = None
                 event.number_workers = None
                 event.hours_worked = None
-            print(request.POST)
-            print(event.type_inspeccions)
             event.type = event.calendar.type
-            print(event.type)
             event.save()
-            print('gogogox4')
             response['success'] = True
             response['message'] = _("Save Success")
             response['id'] = event.id
@@ -154,6 +172,7 @@ def save_event(request, slug):
             response['allDay'] = event.event_start.hour == 0 and event.event_end.minute == 0
         else:
             response['success'] = False
+            print(form.errors)
             errors = form.errors
             response['errors'] = list(errors)
     else:
@@ -184,6 +203,7 @@ def get_event(request):
             'number_workers': event.number_workers,
             'responsable': event.responsable,
             'type_capacitations': event.type_capacitations,
+            'url_evidence': event.evidence.file.name if event.evidence else 'Ninguno',
 
             # 'member': event.member.id,
             # 'member_fullname': event.member.first_name + ' ' + event.member.last_name
@@ -196,33 +216,53 @@ def get_event(request):
     return http.HttpResponse(json.dumps(response), content_type="application/json")
 
 
-def update_event(request):
+def update_event(request, slug):
     response = {}
     if request.POST:
-        event_id = request.POST.get('id')
-        event = get_object_or_404(Events, id=event_id)
-
-        event.event_start = datetime.datetime.strptime(request.POST.get('start'), '%d/%m/%Y %I:%M %p')
-        event.event_end = datetime.datetime.strptime(request.POST.get('end'), '%d/%m/%Y %I:%M %p')
-        event.title = request.POST.get('title')
-        event.save()
-
-        response['success'] = True
-        response['data'] = {
-            'event': event.id,
-            'event_start': event.event_start.strftime('%Y-%m-%d %I:%M %p %z'),
-            'event_end': event.event_end.strftime('%Y-%m-%d %I:%M %p %z'),
-            'title': event.title,
-            'description': event.description,
-            'observation': event.observation,
-            'hours_worked': event.hours_worked,
-            'number_workers': event.number_workers
-            # 'member': event.member.id
-        }
+        print(request.FILES)
+        if request.POST.get('id'):
+            e = get_object_or_404(Events, pk=request.POST.get('id'))
+            form = EventsModelForm(request.POST, request.FILES, instance=e)
+        else:
+            form = EventsModelForm(request.POST, request.FILES)
+        print('gogogo')
+        if form.is_valid():
+            print('gogogox2')
+            calendar = get_object_or_404(Calendar, slug=slug)
+            event = form.save(commit=False)
+            event.calendar = calendar
+            event.created_by = request.user
+            if event.calendar.type == Calendar.CAPACITATION:
+                event.type_inspeccions = None
+            if event.calendar.type == Calendar.INSPECTION:
+                event.type_capacitations = None
+                event.hours_worked = None
+                event.number_workers = None
+            if event.calendar.type == Calendar.OTRO or event.calendar.type == Calendar.CHARLAS or event.calendar.type == Calendar.SIMULATION or event.calendar.type == Calendar.DOCTOR:
+                event.type_inspeccions = None
+                event.type_capacitations = None
+                event.number_workers = None
+                event.hours_worked = None
+            event.type = event.calendar.type
+            event.save()
+            response['success'] = True
+            response['message'] = _("Save Success")
+            response['id'] = event.id
+            response['title'] = event.title
+            response['start'] = event.event_start.strftime('%Y-%m-%d %I:%M %p %z')
+            response['end'] = event.event_end.strftime('%Y-%m-%d %I:%M %p %z')
+            response['allDay'] = event.event_start.hour == 0 and event.event_end.minute == 0
+        else:
+            response['success'] = False
+            print(form.errors)
+            errors = form.errors
+            response['errors'] = list(errors)
     else:
-        response['success'] = False
+        response['success'] = True
         response['message'] = _("Invalid request")
-    return http.HttpResponse(json.dumps(response), content_type="application/json")
+    return http.HttpResponse(
+        json.dumps(response),
+        content_type="application/json")
 
 
 def settings_calendar(request, slug):

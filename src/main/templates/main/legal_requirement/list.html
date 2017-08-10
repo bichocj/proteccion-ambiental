@@ -4,7 +4,7 @@
 {% endblock %}
 {% block content %}
 
-<div id="pad-wrapper" class="users-list">
+<div id="pad-wrapper" class="">
     <div class="row header">
         <h3>REQUISITOS LEGALES</h3>
         {% if request.user.is_superuser %}
@@ -16,17 +16,31 @@
             </div>
     {% endif %}
     </div>
-    <div id="pad-wrapper" class="users-list">
-
-    <table class="table table-hover">
+    <div class="row section">
+        <table class="table table-hover">
         <thead>
         <tr>
-            <th>Normativa</th>
-            <th>Fecha Publicacion</th>
-            <th>Titulo Dispositivo</th>
+            <th colspan="4"><span class="line"></span>Identificacion</th>
+            <th colspan="1"><span class="line"></span>Interpretacion</th>
+            <th colspan="5"><span class="line"></span>Control</th>
+            <th colspan="2"><span class="line"></span></th>
+        </tr>
+        <tr>
+            <th><span class="line"></span>Tipo Normativa</th>
+            <th><span class="line"></span>Codigo Normativa</th>
+            <th><span class="line"></span>Fecha Publicacion</th>
+            <th><span class="line"></span>Titulo Dispositivo Legal</th>
+            <th><span class="line"></span>Que aplica?</th>
+            <th><span class="line"></span>Frecuencia</th>
+            <th><span class="line"></span>Fecha Ult. Evaluaciones</th>
+            <th><span class="line"></span>Responsable</th>
+            <th><span class="line"></span>Cumplimiento</th>
+            <th><span class="line"></span>Observaciones</th>
+            <th><span class="line"></span>Tipo de Registro</th>
+            <th><span class="line"></span>Estado</th>
 
             {% if request.user.is_superuser %}
-            <th>Opciones</th>
+            <th><span class="line"></span>Opciones</th>
             {% endif %}
         </tr>
         </thead>
@@ -34,9 +48,19 @@
 
         {% for requirement in legal_requirements %}
         <tr>
+
+            <td><b>{{requirement.type_normativa}}</b></td>
             <td><b>{{requirement.normativa}}</b></td>
             <td><b>{{requirement.datepublication}}</b></td>
             <td><b>{{requirement.title}}</b></td>
+            <td><b>{{requirement.apply}}</b></td>
+            <td><b>{{requirement.frecuency}}</b></td>
+            <td><b>{{requirement.date_last_evaluation}}</b></td>
+            <td><b>{{requirement.responsable}}</b></td>
+            <td><b>{{requirement.cumplimiento}}</b></td>
+            <td><b>{{requirement.observations}}</b></td>
+            <td><b>{{requirement.get_type_register_display}}</b></td>
+            <td><b>{{ requirement.get_state_display }}</b></td>
 
             {% if request.user.is_superuser %}
             <td>
@@ -52,6 +76,7 @@
         </tbody>
 
     </table>
+    </div>
 
 </div>
 
