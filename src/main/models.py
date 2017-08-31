@@ -281,7 +281,7 @@ class Format(models.Model):
 class HistoryFormats(models.Model):
     format = models.ForeignKey(Format, null=True, blank=True)
     file = models.FileField(upload_to="history/%Y/%m/%d", null=True, blank=True)
-    date_time = models.DateTimeField(default=datetime.now())
+    date_time = models.DateTimeField(auto_now=True)
 
 
 class UseProduct(models.Model):
