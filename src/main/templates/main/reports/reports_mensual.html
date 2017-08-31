@@ -24,7 +24,8 @@
         <div class="col-md-12">
             <h3>Mes {{ month.mes }}</h3>
             <h4 class="">Compañia: {{ company.name }}</h4>
-            <a class="btn-flat icon pull-right" id="restore_btn" href="{% url 'main:refresh_inform' company_slug month.index %}">
+            <a class="btn-flat icon pull-right" id="restore_btn"
+               href="{% url 'main:refresh_inform' company_slug month.index %}">
                 <i class="icon-refresh"></i> Actualizar informe
             </a>
 
@@ -46,7 +47,8 @@
                             <label>Actividades Plan Trabajo:</label>
                         </div>
                         <div class="col-md-3 ">
-                            <input id="numerator_sgsst" class="form-control" type="number" value="{{ values_details|get_by_key:'sgsst'|numerator }}" step="0.01"/>
+                            <input id="numerator_sgsst" class="form-control" type="number"
+                                   value="{{ values_details|get_by_key:'sgsst'|numerator }}" step="0.01"/>
                         </div>
                         <div class="field-box">
                             <div class="col-md-2">
@@ -90,12 +92,12 @@
 
                     <div class="col-md-12 field-box">
                         <div class="col-md-2">
-                            <label>Requisitos Cumplidos  :</label>
+                            <label>Requisitos Cumplidos :</label>
                         </div>
                         <div class="col-md-3 ">
 
                             <input id="numerator_legal" class="form-control" type="number"
-                                   value="{{ values_details|get_by_key:'legal' }}"/>
+                                   value="{{ values_details|get_by_key:'legal'|numerator }}"/>
                         </div>
 
                         <div class="field-box">
@@ -146,7 +148,7 @@
                         <div class="col-md-3 ">
 
                             <input id="numerator_icsst" class="form-control" type="number"
-                                   value="{{ values_details|get_by_key:'icsst' }}"/>
+                                   value="{{ values_details|get_by_key:'icsst' |numerator }}"/>
                         </div>
 
                         <div class="field-box">
@@ -197,7 +199,7 @@
                         <div class="col-md-3 ">
 
                             <input id="numerator_indice_no_conformidad" class="form-control" type="number"
-                                   value="{{ values_details|get_by_key:'indice_no_conformidad' }}"/>
+                                   value="{{ values_details|get_by_key:'indice_no_conformidad' |numerator }}"/>
                         </div>
 
                         <div class="field-box">
@@ -247,7 +249,7 @@
                         <div class="col-md-3 ">
 
                             <input id="numerator_medida_iperc" class="form-control" type="number"
-                                   value="{{ values_details|get_by_key:'medida_iperc' }}"/>
+                                   value="{{ values_details|get_by_key:'medida_iperc' |numerator }}"/>
                         </div>
 
                         <div class="field-box">
@@ -297,7 +299,7 @@
                         <div class="col-md-3 ">
 
                             <input id="numerator_liderazgo" class="form-control" type="number"
-                                   value="{{ values_details|get_by_key:'liderazgo' }}"/>
+                                   value="{{ values_details|get_by_key:'liderazgo' |numerator }}"/>
                         </div>
 
                         <div class="field-box">
@@ -347,7 +349,7 @@
                         <div class="col-md-3 ">
 
                             <input id="numerator_plan_contingencia" class="form-control" type="number"
-                                   value="{{ values_details|get_by_key:'plan_contingencia' }}"/>
+                                   value="{{ values_details|get_by_key:'plan_contingencia' |numerator }}"/>
                         </div>
 
                         <div class="field-box">
@@ -916,8 +918,8 @@
                 $('#denominator_liderazgo').attr('readonly', true);
                 $('#liderazgo_btn').css({display: "none"});
             }
-            var display_restore={{ display_restore_btn }};
-            if(display_restore == 0){
+            var display_restore ={{ display_restore_btn }};
+            if (display_restore == 0) {
                 $('#restore_btn').css({display: "none"})
             }
             $('#sgsst_btn').click(function (e) {

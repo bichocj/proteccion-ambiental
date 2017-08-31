@@ -646,11 +646,6 @@ def restore_indices(request, company_slug, mounth):
 def refresh_inform(request, company_slug, mes):
     company = Company.objects.get(slug=company_slug)
     month = return_month(mes)
-    workers = Worker.objects.all()
-    if workers.count() > 100:
-        indice_general = 1000000
-    else:
-        indice_general = 200000
     index, _ = Index.objects.get_or_create(company=company)
     index_detail, _ = Index_Detail.objects.get_or_create(index=index, mounth=month['index'])
 
@@ -860,6 +855,12 @@ def refresh_inform(request, company_slug, mes):
 
 
 def mensual_report(request, company_slug, mes):
+    workers = Worker.objects.all()
+    if workers.count() > 100:
+        indice_general = 1000000
+    else:
+        indice_general = 200000
+
     # if request.method == 'GET' or request.GET:
     #     return redirect(reverse('main:reports', kwargs={'company_slug': company_slug}))
     company = get_object_or_404(Company, slug=company_slug)
