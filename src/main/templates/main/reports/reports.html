@@ -12,7 +12,7 @@
         <div class="grid-wrapper">
             <div class="row show-grid text-center">
                 <div class="col-md-6">
-                    <form action="{% url 'main:mensual_report' company_slug %}" method="post">
+                    <form action="{% url 'main:mensual_report' company_slug  0%}" method="post">
                         {% csrf_token %}
                         <div class="col-md-12" style="margin-bottom: 20px;">
                             <h4 class="title">Reporte Mensual</h4>
@@ -27,7 +27,7 @@
                             </select>
                         </div>
                         <div>
-                            <button type="submit" class="btn-flat">Reporte
+                            <button type="button" class="btn-flat report-by-month">Reporte
                                 Mensual
                             </button>
                         </div>
@@ -65,5 +65,9 @@
             });
 
         });
+
+        $('.report-by-month').click(function () {
+            window.location = '/{{ company_slug }}/reports/mensual/'+$(".select2 option:checked").val()+'/';
+        })
     </script>
 {% endblock %}

@@ -643,251 +643,237 @@ def restore_indices(request, company_slug, mounth):
         reverse('main:reports', kwargs={"company_slug": company_slug}))
 
 
-def mensual_report(request, company_slug):
-    report_view = True
+def refresh_inform(request, company_slug, mes):
     company = Company.objects.get(slug=company_slug)
-    is_superuser = int(request.user.is_superuser)
-    month = return_month(request.POST['mes'])
+    month = return_month(mes)
     workers = Worker.objects.all()
     if workers.count() > 100:
         indice_general = 1000000
     else:
         indice_general = 200000
-    index = Index.objects.get(company=company)
-    try:
-        indices = Index_Detail.objects.get(index=index, mounth=month['index'])
-    except Index_Detail.DoesNotExist:
-        indices = Index_Detail(index=index, mounth=month['index'])
-        indices.save()
-    is_empty_index = validate_index(indices)
-    display_restore_btn = 0
-    if request.user.is_superuser:
-        display_restore_btn = 1
+    index, _ = Index.objects.get_or_create(company=company)
+    index_detail, _ = Index_Detail.objects.get_or_create(index=index, mounth=month['index'])
+
+    # is_empty_index = validate_index(index_detail)
+    # display_restore_btn = 0
+    # if request.user.is_superuser:
+    #     display_restore_btn = 1
 
     if index.is_using_sgsst:
-        if indices.sgsst == None:
-            denominator_sgsst = Events.objects.filter(Q(calendar__company=company),
-                                                      Q(event_start__month=month['index'])).count()
-            if not denominator_sgsst:
-                denominator_sgsst = 0
+        denominator_sgsst = Events.objects.filter(Q(calendar__company=company),
+                                                  Q(event_start__month=month['index'])).count()
+        if not denominator_sgsst:
+            denominator_sgsst = 0
 
-            numerator_sgsst = Events.objects.filter(Q(calendar__company=company), Q(state=Events.REALIZADO),
-                                                    Q(event_start__month=month['index'])).count()
-            if not numerator_sgsst:
-                numerator_sgsst = 0
-            try:
-                values = ValuesDetail.objects.get(detail=indices, key='sgsst')
-            except:
-                values = ValuesDetail(detail=indices, key='sgsst')
-            values.numerator = numerator_sgsst
-            values.denominator = denominator_sgsst
-            values.save()
-            if denominator_sgsst == 0:
-                indices.sgsst = Decimal(0)
-            else:
-                indices.sgsst = Decimal(numerator_sgsst) * Decimal(100.00) / Decimal(denominator_sgsst)
-            indices.save()
-        else:
-            try:
-                values = ValuesDetail.objects.get(detail=indices, key='sgsst')
-                print('holax3')
-            except:
-                values = ValuesDetail(detail=indices, key='sgsst')
-            print(values.numerator)
-            numerator_sgsst = values.numerator
-            print(numerator_sgsst)
-            denominator_sgsst = values.denominator
+        numerator_sgsst = Events.objects.filter(Q(calendar__company=company), Q(state=Events.REALIZADO),
+                                                Q(event_start__month=month['index'])).count()
+        if not numerator_sgsst:
+            numerator_sgsst = 0
+
+        values, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='sgsst')
+
+        values.numerator = numerator_sgsst
+        values.denominator = denominator_sgsst
+        values.save()
+
+        index_detail.sgsst = Decimal(numerator_sgsst) * Decimal(100.00) / Decimal(denominator_sgsst)
+        index_detail.save()
+
     if index.is_using_legal:
-        if indices.legal == None:
-            denominator_legal = LegalRequirement.objects.filter(Q(entitie=company),
-                                                                Q(datepublication__month=month['index'])).count()
-            if not denominator_legal:
-                denominator_legal = 0
-            print(denominator_legal)
-            numerator_legal = LegalRequirement.objects.filter(Q(entitie=company), Q(state=LegalRequirement.CUMPLIO),
-                                                              Q(datepublication__month=month['index'])).count()
-            if not numerator_legal:
-                numerator_legal = 0
-            try:
-                values = ValuesDetail.objects.get(detail=indices, key='legal')
-            except:
-                values = ValuesDetail(detail=indices, key='legal')
-            values.numerator = numerator_legal
-            values.denominator = denominator_legal
-            values.save()
-            if denominator_legal == 0:
-                indices.legal = Decimal(0)
-            else:
-                indices.legal = Decimal(numerator_legal) * Decimal(100.00) / Decimal(denominator_legal)
-            indices.save()
+        denominator_legal = LegalRequirement.objects.filter(Q(entitie=company),
+                                                            Q(datepublication__month=month['index'])).count()
+        if not denominator_legal:
+            denominator_legal = 0
+        numerator_legal = LegalRequirement.objects.filter(Q(entitie=company), Q(state=LegalRequirement.CUMPLIO),
+                                                          Q(datepublication__month=month['index'])).count()
+        if not numerator_legal:
+            numerator_legal = 0
+
+        values, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='legal')
+
+        values.numerator = numerator_legal
+        values.denominator = denominator_legal
+        values.save()
+        if denominator_legal == 0:
+            index_detail.legal = Decimal(0)
         else:
-            try:
-                values = ValuesDetail.objects.get(detail=indices, key='legal')
-            except:
-                values = ValuesDetail(detail=indices, key='legal')
-            numerator_legal = values.numerator
-            denominator_legal = values.denominator
+            index_detail.legal = Decimal(numerator_legal) * Decimal(100.00) / Decimal(denominator_legal)
+        index_detail.save()
+
     if index.is_using_icsst:
-        if indices.icsst == None:
-            denominator_icsst = Agreement.objects.filter(Q(company=company),
-                                                         Q(date__month=month['index'])).count()
-            if not denominator_icsst:
-                denominator_icsst = 0
-            print(denominator_icsst)
-            numerator_icsst = Agreement.objects.filter(Q(company=company), Q(percentage=Decimal(100.0)),
-                                                       Q(date__month=month['index'])).count()
-            if not numerator_icsst:
-                numerator_icsst = 0
-            try:
-                values = ValuesDetail.objects.get(detail=indices, key='icsst')
-            except:
-                values = ValuesDetail(detail=indices, key='icsst')
-            values.numerator = numerator_icsst
-            values.denominator = denominator_icsst
-            values.save()
-            if denominator_icsst == 0:
-                indices.icsst = Decimal(0)
-            else:
-                indices.icsst = Decimal(numerator_icsst) * Decimal(100.00) / Decimal(denominator_icsst)
-            indices.save()
+        denominator_icsst = Agreement.objects.filter(Q(company=company),
+                                                     Q(date__month=month['index'])).count()
+        if not denominator_icsst:
+            denominator_icsst = 0
+        print(denominator_icsst)
+        numerator_icsst = Agreement.objects.filter(Q(company=company), Q(percentage=Decimal(100.0)),
+                                                   Q(date__month=month['index'])).count()
+        if not numerator_icsst:
+            numerator_icsst = 0
+        try:
+            values = ValuesDetail.objects.get(detail=index_detail, key='icsst')
+        except:
+            values = ValuesDetail(detail=index_detail, key='icsst')
+        values.numerator = numerator_icsst
+        values.denominator = denominator_icsst
+        values.save()
+        if denominator_icsst == 0:
+            index_detail.icsst = Decimal(0)
         else:
-            try:
-                values = ValuesDetail.objects.get(detail=indices, key='icsst')
-            except:
-                values = ValuesDetail(detail=indices, key='icsst')
-            numerator_icsst = values.numerator
-            denominator_icsst = values.denominator
+            index_detail.icsst = Decimal(numerator_icsst) * Decimal(100.00) / Decimal(denominator_icsst)
+        index_detail.save()
+        # else:
+        #     try:
+        #         values = ValuesDetail.objects.get(detail=index_detail, key='icsst')
+        #     except:
+        #         values = ValuesDetail(detail=index_detail, key='icsst')
+        #     numerator_icsst = values.numerator
+        #     denominator_icsst = values.denominator
     if index.is_using_indice_no_conformidad:
-        if indices.indice_no_conformidad == None:
-            denominator_indice_no_conformidad = Agreement.objects.filter(Q(company=company),
-                                                                         Q(date__month=month['index'])).count()
-            if not denominator_indice_no_conformidad:
-                denominator_indice_no_conformidad = 0
-            print(denominator_indice_no_conformidad)
-            numerator_indice_no_conformidad = Agreement.objects.filter(Q(company=company), Q(percentage=Decimal(100.0)),
-                                                                       Q(date__month=month['index'])).count()
-            if not numerator_indice_no_conformidad:
-                numerator_indice_no_conformidad = 0
-            try:
-                values = ValuesDetail.objects.get(detail=indices, key='indice_no_conformidad')
-            except:
-                values = ValuesDetail(detail=indices, key='indice_no_conformidad')
-            values.numerator = numerator_indice_no_conformidad
-            values.denominator = denominator_indice_no_conformidad
-            values.save()
-            if denominator_indice_no_conformidad == 0:
-                indices.indice_no_conformidad = Decimal(0)
-            else:
-                indices.indice_no_conformidad = Decimal(numerator_indice_no_conformidad) * Decimal(100.00) / Decimal(
-                    denominator_indice_no_conformidad)
-            indices.save()
-        else:
-            try:
-                values = ValuesDetail.objects.get(detail=indices, key='indice_no_conformidad')
-            except:
-                values = ValuesDetail(detail=indices, key='indice_no_conformidad')
-            numerator_indice_no_conformidad = values.numerator
-            denominator_indice_no_conformidad = values.denominator
-    if index.is_using_medida_iperc:
-        if indices.medida_iperc == None:
-            denominator_medida_iperc = Agreement.objects.filter(Q(company=company),
-                                                                Q(date__month=month['index'])).count()
-            if not denominator_medida_iperc:
-                denominator_medida_iperc = 0
-            print(denominator_medida_iperc)
-            numerator_medida_iperc = Agreement.objects.filter(Q(company=company), Q(percentage=Decimal(100.0)),
-                                                              Q(date__month=month['index'])).count()
-            if not numerator_medida_iperc:
-                numerator_medida_iperc = 0
-            try:
-                values = ValuesDetail.objects.get(detail=indices, key='medida_iperc')
-            except:
-                values = ValuesDetail(detail=indices, key='medida_iperc')
-            values.numerator = numerator_medida_iperc
-            values.denominator = denominator_medida_iperc
-            values.save()
-            if denominator_medida_iperc == 0:
-                indices.medida_iperc = Decimal(0)
-            else:
-                indices.medida_iperc = Decimal(numerator_medida_iperc) * Decimal(100.00) / Decimal(
-                    denominator_medida_iperc)
-            indices.save()
-        else:
-            try:
-                values = ValuesDetail.objects.get(detail=indices, key='medida_iperc')
-            except:
-                values = ValuesDetail(detail=indices, key='medida_iperc')
-            numerator_medida_iperc = values.numerator
-            denominator_medida_iperc = values.denominator
-    if index.is_using_liderazgo:
-        if indices.liderazgo == None:
-            denominator_liderazgo = Agreement.objects.filter(Q(company=company),
-                                                             Q(date__month=month['index'])).count()
-            if not denominator_liderazgo:
-                denominator_liderazgo = 0
-            print(denominator_liderazgo)
-            numerator_liderazgo = Agreement.objects.filter(Q(company=company), Q(percentage=Decimal(100.0)),
-                                                           Q(date__month=month['index'])).count()
-            if not numerator_liderazgo:
-                numerator_liderazgo = 0
-            try:
-                values = ValuesDetail.objects.get(detail=indices, key='liderazgo')
-            except:
-                values = ValuesDetail(detail=indices, key='liderazgo')
-            values.numerator = numerator_liderazgo
-            values.denominator = denominator_liderazgo
-            values.save()
-            if denominator_liderazgo == 0:
-                indices.liderazgo = Decimal(0)
-            else:
-                indices.liderazgo = Decimal(numerator_liderazgo) * Decimal(100.00) / Decimal(
-                    denominator_liderazgo)
-            indices.save()
-        else:
-            try:
-                values = ValuesDetail.objects.get(detail=indices, key='liderazgo')
-            except:
-                values = ValuesDetail(detail=indices, key='liderazgo')
-            numerator_liderazgo = values.numerator
-            denominator_liderazgo = values.denominator
-    if index.is_using_plan_contingencia:
-        if indices.plan_contingencia == None:
-            denominator_plan_contingencia = Agreement.objects.filter(Q(company=company),
+        # if index_detail.indice_no_conformidad == 0:
+        denominator_indice_no_conformidad = Agreement.objects.filter(Q(company=company),
                                                                      Q(date__month=month['index'])).count()
-            if not denominator_plan_contingencia:
-                denominator_plan_contingencia = 0
-            print(denominator_plan_contingencia)
-            numerator_plan_contingencia = Agreement.objects.filter(Q(company=company), Q(percentage=Decimal(100.0)),
+        if not denominator_indice_no_conformidad:
+            denominator_indice_no_conformidad = 0
+        print(denominator_indice_no_conformidad)
+        numerator_indice_no_conformidad = Agreement.objects.filter(Q(company=company), Q(percentage=Decimal(100.0)),
                                                                    Q(date__month=month['index'])).count()
-            if not numerator_plan_contingencia:
-                numerator_plan_contingencia = 0
-            try:
-                values = ValuesDetail.objects.get(detail=indices, key='plan_contingencia')
-            except:
-                values = ValuesDetail(detail=indices, key='plan_contingencia')
-            values.numerator = numerator_plan_contingencia
-            values.denominator = denominator_plan_contingencia
-            values.save()
-            if denominator_plan_contingencia == 0:
-                indices.plan_contingencia = Decimal(0)
-            else:
-                indices.plan_contingencia = Decimal(numerator_plan_contingencia) * Decimal(100.00) / Decimal(
-                    denominator_plan_contingencia)
-            indices.save()
+        if not numerator_indice_no_conformidad:
+            numerator_indice_no_conformidad = 0
+        try:
+            values = ValuesDetail.objects.get(detail=index_detail, key='indice_no_conformidad')
+        except:
+            values = ValuesDetail(detail=index_detail, key='indice_no_conformidad')
+        values.numerator = numerator_indice_no_conformidad
+        values.denominator = denominator_indice_no_conformidad
+        values.save()
+        if denominator_indice_no_conformidad == 0:
+            index_detail.indice_no_conformidad = Decimal(0)
         else:
-            try:
-                values = ValuesDetail.objects.get(detail=indices, key='plan_contingencia')
-            except:
-                values = ValuesDetail(detail=indices, key='plan_contingencia')
-            numerator_plan_contingencia = values.numerator
-            denominator_plan_contingencia = values.denominator
+            index_detail.indice_no_conformidad = Decimal(numerator_indice_no_conformidad) * Decimal(
+                100.00) / Decimal(
+                denominator_indice_no_conformidad)
+        index_detail.save()
+        # else:
+        #     try:
+        #         values = ValuesDetail.objects.get(detail=index_detail, key='indice_no_conformidad')
+        #     except:
+        #         values = ValuesDetail(detail=index_detail, key='indice_no_conformidad')
+        #     numerator_indice_no_conformidad = values.numerator
+        #     denominator_indice_no_conformidad = values.denominator
+    if index.is_using_medida_iperc:
+        # if index_detail.medida_iperc == 0:
+        denominator_medida_iperc = Agreement.objects.filter(Q(company=company),
+                                                            Q(date__month=month['index'])).count()
+        if not denominator_medida_iperc:
+            denominator_medida_iperc = 0
+        print(denominator_medida_iperc)
+        numerator_medida_iperc = Agreement.objects.filter(Q(company=company), Q(percentage=Decimal(100.0)),
+                                                          Q(date__month=month['index'])).count()
+        if not numerator_medida_iperc:
+            numerator_medida_iperc = 0
+        try:
+            values = ValuesDetail.objects.get(detail=index_detail, key='medida_iperc')
+        except:
+            values = ValuesDetail(detail=index_detail, key='medida_iperc')
+        values.numerator = numerator_medida_iperc
+        values.denominator = denominator_medida_iperc
+        values.save()
+        if denominator_medida_iperc == 0:
+            index_detail.medida_iperc = Decimal(0)
+        else:
+            index_detail.medida_iperc = Decimal(numerator_medida_iperc) * Decimal(100.00) / Decimal(
+                denominator_medida_iperc)
+        index_detail.save()
+        # else:
+        #     try:
+        #         values = ValuesDetail.objects.get(detail=index_detail, key='medida_iperc')
+        #     except:
+        #         values = ValuesDetail(detail=index_detail, key='medida_iperc')
+        #     numerator_medida_iperc = values.numerator
+        #     denominator_medida_iperc = values.denominator
+    if index.is_using_liderazgo:
+        # if index_detail.liderazgo == 0:
+        denominator_liderazgo = Agreement.objects.filter(Q(company=company),
+                                                         Q(date__month=month['index'])).count()
+        if not denominator_liderazgo:
+            denominator_liderazgo = 0
+        print(denominator_liderazgo)
+        numerator_liderazgo = Agreement.objects.filter(Q(company=company), Q(percentage=Decimal(100.0)),
+                                                       Q(date__month=month['index'])).count()
+        if not numerator_liderazgo:
+            numerator_liderazgo = 0
+        try:
+            values = ValuesDetail.objects.get(detail=index_detail, key='liderazgo')
+        except:
+            values = ValuesDetail(detail=index_detail, key='liderazgo')
+        values.numerator = numerator_liderazgo
+        values.denominator = denominator_liderazgo
+        values.save()
+        if denominator_liderazgo == 0:
+            index_detail.liderazgo = Decimal(0)
+        else:
+            index_detail.liderazgo = Decimal(numerator_liderazgo) * Decimal(100.00) / Decimal(
+                denominator_liderazgo)
+        index_detail.save()
+        # else:
+        #     try:
+        #         values = ValuesDetail.objects.get(detail=index_detail, key='liderazgo')
+        #     except:
+        #         values = ValuesDetail(detail=index_detail, key='liderazgo')
+        #     numerator_liderazgo = values.numerator
+        #     denominator_liderazgo = values.denominator
+    if index.is_using_plan_contingencia:
+        # if index_detail.plan_contingencia == 0:
+        denominator_plan_contingencia = Agreement.objects.filter(Q(company=company),
+                                                                 Q(date__month=month['index'])).count()
+        if not denominator_plan_contingencia:
+            denominator_plan_contingencia = 0
+        print(denominator_plan_contingencia)
+        numerator_plan_contingencia = Agreement.objects.filter(Q(company=company), Q(percentage=Decimal(100.0)),
+                                                               Q(date__month=month['index'])).count()
+        if not numerator_plan_contingencia:
+            numerator_plan_contingencia = 0
+        try:
+            values = ValuesDetail.objects.get(detail=index_detail, key='plan_contingencia')
+        except:
+            values = ValuesDetail(detail=index_detail, key='plan_contingencia')
+        values.numerator = numerator_plan_contingencia
+        values.denominator = denominator_plan_contingencia
+        values.save()
+        if denominator_plan_contingencia == 0:
+            index_detail.plan_contingencia = Decimal(0)
+        else:
+            index_detail.plan_contingencia = Decimal(numerator_plan_contingencia) * Decimal(100.00) / Decimal(
+                denominator_plan_contingencia)
+        index_detail.save()
+        # else:
+        #     try:
+        #         values = ValuesDetail.objects.get(detail=index_detail, key='plan_contingencia')
+        #     except:
+        #         values = ValuesDetail(detail=index_detail, key='plan_contingencia')
+        #     numerator_plan_contingencia = values.numerator
+        #     denominator_plan_contingencia = values.denominator
     title = 'REPORTE MENSUAL SEGURIDAD Y SALUD OCUPACIONAL'
     date_now = datetime.date.today()
+    return redirect(reverse('main:mensual_report', kwargs={'company_slug': company_slug, 'mes': mes}))
+
+
+def mensual_report(request, company_slug, mes):
+    # if request.method == 'GET' or request.GET:
+    #     return redirect(reverse('main:reports', kwargs={'company_slug': company_slug}))
+    company = get_object_or_404(Company, slug=company_slug)
+    month = return_month(mes)
+    # month = return_month(request.POST['mes'])
+    index, _ = Index.objects.get_or_create(company=company)
+    index_detail, _ = Index_Detail.objects.get_or_create(index=index, mounth=month['index'])
+    values_details = ValuesDetail.objects.filter(detail=index_detail)
+
     return render(request, 'main/reports/reports_mensual.html', locals())
 
 
 def indices_update(request, company_slug, indice_slug):
-    company = Company.objects.get(slug=company_slug)
+    company = get_object_or_404(Company, slug=company_slug)
     index = Index.objects.get(company=company)
     try:
         indices = Index_Detail.objects.get(index=index, mounth=request.POST['month'])

@@ -1,11 +1,10 @@
 from django.conf.urls import url
 from django.views.static import serve
 
-from main import views
 from proteccion_ambiental import settings
 
-urlpatterns = [
-]
-urlpatterns += [
-    url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
-]
+# urlpatterns = [
+# ]
+# urlpatterns += [
+#     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+# ]

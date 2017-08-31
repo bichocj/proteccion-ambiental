@@ -2,7 +2,30 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="011cbbc4-954e-4a12-ac9c-9c3c12520c20" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/accounts/migrations/0001_initial.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fullcalendar/migrations/0001_initial.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/fullcalendar/migrations/0002_auto_20170831_1014.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/indices/admin.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/indices/migrations/0001_initial.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/indices/migrations/0002_index_is_using_legal.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/indices/migrations/0003_index_detail_valuesdetail.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/indices/migrations/__init__.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/main/migrations/0001_initial.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/main/migrations/0002_auto_20170831_1016.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/main/migrations/0003_auto_20170831_1020.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/main/migrations/0004_auto_20170831_1123.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/main/migrations/0005_auto_20170831_1123.py" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/main/migrations/0006_auto_20170831_1127.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/indices/models.py" afterPath="$PROJECT_DIR$/indices/models.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/indices/urls.py" afterPath="$PROJECT_DIR$/indices/urls.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main/templates/main/layout_with_out_nav.html" afterPath="$PROJECT_DIR$/main/templates/main/layout_with_out_nav.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main/templates/main/reports/reports.html" afterPath="$PROJECT_DIR$/main/templates/main/reports/reports.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main/templates/main/reports/reports_mensual.html" afterPath="$PROJECT_DIR$/main/templates/main/reports/reports_mensual.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main/templatetags/main_extras.py" afterPath="$PROJECT_DIR$/main/templatetags/main_extras.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main/urls.py" afterPath="$PROJECT_DIR$/main/urls.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main/views.py" afterPath="$PROJECT_DIR$/main/views.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/proteccion_ambiental/urls.py" afterPath="$PROJECT_DIR$/proteccion_ambiental/urls.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -20,32 +43,39 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="layout.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/main/templates/main/layout.html">
+      <file leaf-file-name="reports_mensual.html" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/main/templates/main/reports/reports_mensual.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="119">
-              <caret line="7" column="42" lean-forward="false" selection-start-line="7" selection-start-column="42" selection-end-line="7" selection-end-column="42" />
+            <state relative-caret-position="249">
+              <caret line="26" column="98" lean-forward="false" selection-start-line="26" selection-start-column="84" selection-end-line="26" selection-end-column="98" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="list.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/main/templates/main/requirements/list.html">
+      <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/main/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="14" lean-forward="false" selection-start-line="3" selection-start-column="14" selection-end-line="3" selection-end-column="14" />
+            <state relative-caret-position="155">
+              <caret line="69" column="88" lean-forward="false" selection-start-line="69" selection-start-column="88" selection-end-line="69" selection-end-column="88" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="list.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/main/templates/main/accidents/list.html">
+      <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/main/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="15" column="18" lean-forward="true" selection-start-line="15" selection-start-column="18" selection-end-line="15" selection-end-column="18" />
-              <folding />
+            <state relative-caret-position="187">
+              <caret line="664" column="0" lean-forward="false" selection-start-line="664" selection-start-column="0" selection-end-line="664" selection-end-column="0" />
+              <folding>
+                <element signature="e#25574#26537#0" expanded="false" />
+                <element signature="e#26576#27922#0" expanded="false" />
+                <element signature="e#27976#29762#0" expanded="false" />
+                <element signature="e#29807#31369#0" expanded="false" />
+                <element signature="e#31411#32904#0" expanded="false" />
+                <element signature="e#32954#34631#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -56,16 +86,49 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>cal</find>
-      <find>acc</find>
-      <find>ForeignKey</find>
-      <find>edit</find>
+      <find>icsst</find>
+      <find>default=True,</find>
+      <find>legalrequirement</find>
+      <find>ICSST</find>
+      <find>default=True</find>
+      <find>RESIDUOS</find>
+      <find>resid</find>
+      <find>reports/mensual/</find>
+      <find>sgsst</find>
+      <find>== None</find>
+      <find>index_detail</find>
+      <find>denominator_sgsst</find>
+      <find>ce de Cumplimiento del S</find>
+      <find>auditorias</find>
+      <find>ce de Cumplimiento del Sºº</find>
+      <find>audi</find>
+      <find>denominator_</find>
+      <find>|</find>
+      <find>º</find>
+      <find>values_details|</find>
+      <find>ss</find>
+      <find>get_by_key</find>
+      <find>return_month</find>
+      <find>return_month(request</find>
+      <find>mensu</find>
+      <find>main:mensual_report'</find>
+      <find>rest</find>
+      <find>mensual_report</find>
+      <find>refre</find>
+      <find>refresh_inform</find>
     </findStrings>
+    <replaceStrings>
+      <replace>default=True,</replace>
+      <replace>default=0</replace>
+      <replace>== 0</replace>
+      <replace>values_details|get_by_key:'</replace>
+    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -82,7 +145,6 @@
         <option value="$PROJECT_DIR$/.idea/workspace.xml" />
         <option value="$PROJECT_DIR$/main/templates/main/hooks/field_with_label.html" />
         <option value="$PROJECT_DIR$/main/templates/main/hooks/field.html" />
-        <option value="$PROJECT_DIR$/main/templatetags/main_extras.py" />
         <option value="$PROJECT_DIR$/main/templates/main/accidents.html" />
         <option value="$PROJECT_DIR$/fullcalendar/migrations/0001_initial.py" />
         <option value="$PROJECT_DIR$/fullcalendar/urls.py" />
@@ -90,14 +152,12 @@
         <option value="$PROJECT_DIR$/fullcalendar/forms.py" />
         <option value="$PROJECT_DIR$/fullcalendar/models.py" />
         <option value="$PROJECT_DIR$/fullcalendar/views.py" />
-        <option value="$PROJECT_DIR$/main/admin.py" />
         <option value="$PROJECT_DIR$/main/templates/main/hooks/form.html" />
         <option value="$PROJECT_DIR$/fullcalendar/templates/fullcalendar/list.html" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/fullcalendar/templates/fullcalendar/calendar.html" />
         <option value="$PROJECT_DIR$/main/static/main/css/lib/fullcalendar.css" />
         <option value="$PROJECT_DIR$/fullcalendar/static/fullcalendar/fullcalendar/fullcalendar.css" />
-        <option value="$PROJECT_DIR$/main/templates/main/layout_with_out_nav.html" />
         <option value="$PROJECT_DIR$/main/migrations/0001_initial.py" />
         <option value="$PROJECT_DIR$/main/templates/main/home.html" />
         <option value="$PROJECT_DIR$/accounts/templates/accounts/login.html" />
@@ -107,12 +167,21 @@
         <option value="$PROJECT_DIR$/main/migrations/0005_auto_20170131_0414.py" />
         <option value="$PROJECT_DIR$/main/templates/main/layout.html" />
         <option value="$PROJECT_DIR$/main/templates/main/layout_form.html" />
-        <option value="$PROJECT_DIR$/proteccion_ambiental/urls.py" />
         <option value="$PROJECT_DIR$/main/templates/main/requirements/format.html" />
-        <option value="$PROJECT_DIR$/main/models.py" />
         <option value="$PROJECT_DIR$/main/forms.py" />
-        <option value="$PROJECT_DIR$/main/urls.py" />
         <option value="$PROJECT_DIR$/main/templates/main/accidents/list.html" />
+        <option value="$PROJECT_DIR$/main/templates/main/layout_with_out_nav.html" />
+        <option value="$PROJECT_DIR$/indices/migrations/0001_initial.py" />
+        <option value="$PROJECT_DIR$/main/admin.py" />
+        <option value="$PROJECT_DIR$/indices/urls.py" />
+        <option value="$PROJECT_DIR$/proteccion_ambiental/urls.py" />
+        <option value="$PROJECT_DIR$/main/models.py" />
+        <option value="$PROJECT_DIR$/indices/models.py" />
+        <option value="$PROJECT_DIR$/indices/admin.py" />
+        <option value="$PROJECT_DIR$/main/urls.py" />
+        <option value="$PROJECT_DIR$/main/templatetags/main_extras.py" />
+        <option value="$PROJECT_DIR$/main/templates/main/reports/reports.html" />
+        <option value="$PROJECT_DIR$/main/templates/main/reports/reports_mensual.html" />
         <option value="$PROJECT_DIR$/main/views.py" />
       </list>
     </option>
@@ -128,6 +197,40 @@
     <option name="y" value="-8" />
     <option name="width" value="1382" />
     <option name="height" value="784" />
+  </component>
+  <component name="ProjectInspectionProfilesVisibleTreeState">
+    <entry key="Project Default">
+      <profile-state>
+        <expanded-state>
+          <State>
+            <id />
+          </State>
+          <State>
+            <id>GeneralGo</id>
+          </State>
+          <State>
+            <id>Go</id>
+          </State>
+          <State>
+            <id>Google App Engine (Python)</id>
+          </State>
+          <State>
+            <id>Python</id>
+          </State>
+          <State>
+            <id>RELAX NG</id>
+          </State>
+          <State>
+            <id>SQL</id>
+          </State>
+        </expanded-state>
+        <selected-state>
+          <State>
+            <id>AngularJS</id>
+          </State>
+        </selected-state>
+      </profile-state>
+    </entry>
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -145,7 +248,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="Scope">
         <subPane subId="Project Files">
           <PATH>
@@ -262,6 +364,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -274,38 +377,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fullcalendar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fullcalendar" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="migrations" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
     </panes>
@@ -314,7 +385,7 @@
     <property name="nodejs_interpreter_path" value="C:/Program Files/nodejs/node" />
     <property name="js.eslint.eslintPackage" value="" />
     <property name="js-jscs-nodeInterpreter" value="C:\Program Files\nodejs\node.exe" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.django.DjangoModulesConfigurable" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../../eventus_v2/eventus/src" />
     <property name="SearchEverywhereHistoryKey" value="mode&#9;FILE&#9;file://D:/ALVARO/Projects/proteccion-ambiental/src/main/models.py&#10;model&#9;FILE&#9;file://D:/ALVARO/Projects/proteccion-ambiental/src/accounts/models.py&#10;vi&#9;FILE&#9;file://D:/ALVARO/Projects/proteccion-ambiental/src/main/views.py" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="159" />
@@ -344,6 +415,149 @@
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\ALVARO\Projects\proteccion-ambiental\src\main\templates" />
     </key>
+  </component>
+  <component name="RestoreUpdateTree" date="Moments ago" ActionInfo="_Update">
+    <UpdatedFiles>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Updated from server" />
+        <option name="myStatusName" value="Changed on server" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="CHANGED_ON_SERVER" />
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Updated" />
+          <option name="myStatusName" value="Changed" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="UPDATED" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/accounts/templates/accounts/login.html</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/accounts/urls.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/acuerdos_sst/forms.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/acuerdos_sst/models.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/acuerdos_sst/templates/acuerdos_sst/details_agreement.html</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/acuerdos_sst/templates/acuerdos_sst/list.html</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/acuerdos_sst/urls.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/acuerdos_sst/views.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/fullcalendar/forms.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/fullcalendar/models.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/fullcalendar/templates/fullcalendar/calendar.html</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/fullcalendar/templates/fullcalendar/list.html</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/fullcalendar/urls.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/fullcalendar/views.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/indices/forms.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/indices/models.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/main/forms.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/main/models.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/main/static/main/js/bootstrap.datepicker.js</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/main/templates/main/accidents/list.html</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/main/templates/main/home.html</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/main/templates/main/indeces/list.html</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/main/templates/main/layout.html</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/main/templates/main/layout_with_out_nav.html</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/main/templates/main/legal_requirement/list.html</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/main/templates/main/reports/reports.html</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/main/templates/main/reports/reports_mensual.html</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/main/templatetags/layout_extras.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/main/urls.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/main/views.py</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/proteccion_ambiental/urls.py</PATH>
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Created" />
+          <option name="myStatusName" value="Created" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="CREATED" />
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/acuerdos_sst/templates/acuerdos_sst/meetings/list.html</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/fullcalendar/static/fullcalendar/fullcalendar/moment.min.js</PATH>
+          <PATH vcs="Git" revision="">$PROJECT_DIR$/fullcalendar/static/fullcalendar/plugins/v2/moment.min.js</PATH>
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Deleted" />
+          <option name="myStatusName" value="Deleted" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="true" />
+          <option name="myId" value="REMOVED_FROM_REPOSITORY" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Restored" />
+          <option name="myStatusName" value="Will be restored" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="RESTORED" />
+        </FILE-GROUP>
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Modified" />
+        <option name="myStatusName" value="Modified" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MODIFIED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Skipped" />
+        <option name="myStatusName" value="Skipped" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="SKIPPED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with conflicts" />
+        <option name="myStatusName" value="Will be merged with conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_CONFLICTS" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with tree conflicts" />
+        <option name="myStatusName" value="Merged with tree conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_TREE_CONFLICT" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged with property conflicts" />
+        <option name="myStatusName" value="Will be merged with property conflicts" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED_WITH_PROPERTY_CONFLICT" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Merged" />
+        <option name="myStatusName" value="Will be merged" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="MERGED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Not in repository" />
+        <option name="myStatusName" value="Not in repository" />
+        <option name="mySupportsDeletion" value="true" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="UNKNOWN" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Locally added" />
+        <option name="myStatusName" value="Locally added" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="LOCALLY_ADDED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Locally removed" />
+        <option name="myStatusName" value="Locally removed" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="LOCALLY_REMOVED" />
+      </FILE-GROUP>
+      <FILE-GROUP>
+        <option name="myUpdateName" value="Switched" />
+        <option name="myStatusName" value="Switched" />
+        <option name="mySupportsDeletion" value="false" />
+        <option name="myCanBeAbsent" value="false" />
+        <option name="myId" value="SWITCHED" />
+      </FILE-GROUP>
+    </UpdatedFiles>
   </component>
   <component name="RunManager" selected="Django server.src">
     <configuration default="true" type="DjangoTestsConfigurationType" factoryName="Django tests">
@@ -610,7 +824,7 @@
         <env name="PYTHONUNBUFFERED" value="1" />
         <env name="DJANGO_SETTINGS_MODULE" value="proteccion_ambiental.settings" />
       </envs>
-      <option name="SDK_HOME" value="" />
+      <option name="SDK_HOME" value="C:\Users\Javier\envs\prot\Scripts\python.exe" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -639,7 +853,7 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="ee470672-cab4-4ac0-a235-aefa08136ebe" name="Default" comment="" />
+      <changelist id="011cbbc4-954e-4a12-ac9c-9c3c12520c20" name="Default" comment="" />
       <created>1485645374664</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -671,21 +885,21 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="784" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="manage.py@src" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32872504" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22163388" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32872504" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32872504" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32872504" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32872504" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32872504" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32872504" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22768533" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32872504" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -713,97 +927,20 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main/views.py</url>
-          <line>177</line>
+          <line>186</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main/views.py</url>
-          <line>55</line>
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main/views.py</url>
-          <line>144</line>
+          <line>152</line>
           <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="6" />
+      <option name="time" value="24" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/fullcalendar/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main/migrations/0002_auto_20170128_1740.py" />
-    <entry file="file://$PROJECT_DIR$/main/migrations/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main/templates/main/hooks/field_with_label.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main/static/main/js/fullcalendar.min.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="457">
-          <caret line="6" column="16769" lean-forward="false" selection-start-line="6" selection-start-column="16759" selection-end-line="6" selection-end-column="16769" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fullcalendar/templates/fullcalendar/new_calendar.html" />
-    <entry file="file://$PROJECT_DIR$/main/templates/main/hooks/form.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="36" lean-forward="false" selection-start-line="2" selection-start-column="36" selection-end-line="2" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main/admin.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fullcalendar/static/fullcalendar/fullcalendar/fullcalendar.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="347">
-          <caret line="1407" column="47" lean-forward="false" selection-start-line="1407" selection-start-column="47" selection-end-line="1407" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main/static/main/css/lib/fullcalendar.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="361">
-          <caret line="392" column="5" lean-forward="false" selection-start-line="384" selection-start-column="9" selection-end-line="392" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main/templates/main/layout_with_out_nav.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="69">
-          <caret line="54" column="39" lean-forward="false" selection-start-line="54" selection-start-column="39" selection-end-line="54" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/accounts/templates/accounts/login.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="36" lean-forward="false" selection-start-line="0" selection-start-column="36" selection-end-line="0" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/accounts/templates/accounts/password_reset.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -825,27 +962,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main/migrations/0001_initial.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="14" column="0" lean-forward="false" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fullcalendar/migrations/0001_initial.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="15" column="14" lean-forward="false" selection-start-line="15" selection-start-column="14" selection-end-line="15" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main/templates/main/ley_seguridad.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="19" column="38" lean-forward="false" selection-start-line="19" selection-start-column="38" selection-end-line="19" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/main/migrations/0001_initial.py" />
+    <entry file="file://$PROJECT_DIR$/fullcalendar/migrations/0001_initial.py" />
+    <entry file="file://$PROJECT_DIR$/main/templates/main/ley_seguridad.html" />
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
@@ -854,14 +973,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main/migrations/0005_auto_20170131_0414.py" />
-    <entry file="file://$PROJECT_DIR$/main/templates/main/layout.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="119">
-          <caret line="7" column="42" lean-forward="false" selection-start-line="7" selection-start-column="42" selection-end-line="7" selection-end-column="42" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fullcalendar/templates/fullcalendar/calendar.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-792">
@@ -922,14 +1033,6 @@
     <entry file="file://$PROJECT_DIR$/media/monotv.png" />
     <entry file="file://$PROJECT_DIR$/media/popotv.png" />
     <entry file="file://$PROJECT_DIR$/media/formatos/2017/01/31/popotv.png" />
-    <entry file="file://$PROJECT_DIR$/proteccion_ambiental/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="172">
-          <caret line="103" column="0" lean-forward="false" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/proteccion_ambiental/wsgi.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -937,34 +1040,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/proteccion_ambiental/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="15" column="1" lean-forward="true" selection-start-line="13" selection-start-column="0" selection-end-line="15" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="506">
-          <caret line="23" column="21" lean-forward="false" selection-start-line="23" selection-start-column="21" selection-end-line="23" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/Python34/Lib/site-packages/django/utils/autoreload.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4202">
-          <caret line="202" column="0" lean-forward="false" selection-start-line="202" selection-start-column="0" selection-end-line="202" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://C:/Python34/Lib/site-packages/django/utils/autoreload.py" />
     <entry file="file://$PROJECT_DIR$/main/functions.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#15#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -975,21 +1055,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://C:/Python34/Lib/site-packages/django/forms/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6820">
-          <caret line="330" column="0" lean-forward="false" selection-start-line="330" selection-start-column="0" selection-end-line="330" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main/templates/main/accidents.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="9" column="19" lean-forward="false" selection-start-line="9" selection-start-column="19" selection-end-line="9" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://C:/Python34/Lib/site-packages/django/forms/models.py" />
+    <entry file="file://$PROJECT_DIR$/main/templates/main/accidents.html" />
     <entry file="file://$PROJECT_DIR$/main/templates/main/home.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-580">
@@ -1006,10 +1073,40 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main/templates/main/reports.html">
+    <entry file="file://$PROJECT_DIR$/main/templates/main/reports.html" />
+    <entry file="file://$PROJECT_DIR$/main/templates/main/requirements/format.html" />
+    <entry file="file://C:/Python34/Lib/site-packages/django/contrib/auth/decorators.py" />
+    <entry file="file://$PROJECT_DIR$/proteccion_ambiental/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="431">
+          <caret line="40" column="7" lean-forward="false" selection-start-line="40" selection-start-column="7" selection-end-line="40" selection-end-column="7" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/indices/migrations/0002_index_is_using_legal.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="15" column="0" lean-forward="false" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main/templates/main/layout_with_out_nav.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="290">
+          <caret line="67" column="39" lean-forward="false" selection-start-line="67" selection-start-column="39" selection-end-line="67" selection-end-column="39" />
+          <folding>
+            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main/templates/main/layout.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <caret line="0" column="33" lean-forward="false" selection-start-line="0" selection-start-column="33" selection-end-line="0" selection-end-column="33" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1021,42 +1118,137 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main/templates/main/requirements/format.html">
+    <entry file="file://$PROJECT_DIR$/main/templates/main/accidents/list.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="12" column="18" lean-forward="true" selection-start-line="8" selection-start-column="8" selection-end-line="12" selection-end-column="18" />
+        <state relative-caret-position="255">
+          <caret line="16" column="18" lean-forward="false" selection-start-line="16" selection-start-column="18" selection-end-line="16" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/indices/migrations/0001_initial.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="273">
+          <caret line="159" column="10" lean-forward="false" selection-start-line="159" selection-start-column="10" selection-end-line="159" selection-end-column="10" />
+          <folding>
+            <element signature="e#317#4739#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/indices/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/indices/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#32#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/proteccion_ambiental/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="11" column="18" lean-forward="false" selection-start-line="11" selection-start-column="18" selection-end-line="11" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main/admin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="32" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="256">
+          <caret line="141" column="36" lean-forward="false" selection-start-line="141" selection-start-column="36" selection-end-line="141" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/indices/admin.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="30" lean-forward="false" selection-start-line="5" selection-start-column="30" selection-end-line="5" selection-end-column="30" />
+          <folding>
+            <element signature="e#0#32#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/indices/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="453">
+          <caret line="194" column="10" lean-forward="true" selection-start-line="194" selection-start-column="4" selection-end-line="194" selection-end-column="10" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main/templates/main/reports/reports.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="102">
+          <caret line="7" column="30" lean-forward="false" selection-start-line="7" selection-start-column="30" selection-end-line="7" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main/templatetags/main_extras.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="341">
+          <caret line="61" column="0" lean-forward="false" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main/templates/main/reports/reports_mensual.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="26" column="98" lean-forward="false" selection-start-line="26" selection-start-column="84" selection-end-line="26" selection-end-column="98" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="264">
-          <caret line="12" column="87" lean-forward="false" selection-start-line="12" selection-start-column="72" selection-end-line="12" selection-end-column="87" />
+        <state relative-caret-position="155">
+          <caret line="69" column="88" lean-forward="false" selection-start-line="69" selection-start-column="88" selection-end-line="69" selection-end-column="88" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main/templates/main/accidents/list.html">
+    <entry file="file://$USER_HOME$/envs/prot/Lib/site-packages/django/core/handlers/base.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="15" column="18" lean-forward="true" selection-start-line="15" selection-start-column="18" selection-end-line="15" selection-end-column="18" />
+        <state relative-caret-position="136">
+          <caret line="131" column="0" lean-forward="false" selection-start-line="131" selection-start-column="0" selection-end-line="131" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/Python34/Lib/site-packages/django/contrib/auth/decorators.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="21" column="0" lean-forward="false" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="112">
-          <caret line="144" column="0" lean-forward="false" selection-start-line="144" selection-start-column="0" selection-end-line="144" selection-end-column="0" />
+        <state relative-caret-position="187">
+          <caret line="664" column="0" lean-forward="false" selection-start-line="664" selection-start-column="0" selection-end-line="664" selection-end-column="0" />
           <folding>
-            <element signature="e#0#44#0" expanded="false" />
+            <element signature="e#25574#26537#0" expanded="false" />
+            <element signature="e#26576#27922#0" expanded="false" />
+            <element signature="e#27976#29762#0" expanded="false" />
+            <element signature="e#29807#31369#0" expanded="false" />
+            <element signature="e#31411#32904#0" expanded="false" />
+            <element signature="e#32954#34631#0" expanded="false" />
           </folding>
         </state>
       </provider>

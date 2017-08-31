@@ -1,7 +1,7 @@
 from django import template
 
-
 register = template.Library()
+
 
 @register.filter
 def is_checkbox(field):
@@ -15,6 +15,7 @@ def is_hidden(field):
     widget = field.field.widget
     class__ = widget.__class__
     return class__.__name__ == 'HiddenInput'
+
 
 @register.filter
 def is_selectable(field):
@@ -35,3 +36,28 @@ def is_file_input(field):
     widget = field.field.widget
     class__ = widget.__class__
     return class__.__name__ == 'ClearableFileInput'
+
+
+@register.filter
+def get_by_key(list, key):
+    try:
+        return list.get(key=key)
+    except:
+        pass
+    return ''
+
+
+@register.filter
+def numerator(value):
+    try:
+        return value.numerator
+    except:
+        return ''
+
+
+@register.filter
+def denominator(value):
+    try:
+        return value.denominator
+    except:
+        return ''

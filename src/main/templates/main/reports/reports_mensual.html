@@ -1,5 +1,6 @@
 {% extends 'main/layout.html' %}
 {% load static %}
+{% load main_extras %}
 {% block styles %}
     <link rel="stylesheet" href="{% static 'main/css/compiled/index.css' %}" type="text/css" media="screen"/>
 {% endblock %}
@@ -23,8 +24,8 @@
         <div class="col-md-12">
             <h3>Mes {{ month.mes }}</h3>
             <h4 class="">Compañia: {{ company.name }}</h4>
-            <a class="btn-flat icon pull-right" id="restore_btn" href="{% url 'main:restore_indices' company_slug month.index %}">
-                <i class="icon-refresh"></i> Restaurar
+            <a class="btn-flat icon pull-right" id="restore_btn" href="{% url 'main:refresh_inform' company_slug month.index %}">
+                <i class="icon-refresh"></i> Refrescar
             </a>
 
         </div>
@@ -45,18 +46,15 @@
                             <label>Actividades Plan Trabajo:</label>
                         </div>
                         <div class="col-md-3 ">
-
-                            <input id="numerator_sgsst" class="form-control" type="number"
-                                   value="{{ numerator_sgsst }}" step="0.01"/>
+                            <input id="numerator_sgsst" class="form-control" type="number" value="{{ values_details|get_by_key:'sgsst'|numerator }}" step="0.01"/>
                         </div>
-
                         <div class="field-box">
                             <div class="col-md-2">
                                 <label>Actividades Programadas Plan Trabajo:</label>
                             </div>
                             <div class="col-md-3">
                                 <input id="denominator_sgsst" class="form-control" type="number"
-                                       value="{{ denominator_sgsst }}"/>
+                                       value="{{ values_details|get_by_key:'sgsst'|denominator }}"/>
                             </div>
                         </div>
                         <div class="field-box col-md-2">
@@ -68,7 +66,7 @@
                     <div class="col-md-12">
                         <div class="col-md-7"></div>
                         <div class="col-md-5 data">
-                            <span class="number" id="sgsst_val">{{ indices.sgsst }}%</span>
+                            <span class="number" id="sgsst_val">{{ index_detail.sgsst }}%</span>
                             ICSST
                         </div>
 
@@ -97,7 +95,7 @@
                         <div class="col-md-3 ">
 
                             <input id="numerator_legal" class="form-control" type="number"
-                                   value="{{ numerator_legal }}"/>
+                                   value="{{ values_details|get_by_key:'legal' }}"/>
                         </div>
 
                         <div class="field-box">
@@ -106,7 +104,7 @@
                             </div>
                             <div class="col-md-3">
                                 <input id="denominator_legal" class="form-control" type="number"
-                                       value="{{ denominator_legal }}"/>
+                                       value="{{ values_details|get_by_key:'legal'|denominator }}"/>
                             </div>
                         </div>
                         <div class="field-box col-md-2">
@@ -118,7 +116,7 @@
                     <div class="col-md-12">
                         <div class="col-md-7"></div>
                         <div class="col-md-5 data">
-                            <span class="number" id="legal_val">{{ indices.legal }}%</span>
+                            <span class="number" id="legal_val">{{ index_detail.legal }}%</span>
                             ILEG
                         </div>
 
@@ -148,7 +146,7 @@
                         <div class="col-md-3 ">
 
                             <input id="numerator_icsst" class="form-control" type="number"
-                                   value="{{ numerator_icsst }}"/>
+                                   value="{{ values_details|get_by_key:'icsst' }}"/>
                         </div>
 
                         <div class="field-box">
@@ -157,7 +155,7 @@
                             </div>
                             <div class="col-md-3">
                                 <input id="denominator_icsst" class="form-control" type="number"
-                                       value="{{ denominator_icsst }}"/>
+                                       value="{{ values_details|get_by_key:'icsst'|denominator }}"/>
                             </div>
                         </div>
                         <div class="field-box col-md-2">
@@ -169,7 +167,7 @@
                     <div class="col-md-12">
                         <div class="col-md-7"></div>
                         <div class="col-md-5 data pull-right">
-                            <span class="number" id="icsst_val">{{ indices.icsst }}%</span>
+                            <span class="number" id="icsst_val">{{ index_detail.icsst }}%</span>
                             ICSST
                         </div>
 
@@ -199,7 +197,7 @@
                         <div class="col-md-3 ">
 
                             <input id="numerator_indice_no_conformidad" class="form-control" type="number"
-                                   value="{{ numerator_indice_no_conformidad }}"/>
+                                   value="{{ values_details|get_by_key:'indice_no_conformidad' }}"/>
                         </div>
 
                         <div class="field-box">
@@ -208,7 +206,7 @@
                             </div>
                             <div class="col-md-3">
                                 <input id="denominator_indice_no_conformidad" class="form-control" type="number"
-                                       value="{{ denominator_indice_no_conformidad }}"/>
+                                       value="{{ values_details|get_by_key:'indice_no_conformidad'|denominator }}"/>
                             </div>
                         </div>
                         <div class="field-box col-md-2">
@@ -220,7 +218,7 @@
                     <div class="col-md-12">
                         <div class="col-md-7"></div>
                         <div class="col-md-5 data pull-right">
-                            <span class="number" id="indice_no_conformidad_val">{{ indices.indice_no_conformidad }}%</span>
+                            <span class="number" id="indice_no_conformidad_val">{{ index_detail.indice_no_conformidad }}%</span>
                             INC
                         </div>
 
@@ -249,7 +247,7 @@
                         <div class="col-md-3 ">
 
                             <input id="numerator_medida_iperc" class="form-control" type="number"
-                                   value="{{ numerator_medida_iperc }}"/>
+                                   value="{{ values_details|get_by_key:'medida_iperc' }}"/>
                         </div>
 
                         <div class="field-box">
@@ -258,7 +256,7 @@
                             </div>
                             <div class="col-md-3">
                                 <input id="denominator_medida_iperc" class="form-control" type="number"
-                                       value="{{ denominator_medida_iperc }}"/>
+                                       value="{{ values_details|get_by_key:'medida_iperc'|denominator }}"/>
                             </div>
                         </div>
                         <div class="field-box col-md-2">
@@ -270,7 +268,7 @@
                     <div class="col-md-12">
                         <div class="col-md-7"></div>
                         <div class="col-md-5 data pull-right">
-                            <span class="number" id="medida_iperc_val">{{ indices.medida_iperc }}%</span>
+                            <span class="number" id="medida_iperc_val">{{ index_detail.medida_iperc }}%</span>
                             IMC
                         </div>
 
@@ -299,7 +297,7 @@
                         <div class="col-md-3 ">
 
                             <input id="numerator_liderazgo" class="form-control" type="number"
-                                   value="{{ numerator_liderazgo }}"/>
+                                   value="{{ values_details|get_by_key:'liderazgo' }}"/>
                         </div>
 
                         <div class="field-box">
@@ -308,7 +306,7 @@
                             </div>
                             <div class="col-md-3">
                                 <input id="denominator_liderazgo" class="form-control" type="number"
-                                       value="{{ denominator_liderazgo }}"/>
+                                       value="{{ values_details|get_by_key:'liderazgo'|denominator }}"/>
                             </div>
                         </div>
                         <div class="field-box col-md-2">
@@ -320,7 +318,7 @@
                     <div class="col-md-12">
                         <div class="col-md-7"></div>
                         <div class="col-md-5 data pull-right">
-                            <span class="number" id="liderazgo_val">{{ indices.liderazgo }}%</span>
+                            <span class="number" id="liderazgo_val">{{ index_detail.liderazgo }}%</span>
                             ILP
                         </div>
 
@@ -349,7 +347,7 @@
                         <div class="col-md-3 ">
 
                             <input id="numerator_plan_contingencia" class="form-control" type="number"
-                                   value="{{ numerator_plan_contingencia }}"/>
+                                   value="{{ values_details|get_by_key:'plan_contingencia' }}"/>
                         </div>
 
                         <div class="field-box">
@@ -358,7 +356,7 @@
                             </div>
                             <div class="col-md-3">
                                 <input id="denominator_plan_contingencia" class="form-control" type="number"
-                                       value="{{ denominator_plan_contingencia }}"/>
+                                       value="{{ values_details|get_by_key:'plan_contingencia'|denominator }}"/>
                             </div>
                         </div>
                         <div class="field-box col-md-2">
@@ -370,7 +368,7 @@
                     <div class="col-md-12">
                         <div class="col-md-7"></div>
                         <div class="col-md-5 data pull-right">
-                            <span class="number" id="plan_contingencia_val">{{ indices.plan_contingencia }}%</span>
+                            <span class="number" id="plan_contingencia_val">{{ index_detail.plan_contingencia }}%</span>
                             IAPC
                         </div>
 
@@ -390,7 +388,7 @@
                     </div>
                     <div class="col-md-12 stat">
                         <div class="data">
-                            <span class="number">{{ indices.mejora }}%</span>
+                            <span class="number">{{ index_detail.mejora }}%</span>
                             IM
                         </div>
 
@@ -409,7 +407,7 @@
                     </div>
                     <div class="col-md-12 stat">
                         <div class="data">
-                            <span class="number">{{ indices.capacitacion }}%</span>
+                            <span class="number">{{ index_detail.capacitacion }}%</span>
                             IC
                         </div>
 
@@ -428,7 +426,7 @@
                     </div>
                     <div class="col-md-12 stat">
                         <div class="data">
-                            <span class="number">{{ indices.personal_capacitado }}%</span>
+                            <span class="number">{{ index_detail.personal_capacitado }}%</span>
                             IPC
                         </div>
 
@@ -447,7 +445,7 @@
                     </div>
                     <div class="col-md-12 stat">
                         <div class="data">
-                            <span class="number">{{ indices.intensidad_formativa }}%</span>
+                            <span class="number">{{ index_detail.intensidad_formativa }}%</span>
                             IIF
                         </div>
 
@@ -466,7 +464,7 @@
                     </div>
                     <div class="col-md-12 stat">
                         <div class="data">
-                            <span class="number">{{ indices.charlas }}%</span>
+                            <span class="number">{{ index_detail.charlas }}%</span>
                             IDPS
                         </div>
 
@@ -485,7 +483,7 @@
                     </div>
                     <div class="col-md-12 stat">
                         <div class="data">
-                            <span class="number">{{ indices.incidentes }}%</span>
+                            <span class="number">{{ index_detail.incidentes }}%</span>
                             IRA
                         </div>
 
@@ -504,7 +502,7 @@
                     </div>
                     <div class="col-md-12 stat">
                         <div class="data">
-                            <span class="number">{{ indices.inspecciones }}%</span>
+                            <span class="number">{{ index_detail.inspecciones }}%</span>
                             II
                         </div>
 
@@ -523,7 +521,7 @@
                     </div>
                     <div class="col-md-12 stat">
                         <div class="data">
-                            <span class="number">{{ indices.observaciones_planeadas }}%</span>
+                            <span class="number">{{ index_detail.observaciones_planeadas }}%</span>
                             OPT
                         </div>
 
@@ -543,7 +541,7 @@
                     </div>
                     <div class="col-md-12 stat">
                         <div class="data">
-                            <span class="number">{{ indices.auditorias }}%</span>
+                            <span class="number">{{ index_detail.auditorias }}%</span>
                             IAU
                         </div>
 
@@ -562,7 +560,7 @@
                     </div>
                     <div class="col-md-12 stat">
                         <div class="data">
-                            <span class="number">{{ indices.simulacros_emergencia }}%</span>
+                            <span class="number">{{ index_detail.simulacros_emergencia }}%</span>
                             ISE
                         </div>
 
@@ -581,7 +579,7 @@
                     </div>
                     <div class="col-md-12 stat">
                         <div class="data">
-                            <span class="number">{{ indices.reconocimiento_trabajador }}%</span>
+                            <span class="number">{{ index_detail.reconocimiento_trabajador }}%</span>
                             IRT
                         </div>
 
@@ -600,7 +598,7 @@
                     </div>
                     <div class="col-md-12 stat">
                         <div class="data">
-                            <span class="number">{{ indices.engenieer }}%</span>
+                            <span class="number">{{ index_detail.engenieer }}%</span>
                             DI
                         </div>
 
@@ -619,7 +617,7 @@
                     </div>
                     <div class="col-md-12 stat">
                         <div class="data">
-                            <span class="number">{{ indices.sgsst }}%</span>
+                            <span class="number">{{ index_detail.sgsst }}%</span>
                             APA
                         </div>
 
@@ -638,7 +636,7 @@
                     </div>
                     <div class="col-md-12 stat">
                         <div class="data">
-                            <span class="number">{{ indices.medic_atention }}%</span>
+                            <span class="number">{{ index_detail.medic_atention }}%</span>
                             AAM
                         </div>
 
@@ -657,7 +655,7 @@
                     </div>
                     <div class="col-md-12 stat">
                         <div class="data">
-                            <span class="number">{{ indices.lose_time }}%</span>
+                            <span class="number">{{ index_detail.lose_time }}%</span>
                             ATP
                         </div>
 
@@ -676,7 +674,7 @@
                     </div>
                     <div class="col-md-12 stat">
                         <div class="data">
-                            <span class="number">{{ indices.fatal_accident }}%</span>
+                            <span class="number">{{ index_detail.fatal_accident }}%</span>
                             AF
                         </div>
 
@@ -695,7 +693,7 @@
                     </div>
                     <div class="col-md-12 stat">
                         <div class="data">
-                            <span class="number">{{ indices.frecuency }}%</span>
+                            <span class="number">{{ index_detail.frecuency }}%</span>
                             IF
                         </div>
 
@@ -714,7 +712,7 @@
                     </div>
                     <div class="col-md-12 stat">
                         <div class="data">
-                            <span class="number">{{ indices.severity }}%</span>
+                            <span class="number">{{ index_detail.severity }}%</span>
                             IS
                         </div>
 
@@ -733,7 +731,7 @@
                     </div>
                     <div class="col-md-12 stat">
                         <div class="data">
-                            <span class="number">{{ indices.accidentality }}%</span>
+                            <span class="number">{{ index_detail.accidentality }}%</span>
                             IA
                         </div>
 
@@ -752,7 +750,7 @@
                     </div>
                     <div class="col-md-12 stat">
                         <div class="data">
-                            <span class="number">{{ indices.professional_sick }}%</span>
+                            <span class="number">{{ index_detail.professional_sick }}%</span>
                             IEP
                         </div>
 
@@ -771,7 +769,7 @@
                     </div>
                     <div class="col-md-12 stat">
                         <div class="data">
-                            <span class="number">{{ indices.medic_exam }}%</span>
+                            <span class="number">{{ index_detail.medic_exam }}%</span>
                             IEMOs
                         </div>
 
@@ -790,7 +788,7 @@
                     </div>
                     <div class="col-md-12 stat">
                         <div class="data">
-                            <span class="number">{{ indices.ap_worker }}%</span>
+                            <span class="number">{{ index_detail.ap_worker }}%</span>
                             ITA
                         </div>
 
@@ -809,7 +807,7 @@
                     </div>
                     <div class="col-md-12 stat">
                         <div class="data">
-                            <span class="number">{{ indices.ap_worker_restric }}%</span>
+                            <span class="number">{{ index_detail.ap_worker_restric }}%</span>
                             ITAR
                         </div>
 
@@ -828,7 +826,7 @@
                     </div>
                     <div class="col-md-12 stat">
                         <div class="data">
-                            <span class="number">{{ indices.is_using_aq_exposition }}%</span>
+                            <span class="number">{{ index_detail.is_using_aq_exposition }}%</span>
                             IEAQ
                         </div>
 
@@ -848,7 +846,7 @@
                     </div>
                     <div class="col-md-12 stat">
                         <div class="data">
-                            <span class="number">{{ indices.monitoring }}%</span>
+                            <span class="number">{{ index_detail.monitoring }}%</span>
                             IMO
                         </div>
 
@@ -867,7 +865,7 @@
                     </div>
                     <div class="col-md-12 stat">
                         <div class="data">
-                            <span class="number">{{ indices.medidas_control }}%</span>
+                            <span class="number">{{ index_detail.medidas_control }}%</span>
                             IMCO
                         </div>
 
