@@ -8,6 +8,7 @@ from fullcalendar.forms import UserModelMultipleChoiceField, WorkerModelMultiple
 from .functions import add_form_control_class, add_form_text
 from .models import Company, Format, Accident, Employee, Requirement, LegalRequirement, MedicControl, Worker, \
     AccidentDetail
+from django.contrib.auth.models import Group
 
 
 class FormatForm(ModelForm):
@@ -81,13 +82,16 @@ class DateInput(forms.DateInput):
 class LegalRequirementForm(ModelForm):
     class Meta:
         model = LegalRequirement
-        fields = ['title', 'normativa', 'datepublication', 'apply']
+        fields = ['type_normativa', 'normativa', 'datepublication', 'title', 'apply', 'evidence',
+                  'frecuency', 'date_last_evaluation', 'responsable', 'cumplimiento', 'observations', 'type_register',
+                  'state']
 
     def __init__(self, *args, **kwargs):
         super(LegalRequirementForm, self).__init__(*args, **kwargs)
         _instance = kwargs.pop('instance', None)
         add_form_control_class(self.fields)
         self.fields['datepublication'].widget.attrs['class'] = 'form-control input-datepicker'
+        self.fields['date_last_evaluation'].widget.attrs['class'] = 'form-control input-datepicker'
 
 
 class MedicControlForm(ModelForm):
@@ -96,7 +100,7 @@ class MedicControlForm(ModelForm):
 
     class Meta:
         model = MedicControl
-        fields = ['worker', 'state', 'date', 'evidence']
+        fields = ['worker', 'state', 'program', 'date', 'evidence']
 
     def __init__(self, *args, **kwargs):
         super(MedicControlForm, self).__init__(*args, **kwargs)
@@ -106,13 +110,23 @@ class MedicControlForm(ModelForm):
 
 
 class AccidentForm(ModelForm):
+    worker = forms.ModelChoiceField(queryset=Worker.objects.all(), label='Trabajador')
+    evidence = forms.FileField(required=False)
+
     class Meta:
         model = Accident
         fields = ['title', 'content', 'type_accident', 'worker', 'date', 'evidence']
 
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
         super(AccidentForm, self).__init__(*args, **kwargs)
         _instance = kwargs.pop('instance', None)
+        if user:
+            group = Group.objects.get(name="Doctor")
+            if not group in user.groups.all():
+                self.fields['evidence'] = forms.Field(widget=HiddenInput, required=False)
+        else:
+            self.fields['evidence'] = forms.Field(widget=HiddenInput, required=False)
         add_form_control_class(self.fields)
         self.fields['date'].widget.attrs['class'] = 'form-control input-datepicker'
 

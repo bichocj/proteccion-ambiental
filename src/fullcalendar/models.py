@@ -13,11 +13,13 @@ class Calendar(models.Model):
     SIMULATION = 3
     OTRO = 4
     CHARLAS = 5
+    DOCTOR=6
     types_calendar = ((CAPACITATION, 'CAPACITACION'),
                       (INSPECTION, 'INSPECCION'),
                       (SIMULATION, 'SIMULACRO'),
                       (CHARLAS, 'CHARLAS DE SEGURIDAD'),
-                      (OTRO, 'OTRO'))
+                      (OTRO, 'OTRO'),
+                      (DOCTOR,'DOCTOR'))
     title = models.CharField(_('Nombre'), max_length=200, null=False, blank=None)
     company = models.ForeignKey(Company, null=False)
     slug = models.SlugField(max_length=100)
@@ -78,11 +80,13 @@ class Events(models.Model):
     CHARLAS = 5
     REALIZADO = 2
     PENDIENTE = 1
+    DOCTOR=6
     types_event = ((CAPACITATION, 'CAPACITACION'),
                    (INSPECTION, 'INSPECCION'),
                    (SIMULATION, 'SIMULACRO'),
                    (CHARLAS, 'CHARLAS DE SEGURIDAD'),
-                   (OTRO, 'OTRO'))
+                   (OTRO, 'OTRO'),
+                   (DOCTOR,'DOCTOR'))
     state_event = ((REALIZADO, 'REALIZADO'),
                    (PENDIENTE, 'PENDIENTE'),
                    )
@@ -144,6 +148,6 @@ class Events(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     type_capacitations = models.IntegerField(_('Tipo Capacitacion'), choices=type_capacitation, null=True, blank=True,
-                                             default=-1)
+                                             default=INDUCCION)
     type_inspeccions = models.IntegerField(_('TIpo Inspeccion'), choices=type_inspeccion, null=True, blank=True,
-                                           default=-1)
+                                           default=INSPECCION_DE_SEGURIDAD)

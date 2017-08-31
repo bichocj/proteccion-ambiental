@@ -1,433 +1,1139 @@
 {% extends 'main/layout.html' %}
 {% load static %}
 {% block styles %}
-     <link rel="stylesheet" href="{% static 'main/css/compiled/index.css' %}" type="text/css" media="screen" />
+    <link rel="stylesheet" href="{% static 'main/css/compiled/index.css' %}" type="text/css" media="screen"/>
 {% endblock %}
 {% block content %}
-
-
-        <!-- settings changer -->
-        <div class="skins-nav">
-            <a href="#" class="skin first_nav selected">
-                <span class="icon"></span><span class="text">Default skin</span>
-            </a>
-            <a href="#" class="skin second_nav" data-file="css/compiled/skins/dark.css">
-                <span class="icon"></span><span class="text">Dark skin</span>
-            </a>
-        </div>
-
-        <!-- upper main stats -->
-        <div id="main-stats">
-            <div class="row stats-row">
-                <div class="col-md-3 col-sm-3 stat">
-                    <div class="data">
-                        <span class="number">2457</span>
-                        visits
-                    </div>
-                    <span class="date">Today</span>
+    <div id="pad-wrapper">
+        <div class="row header">
+            <div class="col-md-12">
+                <div class="col-md-9">
+                    <h3>{{ title }}</h3>
                 </div>
-                <div class="col-md-3 col-sm-3 stat">
-                    <div class="data" >
-                        <span class="number">3240</span>
-
-                    </div>
-                    <span class="date">February 2013</span>
-                </div>
-                <div class="col-md-3 col-sm-3 stat">
-                    <div class="data">
-                        <span class="number">322</span>
-                        orders
-                    </div>
-                    <span class="date">This week</span>
-                </div>
-                <div class="col-md-3 col-sm-3 stat last">
-                    <div class="data">
-                        <span class="number">$2,340</span>
-                        sales
-                    </div>
-                    <span class="date">last 30 days</span>
-                </div>
-            </div>
-        </div>
-        <!-- end upper main stats -->
-
-        <div id="pad-wrapper">
-
-            <!-- statistics chart built with jQuery Flot -->
-            <div class="row chart">
-                <div class="col-md-12">
-                    <h4 class="clearfix pull-left">
-                        Statistics
+                <div class="col-md-3">
+                    <h4>
+                        <small> Numero de trabajadores: <b>{{ workers.count }}</b></small>
                     </h4>
-                    <div class="btn-group pull-right">
-                        <button class="glow left">DAY</button>
-                        <button class="glow middle active">MONTH</button>
-                        <button class="glow right">YEAR</button>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div id="statsChart"></div>
+                    <h4>
+                        <small>Indice General: <b>{{ indice_general }}</b></small>
+                    </h4>
                 </div>
             </div>
-            <!-- end statistics chart -->
-
-            <!-- UI Elements section -->
-            <div class="row section ui-elements">
-                <div class="col-md-12">
-                    <h4>UI Elements</h4>
-                </div>
-                <div class="col-md-5 knobs">
-                    <div class="knob-wrapper">
-                        <input type="text" value="50" class="knob" data-thickness=".3" data-inputColor="#333" data-fgColor="#30a1ec" data-bgColor="#d4ecfd" data-width="150">
-                        <div class="info">
-                            <div class="param">
-                                <span class="line blue"></span>
-                                Active users
-                            </div>
-                        </div>
-                    </div>
-                    <div class="knob-wrapper">
-                        <input type="text" value="75" class="knob second" data-thickness=".3" data-inputColor="#333" data-fgColor="#3d88ba" data-bgColor="#d4ecfd" data-width="150">
-                        <div class="info">
-                            <div class="param">
-                                <span class="line blue"></span>
-                                % disk space usage
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 showcase">
-                    <div class="ui-sliders">
-                        <div class="slider slider-sample1 vertical-handler"></div>
-                        <div class="slider slider-sample2"></div>
-                        <div class="slider slider-sample3"></div>
-                    </div>
-                    <div class="ui-group">
-                        <a class="btn-flat inverse">Large Button</a>
-                        <a class="btn-flat gray">Large Button</a>
-                        <a class="btn-flat default">Large Button</a>
-                        <a class="btn-flat primary">Large Button</a>
-                    </div>
-
-                    <div class="ui-group">
-                        <a class="btn-flat icon">
-                            <i class="tool"></i> Icon button
-                        </a>
-                        <a class="btn-glow small inverse">
-                            <i class="shuffle"></i>
-                        </a>
-                        <a class="btn-glow small primary">
-                            <i class="setting"></i>
-                        </a>
-                        <a class="btn-glow small default">
-                            <i class="attach"></i>
-                        </a>
-                        <div class="ui-select">
-                            <select>
-                                <option selected>Dropdown</option>
-                                <option>Custom selects</option>
-                                <option>Pure css styles</option>
-                            </select>
-                        </div>
-
-                        <div class="btn-group">
-                            <button class="glow left">LEFT</button>
-                            <button class="glow right">RIGHT</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- end UI elements section -->
-
-            <!-- table sample -->
-            <!-- the script for the toggle all checkboxes from header is located in js/theme.js -->
-            <div class="table-products section">
-                <div class="row head">
-                    <div class="col-md-12">
-                        <h4>Products <small>Table sample</small></h4>
-                    </div>
-                </div>
-
-                <div class="row filter-block">
-                    <div class="col-md-8 col-md-offset-5">
-                        <div class="ui-select">
-                            <select>
-                              <option>Filter users</option>
-                              <option>Signed last 30 days</option>
-                              <option>Active users</option>
-                            </select>
-                        </div>
-                        <input type="text" class="search">
-                        <a class="btn-flat new-product">+ Add product</a>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th class="col-md-3">
-                                    <input type="checkbox">
-                                    Product
-                                </th>
-                                <th class="col-md-3">
-                                    <span class="line"></span>Description
-                                </th>
-                                <th class="col-md-3">
-                                    <span class="line"></span>Status
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- row -->
-                            <tr class="first">
-                                <td>
-                                    <input type="checkbox">
-                                    <div class="img">
-                                        <img src="img/table-img.png" alt="pic" />
-                                    </div>
-                                    <a href="#">There are many variations </a>
-                                </td>
-                                <td class="description">
-                                    if you are going to use a passage of Lorem Ipsum.
-                                </td>
-                                <td>
-                                    <span class="label label-success">Active</span>
-                                    <ul class="actions">
-                                        <li><i class="table-edit"></i></li>
-                                        <li><i class="table-settings"></i></li>
-                                        <li class="last"><i class="table-delete"></i></li>
-                                    </ul>
-                                </td>
-                            </tr>
-                            <!-- row -->
-                            <tr>
-                                <td>
-                                    <input type="checkbox">
-                                    <div class="img">
-                                        <img src="img/table-img.png" alt="pic" />
-                                    </div>
-                                    <a href="#">Internet tend</a>
-                                </td>
-                                <td class="description">
-                                    There are many variations of passages.
-                                </td>
-                                <td>
-                                    <ul class="actions">
-                                        <li><i class="table-edit"></i></li>
-                                        <li><i class="table-settings"></i></li>
-                                        <li class="last"><i class="table-delete"></i></li>
-                                    </ul>
-                                </td>
-                            </tr>
-                            <!-- row -->
-                            <tr>
-                                <td>
-                                    <input type="checkbox">
-                                    <div class="img">
-                                        <img src="img/table-img.png" alt="pic" />
-                                    </div>
-                                    <a href="#">Many desktop publishing </a>
-                                </td>
-                                <td class="description">
-                                    if you are going to use a passage of Lorem Ipsum.
-                                </td>
-                                <td>
-                                    <ul class="actions">
-                                        <li><i class="table-edit"></i></li>
-                                        <li><i class="table-settings"></i></li>
-                                        <li class="last"><i class="table-delete"></i></li>
-                                    </ul>
-                                </td>
-                            </tr>
-                            <!-- row -->
-                            <tr>
-                                <td>
-                                    <input type="checkbox">
-                                    <div class="img">
-                                        <img src="img/table-img.png" alt="pic" />
-                                    </div>
-                                    <a href="#">Generate Lorem </a>
-                                </td>
-                                <td class="description">
-                                    There are many variations of passages.
-                                </td>
-                                <td>
-                                    <span class="label label-info">Standby</span>
-                                    <ul class="actions">
-                                        <li><i class="table-edit"></i></li>
-                                        <li><i class="table-settings"></i></li>
-                                        <li class="last"><i class="table-delete"></i></li>
-                                    </ul>
-                                </td>
-                            </tr>
-                            <!-- row -->
-                            <tr>
-                                <td>
-                                    <input type="checkbox">
-                                    <div class="img">
-                                        <img src="img/table-img.png" alt="pic" />
-                                    </div>
-                                    <a href="#">Internet tend</a>
-                                </td>
-                                <td class="description">
-                                    There are many variations of passages.
-                                </td>
-                                <td>
-                                    <ul class="actions">
-                                        <li><i class="table-edit"></i></li>
-                                        <li><i class="table-settings"></i></li>
-                                        <li class="last"><i class="table-delete"></i></li>
-                                    </ul>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <ul class="pagination">
-                    <li><a href="#">&laquo;</a></li>
-                    <li class="active"><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">&raquo;</a></li>
-                </ul>
-            </div>
-            <!-- end table sample -->
         </div>
+        <div class="col-md-12">
+            <h3>Mes {{ month.mes }}</h3>
+            <h4 class="">Compañia: {{ company.name }}</h4>
+            <a class="btn-flat icon pull-right" id="restore_btn" href="{% url 'main:restore_indices' company_slug month.index %}">
+                <i class="icon-refresh"></i> Restaurar
+            </a>
+
+        </div>
+
+        {% if index.is_using_sgsst %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row stat">
+                    <div class="col-md-12" style="text-align: left;">
+                        <h4>
+                            Índice de Cumplimiento del SGSST (>=90)
+                        </h4>
+
+                    </div>
+
+
+                    <div class="col-md-12 field-box">
+                        <div class="col-md-2">
+                            <label>Actividades Plan Trabajo:</label>
+                        </div>
+                        <div class="col-md-3 ">
+
+                            <input id="numerator_sgsst" class="form-control" type="number"
+                                   value="{{ numerator_sgsst }}" step="0.01"/>
+                        </div>
+
+                        <div class="field-box">
+                            <div class="col-md-2">
+                                <label>Actividades Programadas Plan Trabajo:</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input id="denominator_sgsst" class="form-control" type="number"
+                                       value="{{ denominator_sgsst }}"/>
+                            </div>
+                        </div>
+                        <div class="field-box col-md-2">
+                            <button id="sgsst_btn" class="btn-flat inverse">Guardar</button>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-12">
+                        <div class="col-md-7"></div>
+                        <div class="col-md-5 data">
+                            <span class="number" id="sgsst_val">{{ indices.sgsst }}%</span>
+                            ICSST
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+
+        {% endif %}
+        {% if index.is_using_legal %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row stat">
+                    <div class="col-md-12" style="text-align: left;">
+                        <h4>
+                            Índice Legal (>=100)
+                        </h4>
+
+                    </div>
+
+
+                    <div class="col-md-12 field-box">
+                        <div class="col-md-2">
+                            <label>Requisitos Cumplidos  :</label>
+                        </div>
+                        <div class="col-md-3 ">
+
+                            <input id="numerator_legal" class="form-control" type="number"
+                                   value="{{ numerator_legal }}"/>
+                        </div>
+
+                        <div class="field-box">
+                            <div class="col-md-2">
+                                <label>Requisitos identificados:</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input id="denominator_legal" class="form-control" type="number"
+                                       value="{{ denominator_legal }}"/>
+                            </div>
+                        </div>
+                        <div class="field-box col-md-2">
+                            <button id="legal_btn" class="btn-flat inverse">Guardar</button>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-12">
+                        <div class="col-md-7"></div>
+                        <div class="col-md-5 data">
+                            <span class="number" id="legal_val">{{ indices.legal }}%</span>
+                            ILEG
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+
+
+        {% endif %}
+        {% if index.is_using_icsst %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row stat">
+                    <div class="col-md-12" style="text-align: left;">
+                        <h4>
+                            Implementación CSST (>=90)
+                        </h4>
+
+                    </div>
+
+
+                    <div class="col-md-12 field-box">
+                        <div class="col-md-2">
+                            <label>Acuerdos SST implementados:</label>
+                        </div>
+                        <div class="col-md-3 ">
+
+                            <input id="numerator_icsst" class="form-control" type="number"
+                                   value="{{ numerator_icsst }}"/>
+                        </div>
+
+                        <div class="field-box">
+                            <div class="col-md-2">
+                                <label>Acuerdos SST planificados:</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input id="denominator_icsst" class="form-control" type="number"
+                                       value="{{ denominator_icsst }}"/>
+                            </div>
+                        </div>
+                        <div class="field-box col-md-2">
+                            <button id="icsst_btn" class="btn-flat inverse">Guardar</button>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-12">
+                        <div class="col-md-7"></div>
+                        <div class="col-md-5 data pull-right">
+                            <span class="number" id="icsst_val">{{ indices.icsst }}%</span>
+                            ICSST
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Solo anual-->
+        {% if index.is_using_indice_no_conformidad and month.index == 12 %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row stat">
+                    <div class="col-md-12" style="text-align: left;">
+                        <h4>
+                            Indice de no Conformidades (>=100)
+                        </h4>
+
+                    </div>
+
+
+                    <div class="col-md-12 field-box">
+                        <div class="col-md-2">
+                            <label>No Conformidades levantadas:</label>
+                        </div>
+                        <div class="col-md-3 ">
+
+                            <input id="numerator_indice_no_conformidad" class="form-control" type="number"
+                                   value="{{ numerator_indice_no_conformidad }}"/>
+                        </div>
+
+                        <div class="field-box">
+                            <div class="col-md-2">
+                                <label>No Conformidades Identificadas:</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input id="denominator_indice_no_conformidad" class="form-control" type="number"
+                                       value="{{ denominator_indice_no_conformidad }}"/>
+                            </div>
+                        </div>
+                        <div class="field-box col-md-2">
+                            <button id="indice_no_conformidad_btn" class="btn-flat inverse">Guardar</button>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-12">
+                        <div class="col-md-7"></div>
+                        <div class="col-md-5 data pull-right">
+                            <span class="number" id="indice_no_conformidad_val">{{ indices.indice_no_conformidad }}%</span>
+                            INC
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+
+        {% endif %}
+        {% if index.is_using_medida_iperc and month.index == 6 %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row stat">
+                    <div class="col-md-12" style="text-align: left;">
+                        <h4>
+                            Indice de Medidas de Control IPERC (>=90)
+                        </h4>
+
+                    </div>
+
+
+                    <div class="col-md-12 field-box">
+                        <div class="col-md-2">
+                            <label>Controles Implementados:</label>
+                        </div>
+                        <div class="col-md-3 ">
+
+                            <input id="numerator_medida_iperc" class="form-control" type="number"
+                                   value="{{ numerator_medida_iperc }}"/>
+                        </div>
+
+                        <div class="field-box">
+                            <div class="col-md-2">
+                                <label>Controles Programados:</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input id="denominator_medida_iperc" class="form-control" type="number"
+                                       value="{{ denominator_medida_iperc }}"/>
+                            </div>
+                        </div>
+                        <div class="field-box col-md-2">
+                            <button id="medida_iperc_btn" class="btn-flat inverse">Guardar</button>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-12">
+                        <div class="col-md-7"></div>
+                        <div class="col-md-5 data pull-right">
+                            <span class="number" id="medida_iperc_val">{{ indices.medida_iperc }}%</span>
+                            IMC
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+
+        {% endif %}
+        {% if index.is_using_liderazgo %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row stat">
+                    <div class="col-md-12" style="text-align: left;">
+                        <h4>
+                            Indice Liderazgo Participativo (>=90)
+                        </h4>
+
+                    </div>
+
+
+                    <div class="col-md-12 field-box">
+                        <div class="col-md-2">
+                            <label>Actividades Preventivas Cumplidas:</label>
+                        </div>
+                        <div class="col-md-3 ">
+
+                            <input id="numerator_liderazgo" class="form-control" type="number"
+                                   value="{{ numerator_liderazgo }}"/>
+                        </div>
+
+                        <div class="field-box">
+                            <div class="col-md-2">
+                                <label>Actividades Preventivas Programadas:</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input id="denominator_liderazgo" class="form-control" type="number"
+                                       value="{{ denominator_liderazgo }}"/>
+                            </div>
+                        </div>
+                        <div class="field-box col-md-2">
+                            <button id="liderazgo_btn" class="btn-flat inverse">Guardar</button>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-12">
+                        <div class="col-md-7"></div>
+                        <div class="col-md-5 data pull-right">
+                            <span class="number" id="liderazgo_val">{{ indices.liderazgo }}%</span>
+                            ILP
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+
+        {% endif %}
+        {% if index.is_using_plan_contingencia %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row stat">
+                    <div class="col-md-12" style="text-align: left;">
+                        <h4>
+                            Indice de Actividades del plan de contingencia (>=90)
+                        </h4>
+
+                    </div>
+
+
+                    <div class="col-md-12 field-box">
+                        <div class="col-md-2">
+                            <label>Actividades Preventivas Cumplidas:</label>
+                        </div>
+                        <div class="col-md-3 ">
+
+                            <input id="numerator_plan_contingencia" class="form-control" type="number"
+                                   value="{{ numerator_plan_contingencia }}"/>
+                        </div>
+
+                        <div class="field-box">
+                            <div class="col-md-2">
+                                <label>Actividades Preventivas Programadas:</label>
+                            </div>
+                            <div class="col-md-3">
+                                <input id="denominator_plan_contingencia" class="form-control" type="number"
+                                       value="{{ denominator_plan_contingencia }}"/>
+                            </div>
+                        </div>
+                        <div class="field-box col-md-2">
+                            <button id="plan_contingencia_btn" class="btn-flat inverse">Guardar</button>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-12">
+                        <div class="col-md-7"></div>
+                        <div class="col-md-5 data pull-right">
+                            <span class="number" id="plan_contingencia_val">{{ indices.plan_contingencia }}%</span>
+                            IAPC
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        {% endif %}
+        {% if index.is_using_mejora %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row">
+                    <div class="col-md-12">
+                        <h4 class="clearfix pull-left">
+                            Índice de Mejora (>=90)
+                        </h4>
+                    </div>
+                    <div class="col-md-12 stat">
+                        <div class="data">
+                            <span class="number">{{ indices.mejora }}%</span>
+                            IM
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+        {% if index.is_using_capacitacion %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row">
+                    <div class="col-md-12">
+                        <h4 class="clearfix pull-left">
+                            Índice de Capacitacion (>=90)
+                        </h4>
+                    </div>
+                    <div class="col-md-12 stat">
+                        <div class="data">
+                            <span class="number">{{ indices.capacitacion }}%</span>
+                            IC
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+        {% if index.is_using_personal_capacitado %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row">
+                    <div class="col-md-12">
+                        <h4 class="clearfix pull-left">
+                            Índice de Personal Capacitado (>=90)
+                        </h4>
+                    </div>
+                    <div class="col-md-12 stat">
+                        <div class="data">
+                            <span class="number">{{ indices.personal_capacitado }}%</span>
+                            IPC
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+        {% if index.is_using_intensidad_formativa %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row">
+                    <div class="col-md-12">
+                        <h4 class="clearfix pull-left">
+                            Índice de Intensidad Formativa
+                        </h4>
+                    </div>
+                    <div class="col-md-12 stat">
+                        <div class="data">
+                            <span class="number">{{ indices.intensidad_formativa }}%</span>
+                            IIF
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+        {% if index.is_using_charlas %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row">
+                    <div class="col-md-12">
+                        <h4 class="clearfix pull-left">
+                            Indice de Charlas Periodicas de Seguridad (>=90)
+                        </h4>
+                    </div>
+                    <div class="col-md-12 stat">
+                        <div class="data">
+                            <span class="number">{{ indices.charlas }}%</span>
+                            IDPS
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+        {% if index.is_using_incidentes %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row">
+                    <div class="col-md-12">
+                        <h4 class="clearfix pull-left">
+                            Indice de Reporte de Incidentes (>=90)
+                        </h4>
+                    </div>
+                    <div class="col-md-12 stat">
+                        <div class="data">
+                            <span class="number">{{ indices.incidentes }}%</span>
+                            IRA
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+        {% if index.is_using_inspecciones %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row">
+                    <div class="col-md-12">
+                        <h4 class="clearfix pull-left">
+                            Indice de Inspecciones (>=90)
+                        </h4>
+                    </div>
+                    <div class="col-md-12 stat">
+                        <div class="data">
+                            <span class="number">{{ indices.inspecciones }}%</span>
+                            II
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+        {% if index.is_using_observaciones_planeadas %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row">
+                    <div class="col-md-12">
+                        <h4 class="clearfix pull-left">
+                            Índice de Observaciones planeadas de trabajo (>=100)
+                        </h4>
+                    </div>
+                    <div class="col-md-12 stat">
+                        <div class="data">
+                            <span class="number">{{ indices.observaciones_planeadas }}%</span>
+                            OPT
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+        <!-- anual-->
+        {% if index.is_using_auditorias %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row">
+                    <div class="col-md-12">
+                        <h4 class="clearfix pull-left">
+                            Índice de Cumplimiento del SGSST (>=100)
+                        </h4>
+                    </div>
+                    <div class="col-md-12 stat">
+                        <div class="data">
+                            <span class="number">{{ indices.auditorias }}%</span>
+                            IAU
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+        {% if index.is_using_simulacros_emergencia %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row">
+                    <div class="col-md-12">
+                        <h4 class="clearfix pull-left">
+                            Índice de Simulacros de Emergencia (>=90)
+                        </h4>
+                    </div>
+                    <div class="col-md-12 stat">
+                        <div class="data">
+                            <span class="number">{{ indices.simulacros_emergencia }}%</span>
+                            ISE
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+        {% if index.is_using_reconocimiento_trabajador %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row">
+                    <div class="col-md-12">
+                        <h4 class="clearfix pull-left">
+                            Índice de Reconocimiento del Trabajador (>=90)
+                        </h4>
+                    </div>
+                    <div class="col-md-12 stat">
+                        <div class="data">
+                            <span class="number">{{ indices.reconocimiento_trabajador }}%</span>
+                            IRT
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+        {% if index.is_using_engenieer %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row">
+                    <div class="col-md-12">
+                        <h4 class="clearfix pull-left">
+                            Índice de Disponibilidad Ingeniero SST (>=90)
+                        </h4>
+                    </div>
+                    <div class="col-md-12 stat">
+                        <div class="data">
+                            <span class="number">{{ indices.engenieer }}%</span>
+                            DI
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+        {% if index.is_using_first_auxi %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row">
+                    <div class="col-md-12">
+                        <h4 class="clearfix pull-left">
+                            Índice de Accidentes con Primeros Auxilios (<= 10)
+                        </h4>
+                    </div>
+                    <div class="col-md-12 stat">
+                        <div class="data">
+                            <span class="number">{{ indices.sgsst }}%</span>
+                            APA
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+        {% if index.is_using_medic_atention %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row">
+                    <div class="col-md-12">
+                        <h4 class="clearfix pull-left">
+                            Índice de Accidentes con Atención Médica (<=20)
+                        </h4>
+                    </div>
+                    <div class="col-md-12 stat">
+                        <div class="data">
+                            <span class="number">{{ indices.medic_atention }}%</span>
+                            AAM
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+        {% if index.is_using_lose_time %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row">
+                    <div class="col-md-12">
+                        <h4 class="clearfix pull-left">
+                            Índice de Accidentes con Tiempo Perdido (<=20)
+                        </h4>
+                    </div>
+                    <div class="col-md-12 stat">
+                        <div class="data">
+                            <span class="number">{{ indices.lose_time }}%</span>
+                            ATP
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+        {% if index.is_using_fatal_accident %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row">
+                    <div class="col-md-12">
+                        <h4 class="clearfix pull-left">
+                            Índice de Accidentes Fatales (=0)
+                        </h4>
+                    </div>
+                    <div class="col-md-12 stat">
+                        <div class="data">
+                            <span class="number">{{ indices.fatal_accident }}%</span>
+                            AF
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+        {% if index.is_using_frecuency %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row">
+                    <div class="col-md-12">
+                        <h4 class="clearfix pull-left">
+                            Índice de Frecuencia (<=10)
+                        </h4>
+                    </div>
+                    <div class="col-md-12 stat">
+                        <div class="data">
+                            <span class="number">{{ indices.frecuency }}%</span>
+                            IF
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+        {% if index.is_using_severity %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row">
+                    <div class="col-md-12">
+                        <h4 class="clearfix pull-left">
+                            Índice de Severidad (<=50)
+                        </h4>
+                    </div>
+                    <div class="col-md-12 stat">
+                        <div class="data">
+                            <span class="number">{{ indices.severity }}%</span>
+                            IS
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+        {% if index.is_using_accidentality %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row">
+                    <div class="col-md-12">
+                        <h4 class="clearfix pull-left">
+                            Índice de Accidentabilidad (<= 1)
+                        </h4>
+                    </div>
+                    <div class="col-md-12 stat">
+                        <div class="data">
+                            <span class="number">{{ indices.accidentality }}%</span>
+                            IA
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+        {% if index.is_using_professional_sick %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row">
+                    <div class="col-md-12">
+                        <h4 class="clearfix pull-left">
+                            Índice de Enfermedades Profesionales (<= 5)
+                        </h4>
+                    </div>
+                    <div class="col-md-12 stat">
+                        <div class="data">
+                            <span class="number">{{ indices.professional_sick }}%</span>
+                            IEP
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+        {% if index.is_using_medic_exam %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row">
+                    <div class="col-md-12">
+                        <h4 class="clearfix pull-left">
+                            Índice de Examen Médico Ocupacional (100)
+                        </h4>
+                    </div>
+                    <div class="col-md-12 stat">
+                        <div class="data">
+                            <span class="number">{{ indices.medic_exam }}%</span>
+                            IEMOs
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+        {% if index.is_using_ap_worker %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row">
+                    <div class="col-md-12">
+                        <h4 class="clearfix pull-left">
+                            Índice de Trabajadores Aptos (>=90)
+                        </h4>
+                    </div>
+                    <div class="col-md-12 stat">
+                        <div class="data">
+                            <span class="number">{{ indices.ap_worker }}%</span>
+                            ITA
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+        {% if index.is_using_ap_worker_restric %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row">
+                    <div class="col-md-12">
+                        <h4 class="clearfix pull-left">
+                            Índice de Trabajadores Aptos con restricción (>=90)
+                        </h4>
+                    </div>
+                    <div class="col-md-12 stat">
+                        <div class="data">
+                            <span class="number">{{ indices.ap_worker_restric }}%</span>
+                            ITAR
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+        {% if index.is_using_aq_exposition %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row">
+                    <div class="col-md-12">
+                        <h4 class="clearfix pull-left">
+                            Índice de Exposición a Agentes Químicos (<= 50)
+                        </h4>
+                    </div>
+                    <div class="col-md-12 stat">
+                        <div class="data">
+                            <span class="number">{{ indices.is_using_aq_exposition }}%</span>
+                            IEAQ
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+        <!--anual-->
+        {% if index.is_using_monitoring %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row">
+                    <div class="col-md-12">
+                        <h4 class="clearfix pull-left">
+                            Índice de Monitoreos Ocupacionales (>=90)
+                        </h4>
+                    </div>
+                    <div class="col-md-12 stat">
+                        <div class="data">
+                            <span class="number">{{ indices.monitoring }}%</span>
+                            IMO
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+        {% if index.is_using_medidas_control %}
+            <div id="main-stats" style="margin-top: 50px;">
+                <div class="row stats-row">
+                    <div class="col-md-12">
+                        <h4 class="clearfix pull-left">
+                            Índice de Medidas de Control Ocupacional (>=70)
+                        </h4>
+                    </div>
+                    <div class="col-md-12 stat">
+                        <div class="data">
+                            <span class="number">{{ indices.medidas_control }}%</span>
+                            IMCO
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        {% endif %}
+    </div>
+
 
 {% endblock %}
 {% block scripts %}
     <script src="http://code.jquery.com/jquery-latest.js"></script>
-<script src="{% static 'main/js/bootstrap.min.js' %}"></script>
-<script src="{% static 'main/js/jquery-ui-1.10.2.custom.min.js' %}"></script>
-<script src="http://code.jquery.com/jquery-latest.js"></script>
-<script src="{% static 'main/js/bootstrap.min.js'%}"></script>
-<script src="{% static 'main/js/jquery-ui-1.10.2.custom.min.js'%}"></script>
-<!-- knob -->
-<script src="{% static 'main/js/jquery.knob.js'%}"></script>
-<!-- flot charts -->
-<script src="{% static 'main/js/jquery.flot.js'%}"></script>
-<script src="{% static 'main/js/jquery.flot.stack.js'%}"></script>
-<script src="{% static 'main/js/jquery.flot.resize.js'%}"></script>
-<script src="{% static 'main/js/theme.js'%}"></script>
-<!-- knob -->
-    <script>
-    function call_user_report() {
-        alert('holamundo');
-    }
-    </script>
+    <script src="{% static 'main/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'main/js/jquery-ui-1.10.2.custom.min.js' %}"></script>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script src="{% static 'main/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'main/js/jquery-ui-1.10.2.custom.min.js' %}"></script>
+    <!-- knob -->
+    <script src="{% static 'main/js/jquery.knob.js' %}"></script>
+    <!-- flot charts -->
+    <script src="{% static 'main/js/jquery.flot.js' %}"></script>
+    <script src="{% static 'main/js/jquery.flot.stack.js' %}"></script>
+    <script src="{% static 'main/js/jquery.flot.resize.js' %}"></script>
+    <script src="{% static 'main/js/theme.js' %}"></script>
+    <!-- knob -->
     <script type="text/javascript">
-        $(function () {
-
-            // jQuery Knobs
-            $(".knob").knob();
-
-
-
-            // jQuery UI Sliders
-            $(".slider-sample1").slider({
-                value: 100,
-                min: 1,
-                max: 500
-            });
-            $(".slider-sample2").slider({
-                range: "min",
-                value: 130,
-                min: 1,
-                max: 500
-            });
-            $(".slider-sample3").slider({
-                range: true,
-                min: 0,
-                max: 500,
-                values: [ 40, 170 ],
-            });
-
-
-
-            // jQuery Flot Chart
-            var visits = [[1, 50], [2, 40], [3, 45], [4, 23],[5, 55],[6, 65],[7, 61],[8, 70],[9, 65],[10, 75],[11, 57],[12, 59]];
-            var visitors = [[1, 25], [2, 50], [3, 23], [4, 48],[5, 38],[6, 40],[7, 47],[8, 55],[9, 43],[10,50],[11,47],[12, 39]];
-
-            var plot = $.plot($("#statsChart"),
-                [ { data: visits, label: "Signups"},
-                 { data: visitors, label: "Visits" }], {
-                    series: {
-                        lines: { show: true,
-                                lineWidth: 1,
-                                fill: true,
-                                fillColor: { colors: [ { opacity: 0.1 }, { opacity: 0.13 } ] }
-                             },
-                        points: { show: true,
-                                 lineWidth: 2,
-                                 radius: 3
-                             },
-                        shadowSize: 0,
-                        stack: true
-                    },
-                    grid: { hoverable: true,
-                           clickable: true,
-                           tickColor: "#f9f9f9",
-                           borderWidth: 0
-                        },
-                    legend: {
-                            // show: false
-                            labelBoxBorderColor: "#fff"
-                        },
-                    colors: ["#a7b5c5", "#30a0eb"],
-                    xaxis: {
-                        ticks: [[1, "JAN"], [2, "FEB"], [3, "MAR"], [4,"APR"], [5,"MAY"], [6,"JUN"],
-                               [7,"JUL"], [8,"AUG"], [9,"SEP"], [10,"OCT"], [11,"NOV"], [12,"DEC"]],
-                        font: {
-                            size: 12,
-                            family: "Open Sans, Arial",
-                            variant: "small-caps",
-                            color: "#697695"
-                        }
-                    },
-                    yaxis: {
-                        ticks:3,
-                        tickDecimals: 0,
-                        font: {size:12, color: "#9da3a9"}
-                    }
-                 });
-
-            function showTooltip(x, y, contents) {
-                $('<div id="tooltip">' + contents + '</div>').css( {
-                    position: 'absolute',
-                    display: 'none',
-                    top: y - 30,
-                    left: x - 50,
-                    color: "#fff",
-                    padding: '2px 5px',
-                    'border-radius': '6px',
-                    'background-color': '#000',
-                    opacity: 0.80
-                }).appendTo("body").fadeIn(200);
+        $(document).ready(function () {
+            var user ={{ is_superuser }};
+            if (!user) {
+                $('#numerator_sgsst').attr('readonly', true);
+                $('#denominator_sgsst').attr('readonly', true);
+                $('#sgsst_btn').css({display: "none"});
+                $('#numerator_legal').attr('readonly', true);
+                $('#denominator_legal').attr('readonly', true);
+                $('#legal_btn').css({display: "none"});
+                $('#numerator_icsst').attr('readonly', true);
+                $('#denominator_icsst').attr('readonly', true);
+                $('#icsst_btn').css({display: "none"});
+                $('#numerator_indice_no_conformidad').attr('readonly', true);
+                $('#denominator_indice_no_conformidad').attr('readonly', true);
+                $('#indice_no_conformidad_btn').css({display: "none"});
+                $('#numerator_medida_iperc').attr('readonly', true);
+                $('#denominator_medida_iperc').attr('readonly', true);
+                $('#medida_iperc_btn').css({display: "none"});
+                $('#numerator_liderazgo').attr('readonly', true);
+                $('#denominator_liderazgo').attr('readonly', true);
+                $('#liderazgo_btn').css({display: "none"});
             }
+            var display_restore={{ display_restore_btn }};
+            if(display_restore == 0){
+                $('#restore_btn').css({display: "none"})
+            }
+            $('#sgsst_btn').click(function (e) {
 
-            var previousPoint = null;
-            $("#statsChart").bind("plothover", function (event, pos, item) {
-                if (item) {
-                    if (previousPoint != item.dataIndex) {
-                        previousPoint = item.dataIndex;
+                    e.preventDefault();
+                    var url = '';
+                    var data = {
+                        'numerator': $('#numerator_sgsst').val(),
+                        'denominator': $('#denominator_sgsst').val(),
+                        'month':{{ month.index }},
+                        csrfmiddlewaretoken: "{{ csrf_token }}"
+                    };
 
-                        $("#tooltip").remove();
-                        var x = item.datapoint[0].toFixed(0),
-                            y = item.datapoint[1].toFixed(0);
+                    url = '{% url 'main:indices_update' company_slug 'sgsst'%}';
+                    //var data = $(this).serializeArray();
+                    console.log(data);
+                    $.ajax({
+                        url: url,
+                        method: 'post',
+                        data: data,
+                        dataType: "JSON",
+                        success: function (response) {
 
-                        var month = item.series.xaxis.ticks[item.dataIndex].label;
+                            $('#sgsst_val').text(response.val + '%');
+                            $('#restore_btn').css({display: "inline"});
+                            console.log(response);
 
-                        showTooltip(item.pageX, item.pageY,
-                                    item.series.label + " of " + month + ": " + y);
-                    }
+                        }
+
+                    });
+
                 }
-                else {
-                    $("#tooltip").remove();
-                    previousPoint = null;
+            );
+            $('#legal_btn').click(function (e) {
+
+                    e.preventDefault();
+                    var url = '';
+                    var data = {
+                        'numerator': $('#numerator_legal').val(),
+                        'denominator': $('#denominator_legal').val(),
+                        'month':{{ month.index }},
+                        csrfmiddlewaretoken: "{{ csrf_token }}"
+                    };
+
+                    url = '{% url 'main:indices_update' company_slug 'legal'%}';
+                    //var data = $(this).serializeArray();
+                    console.log(data);
+                    $.ajax({
+                        url: url,
+                        method: 'post',
+                        data: data,
+                        dataType: "JSON",
+                        success: function (response) {
+                            $('#legal_val').text(response.val + '%');
+                            $('#restore_btn').css({display: "inline"});
+                            console.log(response);
+
+                        }
+
+                    });
+
                 }
-            });
+            );
+            $('#icsst_btn').click(function (e) {
+
+                    e.preventDefault();
+                    var url = '';
+                    var data = {
+                        'numerator': $('#numerator_icsst').val(),
+                        'denominator': $('#denominator_icsst').val(),
+                        'month':{{ month.index }},
+                        csrfmiddlewaretoken: "{{ csrf_token }}"
+                    };
+
+                    url = '{% url 'main:indices_update' company_slug 'icsst'%}';
+                    //var data = $(this).serializeArray();
+                    console.log(data);
+                    $.ajax({
+                        url: url,
+                        method: 'post',
+                        data: data,
+                        dataType: "JSON",
+                        success: function (response) {
+                            $('#icsst_val').text(response.val + '%');
+                            $('#restore_btn').css({display: "inline"});
+                            console.log(response);
+
+                        }
+
+                    });
+
+                }
+            );
+            $('#indice_no_conformidad_btn').click(function (e) {
+
+                    e.preventDefault();
+                    var url = '';
+                    var data = {
+                        'numerator': $('#numerator_indice_no_conformidad').val(),
+                        'denominator': $('#denominator_indice_no_conformidad').val(),
+                        'month':{{ month.index }},
+                        csrfmiddlewaretoken: "{{ csrf_token }}"
+                    };
+
+                    url = '{% url 'main:indices_update' company_slug 'indice_no_conformidad'%}';
+                    //var data = $(this).serializeArray();
+                    console.log(data);
+                    $.ajax({
+                        url: url,
+                        method: 'post',
+                        data: data,
+                        dataType: "JSON",
+                        success: function (response) {
+                            $('#indice_no_conformidad_val').text(response.val + '%');
+                            $('#restore_btn').css({display: "inline"});
+                            console.log(response);
+
+                        }
+
+                    });
+
+                }
+            );
+            $('#medida_iperc_btn').click(function (e) {
+
+                    e.preventDefault();
+                    var url = '';
+                    var data = {
+                        'numerator': $('#numerator_medida_iperc').val(),
+                        'denominator': $('#denominator_medida_iperc').val(),
+                        'month':{{ month.index }},
+                        csrfmiddlewaretoken: "{{ csrf_token }}"
+                    };
+
+                    url = '{% url 'main:indices_update' company_slug 'medida_iperc'%}';
+                    //var data = $(this).serializeArray();
+                    console.log(data);
+                    $.ajax({
+                        url: url,
+                        method: 'post',
+                        data: data,
+                        dataType: "JSON",
+                        success: function (response) {
+                            $('#medida_iperc_val').text(response.val + '%');
+                            $('#restore_btn').css({display: "inline"});
+                            console.log(response);
+
+                        }
+
+                    });
+
+                }
+            );
+            $('#liderazgo_btn').click(function (e) {
+
+                    e.preventDefault();
+                    var url = '';
+                    var data = {
+                        'numerator': $('#numerator_liderazgo').val(),
+                        'denominator': $('#denominator_liderazgo').val(),
+                        'month':{{ month.index }},
+                        csrfmiddlewaretoken: "{{ csrf_token }}"
+                    };
+
+                    url = '{% url 'main:indices_update' company_slug 'liderazgo'%}';
+                    //var data = $(this).serializeArray();
+                    console.log(data);
+                    $.ajax({
+                        url: url,
+                        method: 'post',
+                        data: data,
+                        dataType: "JSON",
+                        success: function (response) {
+                            $('#liderazgo_val').text(response.val + '%');
+                            $('#restore_btn').css({display: "inline"});
+                            console.log(response);
+
+                        }
+
+                    });
+
+                }
+            );
+            $('#plan_contingencia_btn').click(function (e) {
+
+                    e.preventDefault();
+                    var url = '';
+                    var data = {
+                        'numerator': $('#numerator_plan_contingencia').val(),
+                        'denominator': $('#denominator_plan_contingencia').val(),
+                        'month':{{ month.index }},
+                        csrfmiddlewaretoken: "{{ csrf_token }}"
+                    };
+
+                    url = '{% url 'main:indices_update' company_slug 'plan_contingencia'%}';
+                    //var data = $(this).serializeArray();
+                    console.log(data);
+                    $.ajax({
+                        url: url,
+                        method: 'post',
+                        data: data,
+                        dataType: "JSON",
+                        success: function (response) {
+                            $('#plan_contingencia_val').text(response.val + '%');
+                            $('#restore_btn').css({display: "inline"});
+                            console.log(response);
+
+                        }
+
+                    });
+
+                }
+            );
         });
+
     </script>
 {% endblock %}

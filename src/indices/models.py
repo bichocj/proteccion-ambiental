@@ -106,13 +106,6 @@ class Medida_IPERC(models.Model):
 
 class Index(models.Model):
     company = models.ForeignKey(Company)
-    indice_no_conformidad = models.ForeignKey(No_Conformidades, null=True)
-    indice_plan_contingencia = models.ForeignKey(Plan_Contingencia, null=True)
-    indice_medida_iperc = models.ForeignKey(Medida_IPERC, null=True)
-    indice_liderazgo = models.ForeignKey(Liderazgo_Participativo, null=True)
-    indice_charlas = models.ForeignKey(Index_de_charlas, null=True)
-    indice_incidente = models.ForeignKey(Indice_Reporte_Incidente, null=True)
-    indice_inpecciones = models.ForeignKey(Indice_Inspecciones, null=True)
 
     is_using_sgsst = models.BooleanField(_('Índice de Cumplimiento del SGSST'), null=False, default=False)
     is_using_legal = models.BooleanField(_('Índice Legal'), null=False, default=False)
@@ -132,6 +125,74 @@ class Index(models.Model):
     is_using_observaciones_planeadas = models.BooleanField(_('Índice de Observaciones planeadas  de trabajo'),
                                                            null=False, default=False)
     is_using_auditorias = models.BooleanField(_('Índice de Auditorias'), null=False, default=False)
-    is_using_simulacros_emergencia = models.BooleanField(_('Índice de Simulacros de Emergencia'), null=False, default=False)
-    is_using_reconocimiento_trabajador = models.BooleanField(_('Índice de Cumplimiento del SGSST'), null=False, default=False)
-    is_using_sgsst = models.BooleanField(_('Índice de Cumplimiento del SGSST'), null=False, default=False)
+    is_using_simulacros_emergencia = models.BooleanField(_('Índice de Simulacros de Emergencia'), null=False,
+                                                         default=False)
+    is_using_reconocimiento_trabajador = models.BooleanField(_('Índice de Reconocimiento del Trabajador'), null=False,
+                                                             default=False)
+    is_using_engenieer = models.BooleanField(_('Índice de Disponibilidad Ingeniero SST'), null=False, default=False)
+    is_using_first_auxi = models.BooleanField(_('Índice de Accidentes con Primeros Auxilios'), null=False,
+                                              default=False)
+    is_using_medic_atention = models.BooleanField(_('Índice de Accidentes con Atención Médica'), null=False,
+                                                  default=False)
+    is_using_lose_time = models.BooleanField(_('Índice de Accidentes con Tiempo Perdido'), null=False, default=False)
+    is_using_fatal_accident = models.BooleanField(_('Índice de Accidentes Fatales'), null=False, default=False)
+    is_using_frecuency = models.BooleanField(_('Índice de Frecuencia'), null=False, default=False)
+    is_using_severity = models.BooleanField(_('Índice de Severidad'), null=False, default=False)
+    is_using_accidentality = models.BooleanField(_('Índice de Accidentabilidad'), null=False, default=False)
+    is_using_professional_sick = models.BooleanField(_('Índice de Enfermedades Profesionales'), null=False,
+                                                     default=False)
+    is_using_medic_exam = models.BooleanField(_('Índice de Examen Médico Ocupacional'), null=False, default=False)
+    is_using_ap_worker = models.BooleanField(_('Índice de Trabajadores Aptos'), null=False, default=False)
+    is_using_ap_worker_restric = models.BooleanField(_('Índice de Trabajadores Aptos con restricción'), null=False,
+                                                     default=False)
+    is_using_aq_exposition = models.BooleanField(_('Índice de Exposición a  Agentes Químicos'), null=False,
+                                                 default=False)
+    is_using_monitoring = models.BooleanField(_('Índice de Monitoreos Ocupacionales'), null=False, default=False)
+    is_using_medidas_control = models.BooleanField(_('Índice de Medidas de Control Ocupacional'), null=False,
+                                                   default=False)
+
+
+class Index_Detail(models.Model):
+    index = models.ForeignKey(Index)
+    mounth = models.IntegerField(null=True, blank=True)
+    sgsst = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+
+    legal = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    icsst = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    indice_no_conformidad = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    medida_iperc = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    liderazgo = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    plan_contingencia = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    mejora = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    capacitacion = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    personal_capacitado = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    intensidad_formativa = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    charlas = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    incidentes = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    inspecciones = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    observaciones_planeadas = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    auditorias = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    simulacros_emergencia = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    reconocimiento_trabajador = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    engenieer = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    first_auxi = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    medic_atention = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    lose_time = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    fatal_accident = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    frecuency = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    severity = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    accidentality = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    professional_sick = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    medic_exam = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    ap_worker = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    ap_worker_restric = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    exposition = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    monitoring = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+    medidas_control = models.DecimalField(null=True, default=True, max_digits=10, decimal_places=2)
+
+
+class ValuesDetail(models.Model):
+    detail = models.ForeignKey(Index_Detail)
+    key = models.CharField(null=True, blank=True, max_length=100)
+    numerator = models.IntegerField(null=True, blank=True)
+    denominator = models.IntegerField(null=True, blank=True)

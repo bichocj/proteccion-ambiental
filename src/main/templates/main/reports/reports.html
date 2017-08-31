@@ -3,13 +3,54 @@
 {% endblock %}
 {% block content %}
     <div id="pad-wrapper">
-            <!-- grid examples -->
-            <div class="grid-wrapper">
-                <div class="row show-grid text-center">
-                                <div class="col-md-6"><a href="{% url 'main:mensual_report' company_slug%}" class="btn-flat">Reporte Mensual</a></div>
-                                <div class="col-md-6"><a href="" class="btn-flat info">Reporte Anual</a></div>
-                            </div>
+        <div class="row header">
+            <div class="col-md-12">
+                <h3>Generar Reporte</h3>
             </div>
+        </div>
+        <!-- grid examples -->
+        <div class="grid-wrapper">
+            <div class="row show-grid text-center">
+                <div class="col-md-6">
+                    <form action="{% url 'main:mensual_report' company_slug %}" method="post">
+                        {% csrf_token %}
+                        <div class="col-md-12" style="margin-bottom: 20px;">
+                            <h4 class="title">Reporte Mensual</h4>
+                        </div>
+                        <div class="field-box" style="margin-bottom: 20px;">
+                            <label>Mes:</label>
+                            <select style="width:250px" name="mes" id="mes" class="select2">
+                                <option value=""></option>
+                                {% for month in months %}
+                                    <option value="{{ month.index }}">{{ month.mes }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn-flat">Reporte
+                                Mensual
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-6">
+                    <div class="col-md-12" style="margin-bottom: 20px;">
+                        <h4 class="title">Reporte Anual</h4>
+                    </div>
+                    <div class="field-box">
+                        <div class="col-md-3">
+                            <label>Año:</label>
+                        </div>
+                        <div class="col-md-9" style="margin-bottom: 20px;">
+                            <input class="form-control" name="year" type="number" value="{{ year }}"/>
+                        </div>
+                    </div>
+                    <div >
+                        <a href="" class="btn-flat info">Reporte Anual</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 
@@ -17,4 +58,12 @@
 
 {% endblock %}
 {% block scripts %}
+    <script type="application/javascript">
+        $(function () {
+            $(".select2").select2({
+                placeholder: "Selecciona un mes"
+            });
+
+        });
+    </script>
 {% endblock %}

@@ -1,4 +1,4 @@
-from django.conf.urls import include, url, patterns
+from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 
@@ -12,7 +12,5 @@ urlpatterns = [
                   url(r'^indices/', include('indices.urls', namespace="indices")),
                   url(r'^admin/', admin.site.urls),
 
-              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-urlpatterns += patterns('',
-                        (r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
-                        )
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) \
+              + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

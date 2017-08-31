@@ -18,7 +18,7 @@
         <br>
         <br>
         <br>
-        {% if request.user.is_superuser or show%}
+        {% if request.user.is_superuser or show or show_all%}
         <div class="col-md-3"></div>
             <a href="{% url 'main:panel' company_jra_slug %}">
             <div class="col-md-2 circulo1" align="center" width="200" height="200">
@@ -32,7 +32,7 @@
             {% else %}
               <div class="col-md-3"></div>
             {% endif %}
-    {% if not show %}
+    {% if not show or show_all%}
         <div class="col-md-2"></div>
 
         <a href="{% url 'main:company_list' %}">

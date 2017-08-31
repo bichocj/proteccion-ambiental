@@ -1,7 +1,7 @@
 import datetime
 from django import forms
 from django.contrib.auth.models import User, Group
-from django.forms import ModelChoiceField, ModelForm, ModelMultipleChoiceField
+from django.forms import ModelChoiceField, ModelForm, ModelMultipleChoiceField, HiddenInput
 from accounts.functions import get_users_of_member_group, get_member_group
 from fullcalendar.models import Calendar, Events
 from main.functions import add_form_control_class, add_class_time_picker
@@ -32,6 +32,8 @@ class UserModelMultipleChoiceField(ModelMultipleChoiceField):
         except Company.DoesNotExist:
             pass
         return name
+
+
 class WorkerModelMultipleChoiceField(ModelMultipleChoiceField):
     def label_from_instance(self, obj):
         if obj.name:
@@ -49,7 +51,16 @@ class CalendarModelForm(ModelForm):
         fields = ["title", "type"]
 
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
         super(CalendarModelForm, self).__init__(*args, **kwargs)
+        _instance = kwargs.pop('instance', None)
+        if user:
+            group = Group.objects.get(name="Doctor")
+            if group in user.groups.all():
+                self.fields['type'] = forms.IntegerField(label="Tipo", required=False,
+                                                         widget=forms.TextInput(
+                                                             attrs={'placeholder': 'Doctor', 'readonly': True}))
+
         add_form_control_class(self.fields)
 
 
@@ -70,7 +81,7 @@ class EventsModelForm(ModelForm):
     hours_worked = forms.FloatField(widget=forms.HiddenInput(), required=False)
     number_workers = forms.IntegerField(widget=forms.HiddenInput(), required=False)
 
-    evidence = forms.FileField(label="Evidencia",required=False)
+    evidence = forms.FileField(label="Evidencia", required=False)
 
     class Meta:
         model = Events

@@ -7,91 +7,121 @@
 
 {% block styles %}
 
-<!-- this page specific styles -->
+    <!-- this page specific styles -->
 
 
-<link rel="stylesheet" type="text/css"
-      href="{% static 'fullcalendar/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css' %}"/>
-<link href="{% static 'fullcalendar/fullcalendar/fullcalendar.css'%}" rel="stylesheet"/>
-<link href="https://fullcalendar.io/js/fullcalendar-3.1.0/fullcalendar.print.min.css" rel="stylesheet" media='print'/>
-<link href="{% static 'fullcalendar/fullcalendar/lib/cupertino/jquery-ui.min.css' %}" rel="stylesheet"/>
-    <link rel="stylesheet" href="{% static 'main/css/compiled/calendar.css' %}" type="text/css" media="screen" />
+    <link rel="stylesheet" type="text/css"
+          href="{% static 'fullcalendar/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css' %}"/>
+    <link href="{% static 'fullcalendar/fullcalendar/fullcalendar.css' %}" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.print.css" rel="stylesheet"
+          media='print'/>
+    <link href="{% static 'fullcalendar/fullcalendar/lib/cupertino/jquery-ui.min.css' %}" rel="stylesheet"/>
+    <link rel="stylesheet" href="{% static 'main/css/compiled/calendar.css' %}" type="text/css" media="screen"/>
 
 
 
 {% endblock %}
 
 {% block page_toolbar %}
-<div class="btn-group pull-right">
-    <a href="{% url 'fullcalendar:settings_calendar' slug %}" class="btn btn-fit-height blue-ebonyclay">
-        <i class="glyphicon glyphicon-cog"></i>
-        {% trans 'Settings' %}
-    </a>
-</div>
+    <div class="btn-group pull-right">
+        <a href="{% url 'fullcalendar:settings_calendar' slug %}" class="btn btn-fit-height blue-ebonyclay">
+            <i class="glyphicon glyphicon-cog"></i>
+            {% trans 'Settings' %}
+        </a>
+    </div>
 {% endblock %}
 
 {% block content %}
-<div id="pad-wrapper" class="new-user">
-    <div class="col-md-12 text-center">
-        <h3>Cronograma <b>{{calendar.title}}</b></h3>
-    </div>
-    <div id='calendar'></div>
-</div>
-<div class="modal fade" id="event" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                <h4 class="modal-title">Event</h4>
-            </div>
-            <div class="modal-body">
-                <form method="post" class="form-horizontal" action="{% url 'fullcalendar:save_event' slug %}" id="event-form">
-                    {% for f in form %}
-                        {% csrf_token %}
-                {% if not f|is_hidden %}
-                    <div class="form-group {% if f.errors %}has-error{% endif %}">
-                        <label for="id_{{f.name}}" class="col-sm-2 control-label">{{ f.label|capfirst }}</label>
-                        <div class="col-sm-10">
-
-                            {{ f }}
-                        <p id="id_{{f.name}}_input" style="color: #002a80;font-size: 15px;" hidden>hola</p>
-
-                            {% for error in f.errors %}
-                            <p class="help-block">{{ error }}</p>
-                            {% endfor %}
-                        </div>
-
-                    </div>
-                {% endif %}
-
-
-                    {% endfor %}
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn default" data-dismiss="modal">{% trans "close"|capfirst %}</button>
-                <button type="submit" class="btn blue"
-                        form="event-form">{% trans "save changes"|capfirst %}
-                </button>
-            </div>
+    <div id="pad-wrapper" class="new-user">
+        <div class="col-md-12 text-center">
+            <h3>Cronograma <b>{{ calendar.title }}</b></h3>
         </div>
-        <!-- /.modal-content -->
+        <div class="col-md-12" style="margin-bottom: 10px;">
+            <h4>Realizados: {{ dones }}</h4>
+            <h4>Por Realizar: {{ not_do}}</h4>
+        </div>
+        <div id='calendar'></div>
     </div>
-    <!-- /.modal-dialog -->
-</div>
+    <div class="modal fade" id="event" tabindex="-1" role="basic" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Event</h4>
+                </div>
+                <div class="modal-body">
+                    <form method="post" class="form-horizontal" action="{% url 'fullcalendar:save_event' slug %}"
+                          id="event-form">
+                        {% for f in form %}
+                            {% csrf_token %}
+                            {% if not f|is_hidden %}
+                                {% if f|is_file_input %}
+                                    <div class="form-group {% if f.errors %}has-error{% endif %}">
+                                        <label for="id_{{ f.name }}"
+                                               class="col-sm-2 control-label">{{ f.label|capfirst }}</label>
+                                        <div class="col-sm-10">
+
+                                            <a id="event_file"></a>
+
+
+                                            {{ f }}
+
+                                            {% for error in f.errors %}
+                                                <p class="help-block">{{ error }}</p>
+                                            {% endfor %}
+                                        </div>
+
+                                    </div>
+                                {% else %}
+                                    <div class="form-group {% if f.errors %}has-error{% endif %}">
+                                        <label for="id_{{ f.name }}"
+                                               class="col-sm-2 control-label">{{ f.label|capfirst }}</label>
+                                        <div class="col-sm-10">
+
+                                            {{ f }}
+
+                                            {% for error in f.errors %}
+                                                <p class="help-block">{{ error }}</p>
+                                            {% endfor %}
+                                        </div>
+
+                                    </div>
+                                {% endif %}
+
+                            {% endif %}
+
+
+                        {% endfor %}
+                        <input type="number" hidden id="event_id_pk">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn default" data-dismiss="modal">{% trans "close"|capfirst %}</button>
+                    <button type="submit" class="btn blue" id="form_button"
+                            form="event-form">{% trans "save changes"|capfirst %}
+                    </button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
 {% endblock %}
 
 {% block more_scripts %}
     <script src="http://code.jquery.com/jquery-latest.js"></script>
-     <script src="{% static 'main/js/jquery-ui-1.10.2.custom.min.js' %}"></script>
-      <script src="{% static 'main/js/bootstrap.min.js' %}"></script>
-<script src="https://fullcalendar.io/js/fullcalendar-3.1.0/lib/moment.min.js"></script>
-     <script src="{% static 'main/js/theme.js' %}"></script>
-<script type="text/javascript" src="{% static 'fullcalendar/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js' %}"></script>
-<!--<script src="{% static 'main/js/fullcalendar.min.js' %}"></script>-->
-<script src="https://fullcalendar.io/js/fullcalendar-3.1.0/fullcalendar.min.js"></script>
-<script src="https://fullcalendar.io/js/fullcalendar-3.1.0/locale/es.js"></script>
-<script>
+    <script src="{% static 'main/js/jquery-ui-1.10.2.custom.min.js' %}"></script>
+    <script src="{% static 'main/js/bootstrap.min.js' %}"></script>
+    <!-- <script src="https://fullcalendar.io/js/fullcalendar-3.1.0/lib/moment.min.js"></script> -->
+    <script src="{% static 'fullcalendar/plugins/v2/moment.min.js' %}"></script>
+
+    <script src="{% static 'main/js/theme.js' %}"></script>
+    <script type="text/javascript"
+            src="{% static 'fullcalendar/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js' %}"></script>
+    <!--<script src="{% static 'main/js/fullcalendar.min.js' %}"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/locale/es.js"></script>
+    <script>
         $(document).ready(function () {
             var format = 'DD/MM/YYYY hh:mm a';
             $('#calendar').fullCalendar({
@@ -131,15 +161,18 @@
                             console.log(response.data);
                             if (response.success) {
                                 $.each(response.data, function (index, value) {
+                                    console.log(response.data);
                                     if (index == 'event_start' || index == 'event_end') {
                                         $('#id_' + index).val(
-                                                moment(value).format(format)
+                                            moment(value).format(format)
                                         ).addClass('edited');
                                     } else {
                                         $('#id_' + index).val(value).addClass('edited');
 
                                     }
                                 });
+                                $("#event_file").attr("href", response.data.url_evidence).text('Anterior: \n' + response.data.url_evidence);
+                                $("#event_id_pk").val(response.data.event);
                                 $('#event').modal('show');
 
                             } else {
@@ -158,9 +191,9 @@
 
             });
 
-            var sendEvent = function (id, title, start, end, allDay) {
+            var sendEvent = function () {
                 $.ajax({
-                    url: '{% url 'fullcalendar:update_event' %}',
+                    url: '{% url 'fullcalendar:update_event' slug %}',
                     method: 'post',
                     data: {
                         csrfmiddlewaretoken: "{{ csrf_token }}",
@@ -173,21 +206,35 @@
                     dataType: 'json',
                     success: function (response) {
                         console.log(response);
+                        console.log('hola');
                     }
                 });
             };
 
             $('#event-form').on('submit', function (e) {
                 e.preventDefault();
-                var url = $(this).attr('action');
-                var method = $(this).attr('method');
-                var data = $(this).serializeArray();
+                var url = '';
+                var data = new FormData($('#event-form').get(0));
+                data.append('evidence', $("#id_evidence")[0].files[0]);
 
+                if ($("#event_id_pk").val() == "") {
+                    url = $(this).attr('action');
+
+                }
+                else {
+                    url = '{% url 'fullcalendar:update_event' slug %}';
+                    data.append('id', $("#event_id_pk").val());
+                }
+                var method = $(this).attr('method');
+                //var data = $(this).serializeArray();
+                console.log(data.data);
                 $.ajax({
                     url: url,
                     method: method,
                     data: data,
-                    dataType: 'json',
+                    dataType: "JSON",
+                    processData: false,
+                    contentType: false,
                     success: function (response) {
                         if (response.success) {
                             var w = $('#calendar').fullCalendar('clientEvents', response.id);
@@ -216,7 +263,9 @@
                         }
                     }
                 });
+
             });
+
             $('.datetime').datetimepicker({
                 autoclose: true,
                 format: 'dd/mm/yyyy HH:ii p',
@@ -229,8 +278,5 @@
 
         });
 
-
-
-
-</script>
+    </script>
 {% endblock %}

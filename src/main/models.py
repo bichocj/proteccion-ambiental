@@ -56,7 +56,7 @@ class Worker(models.Model):
     estado = models.BooleanField(_('Estado'), default=True, null=False)
 
     def __str__(self):
-        return self.name + self.last_name
+        return self.name + ' ' + self.last_name
 
 
 class Product(models.Model):
@@ -82,12 +82,63 @@ class Requirement(models.Model):
 
 
 class LegalRequirement(models.Model):
-    normativa = models.CharField(max_length=50, null=False, blank=False)
+    General = 0
+    Seguridad = 1
+    Salud = 2
+    Ergonomia = 3
+    Mujer = 4
+    Agentes = 5
+    Cancer = 6
+    Hostigamiento = 7
+    Edificacion = 8
+    Emergencia = 9
+    Inspeccion = 10
+    Electricidad = 11
+    NTP = 12
+    Radiaciones = 13
+    Sanitarias = 14
+    Transporte = 15
+    Normas = 16
+    type_registers = (
+        (General, 'Generales'),
+        (Seguridad, 'Seguridad Ocupacional'),
+        (Salud, 'Salud Ocupacional'),
+        (Ergonomia, 'Ergonomia'),
+        (Mujer, 'Mujer Gestante / Personas con limitaciones'),
+        (Agentes, 'Agentes Quimicos / Tabaco'),
+        (Cancer, 'Cancer'),
+        (Hostigamiento, 'Hostigamiento / Disciminacion / VIH - SIDA'),
+        (Edificacion, 'Edificacion'),
+        (Emergencia, 'Emergencia'),
+        (Inspeccion, 'Inspeccion en el Trabajo'),
+        (Electricidad, 'Electricidad'),
+        (NTP, 'NTP'),
+        (Radiaciones, 'Radiaciones'),
+        (Sanitarias, 'Sanitarias / Alimentacion'),
+        (Transporte, 'Transporte'),
+        (Normas, 'Normas Tecnicas Internacionales / NFPA / Otros')
+    )
+    CUMPLIO = 0
+    NO_CUMPLIO = 1
+    state = (
+        (CUMPLIO, 'CUMPLIO',),
+        (NO_CUMPLIO, 'NO CUMPLIO',)
+    )
+    type_normativa = models.CharField(_('Tipo Normativa'), max_length=200, null=True, blank=True)
+    normativa = models.CharField(_('Codigo Normativa'), max_length=200, null=False, blank=False)
     datepublication = models.DateField(_('Fecha Publicacion'), default=datetime.now)
     entitie = models.ForeignKey(Company)
-    title = models.CharField(_('Titulo'), max_length=200, null=False, blank=False)
-    apply = models.TextField(_('Aplica'), null=False, blank=False)
+    title = models.CharField(_('Titulo del Dispositivo Legal'), max_length=200, null=False, blank=False)
+    apply = models.TextField(_('Que Aplica?'), null=False, blank=False)
     actual_month = models.CharField(max_length=100, null=False, blank=False)
+    evidence = models.FileField(_('Evidencia Registro'), upload_to="legal_requirement/", null=True)
+    frecuency = models.CharField(_('Frecuencia'), max_length=200, null=True, blank=True)
+    date_last_evaluation = models.DateField(_('Fecha Ultima Evaluacion'), null=True, blank=True)
+    responsable = models.CharField(max_length=200, null=True, blank=True)
+    cumplimiento = models.DecimalField(_('Cumplimiento (%)'), null=True, blank=True, max_digits=10, decimal_places=2)
+    observations = models.TextField(_('Observaciones'), null=True, blank=True)
+    type_register = models.IntegerField(_('Estado'), choices=type_registers, default=General, null=False, blank=False)
+    state = models.IntegerField(_('Estado'), choices=state, default=NO_CUMPLIO, null=False, blank=False)
     # responsable = models.ForeignKey(Worker)
 
 
@@ -130,9 +181,28 @@ class MedicControl(models.Model):
         (NO_APTO, 'NO APTO')
 
     )
+    AUDITIVA = 0
+    CALIDAD = 1
+    PROMOCION = 2
+    PROTECCION = 3
+    PROTECCION_RES = 4
+    VIGILANCIA = 5
+    PROTECCION_RA = 6
+    RIEGO = 7
+    medic_program = (
+        (AUDITIVA, "CONSERVACION AUDITIVA"),
+        (CALIDAD, "CALIDAD DE VIDA"),
+        (PROMOCION, "PROMOCION Y PRESERVACION SALUD VISUAL"),
+        (PROTECCION, "PROTECCION A LA MUJER GESTANTE Y EN EDAD FERTIL"),
+        (PROTECCION_RES, "PROTECCION RESPIRATORIA"),
+        (VIGILANCIA, "VIGILANCIA CONTRA TME"),
+        (PROTECCION_RA, "PROTECCION RADIACION UV"),
+        (RIEGO, "RIESGO GEOLOGICO")
+    )
     company = models.ForeignKey(Company, null=False, blank=False)
     worker = models.ForeignKey(Worker)
     state = models.IntegerField(_('Estado'), choices=medic_states, default=NO_APTO, null=False, blank=False)
+    program = models.IntegerField(_('Programa'), choices=medic_program, default=AUDITIVA, null=False, blank=False)
     date = models.DateField(_('Fecha'), null=False, default=datetime.now)
     evidence = models.FileField(_('Evidencia'), upload_to="examen_medico/", null=True)
 
@@ -161,7 +231,7 @@ class Accident(models.Model):
     date = models.DateField(_('Fecha'), null=False, default=datetime.now)
     lose_days = models.DecimalField(_('Dias Perdidos'), max_digits=5, decimal_places=2, null=True, blank=True)
     company = models.ForeignKey(Company, null=False, blank=False)
-    worker = models.ForeignKey(Worker,default=None)
+    worker = models.ForeignKey(Worker, default=None)
     evidence = models.FileField(_('Evidencia'), upload_to="accident/", null=True)
 
 

@@ -23,6 +23,8 @@ urlpatterns = [
     url(r'^company-edit/(?P<company_slug>[-\w]+)/$', views.company_edit, name='company_edit'),
 
     url(r'^(?P<company_slug>[-\w]+)/indices/$', views.indices, name='indices'),
+    url(r'^(?P<company_slug>[-\w]+)/indices/restore/(?P<mounth>\d+)/$', views.restore_indices, name='restore_indices'),
+    url(r'^(?P<company_slug>[-\w]+)/indices/(?P<indice_slug>[-\w]+)/$', views.indices_update, name='indices_update'),
 
     url(r'^(?P<company_slug>[-\w]+)/medic_exams/$', views.medic_exam, name='medic_exam'),
     url(r'^(?P<company_slug>[-\w]+)/medic_exams/new/$', views.medic_exam_new,

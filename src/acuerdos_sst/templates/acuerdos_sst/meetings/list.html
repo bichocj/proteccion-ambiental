@@ -7,13 +7,13 @@
     <div id="pad-wrapper" class="users-list">
         <div class="table-wrapper products-table">
             <div class="row header">
-                <h3>ACUERDOS DE COMITE</h3>
+                <h3>REUNIONES DE ACUERDOS DE COMITE</h3>
                 {% if request.user.is_superuser %}
                     <div class="col-md-10 col-sm-12 col-xs-12 pull-right">
-                        <a href="{% url 'acuerdos_sst:agreement_new' company.slug meeting.pk%}"
+                        <a href="{% url 'acuerdos_sst:meeting_new' company.slug %}"
                            class="btn-flat success pull-right">
                             <span>&#43;</span>
-                            Nuevo Acuerdo
+                            Nueva Reunion
                         </a>
                     </div>
                 {% endif %}
@@ -27,9 +27,8 @@
                 <thead>
                 <tr>
                     <th>Acuerdo</th>
-                    <th class="line">Detalles</th>
-                    <th><span class="line"></span>Fecha Acuerdo</th>
-                    <th><span class="line"></span>Detalles Realizados (%)</th>
+                    <th><span class="line"></span>Fecha de Reunion</th>
+                    <th><span class="line"></span>Acuerdos Completados (%)</th>
 
                     {% if request.user.is_superuser %}
                         <th><span class="line"></span>Opciones</th>
@@ -38,19 +37,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for agreement in agreements %}
+                {% for meeting in meetings %}
                     <tr>
-                        <td>{{ agreement.title }}</td>
-                        <td>{{ agreement.content }}</td>
-                        <td>{{ agreement.date }}</td>
-                        {% if agreement.percentage or agreement.percentage == 0 %}
-                            <td>{{ agreement.percentage }}%
-                                {% if agreement.percentage == 100.00 %}
-                                    <a href="{% url 'acuerdos_sst:desactive_agreement' company_slug meeting.pk  agreement.pk %}" style="margin-left: 50px;">ocultar</a>
-                                {% endif %}
+                        <td>{{ meeting.title }}</td>
+                        <td>{{ meeting.date }}</td>
+                        {% if meeting.percentage or meeting.percentage == 0 %}
+                            <td>{{ meeting.percentage }}%
                             </td>
                         {% else %}
-                            <td>Agrege Detalles</td>
+                            <td>Agrege Acuerdos</td>
                         {% endif %}
                         {% if request.user.is_superuser %}
                             <td>
@@ -58,13 +53,13 @@
 
                                 <ul>
                                     <li>
-                                        <a href="{% url 'acuerdos_sst:agreement_detail' company.slug agreement.pk %}">Ver Tareas</a>
+                                        <a href="{% url 'acuerdos_sst:agreement_list' company.slug meeting.pk %}">Ver Acuerdos</a>
                                     </li>
                                     <li><a
-                                            href="{% url 'acuerdos_sst:agreement_edit' company.slug meeting.pk  agreement.pk %}">Editar</a>
+                                            href="{% url 'acuerdos_sst:meeting_edit' company.slug meeting.pk %}">Editar</a>
                                     </li>
                                     <li class="last"><a
-                                            href="{% url 'acuerdos_sst:agreement_delete' company.slug meeting.pk  agreement.pk %}">Eliminar</a>
+                                            href="{% url 'acuerdos_sst:meeting_delete' company.slug meeting.pk %}">Eliminar</a>
                                     </li>
                                 </ul>
 
