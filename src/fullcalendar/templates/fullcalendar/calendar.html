@@ -137,7 +137,7 @@
                     maxTime: "{{ calendar.max_time }}" ,
                     minTime: "{{ calendar.min_time }}" ,
                 {% endif %}
-                timezone: false,
+                timezone: true,
                 editable: true,
                 selectable: true,
                 events: '{% url 'fullcalendar:events_json' calendar_id %}',
