@@ -123,8 +123,8 @@ def events_json(request, calendar_id):
         if not event.is_cancelled:
             events_list.append({
                 'id': event.id,
-                'start': event_start.strftime('%Y-%m-%d %H:%M'),
-                'end': event_end.strftime('%Y-%m-%d %H:%M'),
+                'start': event_start.strftime('%Y-%m-%dT%H:%M%z'),
+                'end': event_end.strftime('%Y-%m-%dT%H:%M%z'),
                 'title': event.title,
                 'allDay': all_day
             })
