@@ -100,7 +100,7 @@
                     <button type="submit" class="btn blue" id="form_button"
                             form="event-form">{% trans "save changes"|capfirst %}
                     </button>
-                    <div id="form_button_loading">
+                    <div id="form_button_loading" style="display: none;">
                         <img src="{% static 'fullcalendar/img/ajax-loader.gif' %}" style="max-width: 150px">
                     </div>
                 </div>
@@ -209,10 +209,6 @@
                     dataType: 'json',
                     success: function (response) {
                         console.log(response);
-
-                        $('#form_button').show()
-                        $('#form_button_loading').hide()
-
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         alert('hubo un error subiendo el archivo, intente luego')
@@ -224,7 +220,7 @@
             $('#event-form').on('submit', function (e) {
                 e.preventDefault();
 
-                $('#form_button').hide()
+                $('#form_button').prop( "disabled", true );
                 $('#form_button_loading').show()
 
                 var url = '';
@@ -277,7 +273,7 @@
                             });
                         }
 
-                        $('#form_button').show()
+                        $('#form_button').prop( "disabled", false );
                         $('#form_button_loading').hide()
 
                     },
