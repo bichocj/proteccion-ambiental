@@ -102,7 +102,7 @@ class EventsModelForm(ModelForm):
             self.fields['number_workers'] = forms.IntegerField(label='Numero de Trabajadores', required=False)
 
         if calendar and calendar.type == INSPECTION:
-            self.fields['type_inspeccions'] = forms.ChoiceField(choices=Events.type_inspeccion,
+            self.fields['type_inspeccions'] = forms.ChoiceField(choices=type_inspeccion,
                                                                 label='Tipo de Inspeccion', required=True, initial=-1,
                                                                 widget=forms.Select())
         add_form_control_class(self.fields)
