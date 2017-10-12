@@ -700,9 +700,6 @@ def refresh_inform(request, company_slug, mes):
         total = events.count()
         total_done = events.filter(state=REALIZADO).count()
 
-        from pdb import set_trace
-        set_trace()
-
         index_detail.capacitacion = total_done * 100 / total
         index_detail.save()
 
