@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.auth.models import User, Group
 from django.forms import ModelChoiceField, ModelForm, ModelMultipleChoiceField, HiddenInput
 from accounts.functions import get_users_of_member_group, get_member_group
-from fullcalendar.models import Calendar, Events
+from fullcalendar.models import Calendar, Events, type_capacitation, type_inspeccion, INSPECTION, CAPACITATION
 from main.functions import add_form_control_class, add_class_time_picker
 from django.utils.translation import ugettext as _
 
@@ -74,9 +74,9 @@ class EventsModelForm(ModelForm):
                                   label=_('Descripcion '))
     observation = forms.CharField(widget=forms.Textarea(attrs={'rows': 2, 'cols': 15}), required=False,
                                   label="Observacion")
-    type_capacitations = forms.ChoiceField(choices=Events.type_capacitation, label='Tipo de Capacitacion',
+    type_capacitations = forms.ChoiceField(choices=type_capacitation, label='Tipo de Capacitacion',
                                            widget=forms.HiddenInput(), required=False)
-    type_inspeccions = forms.ChoiceField(choices=Events.type_inspeccion, label='Tipo de Inspeccion',
+    type_inspeccions = forms.ChoiceField(choices=type_inspeccion, label='Tipo de Inspeccion',
                                          widget=forms.HiddenInput(), required=False)
     hours_worked = forms.FloatField(widget=forms.HiddenInput(), required=False)
     number_workers = forms.IntegerField(widget=forms.HiddenInput(), required=False)
@@ -94,14 +94,14 @@ class EventsModelForm(ModelForm):
         add_class_time_picker(self, ['event_start', 'event_end'])
         # if _instance and _instance.calendar.type == Calendar.CAPACITATION:
         #     self.fields['type_capacitations'] = forms.ChoiceField(choices=Events.type_capacitation)
-        if calendar and calendar.type == Calendar.CAPACITATION:
-            self.fields['type_capacitations'] = forms.ChoiceField(choices=Events.type_capacitation,
+        if calendar and calendar.type == CAPACITATION:
+            self.fields['type_capacitations'] = forms.ChoiceField(choices=type_capacitation,
                                                                   label='Tipo de Capacitacion', required=True,
                                                                   initial=-1, widget=forms.Select())
             self.fields['hours_worked'] = forms.FloatField(label='Horas Trabajadas', required=False)
             self.fields['number_workers'] = forms.IntegerField(label='Numero de Trabajadores', required=False)
 
-        if calendar and calendar.type == Calendar.INSPECTION:
+        if calendar and calendar.type == INSPECTION:
             self.fields['type_inspeccions'] = forms.ChoiceField(choices=Events.type_inspeccion,
                                                                 label='Tipo de Inspeccion', required=True, initial=-1,
                                                                 widget=forms.Select())

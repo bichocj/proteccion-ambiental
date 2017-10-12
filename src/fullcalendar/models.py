@@ -6,20 +6,60 @@ from django.utils.translation import ugettext as _
 from main.models import Company, Worker
 from proteccion_ambiental.settings import COMPANY_JRA_SLUG
 
+CAPACITATION = 1
+INSPECTION = 2
+SIMULATION = 3
+OTRO = 4
+CHARLAS = 5
+DOCTOR = 6
+
+REALIZADO = 2
+PENDIENTE = 1
+
+types_calendar = ((CAPACITATION, 'CAPACITACION'),
+                  (INSPECTION, 'INSPECCION'),
+                  (SIMULATION, 'SIMULACRO'),
+                  (CHARLAS, 'CHARLAS DE SEGURIDAD'),
+                  (OTRO, 'OTRO'),
+                  (DOCTOR, 'DOCTOR'))
+
+state_event = ((REALIZADO, 'REALIZADO'),
+               (PENDIENTE, 'PENDIENTE'),
+               )
+
+types_event = ((CAPACITATION, 'CAPACITACION'),
+               (INSPECTION, 'INSPECCION'),
+               (SIMULATION, 'SIMULACRO'),
+               (CHARLAS, 'CHARLAS DE SEGURIDAD'),
+               (OTRO, 'OTRO'),
+               (DOCTOR, 'DOCTOR'))
+
+INDUCCION = 1
+CAPACITACION_DE_LEY = 2
+CAPACITACION_ESPECIFICA = 3
+CAPACITACION_DE_SALUD_OCUPACIONAL = 4
+ENTRENAMIENTO = 5
+
+type_capacitation = (
+    (INDUCCION, 'INDUCCION'),
+    (CAPACITACION_DE_LEY, 'CAPACITACION DE LEY'),
+    (CAPACITACION_ESPECIFICA, 'CAPACITACION'),
+    (CAPACITACION_DE_SALUD_OCUPACIONAL, 'CAPACITACION DE SALUD OCUPACIONAL'),
+    (ENTRENAMIENTO, 'ENTRENAMIENTO'),
+)
+
+INSPECCION_DE_SEGURIDAD = 1
+INSPECCION_DE_SALUD = 2
+INSPECCION_OBSERVACION_PLANEADA = 3
+type_inspeccion = (
+    (INSPECCION_DE_SEGURIDAD, 'INSPECCION DE SEGURIDAD'),
+    (INSPECCION_DE_SALUD, 'INSPECCION DE SALUD'),
+    (INSPECCION_OBSERVACION_PLANEADA, 'INSPECCION OBSERVACION PLANEADA'),
+
+)
+
 
 class Calendar(models.Model):
-    CAPACITATION = 1
-    INSPECTION = 2
-    SIMULATION = 3
-    OTRO = 4
-    CHARLAS = 5
-    DOCTOR=6
-    types_calendar = ((CAPACITATION, 'CAPACITACION'),
-                      (INSPECTION, 'INSPECCION'),
-                      (SIMULATION, 'SIMULACRO'),
-                      (CHARLAS, 'CHARLAS DE SEGURIDAD'),
-                      (OTRO, 'OTRO'),
-                      (DOCTOR,'DOCTOR'))
     title = models.CharField(_('Nombre'), max_length=200, null=False, blank=None)
     company = models.ForeignKey(Company, null=False)
     slug = models.SlugField(max_length=100)
@@ -62,57 +102,16 @@ class Accessibility(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 
+types_event = ((CAPACITATION, 'CAPACITACION'),
+               (INSPECTION, 'INSPECCION'),
+               (SIMULATION, 'SIMULACRO'),)
+
+
 class EventType(models.Model):
-    CAPACITATION = 1
-    INSPECTION = 2
-    SIMULATION = 3
-    types_event = ((CAPACITATION, 'CAPACITACION'),
-                   (INSPECTION, 'INSPECCION'),
-                   (SIMULATION, 'SIMULACRO'),)
     name = models.IntegerField(choices=types_event, default=CAPACITATION, null=False)
 
 
 class Events(models.Model):
-    CAPACITATION = 1
-    INSPECTION = 2
-    SIMULATION = 3
-    OTRO = 4
-    CHARLAS = 5
-    REALIZADO = 2
-    PENDIENTE = 1
-    DOCTOR=6
-    types_event = ((CAPACITATION, 'CAPACITACION'),
-                   (INSPECTION, 'INSPECCION'),
-                   (SIMULATION, 'SIMULACRO'),
-                   (CHARLAS, 'CHARLAS DE SEGURIDAD'),
-                   (OTRO, 'OTRO'),
-                   (DOCTOR,'DOCTOR'))
-    state_event = ((REALIZADO, 'REALIZADO'),
-                   (PENDIENTE, 'PENDIENTE'),
-                   )
-    INDUCCION = 1
-    CAPACITACION_DE_LEY = 2
-    CAPACITACION_ESPECIFICA = 3
-    CAPACITACION_DE_SALUD_OCUPACIONAL = 4
-    ENTRENAMIENTO = 5
-
-    type_capacitation = (
-        (INDUCCION, 'INDUCCION'),
-        (CAPACITACION_DE_LEY, 'CAPACITACION DE LEY'),
-        (CAPACITACION_ESPECIFICA, 'CAPACITACION'),
-        (CAPACITACION_DE_SALUD_OCUPACIONAL, 'CAPACITACION DE SALUD OCUPACIONAL'),
-        (ENTRENAMIENTO, 'ENTRENAMIENTO'),
-    )
-
-    INSPECCION_DE_SEGURIDAD = 1
-    INSPECCION_DE_SALUD = 2
-    INSPECCION_OBSERVACION_PLANEADA = 3
-    type_inspeccion = (
-        (INSPECCION_DE_SEGURIDAD, 'INSPECCION DE SEGURIDAD'),
-        (INSPECCION_DE_SALUD, 'INSPECCION DE SALUD'),
-        (INSPECCION_OBSERVACION_PLANEADA, 'INSPECCION OBSERVACION PLANEADA'),
-
-    )
     ASESOR = 0
     COMITE = 1
     RRHH = 2

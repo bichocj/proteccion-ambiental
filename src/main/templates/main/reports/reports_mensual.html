@@ -404,7 +404,7 @@
                 <div class="row stats-row">
                     <div class="col-md-12">
                         <h4 class="clearfix pull-left">
-                            Índice de Capacitacion (>=90)
+                            Índice de Capacitación (>=90)
                         </h4>
                     </div>
                     <div class="col-md-12 stat">
@@ -891,13 +891,13 @@
     <script src="{% static 'main/js/jquery.knob.js' %}"></script>
     <!-- flot charts -->
     <script src="{% static 'main/js/jquery.flot.js' %}"></script>
-    <script src="{% static 'main/js/jquery.flot.stack.js' %}"></script>
+    <script sr="{% static 'main/js/jquery.flot.stack.js' %}"></script>
     <script src="{% static 'main/js/jquery.flot.resize.js' %}"></script>
     <script src="{% static 'main/js/theme.js' %}"></script>
     <!-- knob -->
     <script type="text/javascript">
         $(document).ready(function () {
-            var user ={{ is_superuser }};
+            var user = {% if request.user.is_superuser %}true{% else %}false{% endif %} ;
             if (!user) {
                 $('#numerator_sgsst').attr('readonly', true);
                 $('#denominator_sgsst').attr('readonly', true);
@@ -918,7 +918,7 @@
                 $('#denominator_liderazgo').attr('readonly', true);
                 $('#liderazgo_btn').css({display: "none"});
             }
-            var display_restore ={{ display_restore_btn }};
+            var display_restore ={{ display_restore_btn|default:'true' }};
             if (display_restore == 0) {
                 $('#restore_btn').css({display: "none"})
             }

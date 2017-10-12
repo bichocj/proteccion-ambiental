@@ -135,14 +135,17 @@
         $(function () {
 
             // add uniform plugin styles to html elements
-            $("input:checkbox, input:radio").uniform();
-
+            if(typeof uniform !== 'undefined'){
+                $("input:checkbox, input:radio").uniform();
+            }
             // select2 plugin for select elements
 
             // datepicker plugin
-            $('.input-datepicker').datepicker().on('changeDate', function (ev) {
-                $(this).datepicker('hide');
-            });
+            if(typeof datepicker !== 'undefined') {
+                $('.input-datepicker').datepicker().on('changeDate', function (ev) {
+                    $(this).datepicker('hide');
+                });
+            }
         });
     </script>
 {% endif %}

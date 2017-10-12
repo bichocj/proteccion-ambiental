@@ -11,7 +11,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import ugettext as _
 
 from fullcalendar.forms import CalendarModelForm, EventsModelForm
-from fullcalendar.models import Calendar, Events
+from fullcalendar.models import Calendar, Events, DOCTOR, REALIZADO, INSPECTION, CAPACITATION, SIMULATION, CHARLAS, OTRO
 from main.models import Company
 
 
@@ -19,9 +19,9 @@ def calendar_list(request, company_slug):
     group = Group.objects.get(name="Doctor")
     company = get_object_or_404(Company, slug=company_slug)
     if group in request.user.groups.all():
-        calendars = Calendar.objects.filter(Q(company=company), Q(type=Calendar.DOCTOR))
+        calendars = Calendar.objects.filter(Q(company=company), Q(type=DOCTOR))
     else:
-        calendars = Calendar.objects.filter(Q(company=company), ~Q(type=Calendar.DOCTOR))
+        calendars = Calendar.objects.filter(Q(company=company), ~Q(type=DOCTOR))
     return render(request, "fullcalendar/list.html", locals())
 
 
@@ -36,7 +36,7 @@ def calendar_new(request, company_slug):
             calendar = form.save(commit=False)
             group = Group.objects.get(name="Doctor")
             if group in request.user.groups.all():
-                calendar.type = Calendar.DOCTOR
+                calendar.type = DOCTOR
             calendar.created_by = request.user
             calendar.company = company
             calendar.save()
@@ -61,7 +61,7 @@ def calendar_edit(request, company_slug, calendar_id):
         if form.is_valid():
             calendar = form.save(commit=False)
             if group in request.user.groups.all():
-                calendar.type = Calendar.DOCTOR
+                calendar.type = DOCTOR
             calendar.save()
             return redirect(reverse('fullcalendar:calendar_list', args=[company_slug]))
         else:
@@ -95,7 +95,7 @@ def view_calendar(request, company_slug, slug, calendar_id):
         calendar = Calendar.objects.get(company=company, slug=slug, id=calendar_id)
     except ObjectDoesNotExist:
         calendar = get_object_or_404(Calendar, id=calendar_id)
-    dones = Events.objects.filter(state=Events.REALIZADO, calendar=calendar).count()
+    dones = Events.objects.filter(state=REALIZADO, calendar=calendar).count()
     not_do = Events.objects.filter(calendar=calendar).count() - dones
     # company = request.user.company
     form = EventsModelForm(calendar=calendar)
@@ -150,18 +150,20 @@ def save_event(request, slug):
             event = form.save(commit=False)
             event.calendar = calendar
             event.created_by = request.user
-            if event.calendar.type == Calendar.CAPACITATION:
+            if event.calendar.type == CAPACITATION:
                 event.type_inspeccions = None
-            if event.calendar.type == Calendar.INSPECTION:
+            if event.calendar.type == INSPECTION:
                 event.type_capacitations = None
                 event.hours_worked = None
                 event.number_workers = None
-            if event.calendar.type == Calendar.OTRO or event.calendar.type == Calendar.CHARLAS or event.calendar.type == Calendar.SIMULATION or event.calendar.type == Calendar.DOCTOR:
+            if event.calendar.type == OTRO or event.calendar.type == CHARLAS or event.calendar.type == SIMULATION or event.calendar.type == DOCTOR:
                 event.type_inspeccions = None
                 event.type_capacitations = None
                 event.number_workers = None
                 event.hours_worked = None
+
             event.type = event.calendar.type
+
             event.save()
             response['success'] = True
             response['message'] = _("Save Success")
@@ -234,18 +236,22 @@ def update_event(request, slug):
             event = form.save(commit=False)
             event.calendar = calendar
             event.created_by = request.user
-            if event.calendar.type == Calendar.CAPACITATION:
+            if event.calendar.type == CAPACITATION:
                 event.type_inspeccions = None
-            if event.calendar.type == Calendar.INSPECTION:
+            if event.calendar.type == INSPECTION:
                 event.type_capacitations = None
                 event.hours_worked = None
                 event.number_workers = None
-            if event.calendar.type == Calendar.OTRO or event.calendar.type == Calendar.CHARLAS or event.calendar.type == Calendar.SIMULATION or event.calendar.type == Calendar.DOCTOR:
+            if event.calendar.type == OTRO or event.calendar.type == CHARLAS or event.calendar.type == SIMULATION or event.calendar.type == DOCTOR:
                 event.type_inspeccions = None
                 event.type_capacitations = None
                 event.number_workers = None
                 event.hours_worked = None
             event.type = event.calendar.type
+
+            if event.evidence:
+                event.state = REALIZADO
+
             event.save()
             response['success'] = True
             response['message'] = _("Save Success")

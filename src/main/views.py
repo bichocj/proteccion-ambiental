@@ -11,7 +11,7 @@ from django import http
 
 from accounts.forms import WorkerForm, WorkerEditForm
 from acuerdos_sst.models import Agreement
-from fullcalendar.models import Events
+from fullcalendar.models import Events, CAPACITATION, REALIZADO
 from main.models import Worker, Employee, AccidentDetail
 from indices.forms import IndexForm
 from indices.models import Index, Index_Detail, ValuesDetail
@@ -660,7 +660,7 @@ def refresh_inform(request, company_slug, mes):
         if not denominator_sgsst:
             denominator_sgsst = 0
 
-        numerator_sgsst = Events.objects.filter(Q(calendar__company=company), Q(state=Events.REALIZADO),
+        numerator_sgsst = Events.objects.filter(Q(calendar__company=company), Q(state=REALIZADO),
                                                 Q(event_start__month=month['index'])).count()
         if not numerator_sgsst:
             numerator_sgsst = 0
@@ -693,6 +693,17 @@ def refresh_inform(request, company_slug, mes):
             index_detail.legal = Decimal(0)
         else:
             index_detail.legal = Decimal(numerator_legal) * Decimal(100.00) / Decimal(denominator_legal)
+        index_detail.save()
+
+    if index.is_using_capacitacion:
+        events = Events.objects.filter(event_start__month=month['index'], calendar__type=CAPACITATION)
+        total = events.count()
+        total_done = events.filter(state=REALIZADO).count()
+
+        from pdb import set_trace
+        set_trace()
+
+        index_detail.capacitacion = total_done * 100 / total
         index_detail.save()
 
     if index.is_using_icsst:
