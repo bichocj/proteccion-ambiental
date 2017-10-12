@@ -100,6 +100,9 @@
                     <button type="submit" class="btn blue" id="form_button"
                             form="event-form">{% trans "save changes"|capfirst %}
                     </button>
+                    <div id="form_button_loading">
+                        <img src="https://cdn.dribbble.com/users/172906/screenshots/1183163/2013-08-04_21_12_53.gif" style="max-width: 150px">
+                    </div>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -192,6 +195,8 @@
             });
 
             var sendEvent = function () {
+                $('#form_button').hide()
+                $('#form_button_loading').show()
                 $.ajax({
                     url: '{% url 'fullcalendar:update_event' slug %}',
                     method: 'post',
@@ -206,13 +211,27 @@
                     dataType: 'json',
                     success: function (response) {
                         console.log(response);
-                        console.log('hola');
+
+                        $('#form_button').show()
+                        $('#form_button_loading').hide()
+
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        alert('hubo un error subiendo el archivo, intente luego')
+                        $('#form_button').show()
+                        $('#form_button_loading').hide()
+
                     }
+
                 });
             };
 
             $('#event-form').on('submit', function (e) {
                 e.preventDefault();
+
+                $('#form_button').hide()
+                $('#form_button_loading').show()
+
                 var url = '';
                 var data = new FormData($('#event-form').get(0));
                 data.append('evidence', $("#id_evidence")[0].files[0]);
@@ -258,9 +277,20 @@
                             $('#event').modal('hide');
                         } else {
                             $.each(response.errors, function (index, value) {
+                                alert('hubo un error subiendo el archivo, intente luego: '+value)
                                 $('#id_' + value).addClass('edited').parents('.form-group').removeClass('has-success').addClass('has-warning');
                             });
                         }
+
+                        $('#form_button').show()
+                        $('#form_button_loading').hide()
+
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        alert('hubo un error subiendo el archivo, intente luego')
+                        $('#form_button').show()
+                        $('#form_button_loading').hide()
+
                     }
                 });
 
