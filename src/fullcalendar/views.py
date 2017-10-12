@@ -186,6 +186,7 @@ def save_event(request, slug):
 
 def get_event(request):
     response = {}
+    import os
     if request.POST:
         event_id = request.POST.get('id')
         event = get_object_or_404(Events, id=event_id)
@@ -203,6 +204,7 @@ def get_event(request):
             'number_workers': event.number_workers,
             'responsable': event.responsable,
             'type_capacitations': event.type_capacitations,
+            'evidence_name': os.path.basename(event.evidence.name) if event.evidence else 'Ninguno',
             'url_evidence': event.evidence.url if event.evidence else 'Ninguno',
 
             # 'member': event.member.id,

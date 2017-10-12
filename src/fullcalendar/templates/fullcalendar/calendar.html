@@ -61,7 +61,7 @@
                                                class="col-sm-2 control-label">{{ f.label|capfirst }}</label>
                                         <div class="col-sm-10">
 
-                                            <a id="event_file"></a>
+                                            <a id="event_file" target="_blank"></a>
 
 
                                             {{ f }}
@@ -174,7 +174,7 @@
 
                                     }
                                 });
-                                $("#event_file").attr("href", response.data.url_evidence).text('Anterior: \n' + response.data.url_evidence);
+                                $("#event_file").attr("href", response.data.url_evidence).text('Anterior: \n' + response.data.evidence_name);
                                 $("#event_id_pk").val(response.data.event);
                                 $('#event').modal('show');
 
