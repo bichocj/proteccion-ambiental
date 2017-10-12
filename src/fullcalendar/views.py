@@ -203,7 +203,7 @@ def get_event(request):
             'number_workers': event.number_workers,
             'responsable': event.responsable,
             'type_capacitations': event.type_capacitations,
-            'url_evidence': event.evidence.file.name if event.evidence else 'Ninguno',
+            'url_evidence': event.evidence.file.url if event.evidence else 'Ninguno',
 
             # 'member': event.member.id,
             # 'member_fullname': event.member.first_name + ' ' + event.member.last_name
