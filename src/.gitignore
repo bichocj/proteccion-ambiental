@@ -2,7 +2,7 @@ db.sqlite3
 media
 archivos
 *.pyc
-.idea/
+.idea/*
 */__pycache__/
 accounts/migrations/__pycache__/
 fullcalendar/migrations/__pycache__/

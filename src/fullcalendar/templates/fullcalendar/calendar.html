@@ -101,7 +101,7 @@
                             form="event-form">{% trans "save changes"|capfirst %}
                     </button>
                     <div id="form_button_loading">
-                        <img src="https://cdn.dribbble.com/users/172906/screenshots/1183163/2013-08-04_21_12_53.gif" style="max-width: 150px">
+                        <img src="{% static 'fullcalendar/img/ajax-loader.gif' %}" style="max-width: 150px">
                     </div>
                 </div>
             </div>
@@ -195,8 +195,6 @@
             });
 
             var sendEvent = function () {
-                $('#form_button').hide()
-                $('#form_button_loading').show()
                 $.ajax({
                     url: '{% url 'fullcalendar:update_event' slug %}',
                     method: 'post',
@@ -218,10 +216,7 @@
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         alert('hubo un error subiendo el archivo, intente luego')
-                        $('#form_button').show()
-                        $('#form_button_loading').hide()
-
-                    }
+                                    }
 
                 });
             };
