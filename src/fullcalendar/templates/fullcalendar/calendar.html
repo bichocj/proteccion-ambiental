@@ -279,7 +279,8 @@
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         alert('hubo un error subiendo el archivo, intente luego')
-                        $('#form_button').show()
+
+                        $('#form_button').prop( "disabled", false );
                         $('#form_button_loading').hide()
 
                     }
