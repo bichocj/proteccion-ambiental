@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from _pydecimal import Decimal
 from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
