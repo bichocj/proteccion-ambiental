@@ -38,41 +38,31 @@
                         <h4>
                             Índice de Cumplimiento del SGSST (>=90)
                         </h4>
-
-                    </div>
-
-
-                    <div class="col-md-12 field-box">
-                        <div class="col-md-2">
-                            <label>Actividades Plan Trabajo:</label>
-                        </div>
-                        <div class="col-md-3 ">
-                            <input id="numerator_sgsst" class="form-control" type="number"
-                                   value="{{ values_details|get_by_key:'sgsst'|numerator }}" step="0.01"/>
-                        </div>
-                        <div class="field-box">
-                            <div class="col-md-2">
-                                <label>Actividades Programadas Plan Trabajo:</label>
-                            </div>
-                            <div class="col-md-3">
-                                <input id="denominator_sgsst" class="form-control" type="number"
-                                       value="{{ values_details|get_by_key:'sgsst'|denominator }}"/>
-                            </div>
-                        </div>
-                        <div class="field-box col-md-2">
-                            <button id="sgsst_btn" class="btn-flat inverse">Guardar</button>
-                        </div>
-                    </div>
-
-
-                    <div class="col-md-12">
-                        <div class="col-md-7"></div>
-                        <div class="col-md-5 data">
-                            <span class="number" id="sgsst_val">{{ index_detail.sgsst }}%</span>
-                            ICSST
-                        </div>
-
-
+                        <br>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="col-md-4">
+                                    Actividades Plan Trabajo
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Actividades Programadas Plan Trabajo:
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Record
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{ values_details|get_by_key:'sgsst'|numerator }}</td>
+                                <td>{{ values_details|get_by_key:'sgsst'|denominator }}</td>
+                                <td>{{ index_detail.sgsst }}% ICSST</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
 
                 </div>
@@ -87,42 +77,31 @@
                             Índice Legal (>=100)
                         </h4>
 
-                    </div>
-
-
-                    <div class="col-md-12 field-box">
-                        <div class="col-md-2">
-                            <label>Requisitos Cumplidos :</label>
-                        </div>
-                        <div class="col-md-3 ">
-
-                            <input id="numerator_legal" class="form-control" type="number"
-                                   value="{{ values_details|get_by_key:'legal'|numerator }}"/>
-                        </div>
-
-                        <div class="field-box">
-                            <div class="col-md-2">
-                                <label>Requisitos identificados:</label>
-                            </div>
-                            <div class="col-md-3">
-                                <input id="denominator_legal" class="form-control" type="number"
-                                       value="{{ values_details|get_by_key:'legal'|denominator }}"/>
-                            </div>
-                        </div>
-                        <div class="field-box col-md-2">
-                            <button id="legal_btn" class="btn-flat inverse">Guardar</button>
-                        </div>
-                    </div>
-
-
-                    <div class="col-md-12">
-                        <div class="col-md-7"></div>
-                        <div class="col-md-5 data">
-                            <span class="number" id="legal_val">{{ index_detail.legal }}%</span>
-                            ILEG
-                        </div>
-
-
+                        <br>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="col-md-4">
+                                    Requisitos Cumplidos :
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Requisitos identificados:
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Record
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{ values_details|get_by_key:'legal'|numerator }}</td>
+                                <td>{{ values_details|get_by_key:'legal'|denominator }}</td>
+                                <td>{{ index_detail.legal }}% ILEG</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
 
                 </div>
@@ -137,43 +116,30 @@
                         <h4>
                             Implementación CSST (>=90)
                         </h4>
-
-                    </div>
-
-
-                    <div class="col-md-12 field-box">
-                        <div class="col-md-2">
-                            <label>Acuerdos SST implementados:</label>
-                        </div>
-                        <div class="col-md-3 ">
-
-                            <input id="numerator_icsst" class="form-control" type="number"
-                                   value="{{ values_details|get_by_key:'icsst' |numerator }}"/>
-                        </div>
-
-                        <div class="field-box">
-                            <div class="col-md-2">
-                                <label>Acuerdos SST planificados:</label>
-                            </div>
-                            <div class="col-md-3">
-                                <input id="denominator_icsst" class="form-control" type="number"
-                                       value="{{ values_details|get_by_key:'icsst'|denominator }}"/>
-                            </div>
-                        </div>
-                        <div class="field-box col-md-2">
-                            <button id="icsst_btn" class="btn-flat inverse">Guardar</button>
-                        </div>
-                    </div>
-
-
-                    <div class="col-md-12">
-                        <div class="col-md-7"></div>
-                        <div class="col-md-5 data pull-right">
-                            <span class="number" id="icsst_val">{{ index_detail.icsst }}%</span>
-                            ICSST
-                        </div>
-
-
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="col-md-4">
+                                    Acuerdos SST implementados:
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Acuerdos SST planificados:
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Record
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{ values_details|get_by_key:'icsst' |numerator }}</td>
+                                <td>{{ values_details|get_by_key:'icsst'|denominator }}</td>
+                                <td>{{ index_detail.icsst }}% ICSST</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
 
                 </div>
@@ -308,58 +274,58 @@
                             </thead>
                             <tbody>
                             {% for values_detail_lidership in values_details|get_by_key:'lidership__' %}
-                            <tr class="first">
-                                <td>
-                                    {{ values_detail_lidership.key|clean:'lidership__' }}
-                                </td>
-                                <td>
-                                    {{ values_detail_lidership.numerator }}
-                                </td>
-                                <td>
-                                    {{ values_detail_lidership.denominator }}
-                                </td>
-                                <td>
-                                    {{ values_detail_lidership.value }}%
-                                </td>
-                            </tr>
+                                <tr class="first">
+                                    <td>
+                                        {{ values_detail_lidership.key|clean:'lidership__' }}
+                                    </td>
+                                    <td>
+                                        {{ values_detail_lidership.numerator }}
+                                    </td>
+                                    <td>
+                                        {{ values_detail_lidership.denominator }}
+                                    </td>
+                                    <td>
+                                        {{ values_detail_lidership.value }}%
+                                    </td>
+                                </tr>
                             {% endfor %}
                             </tbody>
                         </table>
                     </div>
 
 
-{#                    <div class="col-md-12 field-box">#}
-{#                        <div class="col-md-2">#}
-{#                            <label>Actividades Preventivas Cumplidas:</label>#}
-{#                        </div>#}
-{#                        <div class="col-md-3 ">#}
-{##}
-{#                            <input id="numerator_liderazgo" class="form-control" type="number"#}
-{#                                   value="{{ values_details|get_by_key:'liderazgo' |numerator }}"/>#}
-{#                        </div>#}
-{##}
-{#                        <div class="field-box">#}
-{#                            <div class="col-md-2">#}
-{#                                <label>Actividades Preventivas Programadas:</label>#}
-{#                            </div>#}
-{#                            <div class="col-md-3">#}
-{#                                <input id="denominator_liderazgo" class="form-control" type="number"#}
-{#                                       value="{{ values_details|get_by_key:'liderazgo'|denominator }}"/>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                        <div class="field-box col-md-2">#}
-{#                            <button id="liderazgo_btn" class="btn-flat inverse">Guardar</button>#}
-{#                        </div>#}
-{#                    </div>#}
+                    {#                    <div class="col-md-12 field-box">#}
+                    {#                        <div class="col-md-2">#}
+                    {#                            <label>Actividades Preventivas Cumplidas:</label>#}
+                    {#                        </div>#}
+                    {#                        <div class="col-md-3 ">#}
+                    {##}
+                    {#                            <input id="numerator_liderazgo" class="form-control" type="number"#}
+                    {#                                   value="{{ values_details|get_by_key:'liderazgo' |numerator }}"/>#}
+                    {#                        </div>#}
+                    {##}
+                    {#                        <div class="field-box">#}
+                    {#                            <div class="col-md-2">#}
+                    {#                                <label>Actividades Preventivas Programadas:</label>#}
+                    {#                            </div>#}
+                    {#                            <div class="col-md-3">#}
+                    {#                                <input id="denominator_liderazgo" class="form-control" type="number"#}
+                    {#                                       value="{{ values_details|get_by_key:'liderazgo'|denominator }}"/>#}
+                    {#                            </div>#}
+                    {#                        </div>#}
+                    {#                        <div class="field-box col-md-2">#}
+                    {#                            <button id="liderazgo_btn" class="btn-flat inverse">Guardar</button>#}
+                    {#                        </div>#}
+                    {#                    </div>#}
 
 
-{#                    <div class="col-md-12">#}
-{#                        <div class="col-md-7"></div>#}
-{#                        <div class="col-md-5 data pull-right">#}
-{#                            <span class="number" id="liderazgo_val">{{ index_detail.liderazgo }}%</span>#}
-{#                            ILP#}
-{#                        </div>#}
-{#                    </div>#}
+                    {#                    <div class="col-md-12">#}
+                    {#                        <div class="col-md-7"></div>#}
+                    {#                        <div class="col-md-5 data pull-right">#}
+                    {#                            <span class="number" id="liderazgo_val">{{ index_detail.liderazgo }}%</span>#}
+                    {#                            ILP#}
+                    {#                        </div>#}
+                    {#                    </div>#}
 
                 </div>
             </div>
@@ -373,42 +339,31 @@
                             Indice de Actividades del plan de contingencia (>=90)
                         </h4>
 
-                    </div>
 
-
-                    <div class="col-md-12 field-box">
-                        <div class="col-md-2">
-                            <label>Actividades Preventivas Cumplidas:</label>
-                        </div>
-                        <div class="col-md-3 ">
-
-                            <input id="numerator_plan_contingencia" class="form-control" type="number"
-                                   value="{{ values_details|get_by_key:'plan_contingencia' |numerator }}"/>
-                        </div>
-
-                        <div class="field-box">
-                            <div class="col-md-2">
-                                <label>Actividades Preventivas Programadas:</label>
-                            </div>
-                            <div class="col-md-3">
-                                <input id="denominator_plan_contingencia" class="form-control" type="number"
-                                       value="{{ values_details|get_by_key:'plan_contingencia'|denominator }}"/>
-                            </div>
-                        </div>
-                        <div class="field-box col-md-2">
-                            <button id="plan_contingencia_btn" class="btn-flat inverse">Guardar</button>
-                        </div>
-                    </div>
-
-
-                    <div class="col-md-12">
-                        <div class="col-md-7"></div>
-                        <div class="col-md-5 data pull-right">
-                            <span class="number" id="plan_contingencia_val">{{ index_detail.plan_contingencia }}%</span>
-                            IAPC
-                        </div>
-
-
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="col-md-4">
+                                    Actividades Preventivas Cumplidas:
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Actividades Preventivas Programadas:
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Record
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{ values_details|get_by_key:'plan_contingencia' |numerator }}</td>
+                                <td>{{ values_details|get_by_key:'plan_contingencia'|denominator }}</td>
+                                <td>{{ index_detail.plan_contingencia }}% IAPC</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
 
                 </div>
@@ -421,13 +376,30 @@
                         <h4 class="clearfix pull-left">
                             Índice de Mejora (>=90)
                         </h4>
-                    </div>
-                    <div class="col-md-12 stat">
-                        <div class="data">
-                            <span class="number">{{ index_detail.mejora }}%</span>
-                            IM
-                        </div>
-
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="col-md-4">
+                                    Actividades de Mejoras Cumplidas:
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Actividades de Mejoras Programadas:
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Record
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{ values_details|get_by_key:'improvements'|numerator }}</td>
+                                <td>{{ values_details|get_by_key:'improvements'|denominator }}</td>
+                                <td>{{ values_details|get_by_key:'improvements'|value }}% </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

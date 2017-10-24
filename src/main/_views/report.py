@@ -7,6 +7,7 @@ from django.db.models import Q
 from django.shortcuts import redirect, get_object_or_404, render
 
 from acuerdos_sst.models import Agreement
+from improvements.models import Agreement as AgreementImprovement
 from fullcalendar.models import Events, DONE, CAPACITATION, STATES_EVENT
 from indices.models import Index, Index_Detail, ValuesDetail
 from main.models import Company, LegalRequirement, Worker
@@ -143,7 +144,7 @@ def refresh_inform(request, company_slug, mes):
 
         events = Events.objects.filter(event_start__month=month['index'], calendar__company=company)
         for owner_index, owner_val in Events.OWNER:
-            value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='lidership__'+owner_val)
+            value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='lidership__' + owner_val)
             value_detail.numerator = events.filter(responsable=owner_index, state=DONE).count()
             value_detail.denominator = events.filter(responsable=owner_index).count()
             if value_detail.denominator > 0:
@@ -154,20 +155,21 @@ def refresh_inform(request, company_slug, mes):
             value_detail.save()
 
 
-        # if index_detail.liderazgo == 0:
-        # denominator_liderazgo = Agreement.objects.filter(Q(company=company),
-        #                                                  Q(date__month=month['index'])).count()
-        # numerator_liderazgo = Agreement.objects.filter(Q(company=company), Q(percentage=100),
-        #                                                Q(date__month=month['index'])).count()
-        # value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='liderazgo')
-        #
-        # value_detail.numerator = numerator_liderazgo
-        # value_detail.denominator = denominator_liderazgo
-        # value_detail.save()
-        # if denominator_liderazgo == 0:
-        #     index_detail.liderazgo = 0
-        # else:
-        #     index_detail.liderazgo = numerator_liderazgo * 100.00 / denominator_liderazgo
+
+            # if index_detail.liderazgo == 0:
+            # denominator_liderazgo = Agreement.objects.filter(Q(company=company),
+            #                                                  Q(date__month=month['index'])).count()
+            # numerator_liderazgo = Agreement.objects.filter(Q(company=company), Q(percentage=100),
+            #                                                Q(date__month=month['index'])).count()
+            # value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='liderazgo')
+            #
+            # value_detail.numerator = numerator_liderazgo
+            # value_detail.denominator = denominator_liderazgo
+            # value_detail.save()
+            # if denominator_liderazgo == 0:
+            #     index_detail.liderazgo = 0
+            # else:
+            #     index_detail.liderazgo = numerator_liderazgo * 100.00 / denominator_liderazgo
             # index_detail.save()
             # else:
             #     try:
@@ -197,6 +199,18 @@ def refresh_inform(request, company_slug, mes):
             index_detail.plan_contingencia = numerator_plan_contingencia * 100.00 / denominator_plan_contingencia
 
     index_detail.save()
+
+    if index.is_using_mejora:
+        agreements = AgreementImprovement.objects.filter(date__month=month['index'], company=company)
+        value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='improvements')
+        value_detail.numerator = agreements.filter(percentage=100).count()
+        value_detail.denominator = agreements.count()
+        if value_detail.denominator > 0:
+            value_detail.value = value_detail.numerator * 100 / value_detail.denominator
+        else:
+            value_detail.value = 0
+        value_detail.save()
+
     # else:
     #     try:
     #         values = ValuesDetail.objects.get(detail=index_detail, key='plan_contingencia')

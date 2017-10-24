@@ -71,3 +71,11 @@ def denominator(value):
         return value.denominator
     except:
         return ''
+
+
+@register.filter
+def value(value):
+    try:
+        return value.value
+    except:
+        return ''
