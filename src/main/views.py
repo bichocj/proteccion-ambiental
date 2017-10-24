@@ -3,26 +3,25 @@ import datetime
 import json
 from decimal import Decimal
 
+from django import http
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
-from django import http
+from django.utils.translation import ugettext as _
 
 from accounts.forms import WorkerForm, WorkerEditForm
 from acuerdos_sst.models import Agreement
 from fullcalendar.models import Events, CAPACITATION, REALIZADO
-from main.models import Worker, Employee, AccidentDetail
 from indices.forms import IndexForm
 from indices.models import Index, Index_Detail, ValuesDetail
+from main.models import Worker, Employee, AccidentDetail
 from proteccion_ambiental.settings import COMPANY_JRA_SLUG
-from .models import Company, Format, Requirement, HistoryFormats, Accident, Company_Requirement, LegalRequirement, \
-    MedicControl
 from .forms import CompanyForm, FormatForm, AccidentForm, EmployeeForm, RequirementForm, LegalRequirementForm, \
     MedicControlForm, AccidentDetailForm
-from django.contrib.auth.decorators import login_required
-from django.utils import timezone
-from django.utils.translation import ugettext as _
+from .models import Company, Format, Requirement, HistoryFormats, Accident, Company_Requirement, LegalRequirement, \
+    MedicControl
 
 
 @login_required
@@ -1168,3 +1167,5 @@ def reports(request, company_slug):
               {'mes': 'Noviembre', 'index': 11}, {'mes': 'Diciembre', 'index': 12}]
     year = datetime.datetime.now().year
     return render(request, "main/reports/reports.html", locals())
+
+

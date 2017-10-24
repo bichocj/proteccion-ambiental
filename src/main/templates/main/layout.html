@@ -2,6 +2,8 @@
 {% load layout_extras %}
 {% load static %}
 {% load i18n %}
+{% load thumbnail %}
+
 
 {% block styles %}
 {% endblock %}
@@ -17,20 +19,32 @@
     <div id="sidebar-nav">
         <div style="text-align: center;">
             {% if company.logo %}
-                <img src="{{ company.logo.url }}" alt="contact" class="avatar" style="max-height: 100px;"/>
+                {% thumbnail company.logo "150x100" format="PNG" as im %}
+                    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                {% endthumbnail %}
+
+                {#                <img src="{{ company.logo.url }}" alt="contact" class="avatar" style="max-height: 100px;"/>#}
             {% else %}
                 <img src="{% static 'main/img/logo_proteccion.png' %}" alt="contact" class="avatar"
                      style="max-height: 50px;"/>
             {% endif %}
         </div>
-        <ul id="dashboard-menu">
+        <ul id="dashboard-menu">         
             <li>
+                <div class="pointer hide">
+                    <div class="arrow"></div>
+                    <div class="arrow_border"></div>
+                </div>
                 <a href="{% url 'main:panel' company_slug %}"><i class="icon-home"></i>
                     <span>{{ company.short_name|upper }}</span>
                 </a>
             </li>
             {% if not request.user|has_group:"Doctor" %}
                 <li>
+                    <div class="pointer hide">
+                        <div class="arrow"></div>
+                        <div class="arrow_border"></div>
+                    </div>
                     <a href="{% url 'main:requirements_list' company.slug %}">
                         <i class="icon-tasks"></i>
                         <span>Requerimientos</span>
@@ -38,6 +52,11 @@
                 </li>
 
                 <li>
+                    <div class="pointer hide">
+                        <div class="arrow"></div>
+                        <div class="arrow_border"></div>
+                    </div>
+
                     <a class="dropdown-toggle" href="#">
                         <i class="icon-group"></i>
                         <span>Personal</span>
@@ -51,7 +70,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="new-user.html">
+                            <a href="{% url 'main:personal_counter_list' company_slug %}">
                                 <i class=""></i>
                                 <span>Por mes</span>
                             </a>
@@ -69,8 +88,8 @@
                         {% if request.user|has_group:"Doctor" or request.user.is_superuser %}
                             <li>
                                 <a href="{% url 'main:medic_exam' company.slug %}">
-                                    <i class="icon-heart"></i>
-                                    <span>Control Medico</span>
+                                    <i class=""></i>
+                                    <span>ControlMedico</span>
                                 </a>
                             </li>
                         {% endif %}
@@ -92,6 +111,10 @@
             </li>-->
             {% endif %}
             <li>
+                <div class="pointer hide">
+                    <div class="arrow"></div>
+                    <div class="arrow_border"></div>
+                </div>
                 <a href="{% url 'fullcalendar:calendar_list' company.slug %}">
                     <i class="icon-calendar-empty"></i>
                     <span>Programas Anuales</span>
@@ -100,18 +123,30 @@
 
             {% if not request.user|has_group:"Doctor" %}
                 <li>
+                    <div class="pointer hide">
+                        <div class="arrow"></div>
+                        <div class="arrow_border"></div>
+                    </div>
                     <a href="{% url 'acuerdos_sst:meeting_list' company.slug %}">
                         <i class="icon-comments-alt"></i>
                         <span>Comite SST</span>
                     </a>
                 </li>
                 <li>
+                    <div class="pointer hide">
+                        <div class="arrow"></div>
+                        <div class="arrow_border"></div>
+                    </div>
                     <a href="{% url 'main:legal_requirement' company.slug %}">
                         <i class="icon-edit"></i>
                         <span>Requisitos Legales</span>
                     </a>
                 </li>
                 <li>
+                    <div class="pointer hide">
+                        <div class="arrow"></div>
+                        <div class="arrow_border"></div>
+                    </div>
                     <a class="dropdown-toggle" href="#">
                         <i class="icon-signal"></i>
                         <span>Reportes</span>

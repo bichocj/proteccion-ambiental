@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from django.views.static import serve
 
+import main._views.personal
 from main import views
 from proteccion_ambiental import settings
 
@@ -76,6 +77,14 @@ url(r'^(?P<company_slug>[-\w]+)/requirement/(?P<requirement_pk>\d+)/formats/$', 
     url(r'^(?P<company_slug>[-\w]+)/agreement/$', views.agreement, name='agreement'),
 
 ]
+
+# Personal
+urlpatterns += [
+    url(r'^(?P<company_slug>[-\w]+)/personal/contador/$', main._views.personal.personal_counter_list, name='personal_counter_list'),
+        url(r'^(?P<company_slug>[-\w]+)/personal/contador/(?P<counter_pk>\d+)/edit/$', main._views.personal.personal_counter_edit, name='personal_counter_edit'),
+]
+
 urlpatterns += [
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]
+

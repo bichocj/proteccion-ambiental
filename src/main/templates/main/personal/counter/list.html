@@ -1,0 +1,46 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'main/css/compiled/tables.css'%}"/>
+{% endblock %}
+{% block content %}
+    <div id="pad-wrapper" class="users-list">
+    <div class="table-wrapper products-table">
+        <div class="row header">
+            <h3>Contador Mensual</h3>
+
+        </div>
+        {% if message %}
+            <div class="alert alert-danger alert-dismissible" role="alert">
+                <strong>Error!</strong> {{ message }} {{ response }}
+            </div>
+        {% endif %}
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>Mes</th>
+                <th><span class="line"></span>Trabajadores contados</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for count_worker in count_workers %}
+            <tr>
+                <td>{{count_worker.month_year|date:'F'}}</td>
+                <td>{{count_worker.quantity}}</td>
+                <td>
+                    <ul class="actions">
+                        <li>
+                            <a href="{% url 'main:personal_counter_edit' company_slug count_worker.pk %}" title="editar" class="btn btn-default"><i class="icon-edit"></i></a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock%}
+
+{% block scripts %}
+{% endblock%}

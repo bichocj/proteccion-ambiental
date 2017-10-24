@@ -153,7 +153,7 @@ $(function () {
     $('.btn-confirm-delete').click(function (e) {
         e.preventDefault()
         if (confirm('¿Esta seguro de querer eliminar este registro ')) {
-            if($(e.target).attr('href')){
+            if ($(e.target).attr('href')) {
                 window.location.href = $(e.target).attr('href');
                 return
             }
@@ -161,5 +161,18 @@ $(function () {
             window.location.href = $(e.target).parents('a').attr('href');
         }
     })
+
+    var $el = $('[href="' + window.location.pathname + '"]').siblings('.hide');
+    if ($el.length > 0) {
+        $el.removeClass('hide')
+        $el.parents('li').addClass('active')
+    } else {
+        $el = $('[href="' + window.location.pathname + '"]')
+        $el.addClass('active')
+        $el = $el.parents('li')
+        $el.addClass('active')
+        $el.find('.hide').removeClass('hide')
+        $el.find('.submenu').attr('style', 'display: block')
+    }
 
 });

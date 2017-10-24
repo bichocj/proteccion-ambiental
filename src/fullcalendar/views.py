@@ -18,6 +18,7 @@ from main.models import Company
 def calendar_list(request, company_slug):
     group = Group.objects.get(name="Doctor")
     company = get_object_or_404(Company, slug=company_slug)
+
     if group in request.user.groups.all():
         calendars = Calendar.objects.filter(Q(company=company), Q(type=DOCTOR))
     else:

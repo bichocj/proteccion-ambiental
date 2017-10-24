@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from .functions import add_form_control_class, add_form_text, add_form_control2_class
 from .models import Company, Format, Accident, Employee, Requirement, LegalRequirement, MedicControl, Worker, \
-    AccidentDetail
+    AccidentDetail, CountWorker
 
 
 class FormatForm(ModelForm):
@@ -150,4 +150,14 @@ class RequirementForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(RequirementForm, self).__init__(*args, **kwargs)
         _instance = kwargs.pop('instance', None)
+        add_form_control_class(self.fields)
+
+
+class CountWorkerForm(ModelForm):
+    class Meta:
+        model = CountWorker
+        fields = ['quantity', ]
+
+    def __init__(self, *args, **kwargs):
+        super(CountWorkerForm, self).__init__(*args, **kwargs)
         add_form_control_class(self.fields)

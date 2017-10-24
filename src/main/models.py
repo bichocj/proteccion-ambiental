@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils.text import slugify
 from django.utils.translation import ugettext as _
+from sorl.thumbnail import ImageField
 
 # from accounts.models import Worker
 
@@ -36,7 +37,8 @@ class Company(models.Model):
     name = models.CharField(_('Nombre Compañia'), max_length=100, null=False, blank=False, unique=True)
     short_name = models.CharField(_('Nombre Corto'), max_length=100, null=False, blank=False, unique=True)
     slug = models.SlugField(_('slug'), max_length=100, blank=True, null=True, unique=True)
-    logo = models.ImageField(_('Logo'), upload_to=upload_image_to, blank=True, null=True)
+
+    logo = ImageField(_('Logo'), upload_to=upload_image_to, blank=True, null=True)
     address = models.CharField(_('Dirección'), max_length=200, null=True, blank=True)
 
     def __str__(self):
@@ -57,6 +59,12 @@ class Worker(models.Model):
 
     def __str__(self):
         return self.name + ' ' + self.last_name
+
+
+class CountWorker(models.Model):
+    month_year = models.DateField(null=True)
+    quantity = models.IntegerField(_('worker quantity'))
+    company = models.ForeignKey(Company)
 
 
 class Product(models.Model):
