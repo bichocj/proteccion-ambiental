@@ -10,11 +10,9 @@
                 <div class="col-md-8 col-sm-12 col-xs-12 ">
                     <h3>Reunion: <b>{{ meeting.title }}</b></h3>
                     <div style="clear:both">
-
                         <a href="{% url 'acuerdos_sst:meeting_list' company.slug %}"><< ver todas las reuniones</a>
                     </div>
                     <br>
-                    <h4>acuerdos de comite</h4>
                 </div>
                 {% if request.user.is_superuser %}
                     <div class="col-md-4 col-sm-12 col-xs-12 pull-right">
@@ -31,13 +29,15 @@
                     <strong>Error!</strong> {{ message }} {{ response }}
                 </div>
             {% endif %}
+            <h4>Acuerdos de comite</h4>
+            <br>
             <table class="table table-hover">
                 <thead>
                 <tr>
                     <th>Acuerdo</th>
                     <th class="line">Detalles</th>
                     <th><span class="line"></span>Fecha Acuerdo</th>
-                    <th><span class="line"></span>Detalles Realizados (%)</th>
+                    <th><span class="line"></span>Tareas Completadas (%)</th>
 
                     {% if request.user.is_superuser %}
                         <th><span class="line"></span>Opciones</th>

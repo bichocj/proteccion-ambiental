@@ -1,6 +1,7 @@
 {% extends 'main/layout_with_out_nav.html' %}
 {% load layout_extras %}
 {% load static %}
+{% load i18n %}
 
 {% block styles %}
 {% endblock %}
@@ -63,6 +64,17 @@
                                 <span>Accidentes</span>
                             </a>
                         </li>
+
+
+                        {% if request.user|has_group:"Doctor" or request.user.is_superuser %}
+                            <li>
+                                <a href="{% url 'main:medic_exam' company.slug %}">
+                                    <i class="icon-heart"></i>
+                                    <span>Control Medico</span>
+                                </a>
+                            </li>
+                        {% endif %}
+
                     </ul>
 
                 </li>
@@ -85,14 +97,6 @@
                     <span>Programas Anuales</span>
                 </a>
             </li>
-            {% if request.user|has_group:"Doctor" and not request.user.is_superuser %}
-                <li>
-                    <a href="{% url 'main:medic_exam' company.slug %}">
-                        <i class="icon-heart"></i>
-                        <span>Control Medico</span>
-                    </a>
-                </li>
-            {% endif %}
 
             {% if not request.user|has_group:"Doctor" %}
                 <li>
@@ -108,10 +112,19 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{% url 'main:reports' company.slug %}">
+                    <a class="dropdown-toggle" href="#">
                         <i class="icon-signal"></i>
                         <span>Reportes</span>
+                        <i class="icon-chevron-down"></i>
                     </a>
+                    <ul class="submenu">
+                        <li>
+                            <a href="{% url 'main:reports' company.slug %}">Por mes</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'main:indices' company.slug %}">{% trans 'indices'|capfirst %}</a>
+                        </li>
+                    </ul>
                 </li>
             {% endif %}
         </ul>

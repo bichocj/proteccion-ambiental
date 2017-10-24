@@ -223,7 +223,7 @@ input.search {
   float: left;
   margin: 0em;
   /*padding-top: 5.8em; */
-  padding-top: 1em;
+  padding-top: 5.8em;
 }
   #sidebar-nav #dashboard-menu {
     list-style: none;
@@ -305,6 +305,19 @@ input.search {
       -moz-transition: opacity .1s ease;
       -webkit-transition: opacity .1s ease;
       -o-transition: opacity .1s ease; }
+
+    #sidebar-nav #dashboard-menu a i {
+      position: absolute;
+      left: 0;
+      height: 24px;
+      width: 24px;
+      opacity: 0.7;
+      transition: opacity .1s ease;
+      -moz-transition: opacity .1s ease;
+      -webkit-transition: opacity .1s ease;
+      -o-transition: opacity .1s ease;
+    }
+
       #sidebar-nav #dashboard-menu a i.icon-chevron-down {
         position: relative;
         float: right;

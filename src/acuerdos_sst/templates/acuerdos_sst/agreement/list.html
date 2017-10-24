@@ -7,7 +7,8 @@
 
     <div class="row">
         <div class="col-md-12 col-sm-12 stat">
-            <div id="pad-wrapper" class="new-user">
+            <div id="pad-wrapper" class="users-list">
+            <div class="table-wrapper products-table">
                 <div class="row header">
                     <div class="col-md-12">
                         <h3>Reunion: <b>{{ meeting.title }}</b></h3>
@@ -41,11 +42,12 @@
 
                 </div>
 
-            </div>
-            <div class="data">
-                <div class="col-md-12">
+{#            </div>#}
+{#            <div class="data">#}
+{#                <div class="col-md-12">#}
                     <h4>Tareas:</h4>
-                </div>
+            <br></br>
+{#                </div>#}
                 <table class="table table-hover">
                     <thead>
                     <tr>
@@ -80,7 +82,7 @@
                     {% endfor %}
                     </tbody>
                 </table>
-            </div>
+{#            </div>#}
         </div>
     </div>
 

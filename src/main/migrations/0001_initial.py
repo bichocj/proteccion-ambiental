@@ -124,7 +124,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(serialize=False, primary_key=True, auto_created=True, verbose_name='ID')),
                 ('state', models.IntegerField(choices=[(0, 'APTO'), (1, 'APTO CON RESTRICCION'), (2, 'NO APTO')], default=2, verbose_name='Estado')),
-                ('program', models.IntegerField(choices=[(0, 'CONSERVACION AUDITIVA'), (1, 'CALIDAD DE VIDA'), (2, 'PROMOCION Y PRESERVACION SALUD VISUAL'), (3, 'PROTECCION A LA MUJER GESTANTE Y EN EDAD FERTIL'), (4, 'PROTECCION RESPIRATORIA'), (5, 'VIGILANCIA CONTRA TME'), (6, 'PROTECCION RADIACION UV'), (7, 'RIESGO GEOLOGICO')], default=0, verbose_name='Programa')),
+                # ('program', models.IntegerField(choices=[(0, 'CONSERVACION AUDITIVA'), (1, 'CALIDAD DE VIDA'), (2, 'PROMOCION Y PRESERVACION SALUD VISUAL'), (3, 'PROTECCION A LA MUJER GESTANTE Y EN EDAD FERTIL'), (4, 'PROTECCION RESPIRATORIA'), (5, 'VIGILANCIA CONTRA TME'), (6, 'PROTECCION RADIACION UV'), (7, 'RIESGO GEOLOGICO')], default=0, verbose_name='Programa')),
                 ('date', models.DateField(default=datetime.datetime.now, verbose_name='Fecha')),
                 ('evidence', models.FileField(null=True, verbose_name='Evidencia', upload_to='examen_medico/')),
                 ('company', models.ForeignKey(to='main.Company')),

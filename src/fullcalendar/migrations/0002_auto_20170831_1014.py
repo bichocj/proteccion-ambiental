@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='calendar',
             name='company',
-            field=models.ForeignKey(to='main.Company'),
+            field=models.ForeignKey(to='main.Company', default=1),
         ),
         migrations.AddField(
             model_name='accessibility',

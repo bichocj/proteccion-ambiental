@@ -1,7 +1,6 @@
 {% extends 'main/layout.html' %}
 {% load static %}
 {% block styles %}
-    <link href="{% static 'main/css/lib/select2.css' %}" type="text/css" rel="stylesheet"/>
 
 {% endblock %}
 {% block content %}
@@ -38,12 +37,5 @@
 
 {% endblock %}
 {% block scripts %}
-    <script src="{% static 'main/js/select2.min.js' %}"></script>
-    <script>
-        $(document).ready(function () {
-            $("#id_worker").select2({
-                placeholder: "Select a State"
-            });
-        })
-    </script>
+
 {% endblock %}

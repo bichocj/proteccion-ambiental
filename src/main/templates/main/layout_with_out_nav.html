@@ -81,9 +81,9 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li><a href="{% url 'main:config_requirements_list' %}">{% trans 'requirements'|capfirst %}</a></li>
-                    {% if company_slug %}
-                        <li><a href="{% url 'main:indices' company.slug %}">{% trans 'indices'|capfirst %}</a></li>
-                    {% endif %}
+{#                    {% if company_slug %}#}
+{#                        <li><a href="{% url 'main:indices' company.slug %}">{% trans 'indices'|capfirst %}</a></li>#}
+{#                    {% endif %}#}
                 </ul>
 
             </li>
@@ -118,7 +118,8 @@
 
 <!-- knob -->
 {% if not calendar and not worker_view and not accident_view and not report_view%}
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
+{#    <script src="http://code.jquery.com/jquery-latest.js"></script>#}
+    <script src="{% static 'fullcalendar/fullcalendar/lib/jquery.min.js' %}"></script>
     <script src="{% static 'main/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'main/js/jquery-ui-1.10.2.custom.min.js' %}"></script>
     <script src="{% static 'main/js/wysihtml5-0.3.0.js' %}"></script>
@@ -141,6 +142,16 @@
                     $(this).datepicker('hide');
                 });
             }
+
+
+            $("select").each(function (e, elem) {
+                if (elem.options.length > 4) {
+                    $(elem).select2({
+                        placeholder: "Selecciona una opción"
+                    });
+                }
+            });
+
         });
     </script>
 {% endif %}
