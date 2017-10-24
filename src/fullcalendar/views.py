@@ -11,7 +11,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import ugettext as _
 
 from fullcalendar.forms import CalendarModelForm, EventsModelForm
-from fullcalendar.models import Calendar, Events, DOCTOR, REALIZADO, INSPECTION, CAPACITATION, SIMULATION, CHARLAS, OTRO
+from fullcalendar.models import Calendar, Events, DOCTOR, DONE, INSPECTION, CAPACITATION, SIMULATION, CHARLAS, OTRO
 from main.models import Company
 
 
@@ -96,7 +96,7 @@ def view_calendar(request, company_slug, slug, calendar_id):
         calendar = Calendar.objects.get(company=company, slug=slug, id=calendar_id)
     except ObjectDoesNotExist:
         calendar = get_object_or_404(Calendar, id=calendar_id)
-    dones = Events.objects.filter(state=REALIZADO, calendar=calendar).count()
+    dones = Events.objects.filter(state=DONE, calendar=calendar).count()
     not_do = Events.objects.filter(calendar=calendar).count() - dones
     # company = request.user.company
     form = EventsModelForm(calendar=calendar)
@@ -251,7 +251,7 @@ def update_event(request, slug):
             event.type = event.calendar.type
 
             if event.evidence:
-                event.state = REALIZADO
+                event.state = DONE
 
             event.save()
             response['success'] = True

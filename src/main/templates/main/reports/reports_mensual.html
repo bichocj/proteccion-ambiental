@@ -288,44 +288,78 @@
                         <h4>
                             Indice Liderazgo Participativo (>=90)
                         </h4>
-
+                        <br>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="col-md-4">
+                                    Rol
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>Actividades Preventivas Cumplidas
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>Actividades Preventivas Programadas
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>Record
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for values_detail_lidership in values_details|get_by_key:'lidership__' %}
+                            <tr class="first">
+                                <td>
+                                    {{ values_detail_lidership.key|clean:'lidership__' }}
+                                </td>
+                                <td>
+                                    {{ values_detail_lidership.numerator }}
+                                </td>
+                                <td>
+                                    {{ values_detail_lidership.denominator }}
+                                </td>
+                                <td>
+                                    {{ values_detail_lidership.value }}%
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
 
 
-                    <div class="col-md-12 field-box">
-                        <div class="col-md-2">
-                            <label>Actividades Preventivas Cumplidas:</label>
-                        </div>
-                        <div class="col-md-3 ">
-
-                            <input id="numerator_liderazgo" class="form-control" type="number"
-                                   value="{{ values_details|get_by_key:'liderazgo' |numerator }}"/>
-                        </div>
-
-                        <div class="field-box">
-                            <div class="col-md-2">
-                                <label>Actividades Preventivas Programadas:</label>
-                            </div>
-                            <div class="col-md-3">
-                                <input id="denominator_liderazgo" class="form-control" type="number"
-                                       value="{{ values_details|get_by_key:'liderazgo'|denominator }}"/>
-                            </div>
-                        </div>
-                        <div class="field-box col-md-2">
-                            <button id="liderazgo_btn" class="btn-flat inverse">Guardar</button>
-                        </div>
-                    </div>
-
-
-                    <div class="col-md-12">
-                        <div class="col-md-7"></div>
-                        <div class="col-md-5 data pull-right">
-                            <span class="number" id="liderazgo_val">{{ index_detail.liderazgo }}%</span>
-                            ILP
-                        </div>
+{#                    <div class="col-md-12 field-box">#}
+{#                        <div class="col-md-2">#}
+{#                            <label>Actividades Preventivas Cumplidas:</label>#}
+{#                        </div>#}
+{#                        <div class="col-md-3 ">#}
+{##}
+{#                            <input id="numerator_liderazgo" class="form-control" type="number"#}
+{#                                   value="{{ values_details|get_by_key:'liderazgo' |numerator }}"/>#}
+{#                        </div>#}
+{##}
+{#                        <div class="field-box">#}
+{#                            <div class="col-md-2">#}
+{#                                <label>Actividades Preventivas Programadas:</label>#}
+{#                            </div>#}
+{#                            <div class="col-md-3">#}
+{#                                <input id="denominator_liderazgo" class="form-control" type="number"#}
+{#                                       value="{{ values_details|get_by_key:'liderazgo'|denominator }}"/>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <div class="field-box col-md-2">#}
+{#                            <button id="liderazgo_btn" class="btn-flat inverse">Guardar</button>#}
+{#                        </div>#}
+{#                    </div>#}
 
 
-                    </div>
+{#                    <div class="col-md-12">#}
+{#                        <div class="col-md-7"></div>#}
+{#                        <div class="col-md-5 data pull-right">#}
+{#                            <span class="number" id="liderazgo_val">{{ index_detail.liderazgo }}%</span>#}
+{#                            ILP#}
+{#                        </div>#}
+{#                    </div>#}
 
                 </div>
             </div>
@@ -897,7 +931,7 @@
     <!-- knob -->
     <script type="text/javascript">
         $(document).ready(function () {
-            var user = {% if request.user.is_superuser %}true{% else %}false{% endif %} ;
+            var user = {% if request.user.is_superuser %}true{% else %}false{% endif %};
             if (!user) {
                 $('#numerator_sgsst').attr('readonly', true);
                 $('#denominator_sgsst').attr('readonly', true);

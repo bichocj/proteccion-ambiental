@@ -13,7 +13,7 @@ OTRO = 4
 CHARLAS = 5
 DOCTOR = 6
 
-REALIZADO = 2
+DONE = 2
 PENDIENTE = 1
 
 types_calendar = ((CAPACITATION, 'CAPACITACION'),
@@ -23,9 +23,9 @@ types_calendar = ((CAPACITATION, 'CAPACITACION'),
                   (OTRO, 'OTRO'),
                   (DOCTOR, 'DOCTOR'))
 
-state_event = ((REALIZADO, 'REALIZADO'),
-               (PENDIENTE, 'PENDIENTE'),
-               )
+STATES_EVENT = ((DONE, 'REALIZADO'),
+                (PENDIENTE, 'PENDIENTE'),
+                )
 
 types_event = ((CAPACITATION, 'CAPACITACION'),
                (INSPECTION, 'INSPECCION'),
@@ -118,7 +118,7 @@ class Events(models.Model):
     SEGURIDAD = 3
     MEDICO = 4
     OPERACIONES = 5
-    responsables = (
+    OWNER = (
         (ASESOR, "ASESOR EXTERNO"),
         (COMITE, "COMITE SST"),
         (RRHH, "RR.HH."),
@@ -134,8 +134,8 @@ class Events(models.Model):
     description = models.TextField()
     observation = models.TextField(blank=True, null=True)
     type = models.IntegerField(_('Tipo Evento'), choices=types_event, default=CAPACITATION, null=False)
-    state = models.IntegerField(_('Estado'), choices=state_event, default=PENDIENTE, null=False)
-    responsable = models.IntegerField(_('Responsable'), choices=responsables, null=False, default=ASESOR)
+    state = models.IntegerField(_('Estado'), choices=STATES_EVENT, default=PENDIENTE, null=False)
+    responsable = models.IntegerField(_('Responsable'), choices=OWNER, null=False, default=ASESOR)
     evidence = models.FileField(_('Evidencia'), upload_to="eventos/", null=True)
 
     is_cancelled = models.BooleanField(default=False)

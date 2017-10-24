@@ -39,12 +39,22 @@ def is_file_input(field):
 
 
 @register.filter
-def get_by_key(list, key):
+def get_by_key(list, keyword):
     try:
-        return list.get(key=key)
+        # return list.get(key=key)
+
+        list_filter = list.filter(key__istartswith=keyword)
+        if list_filter.count() == 1:
+            return list_filter.first()
+        return list_filter
     except:
         pass
     return ''
+
+
+@register.filter()
+def clean(word, replace):
+    return word.replace(replace, '')
 
 
 @register.filter

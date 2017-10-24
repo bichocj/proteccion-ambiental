@@ -7,7 +7,7 @@ from django.db.models import Q
 from django.shortcuts import redirect, get_object_or_404, render
 
 from acuerdos_sst.models import Agreement
-from fullcalendar.models import Events, REALIZADO, CAPACITATION
+from fullcalendar.models import Events, DONE, CAPACITATION, STATES_EVENT
 from indices.models import Index, Index_Detail, ValuesDetail
 from main.models import Company, LegalRequirement, Worker
 from main.views import return_month
@@ -29,16 +29,16 @@ def refresh_inform(request, company_slug, mes):
         denominator_sgsst = Events.objects.filter(Q(calendar__company=company),
                                                   Q(event_start__month=month['index'])).count()
 
-        numerator_sgsst = Events.objects.filter(Q(calendar__company=company), Q(state=REALIZADO),
+        numerator_sgsst = Events.objects.filter(Q(calendar__company=company), Q(state=DONE),
                                                 Q(event_start__month=month['index'])).count()
         if not numerator_sgsst:
             numerator_sgsst = 0
 
-        values, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='sgsst')
+        value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='sgsst')
 
-        values.numerator = numerator_sgsst
-        values.denominator = denominator_sgsst
-        values.save()
+        value_detail.numerator = numerator_sgsst
+        value_detail.denominator = denominator_sgsst
+        value_detail.save()
 
         index_detail.sgsst = numerator_sgsst * 100 / denominator_sgsst
         # index_detail.save()
@@ -51,11 +51,11 @@ def refresh_inform(request, company_slug, mes):
         if not numerator_legal:
             numerator_legal = 0
 
-        values, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='legal')
+        value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='legal')
 
-        values.numerator = numerator_legal
-        values.denominator = denominator_legal
-        values.save()
+        value_detail.numerator = numerator_legal
+        value_detail.denominator = denominator_legal
+        value_detail.save()
         if denominator_legal == 0:
             index_detail.legal = 0
         else:
@@ -65,7 +65,7 @@ def refresh_inform(request, company_slug, mes):
     if index.is_using_capacitacion:
         events = Events.objects.filter(event_start__month=month['index'], calendar__type=CAPACITATION)
         total = events.count()
-        total_done = events.filter(state=REALIZADO).count()
+        total_done = events.filter(state=DONE).count()
 
         index_detail.capacitacion = total_done * 100 / total
         index_detail.save()
@@ -76,10 +76,10 @@ def refresh_inform(request, company_slug, mes):
 
         numerator_icsst = Agreement.objects.filter(Q(company=company), Q(percentage=100),
                                                    Q(date__month=month['index'])).count()
-        values, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='icsst')
-        values.numerator = numerator_icsst
-        values.denominator = denominator_icsst
-        values.save()
+        value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='icsst')
+        value_detail.numerator = numerator_icsst
+        value_detail.denominator = denominator_icsst
+        value_detail.save()
         if denominator_icsst == 0:
             index_detail.icsst = 0
         else:
@@ -99,11 +99,11 @@ def refresh_inform(request, company_slug, mes):
         numerator_indice_no_conformidad = Agreement.objects.filter(Q(company=company), Q(percentage=100),
                                                                    Q(date__month=month['index'])).count()
 
-        values, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='indice_no_conformidad')
+        value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='indice_no_conformidad')
 
-        values.numerator = numerator_indice_no_conformidad
-        values.denominator = denominator_indice_no_conformidad
-        values.save()
+        value_detail.numerator = numerator_indice_no_conformidad
+        value_detail.denominator = denominator_indice_no_conformidad
+        value_detail.save()
         if denominator_indice_no_conformidad == 0:
             index_detail.indice_no_conformidad = 0
         else:
@@ -122,11 +122,11 @@ def refresh_inform(request, company_slug, mes):
                                                             Q(date__month=month['index'])).count()
         numerator_medida_iperc = Agreement.objects.filter(Q(company=company), Q(percentage=100.0),
                                                           Q(date__month=month['index'])).count()
-        values, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='medida_iperc')
+        value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='medida_iperc')
 
-        values.numerator = numerator_medida_iperc
-        values.denominator = denominator_medida_iperc
-        values.save()
+        value_detail.numerator = numerator_medida_iperc
+        value_detail.denominator = denominator_medida_iperc
+        value_detail.save()
         if denominator_medida_iperc == 0:
             index_detail.medida_iperc = 0
         else:
@@ -140,20 +140,34 @@ def refresh_inform(request, company_slug, mes):
             #     numerator_medida_iperc = values.numerator
             #     denominator_medida_iperc = values.denominator
     if index.is_using_liderazgo:
-        # if index_detail.liderazgo == 0:
-        denominator_liderazgo = Agreement.objects.filter(Q(company=company),
-                                                         Q(date__month=month['index'])).count()
-        numerator_liderazgo = Agreement.objects.filter(Q(company=company), Q(percentage=100),
-                                                       Q(date__month=month['index'])).count()
-        values, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='liderazgo')
 
-        values.numerator = numerator_liderazgo
-        values.denominator = denominator_liderazgo
-        values.save()
-        if denominator_liderazgo == 0:
-            index_detail.liderazgo = 0
-        else:
-            index_detail.liderazgo = numerator_liderazgo * 100.00 / denominator_liderazgo
+        events = Events.objects.filter(event_start__month=month['index'], calendar__company=company)
+        for owner_index, owner_val in Events.OWNER:
+            value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='lidership__'+owner_val)
+            value_detail.numerator = events.filter(responsable=owner_index, state=DONE).count()
+            value_detail.denominator = events.filter(responsable=owner_index).count()
+            if value_detail.denominator > 0:
+                value_detail.value = (value_detail.numerator * 100 / value_detail.denominator)
+            else:
+                value_detail.value = 0
+
+            value_detail.save()
+
+
+        # if index_detail.liderazgo == 0:
+        # denominator_liderazgo = Agreement.objects.filter(Q(company=company),
+        #                                                  Q(date__month=month['index'])).count()
+        # numerator_liderazgo = Agreement.objects.filter(Q(company=company), Q(percentage=100),
+        #                                                Q(date__month=month['index'])).count()
+        # value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='liderazgo')
+        #
+        # value_detail.numerator = numerator_liderazgo
+        # value_detail.denominator = denominator_liderazgo
+        # value_detail.save()
+        # if denominator_liderazgo == 0:
+        #     index_detail.liderazgo = 0
+        # else:
+        #     index_detail.liderazgo = numerator_liderazgo * 100.00 / denominator_liderazgo
             # index_detail.save()
             # else:
             #     try:
@@ -171,12 +185,12 @@ def refresh_inform(request, company_slug, mes):
         # if not numerator_plan_contingencia:
         #     numerator_plan_contingencia = 0
         # try:
-        values, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='plan_contingencia')
+        value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='plan_contingencia')
         # except:
         #     values = ValuesDetail(detail=index_detail, key='plan_contingencia')
-        values.numerator = numerator_plan_contingencia
-        values.denominator = denominator_plan_contingencia
-        values.save()
+        value_detail.numerator = numerator_plan_contingencia
+        value_detail.denominator = denominator_plan_contingencia
+        value_detail.save()
         if denominator_plan_contingencia == 0:
             index_detail.plan_contingencia = 0
         else:

@@ -29,7 +29,7 @@
                      style="max-height: 50px;"/>
             {% endif %}
         </div>
-        <ul id="dashboard-menu">         
+        <ul id="dashboard-menu">
             <li>
                 <div class="pointer hide">
                     <div class="arrow"></div>
@@ -77,26 +77,37 @@
                         </li>
 
 
-                        <li>
-                            <a href="{% url 'main:accident_list' company.slug %}">
-                                <i class=""></i>
-                                <span>Accidentes</span>
-                            </a>
-                        </li>
-
-
-                        {% if request.user|has_group:"Doctor" or request.user.is_superuser %}
-                            <li>
-                                <a href="{% url 'main:medic_exam' company.slug %}">
-                                    <i class=""></i>
-                                    <span>ControlMedico</span>
-                                </a>
-                            </li>
-                        {% endif %}
-
                     </ul>
 
                 </li>
+
+                <li>
+                    <div class="pointer hide">
+                        <div class="arrow"></div>
+                        <div class="arrow_border"></div>
+                    </div>
+
+                    <a href="{% url 'main:accident_list' company.slug %}">
+                        <i class="icon-heart"></i>
+
+                        <span>Accidentes</span>
+                    </a>
+                </li>
+
+
+                {% if request.user|has_group:"Doctor" or request.user.is_superuser %}
+                    <li>
+                        <div class="pointer hide">
+                            <div class="arrow"></div>
+                            <div class="arrow_border"></div>
+                        </div>
+
+                        <a href="{% url 'main:medic_exam' company.slug %}">
+                            <i class="icon-heart"></i>
+                            <span>ControlMedico</span>
+                        </a>
+                    </li>
+                {% endif %}
                 <!--<li>
                 <a href="{% url 'main:indices' company.slug %}">
                     <i class="icon-th-large"></i>
