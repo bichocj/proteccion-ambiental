@@ -12,7 +12,7 @@
         <div class="grid-wrapper">
             <div class="row show-grid text-center">
                 <div class="col-md-6">
-                    <form action="{% url 'main:mensual_report' company_slug  0%}" method="post">
+                    <form action="{% url 'main:report_monthly' company_slug  0%}" method="post">
                         {% csrf_token %}
                         <div class="col-md-12" style="margin-bottom: 20px;">
                             <h4 class="title">Reporte Mensual</h4>
@@ -67,7 +67,7 @@
         });
 
         $('.report-by-month').click(function () {
-            window.location = '/{{ company_slug }}/reports/mensual/'+$(".select2 option:checked").val()+'/';
+            window.location = '/{{ company_slug }}/informe/mensual/'+$(".select2 option:checked").val()+'/';
         })
     </script>
 {% endblock %}

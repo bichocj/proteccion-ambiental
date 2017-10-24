@@ -15,7 +15,7 @@ def personal_counter_list(request, company_slug):
     count_workers = CountWorker.objects.filter(month_year__year=current_date.year, company=company).order_by(
         'month_year')
     if count_workers.count() == 0:
-        for i in range(1, 12):
+        for i in range(1, 13):
             CountWorker(month_year=current_date.replace(month=i), quantity=0, company=company).save()
         count_workers = CountWorker.objects.filter(month_year__year=current_date.year, company=company).order_by(
             'month_year')
@@ -34,7 +34,7 @@ def personal_counter_edit(request, company_slug, counter_pk):
         form = CountWorkerForm(request.POST, instance=count_worker)
         if form.is_valid():
             form.save()
-        return redirect(reverse('main:personal_counter_list', kwargs={"company_slug": company_slug}))
+        return redirect(reverse('main:personal_counter_list', kwargs={"": company_slug}))
     else:
         form = CountWorkerForm(instance=count_worker)
 
