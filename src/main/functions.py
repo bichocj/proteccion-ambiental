@@ -25,6 +25,10 @@ def add_form_control_class(fields):
     for f in fields:
         fields[f].widget.attrs.update({'class': 'form-control'})
 
+def add_form_control2_class(field):
+    # for f in fields:
+    field.widget.attrs.update({'class': 'form-control2'})
+
 # def add_class(form, fields):
 #     for field in fields:
 #         form.fields[field].widget.attrs.update(

@@ -44,13 +44,10 @@
                         {% endif %}</td>
                         {% if request.user.is_superuser or request.user|has_group:"Doctor"%}
                             <td>
-                                <ul class="actions">
-                                    <li>
-                                        <a href="{% url 'fullcalendar:view_calendar' company.slug calendar.slug calendar.pk %}">Ver</a>
-                                    </li>
-                                    <li><a href="{% url 'fullcalendar:edit' company.slug calendar.pk%}">Editar</a></li>
-                                    <li class="last"><a href="{% url 'fullcalendar:delete' company.slug calendar.pk%}">Eliminar</a></li>
-                                </ul>
+
+                                <a href="{% url 'fullcalendar:view_calendar' company.slug calendar.slug calendar.pk %}" title="ver" class="btn btn-default"><i class="icon-eye-open"></i></a>
+                                <a href="{% url 'fullcalendar:edit' company.slug calendar.pk%}" title="editar" class="btn btn-default"><i class="icon-edit"></i></a>
+                                <a href="{% url 'fullcalendar:delete' company.slug calendar.pk%}" title="eliminar" class="btn btn-default btn-confirm-delete"><i class="icon-remove"></i></a>
                             </td>
                         {% endif %}
                     </tr>

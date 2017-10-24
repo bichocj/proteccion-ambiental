@@ -98,7 +98,7 @@ TIME_ZONE = 'America/Lima'
 
 USE_I18N = True
 
-USE_L10N = True
+USE_L10N = False
 
 USE_TZ = False
 
@@ -118,3 +118,6 @@ LOGIN_REDIRECT_URL = '/'
 
 MEMBER_GROUP = 'equipo JRA'
 COMPANY_JRA_SLUG = 'pro_tam'
+
+
+DATE_INPUT_FORMATS = ['%Y-%m-%d',]

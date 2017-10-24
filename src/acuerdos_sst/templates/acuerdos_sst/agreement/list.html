@@ -1,0 +1,92 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block styles %}
+
+{% endblock %}
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12 stat">
+            <div id="pad-wrapper" class="new-user">
+                <div class="row header">
+                    <div class="col-md-12">
+                        <h3>Reunion: <b>{{ meeting.title }}</b></h3>
+                        <div style="clear:both">
+                            <a href="{% url 'acuerdos_sst:meeting_list' company.slug %}"><< ver todas las
+                                reuniones</a>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col-md-12">
+                        <div class="col-md-8">
+                            <h3>Acuerdo: <b>{{ agreement.title }}</b></h3>
+                            <div style="clear:both">
+                                <a href="{% url 'acuerdos_sst:agreement_list' company.slug meeting.pk %}"><< ver todos
+                                    los acuerdos de esta reunion</a>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+
+                            {% if request.user.is_superuser %}
+                                <div class="pull-right">
+                                    <a href="{% url 'acuerdos_sst:agreement_detail_new' company.slug agreement.pk %}"
+                                       class="btn-flat success pull-right">
+                                        <span>&#43;</span>
+                                        Nueva Tarea
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="data">
+                <div class="col-md-12">
+                    <h4>Tareas:</h4>
+                </div>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+
+                        <th><span class="line"></span>Descripcion</th>
+                        <th><span class="line"></span>Fecha Inicio</th>
+                        <th><span class="line"></span>Fecha Maxima</th>
+                        <th><span class="line"></span>Estado</th>
+                        <th><span class="line"></span>Evidencia</th>
+                        <th><span class="line"></span>Opciones</th>
+                        <!--<th><span class="line"></span>Formato</th>-->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for agreement in agreements_details %}
+                        <tr>
+                            <td>{{ agreement.description }}</td>
+                            <td>{{ agreement.date_start }}</td>
+                            <td>{{ agreement.date_until }}</td>
+                            <td>{{ agreement.get_state_display }}</td>
+                            {% if agreement.evidence %}
+                                <td><a href="{{ agreement.evidence.url }}" download="{{ agreement.evidence.file }}"><i
+                                        class="icon-download"></i> {{ agreement.evidence.name }}</a></td>
+                            {% else %}
+                                <td>Sin evidencia</td>
+                            {% endif %}
+                            <td>
+                                <a href="{% url 'acuerdos_sst:agreement_detail_edit' company.slug agreement_pk agreement.pk %}" title="editar" class="btn btn-default"><i class="icon-edit"></i></a>
+                                <a href="{% url 'acuerdos_sst:agreement_detail_delete' company.slug agreement_pk agreement.pk %}" title="eliminar" class="btn btn-default btn-confirm-delete"><i class="icon-remove"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+{% block scripts %}
+
+{% endblock %}

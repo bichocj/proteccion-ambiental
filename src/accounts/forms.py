@@ -36,7 +36,7 @@ class WorkerForm(ModelForm):
 class WorkerEditForm(ModelForm):
     class Meta:
         model = Worker
-        fields = ['name', 'last_name', 'code', 'cargo', 'estado']
+        fields = ['name', 'last_name', 'code', 'cargo',]
 
     def __init__(self, *args, **kwargs):
         super(WorkerEditForm, self).__init__(*args, **kwargs)

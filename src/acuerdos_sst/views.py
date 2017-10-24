@@ -1,17 +1,12 @@
 from decimal import Decimal
 
+from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.shortcuts import render, redirect
-from django.core.urlresolvers import reverse
 
 from acuerdos_sst.forms import AgreementForm, AgreementDetailForm, MettingForm
 from acuerdos_sst.models import Agreement, AgreementDetail, Metting
 from main.models import Company
-
-
-def home(request, company_slug):
-    company = Company.objects.get(slug=company_slug)
-    return render(request, 'acuerdos_sst/home.html', locals())
 
 
 # Metting Block
@@ -119,9 +114,10 @@ def agreement_edit(request, meeting_pk, agreement_pk, company_slug):
             agreement.company = company
             agreement.metting = meeting
             agreement.save()
-            return redirect(reverse('acuerdos_sst:agreement_detail',
-                                    kwargs={"agreement_pk": agreement.pk, "meeting_pk": meeting_pk,
-                                            "company_slug": company_slug}))
+            return redirect(reverse('acuerdos_sst:agreement_list',
+                                    kwargs={"meeting_pk": meeting_pk,
+                                            "company_slug": company_slug}
+                                    ))
         else:
             message = 'Revisa la informacion'
     else:
@@ -195,14 +191,36 @@ def agreement_detail_delete(request, agreement_pk, company_slug, agreement_detai
                             kwargs={"agreement_pk": agreement_pk, "company_slug": company_slug}))
 
 
+def agreement_detail_new(request, agreement_pk, company_slug):
+    company = Company.objects.get(slug=company_slug)
+    agreement = Agreement.objects.get(pk=agreement_pk)
+    title = 'Nueva <b>tarea</b> al acuerdo ' + agreement.title
+    if request.POST:
+        form = AgreementDetailForm(request.POST, request.FILES)
+        if form.is_valid():
+            agreement_detail = form.save(commit=False)
+            agreement_detail.agreement = agreement
+            agreement_detail.save()
+
+            cal_porcentage_progreess(agreement_pk)
+            return redirect(reverse('acuerdos_sst:agreement_detail',
+                                    kwargs={"agreement_pk": agreement.pk, "company_slug": company_slug}))
+        else:
+            message = 'Revisa la informacion'
+    else:
+        form = AgreementDetailForm()
+    return render(request, 'main/layout_form.html', locals())
+
+
 def agreement_detail_edit(request, agreement_pk, company_slug, agreement_detail_pk):
     title = 'Editar Detalle en acuerdo'
     agreement = Agreement.objects.get(pk=agreement_pk)
+    meeting = agreement.metting
     agreements_details = AgreementDetail.objects.filter(agreement=agreement)
-    agreementdetail = AgreementDetail.objects.get(pk=agreement_detail_pk)
+    agreement_detail = AgreementDetail.objects.get(pk=agreement_detail_pk)
     company = Company.objects.get(slug=company_slug)
     if request.POST:
-        form = AgreementDetailForm(request.POST, request.FILES, instance=agreementdetail)
+        form = AgreementDetailForm(request.POST, request.FILES, instance=agreement_detail)
         if form.is_valid():
             form.save()
             cal_porcentage_progreess(agreement_pk)
@@ -211,27 +229,14 @@ def agreement_detail_edit(request, agreement_pk, company_slug, agreement_detail_
         else:
             message = 'Revisa la informacion'
     else:
-        form = AgreementDetailForm(instance=agreementdetail)
-    return render(request, 'acuerdos_sst/details_agreement.html', locals())
+        form = AgreementDetailForm(instance=agreement_detail)
+    return render(request, 'main/layout_form.html', locals())
 
 
 def agreement_detail(request, agreement_pk, company_slug):
     title = 'Nuevo Detalle en acuerdo'
     agreement = Agreement.objects.get(pk=agreement_pk)
+    meeting = agreement.metting
     company = Company.objects.get(slug=company_slug)
-    if request.POST:
-        form = AgreementDetailForm(request.POST, request.FILES)
-        if form.is_valid():
-            agd = form.save(commit=False)
-            agd.agreement = agreement
-            agd.save()
-            cal_porcentage_progreess(agreement_pk)
-            return redirect(reverse('acuerdos_sst:agreement_detail',
-                                    kwargs={"agreement_pk": agreement.pk, "company_slug": company_slug}))
-        else:
-            message = 'Revisa que la informacion sea correcta'
-    else:
-
-        form = AgreementDetailForm()
     agreements_details = AgreementDetail.objects.filter(agreement=agreement)
-    return render(request, 'acuerdos_sst/details_agreement.html', locals())
+    return render(request, 'acuerdos_sst/agreement/list.html', locals())

@@ -1,0 +1,219 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-10-23 12:41-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: forms.py:39
+msgid "The two password fields didn't match."
+msgstr "Los dos campos de contraseñas son diferentes."
+
+#: forms.py:41
+msgid "Password"
+msgstr "Contraseña"
+
+#: forms.py:43
+msgid "Password confirmation"
+msgstr "Confirmación de contraseña"
+
+#: forms.py:45
+msgid "Enter the same password as above, for verification."
+msgstr ""
+
+#: models.py:35
+msgid "R.U.C."
+msgstr ""
+
+#: models.py:36
+msgid "Nombre Compañia"
+msgstr ""
+
+#: models.py:37
+msgid "Nombre Corto"
+msgstr ""
+
+#: models.py:38
+msgid "slug"
+msgstr ""
+
+#: models.py:39
+msgid "Logo"
+msgstr ""
+
+#: models.py:40
+msgid "Dirección"
+msgstr ""
+
+#: models.py:51
+msgid "Nombres"
+msgstr ""
+
+#: models.py:52
+msgid "Apellidos"
+msgstr ""
+
+#: models.py:53 models.py:151
+msgid "Codigo"
+msgstr ""
+
+#: models.py:55
+msgid "Cargo"
+msgstr ""
+
+#: models.py:56 models.py:140 models.py:141 models.py:204
+msgid "Estado"
+msgstr ""
+
+#: models.py:75
+msgid "Nombre Requerimiento"
+msgstr ""
+
+#: models.py:76 models.py:228
+msgid "Descripcion"
+msgstr ""
+
+#: models.py:127
+msgid "Tipo Normativa"
+msgstr ""
+
+#: models.py:128
+msgid "Codigo Normativa"
+msgstr ""
+
+#: models.py:129
+msgid "Fecha Publicacion"
+msgstr ""
+
+#: models.py:131
+msgid "Titulo del Dispositivo Legal"
+msgstr ""
+
+#: models.py:132
+msgid "Que Aplica?"
+msgstr ""
+
+#: models.py:134
+msgid "Evidencia Registro"
+msgstr ""
+
+#: models.py:135
+msgid "Frecuencia"
+msgstr ""
+
+#: models.py:136
+msgid "Fecha Ultima Evaluacion"
+msgstr ""
+
+#: models.py:138
+msgid "Cumplimiento (%)"
+msgstr ""
+
+#: models.py:139
+msgid "Observaciones"
+msgstr ""
+
+#: models.py:205
+msgid "Programa"
+msgstr ""
+
+#: models.py:206 models.py:231
+msgid "Fecha"
+msgstr ""
+
+#: models.py:207 models.py:235
+msgid "Evidencia"
+msgstr ""
+
+#: models.py:227
+msgid "Titulo"
+msgstr ""
+
+#: models.py:229
+msgid "Tipo de Accidente"
+msgstr ""
+
+#: models.py:232
+msgid "Dias Perdidos"
+msgstr ""
+
+#: models.py:274
+msgid "Archivo"
+msgstr ""
+
+#: models.py:275
+msgid "Tipo"
+msgstr ""
+
+#: models.py:278
+msgid "Nombre"
+msgstr ""
+
+#: templates/main/company/edit.html:15
+msgid "company"
+msgstr "Empresa"
+
+#: templates/main/company/edit.html:16 templates/main/panel.html:38
+msgid "contact"
+msgstr "contacto"
+
+#: templates/main/company/edit.html:21
+msgid "update company"
+msgstr "actualizar empresa"
+
+#: templates/main/company/edit.html:26
+msgid "update contact"
+msgstr "actualizar contacto"
+
+#: templates/main/config/requirements/formats/list.html:52
+#: templates/main/config/requirements/formats/list.html:131
+#: templates/main/requirements/formats/list.html:58
+#: templates/main/requirements/formats/list.html:144
+msgid "format"
+msgstr "formato"
+
+#: templates/main/config/requirements/list.html:18
+#: templates/main/layout_with_out_nav.html:88
+msgid "requirements"
+msgstr "requerimientos"
+
+#: templates/main/config/requirements/list.html:24
+msgid "new requirement"
+msgstr "nuevo requerimiento"
+
+#: templates/main/config/requirements/list.html:31
+msgid "this requirements will copy in a company when you create one"
+msgstr "estos requerimientos seran copiados a una empresa cuando cree una"
+
+#: templates/main/layout_with_out_nav.html:90
+msgid "indices"
+msgstr ""
+
+#: templates/main/panel.html:33
+msgid "address"
+msgstr "dirección"
+
+#: views.py:80
+msgid "Nueva Compañía"
+msgstr "Nueva empresa"
+
+#: views.py:115
+msgid "edit company"
+msgstr "editar empresa"
+
+#: views.py:478
+msgid "requirement"
+msgstr "requerimiento"

@@ -53,7 +53,7 @@ class Worker(models.Model):
     code = models.CharField(_('Codigo'), max_length=100, null=False, blank=False)
     company = models.ForeignKey(Company, null=False)
     cargo = models.IntegerField(_('Cargo'), choices=cargos, default=RECURSOS_HUMANOS, null=False)
-    estado = models.BooleanField(_('Estado'), default=True, null=False)
+    estado = models.BooleanField(_('Esta activo'), default=True, null=False)
 
     def __str__(self):
         return self.name + ' ' + self.last_name

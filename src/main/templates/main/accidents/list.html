@@ -50,15 +50,8 @@
                         <td>{{ accident.worker.name }}  {{ accident.worker.last_name }}</td>
                         {% if request.user.is_superuser or request.user|has_group:"Doctor" %}
                             <td>
-                                <ul class="actions">
-                                    <li ><a href="{% url 'main:accident_edit' company.slug accident.pk %}">Editar</a>
-                                    </li>
-                                    {% if request.user.is_superuser %}
-                                        <li class="last"><a
-                                                href="{% url 'main:accident_delete' company.slug accident.pk %}">Eliminar</a>
-                                        </li>
-                                    {% endif %}
-                                </ul>
+                                <a href="{% url 'main:accident_edit' company.slug accident.pk %}" title="editar" class="btn btn-default"><i class="icon-edit"></i></a>
+                                <a href="{% url 'main:accident_delete' company.slug accident.pk %}" title="eliminar" class="btn btn-default btn-confirm-delete"><i class="icon-remove"></i></a>
                             </td>
                         {% endif %}
                     </tr>

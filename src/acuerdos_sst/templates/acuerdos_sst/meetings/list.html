@@ -9,7 +9,7 @@
             <div class="row header">
                 <h3>REUNIONES DE ACUERDOS DE COMITE</h3>
                 {% if request.user.is_superuser %}
-                    <div class="col-md-10 col-sm-12 col-xs-12 pull-right">
+                    <div class="col-md-4 col-sm-12 col-xs-12 pull-right">
                         <a href="{% url 'acuerdos_sst:meeting_new' company.slug %}"
                            class="btn-flat success pull-right">
                             <span>&#43;</span>
@@ -26,7 +26,7 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th>Acuerdo</th>
+                    <th>Título</th>
                     <th><span class="line"></span>Fecha de Reunion</th>
                     <th><span class="line"></span>Acuerdos Completados (%)</th>
 
@@ -50,18 +50,10 @@
                         {% if request.user.is_superuser %}
                             <td>
 
+                            <a href="{% url 'acuerdos_sst:agreement_list' company.slug meeting.pk %}" title="ver" class="btn btn-default"><i class="icon-eye-open"></i></a>
+                            <a href="{% url 'acuerdos_sst:meeting_edit' company.slug meeting.pk %}" title="editar" class="btn btn-default"><i class="icon-edit"></i></a>
+                            <a href="{% url 'acuerdos_sst:meeting_delete' company.slug meeting.pk %}" title="eliminar" class="btn btn-default btn-confirm-delete"><i class="icon-remove"></i></a>
 
-                                <ul>
-                                    <li>
-                                        <a href="{% url 'acuerdos_sst:agreement_list' company.slug meeting.pk %}">Ver Acuerdos</a>
-                                    </li>
-                                    <li><a
-                                            href="{% url 'acuerdos_sst:meeting_edit' company.slug meeting.pk %}">Editar</a>
-                                    </li>
-                                    <li class="last"><a
-                                            href="{% url 'acuerdos_sst:meeting_delete' company.slug meeting.pk %}">Eliminar</a>
-                                    </li>
-                                </ul>
 
                             </td>
                         {% endif %}

@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
-import datetime
 from django import forms
+from django.contrib.auth.models import Group
 from django.forms import ModelForm, HiddenInput
-from django.utils.translation import ugettext, ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
 
-from fullcalendar.forms import UserModelMultipleChoiceField, WorkerModelMultipleChoiceField
-from .functions import add_form_control_class, add_form_text
+from .functions import add_form_control_class, add_form_text, add_form_control2_class
 from .models import Company, Format, Accident, Employee, Requirement, LegalRequirement, MedicControl, Worker, \
     AccidentDetail
-from django.contrib.auth.models import Group
 
 
 class FormatForm(ModelForm):
@@ -75,7 +73,7 @@ class EmployeeForm(ModelForm):
         return user
 
 
-class DateInput(forms.DateInput):
+class DateInputWidget(forms.DateInput):
     input_type = 'date'
 
 
@@ -112,6 +110,7 @@ class MedicControlForm(ModelForm):
 class AccidentForm(ModelForm):
     worker = forms.ModelChoiceField(queryset=Worker.objects.all(), label='Trabajador')
     evidence = forms.FileField(required=False)
+    date = forms.Field(widget=DateInputWidget)
 
     class Meta:
         model = Accident
@@ -128,6 +127,7 @@ class AccidentForm(ModelForm):
         else:
             self.fields['evidence'] = forms.Field(widget=HiddenInput, required=False)
         add_form_control_class(self.fields)
+        add_form_control2_class(self.fields['worker'])
         self.fields['date'].widget.attrs['class'] = 'form-control input-datepicker'
 
 

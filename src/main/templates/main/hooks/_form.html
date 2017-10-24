@@ -1,6 +1,10 @@
+{% load main_extras %}
 <form action="{{ action|default:'.' }}" method="post" class="form-horizontal" enctype="multipart/form-data">
     {% csrf_token %}
     {% for f in form %}
+        {% if f|is_hidden %}
+            {{ f }}
+        {% else %}
         <div class="form-group {% if f.errors %}has-error{% endif %}">
             <label for="id_{{ f.name }}" class="col-sm-2 control-label">{{ f.label|capfirst }}:</label>
             <div class="col-sm-10">
@@ -10,6 +14,7 @@
                 {% endfor %}
             </div>
         </div>
+        {% endif %}
     {% endfor %}
 
     <div class="pull-right">

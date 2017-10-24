@@ -7,10 +7,18 @@
     <div id="pad-wrapper" class="users-list">
         <div class="table-wrapper products-table">
             <div class="row header">
-                <h3>ACUERDOS DE COMITE</h3>
+                <div class="col-md-8 col-sm-12 col-xs-12 ">
+                    <h3>Reunion: <b>{{ meeting.title }}</b></h3>
+                    <div style="clear:both">
+
+                        <a href="{% url 'acuerdos_sst:meeting_list' company.slug %}"><< ver todas las reuniones</a>
+                    </div>
+                    <br>
+                    <h4>acuerdos de comite</h4>
+                </div>
                 {% if request.user.is_superuser %}
-                    <div class="col-md-10 col-sm-12 col-xs-12 pull-right">
-                        <a href="{% url 'acuerdos_sst:agreement_new' company.slug meeting.pk%}"
+                    <div class="col-md-4 col-sm-12 col-xs-12 pull-right">
+                        <a href="{% url 'acuerdos_sst:agreement_new' company.slug meeting.pk %}"
                            class="btn-flat success pull-right">
                             <span>&#43;</span>
                             Nuevo Acuerdo
@@ -46,7 +54,8 @@
                         {% if agreement.percentage or agreement.percentage == 0 %}
                             <td>{{ agreement.percentage }}%
                                 {% if agreement.percentage == 100.00 %}
-                                    <a href="{% url 'acuerdos_sst:desactive_agreement' company_slug meeting.pk  agreement.pk %}" style="margin-left: 50px;">ocultar</a>
+                                    <a href="{% url 'acuerdos_sst:desactive_agreement' company_slug meeting.pk  agreement.pk %}"
+                                       style="margin-left: 50px;">ocultar</a>
                                 {% endif %}
                             </td>
                         {% else %}
@@ -54,19 +63,13 @@
                         {% endif %}
                         {% if request.user.is_superuser %}
                             <td>
-
-
-                                <ul>
-                                    <li>
-                                        <a href="{% url 'acuerdos_sst:agreement_detail' company.slug agreement.pk %}">Ver Tareas</a>
-                                    </li>
-                                    <li><a
-                                            href="{% url 'acuerdos_sst:agreement_edit' company.slug meeting.pk  agreement.pk %}">Editar</a>
-                                    </li>
-                                    <li class="last"><a
-                                            href="{% url 'acuerdos_sst:agreement_delete' company.slug meeting.pk  agreement.pk %}">Eliminar</a>
-                                    </li>
-                                </ul>
+                                <a href="{% url 'acuerdos_sst:agreement_detail' company.slug agreement.pk %}"
+                                   title="ver" class="btn btn-default"><i class="icon-eye-open"></i></a>
+                                <a href="{% url 'acuerdos_sst:agreement_edit' company.slug meeting.pk  agreement.pk %}"
+                                   title="editar" class="btn btn-default"><i class="icon-edit"></i></a>
+                                <a href="{% url 'acuerdos_sst:agreement_delete' company.slug meeting.pk  agreement.pk %}"
+                                   title="eliminar" class="btn btn-default btn-confirm-delete"><i
+                                        class="icon-remove"></i></a>
 
                             </td>
                         {% endif %}
