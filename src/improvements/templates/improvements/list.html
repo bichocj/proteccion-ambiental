@@ -1,0 +1,85 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'main/css/compiled/tables.css' %}"/>
+{% endblock %}
+{% block content %}
+    <div id="pad-wrapper" class="users-list">
+        <div class="table-wrapper products-table">
+            <div class="row header">
+                <div class="col-md-8 col-sm-12 col-xs-12 ">
+                    <h3>Reunion: <b>{{ meeting.title }}</b></h3>
+                    <div style="clear:both">
+                        <a href="{% url 'improvements:meeting_list' company.slug %}"><< ver todas las reuniones</a>
+                    </div>
+                    <br>
+                </div>
+                {% if request.user.is_superuser %}
+                    <div class="col-md-4 col-sm-12 col-xs-12 pull-right">
+                        <a href="{% url 'improvements:agreement_new' company.slug meeting.pk %}"
+                           class="btn-flat success pull-right">
+                            <span>&#43;</span>
+                            Nuevo Acuerdo
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+            {% if message %}
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <strong>Error!</strong> {{ message }} {{ response }}
+                </div>
+            {% endif %}
+            <h4>Acuerdos de Mejoras</h4>
+            <br>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Observación</th>
+                    <th class="line">Detalles</th>
+                    <th><span class="line"></span>Fecha observación</th>
+                    <th><span class="line"></span>Tareas Completadas (%)</th>
+
+                    {% if request.user.is_superuser %}
+                        <th><span class="line"></span>Opciones</th>
+                    {% endif %}
+                    <!--<th><span class="line"></span>Formato</th>-->
+                </tr>
+                </thead>
+                <tbody>
+                {% for agreement in agreements %}
+                    <tr>
+                        <td>{{ agreement.title }}</td>
+                        <td>{{ agreement.content }}</td>
+                        <td>{{ agreement.date }}</td>
+                        {% if agreement.percentage or agreement.percentage == 0 %}
+                            <td>{{ agreement.percentage }}%
+                                {% if agreement.percentage == 100.00 %}
+                                    <a href="{% url 'improvements:desactive_agreement' company_slug meeting.pk  agreement.pk %}"
+                                       style="margin-left: 50px;">ocultar</a>
+                                {% endif %}
+                            </td>
+                        {% else %}
+                            <td>Agrege Detalles</td>
+                        {% endif %}
+                        {% if request.user.is_superuser %}
+                            <td>
+                                <a href="{% url 'improvements:agreement_detail' company.slug agreement.pk %}"
+                                   title="ver" class="btn btn-default"><i class="icon-eye-open"></i></a>
+                                <a href="{% url 'improvements:agreement_edit' company.slug meeting.pk  agreement.pk %}"
+                                   title="editar" class="btn btn-default"><i class="icon-edit"></i></a>
+                                <a href="{% url 'improvements:agreement_delete' company.slug meeting.pk  agreement.pk %}"
+                                   title="eliminar" class="btn btn-default btn-confirm-delete"><i
+                                        class="icon-remove"></i></a>
+
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

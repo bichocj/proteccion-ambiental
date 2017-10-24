@@ -88,7 +88,7 @@
                     </div>
 
                     <a href="{% url 'main:accident_list' company.slug %}">
-                        <i class="icon-heart"></i>
+                        <i class="icon-warning-sign"></i>
 
                         <span>Accidentes</span>
                     </a>
@@ -141,6 +141,16 @@
                     <a href="{% url 'acuerdos_sst:meeting_list' company.slug %}">
                         <i class="icon-comments-alt"></i>
                         <span>Comite SST</span>
+                    </a>
+                </li>
+                <li>
+                    <div class="pointer hide">
+                        <div class="arrow"></div>
+                        <div class="arrow_border"></div>
+                    </div>
+                    <a href="{% url 'improvements:meeting_list' company.slug %}">
+                        <i class="icon-thumbs-up"></i>
+                        <span>Mejoras</span>
                     </a>
                 </li>
                 <li>

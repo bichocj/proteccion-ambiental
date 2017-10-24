@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'indices',
     'fullcalendar',
     'acuerdos_sst',
+    'improvements',
 
 )
 

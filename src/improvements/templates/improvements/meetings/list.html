@@ -1,0 +1,69 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'main/css/compiled/tables.css' %}"/>
+{% endblock %}
+{% block content %}
+    <div id="pad-wrapper" class="users-list">
+        <div class="table-wrapper products-table">
+            <div class="row header">
+                <h3>REUNIONES DE ACUERDOS DE MEJORAS</h3>
+                {% if request.user.is_superuser %}
+                    <div class="col-md-4 col-sm-12 col-xs-12 pull-right">
+                        <a href="{% url 'improvements:meeting_new' company.slug %}"
+                           class="btn-flat success pull-right">
+                            <span>&#43;</span>
+                            Nueva Reunion
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+            {% if message %}
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <strong>Error!</strong> {{ message }} {{ response }}
+                </div>
+            {% endif %}
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Título</th>
+                    <th><span class="line"></span>Fecha de Mejora</th>
+                    <th><span class="line"></span>Acuerdos Completados (%)</th>
+
+                    {% if request.user.is_superuser %}
+                        <th><span class="line"></span>Opciones</th>
+                    {% endif %}
+                    <!--<th><span class="line"></span>Formato</th>-->
+                </tr>
+                </thead>
+                <tbody>
+                {% for meeting in meetings %}
+                    <tr>
+                        <td>{{ meeting.title }}</td>
+                        <td>{{ meeting.date }}</td>
+                        {% if meeting.percentage or meeting.percentage == 0 %}
+                            <td>{{ meeting.percentage }}%
+                            </td>
+                        {% else %}
+                            <td>Agrege Acuerdos</td>
+                        {% endif %}
+                        {% if request.user.is_superuser %}
+                            <td>
+
+                            <a href="{% url 'improvements:agreement_list' company.slug meeting.pk %}" title="ver" class="btn btn-default"><i class="icon-eye-open"></i></a>
+                            <a href="{% url 'improvements:meeting_edit' company.slug meeting.pk %}" title="editar" class="btn btn-default"><i class="icon-edit"></i></a>
+                            <a href="{% url 'improvements:meeting_delete' company.slug meeting.pk %}" title="eliminar" class="btn btn-default btn-confirm-delete"><i class="icon-remove"></i></a>
+
+
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}

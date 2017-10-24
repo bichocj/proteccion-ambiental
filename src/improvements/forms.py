@@ -1,7 +1,7 @@
-from django.forms import ModelForm, forms
-from django.utils.translation import ugettext as _
+from django.forms import ModelForm, forms, DateInput
 
-from acuerdos_sst.models import Agreement, AgreementDetail, Metting
+from django.utils.translation import ugettext as _
+from improvements.models import Agreement, AgreementDetail, Metting
 from main.forms import DateInputWidget
 from main.functions import add_form_control_class
 
@@ -40,14 +40,14 @@ class AgreementDetailForm(ModelForm):
     evidence = forms.FileField(required=False)
 
     date_start = forms.Field(widget=DateInputWidget, label=_('start date'))
-    date_until = forms.Field(widget=DateInputWidget, label=_('end date'))
+    date_until = forms.Field(widget=DateInputWidget, label=_('date until'))
 
     class Meta:
         model = AgreementDetail
         fields = ['description', 'date_start', 'date_until', 'state', 'evidence']
         # widgets = {
         #     'date_start': DateInputWidget
-        # 'date_start': DateInput(attrs={'type': 'date'}, format='%m-%d-%Y')
+            # 'date_start': DateInput(attrs={'type': 'date'}, format='%m-%d-%Y')
         # }
 
     def __init__(self, *args, **kwargs):
