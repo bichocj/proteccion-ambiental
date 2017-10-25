@@ -3,14 +3,14 @@ from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.shortcuts import redirect, get_object_or_404, render
 
 from acuerdos_sst.models import Agreement
 from improvements.models import Agreement as AgreementImprovement
 from fullcalendar.models import Events, DONE, CAPACITATION, STATES_EVENT
 from indices.models import Index, Index_Detail, ValuesDetail
-from main.models import Company, LegalRequirement, Worker
+from main.models import Company, LegalRequirement, Worker, CountWorker
 from main.views import return_month
 from django.utils.translation import ugettext as _
 
@@ -49,8 +49,6 @@ def refresh_inform(request, company_slug, mes):
                                                             Q(datepublication__month=month['index'])).count()
         numerator_legal = LegalRequirement.objects.filter(Q(entitie=company), Q(state=LegalRequirement.CUMPLIO),
                                                           Q(datepublication__month=month['index'])).count()
-        if not numerator_legal:
-            numerator_legal = 0
 
         value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='legal')
 
@@ -65,11 +63,35 @@ def refresh_inform(request, company_slug, mes):
 
     if index.is_using_capacitacion:
         events = Events.objects.filter(event_start__month=month['index'], calendar__type=CAPACITATION)
-        total = events.count()
-        total_done = events.filter(state=DONE).count()
 
-        index_detail.capacitacion = total_done * 100 / total
-        index_detail.save()
+        value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='training')
+
+        value_detail.numerator = events.filter(state=DONE).count()
+        value_detail.denominator = events.count()
+        if value_detail.denominator > 0:
+            value_detail.value = value_detail.numerator * 100 / value_detail.denominator
+        else:
+            value_detail.value = 0
+        value_detail.save()
+
+    if index.is_using_personal_capacitado:
+        events = Events.objects.filter(event_start__month=month['index'], calendar__type=CAPACITATION)
+
+        value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='personal_training')
+
+        events_training = events.filter(state=DONE, type_capacitations__isnull=False)
+        events_training_total = events_training.count()
+        events_training_workers = events_training.aggregate(Sum('number_workers'))['number_workers__sum']
+        value_detail.denominator = CountWorker.objects.get(month_year__month=month['index']).quantity
+
+        if value_detail.denominator > 0:
+            value_detail.numerator = events_training_total * events_training_workers / value_detail.denominator
+            value_detail.value = value_detail.numerator / value_detail.denominator
+        else:
+            value_detail.numerator = 0
+            value_detail.value = 0
+        value_detail.save()
+
 
     if index.is_using_icsst:
         denominator_icsst = Agreement.objects.filter(Q(company=company),

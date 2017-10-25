@@ -34,7 +34,7 @@ def personal_counter_edit(request, company_slug, counter_pk):
         form = CountWorkerForm(request.POST, instance=count_worker)
         if form.is_valid():
             form.save()
-        return redirect(reverse('main:personal_counter_list', kwargs={"": company_slug}))
+        return redirect(reverse('main:personal_counter_list', kwargs={"company_slug": company_slug}))
     else:
         form = CountWorkerForm(instance=count_worker)
 

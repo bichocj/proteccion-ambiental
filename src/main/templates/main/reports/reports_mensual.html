@@ -376,6 +376,7 @@
                         <h4 class="clearfix pull-left">
                             Índice de Mejora (>=90)
                         </h4>
+                        <br>
                         <table class="table table-hover">
                             <thead>
                             <tr>
@@ -412,13 +413,31 @@
                         <h4 class="clearfix pull-left">
                             Índice de Capacitación (>=90)
                         </h4>
-                    </div>
-                    <div class="col-md-12 stat">
-                        <div class="data">
-                            <span class="number">{{ index_detail.capacitacion }}%</span>
-                            IC
-                        </div>
-
+                        <br>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="col-md-4">
+                                    Capacitaciones Cumplidas:
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Capacitaciones Programadas:
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Record
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{ values_details|get_by_key:'training'|numerator }}</td>
+                                <td>{{ values_details|get_by_key:'training'|denominator }}</td>
+                                <td>{{ values_details|get_by_key:'training'|value }}% IC</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
