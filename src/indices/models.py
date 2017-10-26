@@ -195,4 +195,4 @@ class ValuesDetail(models.Model):
     key = models.CharField(null=True, blank=True, max_length=100)
     numerator = models.IntegerField(null=True, blank=True)
     denominator = models.IntegerField(null=True, blank=True)
-    value = models.IntegerField(default=0)
+    value = models.DecimalField(null=True, default=0, max_digits=10, decimal_places=2)

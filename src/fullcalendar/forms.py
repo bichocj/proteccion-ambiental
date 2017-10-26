@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.auth.models import User, Group
 from django.forms import ModelChoiceField, ModelForm, ModelMultipleChoiceField, HiddenInput
 from accounts.functions import get_users_of_member_group, get_member_group
-from fullcalendar.models import Calendar, Events, type_capacitation, type_inspeccion, INSPECTION, CAPACITATION
+from fullcalendar.models import Calendar, Events, type_capacitation, type_inspeccion, INSPECTION, CAPACITATION, CHARLAS
 from main.functions import add_form_control_class, add_class_time_picker
 from django.utils.translation import ugettext as _
 
@@ -94,12 +94,14 @@ class EventsModelForm(ModelForm):
         add_class_time_picker(self, ['event_start', 'event_end'])
         # if _instance and _instance.calendar.type == Calendar.CAPACITATION:
         #     self.fields['type_capacitations'] = forms.ChoiceField(choices=Events.type_capacitation)
+        if calendar and (calendar.type == CAPACITATION or calendar.type == CHARLAS):
+            self.fields['hours_worked'] = forms.FloatField(label='Horas Trabajadas', required=False)
+            self.fields['number_workers'] = forms.IntegerField(label='Numero de Trabajadores', required=False)
+
         if calendar and calendar.type == CAPACITATION:
             self.fields['type_capacitations'] = forms.ChoiceField(choices=type_capacitation,
                                                                   label='Tipo de Capacitacion', required=True,
                                                                   initial=-1, widget=forms.Select())
-            self.fields['hours_worked'] = forms.FloatField(label='Horas Trabajadas', required=False)
-            self.fields['number_workers'] = forms.IntegerField(label='Numero de Trabajadores', required=False)
 
         if calendar and calendar.type == INSPECTION:
             self.fields['type_inspeccions'] = forms.ChoiceField(choices=type_inspeccion,

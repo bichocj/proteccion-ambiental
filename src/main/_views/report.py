@@ -8,9 +8,9 @@ from django.shortcuts import redirect, get_object_or_404, render
 
 from acuerdos_sst.models import Agreement
 from improvements.models import Agreement as AgreementImprovement
-from fullcalendar.models import Events, DONE, CAPACITATION, STATES_EVENT
+from fullcalendar.models import Events, DONE, CAPACITATION, STATES_EVENT, CHARLAS
 from indices.models import Index, Index_Detail, ValuesDetail
-from main.models import Company, LegalRequirement, Worker, CountWorker
+from main.models import Company, LegalRequirement, Worker, CountWorker, Accident
 from main.views import return_month
 from django.utils.translation import ugettext as _
 
@@ -62,7 +62,8 @@ def refresh_inform(request, company_slug, mes):
             # index_detail.save()
 
     if index.is_using_capacitacion:
-        events = Events.objects.filter(event_start__month=month['index'], calendar__type=CAPACITATION)
+        events = Events.objects.filter(calendar__company=company, event_start__month=month['index'],
+                                       calendar__type=CAPACITATION)
 
         value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='training')
 
@@ -75,7 +76,8 @@ def refresh_inform(request, company_slug, mes):
         value_detail.save()
 
     if index.is_using_personal_capacitado:
-        events = Events.objects.filter(event_start__month=month['index'], calendar__type=CAPACITATION)
+        events = Events.objects.filter(calendar__company=company, event_start__month=month['index'],
+                                       calendar__type=CAPACITATION)
 
         value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='personal_training')
 
@@ -92,6 +94,76 @@ def refresh_inform(request, company_slug, mes):
             value_detail.value = 0
         value_detail.save()
 
+    if index.is_using_intensidad_formativa:
+        hours_worked = \
+        (Events.objects.filter(calendar__company=company, event_start__month=month['index'], state=DONE).filter(
+            Q(calendar__type=CAPACITATION) | Q(calendar__type=CHARLAS)).aggregate(Sum('hours_worked')))[
+            'hours_worked__sum']
+
+        value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='formative_intensity')
+        value_detail.numerator = hours_worked * 100
+        value_detail.denominator = CountWorker.objects.get(month_year__month=month['index']).quantity
+
+        if value_detail.denominator > 0:
+            value_detail.value = value_detail.numerator / value_detail.denominator
+        else:
+            value_detail.value = 0
+        value_detail.save()
+
+    if index.is_using_charlas:
+        events = Events.objects.filter(calendar__company=company, event_start__month=month['index'],
+                                       calendar__type=CHARLAS)
+        traings_todo = events.count()
+        trainings_done = events.filter(state=DONE).count()
+        people_trained = (events.filter(state=DONE).aggregate(Sum('number_workers')))['number_workers__sum']
+        people_to_training = (events.aggregate(Sum('number_workers')))['number_workers__sum']
+
+        if people_trained is None:
+            people_trained = 0
+
+        if people_to_training is None:
+            people_to_training = 0
+
+        value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='security_talks')
+        value_detail.numerator = trainings_done * people_trained * 100
+        value_detail.denominator = traings_todo * people_to_training
+
+        if value_detail.denominator > 0:
+            value_detail.value = value_detail.numerator / value_detail.denominator
+        else:
+            value_detail.value = 0
+        value_detail.save()
+
+    if index.is_using_incidentes:
+
+        workers_with_incidents = Accident.objects.filter(company=company, date__month=month['index']).count()
+
+        value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='incidents')
+        value_detail.numerator = workers_with_incidents * 100
+        value_detail.denominator = 30  # CountWorker.objects.get(month_year__month=month['index']).quantity
+
+        if value_detail.denominator > 0:
+            value_detail.value = value_detail.numerator / value_detail.denominator
+        else:
+            value_detail.value = 0
+        value_detail.save()
+
+    if index.is_using_inspecciones:
+
+        inspections = Agreement.objects.filter(company=company, date__month=month['index'])
+
+        inspections_done = inspections.filter(percentage=100).count()
+        inspections_todo = inspections.count()
+
+        value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='inspections')
+        value_detail.numerator = inspections_done
+        value_detail.denominator = inspections_todo
+
+        if value_detail.denominator > 0:
+            value_detail.value = value_detail.numerator / value_detail.denominator
+        else:
+            value_detail.value = 0
+        value_detail.save()
 
     if index.is_using_icsst:
         denominator_icsst = Agreement.objects.filter(Q(company=company),

@@ -155,13 +155,17 @@ def save_event(request, slug):
                 event.type_inspeccions = None
             if event.calendar.type == INSPECTION:
                 event.type_capacitations = None
-                event.hours_worked = None
-                event.number_workers = None
-            if event.calendar.type == OTRO or event.calendar.type == CHARLAS or event.calendar.type == SIMULATION or event.calendar.type == DOCTOR:
+                event.hours_worked = float(0)
+                event.number_workers = 0
+            if event.calendar.type == OTRO or event.calendar.type == SIMULATION or event.calendar.type == DOCTOR:
                 event.type_inspeccions = None
                 event.type_capacitations = None
-                event.number_workers = None
-                event.hours_worked = None
+                event.hours_worked = float(0)
+                event.number_workers = 0
+
+            if event.calendar.type == CHARLAS:
+                event.type_inspeccions = None
+                event.type_capacitations = None
 
             event.type = event.calendar.type
 
@@ -241,13 +245,18 @@ def update_event(request, slug):
                 event.type_inspeccions = None
             if event.calendar.type == INSPECTION:
                 event.type_capacitations = None
-                event.hours_worked = None
-                event.number_workers = None
-            if event.calendar.type == OTRO or event.calendar.type == CHARLAS or event.calendar.type == SIMULATION or event.calendar.type == DOCTOR:
+                event.hours_worked = 0
+                event.number_workers = 0
+            if event.calendar.type == OTRO or event.calendar.type == SIMULATION or event.calendar.type == DOCTOR:
                 event.type_inspeccions = None
                 event.type_capacitations = None
-                event.number_workers = None
-                event.hours_worked = None
+                event.number_workers = float(0)
+                event.hours_worked = 0
+
+            if event.calendar.type == CHARLAS:
+                event.type_inspeccions = None
+                event.type_capacitations = None
+
             event.type = event.calendar.type
 
             if event.evidence:

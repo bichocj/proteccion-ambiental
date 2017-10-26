@@ -373,7 +373,7 @@
             <div id="main-stats" style="margin-top: 50px;">
                 <div class="row stats-row">
                     <div class="col-md-12">
-                        <h4 class="clearfix pull-left">
+                        <h4>
                             Índice de Mejora (>=90)
                         </h4>
                         <br>
@@ -410,7 +410,7 @@
             <div id="main-stats" style="margin-top: 50px;">
                 <div class="row stats-row">
                     <div class="col-md-12">
-                        <h4 class="clearfix pull-left">
+                        <h4>
                             Índice de Capacitación (>=90)
                         </h4>
                         <br>
@@ -447,16 +447,34 @@
             <div id="main-stats" style="margin-top: 50px;">
                 <div class="row stats-row">
                     <div class="col-md-12">
-                        <h4 class="clearfix pull-left">
+                        <h4>
                             Índice de Personal Capacitado (>=90)
                         </h4>
-                    </div>
-                    <div class="col-md-12 stat">
-                        <div class="data">
-                            <span class="number">{{ index_detail.personal_capacitado }}%</span>
-                            IPC
-                        </div>
-
+                        <br>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="col-md-4">
+                                    Ponderado (capacitaciones * personas en capacitacion / total de personal ):
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Total de personal en el presente mes:
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Record
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{ values_details|get_by_key:'personal_training'|numerator }}</td>
+                                <td>{{ values_details|get_by_key:'personal_training'|denominator }}</td>
+                                <td>{{ values_details|get_by_key:'personal_training'|value }}% IC</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -466,16 +484,34 @@
             <div id="main-stats" style="margin-top: 50px;">
                 <div class="row stats-row">
                     <div class="col-md-12">
-                        <h4 class="clearfix pull-left">
+                        <h4>
                             Índice de Intensidad Formativa
                         </h4>
-                    </div>
-                    <div class="col-md-12 stat">
-                        <div class="data">
-                            <span class="number">{{ index_detail.intensidad_formativa }}%</span>
-                            IIF
-                        </div>
-
+                        <br>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="col-md-4">
+                                    Horas sumadas de capacitaciones y charlas 'realizadas' * 100
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Total de trabajadores
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Record
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{ values_details|get_by_key:'formative_intensity'|numerator }}</td>
+                                <td>{{ values_details|get_by_key:'formative_intensity'|denominator }}</td>
+                                <td>{{ values_details|get_by_key:'formative_intensity'|value }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -485,16 +521,35 @@
             <div id="main-stats" style="margin-top: 50px;">
                 <div class="row stats-row">
                     <div class="col-md-12">
-                        <h4 class="clearfix pull-left">
+                        <h4>
                             Indice de Charlas Periodicas de Seguridad (>=90)
                         </h4>
-                    </div>
-                    <div class="col-md-12 stat">
-                        <div class="data">
-                            <span class="number">{{ index_detail.charlas }}%</span>
-                            IDPS
-                        </div>
 
+                        <br>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="col-md-4">
+                                    (N° de Charlas al mes realizados x N° de Trabajadores capacitados) x 100
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    (N° de Charlas al mes programados x N° de Trabajadores programados)
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Record
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{ values_details|get_by_key:'security_talks'|numerator }}</td>
+                                <td>{{ values_details|get_by_key:'security_talks'|denominator }}</td>
+                                <td>{{ values_details|get_by_key:'security_talks'|value }}%</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -504,9 +559,34 @@
             <div id="main-stats" style="margin-top: 50px;">
                 <div class="row stats-row">
                     <div class="col-md-12">
-                        <h4 class="clearfix pull-left">
-                            Indice de Reporte de Incidentes (>=90)
+                        <h4>
+                            Indice de Reporte de Incidentes (<=25)
                         </h4>
+                        <br>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="col-md-4">
+                                    Nº Trabajadores reportaron x 100
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Nº Dias del mes
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Record
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{ values_details|get_by_key:'incidents'|numerator }}</td>
+                                <td>{{ values_details|get_by_key:'incidents'|denominator }}</td>
+                                <td>{{ values_details|get_by_key:'incidents'|value }}%</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                     <div class="col-md-12 stat">
                         <div class="data">
@@ -523,9 +603,34 @@
             <div id="main-stats" style="margin-top: 50px;">
                 <div class="row stats-row">
                     <div class="col-md-12">
-                        <h4 class="clearfix pull-left">
+                        <h4>
                             Indice de Inspecciones (>=90)
                         </h4>
+                        <br>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="col-md-4">
+                                    Nº Inspecciones en SST realizadas x 100
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Nº Inspecciones en SST planificadas
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Record
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{ values_details|get_by_key:'inspections'|numerator }}</td>
+                                <td>{{ values_details|get_by_key:'inspections'|denominator }}</td>
+                                <td>{{ values_details|get_by_key:'inspections'|value }}%</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                     <div class="col-md-12 stat">
                         <div class="data">
@@ -542,7 +647,7 @@
             <div id="main-stats" style="margin-top: 50px;">
                 <div class="row stats-row">
                     <div class="col-md-12">
-                        <h4 class="clearfix pull-left">
+                        <h4>
                             Índice de Observaciones planeadas de trabajo (>=100)
                         </h4>
                     </div>
@@ -562,7 +667,7 @@
             <div id="main-stats" style="margin-top: 50px;">
                 <div class="row stats-row">
                     <div class="col-md-12">
-                        <h4 class="clearfix pull-left">
+                        <h4>
                             Índice de Cumplimiento del SGSST (>=100)
                         </h4>
                     </div>
@@ -581,7 +686,7 @@
             <div id="main-stats" style="margin-top: 50px;">
                 <div class="row stats-row">
                     <div class="col-md-12">
-                        <h4 class="clearfix pull-left">
+                        <h4>
                             Índice de Simulacros de Emergencia (>=90)
                         </h4>
                     </div>
@@ -600,7 +705,7 @@
             <div id="main-stats" style="margin-top: 50px;">
                 <div class="row stats-row">
                     <div class="col-md-12">
-                        <h4 class="clearfix pull-left">
+                        <h4>
                             Índice de Reconocimiento del Trabajador (>=90)
                         </h4>
                     </div>
@@ -619,7 +724,7 @@
             <div id="main-stats" style="margin-top: 50px;">
                 <div class="row stats-row">
                     <div class="col-md-12">
-                        <h4 class="clearfix pull-left">
+                        <h4>
                             Índice de Disponibilidad Ingeniero SST (>=90)
                         </h4>
                     </div>
@@ -638,7 +743,7 @@
             <div id="main-stats" style="margin-top: 50px;">
                 <div class="row stats-row">
                     <div class="col-md-12">
-                        <h4 class="clearfix pull-left">
+                        <h4>
                             Índice de Accidentes con Primeros Auxilios (<= 10)
                         </h4>
                     </div>
@@ -657,7 +762,7 @@
             <div id="main-stats" style="margin-top: 50px;">
                 <div class="row stats-row">
                     <div class="col-md-12">
-                        <h4 class="clearfix pull-left">
+                        <h4>
                             Índice de Accidentes con Atención Médica (<=20)
                         </h4>
                     </div>
@@ -676,7 +781,7 @@
             <div id="main-stats" style="margin-top: 50px;">
                 <div class="row stats-row">
                     <div class="col-md-12">
-                        <h4 class="clearfix pull-left">
+                        <h4>
                             Índice de Accidentes con Tiempo Perdido (<=20)
                         </h4>
                     </div>
@@ -695,7 +800,7 @@
             <div id="main-stats" style="margin-top: 50px;">
                 <div class="row stats-row">
                     <div class="col-md-12">
-                        <h4 class="clearfix pull-left">
+                        <h4>
                             Índice de Accidentes Fatales (=0)
                         </h4>
                     </div>
@@ -714,7 +819,7 @@
             <div id="main-stats" style="margin-top: 50px;">
                 <div class="row stats-row">
                     <div class="col-md-12">
-                        <h4 class="clearfix pull-left">
+                        <h4>
                             Índice de Frecuencia (<=10)
                         </h4>
                     </div>
@@ -733,7 +838,7 @@
             <div id="main-stats" style="margin-top: 50px;">
                 <div class="row stats-row">
                     <div class="col-md-12">
-                        <h4 class="clearfix pull-left">
+                        <h4>
                             Índice de Severidad (<=50)
                         </h4>
                     </div>
@@ -752,7 +857,7 @@
             <div id="main-stats" style="margin-top: 50px;">
                 <div class="row stats-row">
                     <div class="col-md-12">
-                        <h4 class="clearfix pull-left">
+                        <h4>
                             Índice de Accidentabilidad (<= 1)
                         </h4>
                     </div>
@@ -771,7 +876,7 @@
             <div id="main-stats" style="margin-top: 50px;">
                 <div class="row stats-row">
                     <div class="col-md-12">
-                        <h4 class="clearfix pull-left">
+                        <h4>
                             Índice de Enfermedades Profesionales (<= 5)
                         </h4>
                     </div>
@@ -790,7 +895,7 @@
             <div id="main-stats" style="margin-top: 50px;">
                 <div class="row stats-row">
                     <div class="col-md-12">
-                        <h4 class="clearfix pull-left">
+                        <h4>
                             Índice de Examen Médico Ocupacional (100)
                         </h4>
                     </div>
@@ -809,7 +914,7 @@
             <div id="main-stats" style="margin-top: 50px;">
                 <div class="row stats-row">
                     <div class="col-md-12">
-                        <h4 class="clearfix pull-left">
+                        <h4>
                             Índice de Trabajadores Aptos (>=90)
                         </h4>
                     </div>
@@ -828,7 +933,7 @@
             <div id="main-stats" style="margin-top: 50px;">
                 <div class="row stats-row">
                     <div class="col-md-12">
-                        <h4 class="clearfix pull-left">
+                        <h4>
                             Índice de Trabajadores Aptos con restricción (>=90)
                         </h4>
                     </div>
@@ -847,7 +952,7 @@
             <div id="main-stats" style="margin-top: 50px;">
                 <div class="row stats-row">
                     <div class="col-md-12">
-                        <h4 class="clearfix pull-left">
+                        <h4>
                             Índice de Exposición a Agentes Químicos (<= 50)
                         </h4>
                     </div>
@@ -867,7 +972,7 @@
             <div id="main-stats" style="margin-top: 50px;">
                 <div class="row stats-row">
                     <div class="col-md-12">
-                        <h4 class="clearfix pull-left">
+                        <h4>
                             Índice de Monitoreos Ocupacionales (>=90)
                         </h4>
                     </div>
@@ -886,7 +991,7 @@
             <div id="main-stats" style="margin-top: 50px;">
                 <div class="row stats-row">
                     <div class="col-md-12">
-                        <h4 class="clearfix pull-left">
+                        <h4>
                             Índice de Medidas de Control Ocupacional (>=70)
                         </h4>
                     </div>
