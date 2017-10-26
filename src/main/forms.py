@@ -156,7 +156,7 @@ class RequirementForm(ModelForm):
 class CountWorkerForm(ModelForm):
     class Meta:
         model = CountWorker
-        fields = ['quantity', ]
+        fields = ["workers", 'hours']
 
     def __init__(self, *args, **kwargs):
         super(CountWorkerForm, self).__init__(*args, **kwargs)

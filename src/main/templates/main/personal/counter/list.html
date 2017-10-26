@@ -20,13 +20,15 @@
             <tr>
                 <th>Mes</th>
                 <th><span class="line"></span>Trabajadores contados</th>
+                <th><span class="line"></span>Horas trabajadas</th>
             </tr>
             </thead>
             <tbody>
             {% for count_worker in count_workers %}
             <tr>
                 <td>{{count_worker.month_year|date:'F'}}</td>
-                <td>{{count_worker.quantity}}</td>
+                <td>{{count_worker.workers}}</td>
+                <td>{{count_worker.hours}}</td>
                 <td>
                     <ul class="actions">
                         <li>

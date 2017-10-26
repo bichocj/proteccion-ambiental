@@ -63,7 +63,8 @@ class Worker(models.Model):
 
 class CountWorker(models.Model):
     month_year = models.DateField(null=True)
-    quantity = models.IntegerField(_('worker quantity'))
+    workers = models.IntegerField(_('worker quantity'), default=0)
+    hours = models.IntegerField(_('hours worked'), default=0)
     company = models.ForeignKey(Company)
 
 
@@ -216,18 +217,18 @@ class MedicControl(models.Model):
 
 
 class Accident(models.Model):
-    ACCIDENT_1 = 1
-    ACCIDENT_2 = 2
-    ACCIDENT_3 = 3
-    ACCIDENT_4 = 4
+    FIRST_AID = 1
+    MEDIC_ATTENTION = 2
+    AID_LOST = 3
+    AID_FATAL = 4
     ACCIDENT_5 = 5
     ACCIDENT_6 = 6
     ACCIDENT_7 = 7
     TYPE_ACCIDENT_CHOICES = (
-        (ACCIDENT_1, 'ACCIDENTES CON PRIMEROS AUXILIOS'),
-        (ACCIDENT_2, 'ACCCIDENTE CON ATENCION MEDICA'),
-        (ACCIDENT_3, 'ACCIDENTES CON TIEMPO PERDIDO'),
-        (ACCIDENT_4, 'ACCIDENTES FATALES'),
+        (FIRST_AID, 'ACCIDENTES CON PRIMEROS AUXILIOS'),
+        (MEDIC_ATTENTION, 'ACCCIDENTE CON ATENCION MEDICA'),
+        (AID_LOST, 'ACCIDENTES CON TIEMPO PERDIDO'),
+        (AID_FATAL, 'ACCIDENTES FATALES'),
         (ACCIDENT_5, 'INCIDENTES PELIGROS'),
         (ACCIDENT_6, 'ENFERMEDADES OCUPACIONALES'),
         (ACCIDENT_7, 'ACTOS INSEGUROS'),
@@ -235,7 +236,7 @@ class Accident(models.Model):
     title = models.CharField(_('Titulo'), max_length=100, null=False, blank=False)
     content = models.TextField(_('Descripcion'), null=True, blank=True)
     type_accident = models.IntegerField(_('Tipo de Accidente'), choices=TYPE_ACCIDENT_CHOICES,
-                                        default=ACCIDENT_1)  # NOQA
+                                        default=FIRST_AID)  # NOQA
     date = models.DateField(_('Fecha'), null=False, default=datetime.now)
     lose_days = models.DecimalField(_('Dias Perdidos'), max_digits=5, decimal_places=2, null=True, blank=True)
     company = models.ForeignKey(Company, null=False, blank=False)

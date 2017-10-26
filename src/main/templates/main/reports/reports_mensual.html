@@ -588,13 +588,6 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-md-12 stat">
-                        <div class="data">
-                            <span class="number">{{ index_detail.incidentes }}%</span>
-                            IRA
-                        </div>
-
-                    </div>
                 </div>
             </div>
 
@@ -632,13 +625,6 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-md-12 stat">
-                        <div class="data">
-                            <span class="number">{{ index_detail.inspecciones }}%</span>
-                            II
-                        </div>
-
-                    </div>
                 </div>
             </div>
 
@@ -650,13 +636,31 @@
                         <h4>
                             Índice de Observaciones planeadas de trabajo (>=100)
                         </h4>
-                    </div>
-                    <div class="col-md-12 stat">
-                        <div class="data">
-                            <span class="number">{{ index_detail.observaciones_planeadas }}%</span>
-                            OPT
-                        </div>
-
+                        <br>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="col-md-4">
+                                    Opt realizadas x Personal Observado x 100
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Opt realizadas x Personal Previsto
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Record
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{ values_details|get_by_key:'observations'|numerator }}</td>
+                                <td>{{ values_details|get_by_key:'observations'|denominator }}</td>
+                                <td>{{ values_details|get_by_key:'observations'|value }}%</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -668,16 +672,35 @@
                 <div class="row stats-row">
                     <div class="col-md-12">
                         <h4>
-                            Índice de Cumplimiento del SGSST (>=100)
+                            Índice de Auditorias
                         </h4>
+                        <br>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="col-md-4">
+                                    N° de Auditorias Ejecutadas x100
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    N° de Auditorias Programadas
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Record
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td> ??? </td>
+                                <td> ??? </td>
+                                <td> ???% </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="col-md-12 stat">
-                        <div class="data">
-                            <span class="number">{{ index_detail.auditorias }}%</span>
-                            IAU
-                        </div>
 
-                    </div>
                 </div>
             </div>
 
@@ -689,13 +712,31 @@
                         <h4>
                             Índice de Simulacros de Emergencia (>=90)
                         </h4>
-                    </div>
-                    <div class="col-md-12 stat">
-                        <div class="data">
-                            <span class="number">{{ index_detail.simulacros_emergencia }}%</span>
-                            ISE
-                        </div>
-
+                        <br>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="col-md-4">
+                                    Nº Simulacros de Emerg. realizadas x 100
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Nº Simulacros de Emerg. Planificadas
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Record
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{ values_details|get_by_key:'simulacrum'|numerator }}</td>
+                                <td>{{ values_details|get_by_key:'simulacrum'|denominator }}</td>
+                                <td>{{ values_details|get_by_key:'simulacrum'|value }}%</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -708,13 +749,31 @@
                         <h4>
                             Índice de Reconocimiento del Trabajador (>=90)
                         </h4>
-                    </div>
-                    <div class="col-md-12 stat">
-                        <div class="data">
-                            <span class="number">{{ index_detail.reconocimiento_trabajador }}%</span>
-                            IRT
-                        </div>
-
+                        <br>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="col-md-4">
+                                    Nº Reconocimientos realizados x 100
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Nº Reconocimientos planificados
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Record
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>???</td>
+                                <td>???</td>
+                                <td>???</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -727,13 +786,32 @@
                         <h4>
                             Índice de Disponibilidad Ingeniero SST (>=90)
                         </h4>
-                    </div>
-                    <div class="col-md-12 stat">
-                        <div class="data">
-                            <span class="number">{{ index_detail.engenieer }}%</span>
-                            DI
-                        </div>
 
+                        <br>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="col-md-4">
+                                    Horas Contratadas Ing. SST
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    N° total trabajadores
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Record
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>???</td>
+                                <td>???</td>
+                                <td>???</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -746,17 +824,35 @@
                         <h4>
                             Índice de Accidentes con Primeros Auxilios (<= 10)
                         </h4>
-                    </div>
-                    <div class="col-md-12 stat">
-                        <div class="data">
-                            <span class="number">{{ index_detail.sgsst }}%</span>
-                            APA
-                        </div>
 
+                        <br>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="col-md-4">
+                                    N°Accidentes Primeros Auxilios Acum x 200 000
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Horas Hombre Trabajadas Acumuladas
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Record
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{ values_details|get_by_key:'first_aid'|numerator }}</td>
+                                <td>{{ values_details|get_by_key:'first_aid'|denominator }}</td>
+                                <td>{{ values_details|get_by_key:'first_aid'|value }}%</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-
         {% endif %}
         {% if index.is_using_medic_atention %}
             <div id="main-stats" style="margin-top: 50px;">
@@ -765,18 +861,36 @@
                         <h4>
                             Índice de Accidentes con Atención Médica (<=20)
                         </h4>
-                    </div>
-                    <div class="col-md-12 stat">
-                        <div class="data">
-                            <span class="number">{{ index_detail.medic_atention }}%</span>
-                            AAM
-                        </div>
-
+                        <br>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="col-md-4">
+                                    N°Accidentes A. Medica Acum x 200 000
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Horas Hombre Trabajadas Acumuladas
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Record
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{ values_details|get_by_key:'medic_attention'|numerator }}</td>
+                                <td>{{ values_details|get_by_key:'medic_attention'|denominator }}</td>
+                                <td>{{ values_details|get_by_key:'medic_attention'|value }}%</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-
         {% endif %}
+
         {% if index.is_using_lose_time %}
             <div id="main-stats" style="margin-top: 50px;">
                 <div class="row stats-row">
@@ -784,13 +898,32 @@
                         <h4>
                             Índice de Accidentes con Tiempo Perdido (<=20)
                         </h4>
-                    </div>
-                    <div class="col-md-12 stat">
-                        <div class="data">
-                            <span class="number">{{ index_detail.lose_time }}%</span>
-                            ATP
-                        </div>
 
+                        <br>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="col-md-4">
+                                    N°Accidentes T. Perdido Acum x 200 000
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Horas Hombre Trabajadas Acumuladas
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Record
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{ values_details|get_by_key:'aids_lost'|numerator }}</td>
+                                <td>{{ values_details|get_by_key:'aids_lost'|denominator }}</td>
+                                <td>{{ values_details|get_by_key:'aids_lost'|value }}%</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -803,13 +936,32 @@
                         <h4>
                             Índice de Accidentes Fatales (=0)
                         </h4>
-                    </div>
-                    <div class="col-md-12 stat">
-                        <div class="data">
-                            <span class="number">{{ index_detail.fatal_accident }}%</span>
-                            AF
-                        </div>
 
+                        <br>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="col-md-4">
+                                    N°Accidentes Fatales x 200 000
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Horas Hombre Trabajadas Acumuladas
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Record
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{ values_details|get_by_key:'aids_fatal'|numerator }}</td>
+                                <td>{{ values_details|get_by_key:'aids_fatal'|denominator }}</td>
+                                <td>{{ values_details|get_by_key:'aids_fatal'|value }}%</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -822,13 +974,31 @@
                         <h4>
                             Índice de Frecuencia (<=10)
                         </h4>
-                    </div>
-                    <div class="col-md-12 stat">
-                        <div class="data">
-                            <span class="number">{{ index_detail.frecuency }}%</span>
-                            IF
-                        </div>
-
+                        <br>
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="col-md-4">
+                                    N°Accidentes T. Perdido Acum x 200 000
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Horas Hombre Trabajadas Acumuladas
+                                </th>
+                                <th class="col-md-4">
+                                    <span class="line"></span>
+                                    Record
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>{{ values_details|get_by_key:'frecuency'|numerator }}</td>
+                                <td>{{ values_details|get_by_key:'frecuency'|denominator }}</td>
+                                <td>{{ values_details|get_by_key:'frecuency'|value }}%</td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

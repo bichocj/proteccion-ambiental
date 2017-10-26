@@ -16,7 +16,7 @@ def personal_counter_list(request, company_slug):
         'month_year')
     if count_workers.count() == 0:
         for i in range(1, 13):
-            CountWorker(month_year=current_date.replace(month=i), quantity=0, company=company).save()
+            CountWorker(month_year=current_date.replace(month=i), company=company).save()
         count_workers = CountWorker.objects.filter(month_year__year=current_date.year, company=company).order_by(
             'month_year')
 
