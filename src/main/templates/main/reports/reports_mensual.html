@@ -968,80 +968,17 @@
             </div>
 
         {% endif %}
+
         {% if index.is_using_frecuency %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row">
-                    <div class="col-md-12">
-                        <h4>
-                            Índice de Frecuencia (<=10)
-                        </h4>
-                        <br>
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="col-md-4">
-                                    N°Accidentes T. Perdido Acum x 200 000
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Horas Hombre Trabajadas Acumuladas
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Record
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>{{ values_details|get_by_key:'frecuency'|numerator }}</td>
-                                <td>{{ values_details|get_by_key:'frecuency'|denominator }}</td>
-                                <td>{{ values_details|get_by_key:'frecuency'|value }}%</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
+            {% include 'main/reports/hook/table.html' with title='Índice de Frecuencia (<=10)' title_numerator='N°Accidentes T. Perdido Acum x 200 000' title_denominator='Horas Hombre Trabajadas Acumuladas' index=values_details|get_by_key:'frecuency' editable=False %}
         {% endif %}
+
         {% if index.is_using_severity %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row">
-                    <div class="col-md-12">
-                        <h4>
-                            Índice de Severidad (<=50)
-                        </h4>
-                    </div>
-                    <div class="col-md-12 stat">
-                        <div class="data">
-                            <span class="number">{{ index_detail.severity }}%</span>
-                            IS
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
+            {% include 'main/reports/hook/table.html' with title='Índice de Severidad (<=50)' title_numerator='N°días perdidos Acum x 200 000' title_denominator='Horas Hombre Trabajadas Acumuladas' index=values_details|get_by_key:'severity' editable=True %}
         {% endif %}
+
         {% if index.is_using_accidentality %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row">
-                    <div class="col-md-12">
-                        <h4>
-                            Índice de Accidentabilidad (<= 1)
-                        </h4>
-                    </div>
-                    <div class="col-md-12 stat">
-                        <div class="data">
-                            <span class="number">{{ index_detail.accidentality }}%</span>
-                            IA
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
+            {% include 'main/reports/hook/table.html' with title='Índice de Accidentabilidad (<= 1)' title_numerator='IF x IS' title_denominator='1000' index=values_details|get_by_key:'accidentability' editable=True %}
         {% endif %}
         {% if index.is_using_professional_sick %}
             {% include 'main/reports/hook/table.html' with title='Índice de Enfermedades Profesionales (<= 5)' title_numerator='N°Enfermedades Profesionales Acum x 200 000' title_denominator='Horas Hombre Trabajadas Acumuladas' index=values_details|get_by_key:'proffesional_sick' editable=True %}

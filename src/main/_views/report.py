@@ -436,6 +436,12 @@ def refresh_inform(request, company_slug, month):
             value_detail.value = 0
         value_detail.save()
 
+    if index.is_using_severity:
+        value_detail, _is_new = ValuesDetail.objects.get_or_create(detail=index_detail, key='severity')
+
+    if index.is_using_accidentality:
+        value_detail, _is_new = ValuesDetail.objects.get_or_create(detail=index_detail, key='accidentability')
+
     if index.is_using_professional_sick:
         value_detail, _is_new = ValuesDetail.objects.get_or_create(detail=index_detail, key='proffesional_sick')
 
