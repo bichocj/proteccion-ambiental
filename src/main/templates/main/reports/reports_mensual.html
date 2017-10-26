@@ -1,5 +1,6 @@
 {% extends 'main/layout.html' %}
 {% load static %}
+{% load i18n %}
 {% load main_extras %}
 {% block styles %}
     <link rel="stylesheet" href="{% static 'main/css/compiled/index.css' %}" type="text/css" media="screen"/>
@@ -13,7 +14,7 @@
                 </div>
                 <div class="col-md-3">
                     <h4>
-                        <small> Numero de trabajadores: <b>{{ workers.count }}</b></small>
+                        <small> Numero de trabajadores: <b>{{ workers_in_month }}</b></small>
                     </h4>
                     <h4>
                         <small>Indice General: <b>{{ indice_general }}</b></small>
@@ -22,10 +23,10 @@
             </div>
         </div>
         <div class="col-md-12">
-            <h3>Mes {{ month.mes }}</h3>
+            <h3>Mes {% trans month_label  %}</h3>
             <h4 class="">Compañia: {{ company.name }}</h4>
             <a class="btn-flat icon pull-right" id="restore_btn"
-               href="{% url 'main:report_update' company_slug month.index %}">
+               href="{% url 'main:report_update' company_slug month %}">
                 <i class="icon-refresh"></i> Actualizar informe
             </a>
 
@@ -59,7 +60,7 @@
                             <tr>
                                 <td>{{ values_details|get_by_key:'sgsst'|numerator }}</td>
                                 <td>{{ values_details|get_by_key:'sgsst'|denominator }}</td>
-                                <td>{{ index_detail.sgsst }}% ICSST</td>
+                                <td>{{ values_details|get_by_key:'sgsst'|value }}% ICSST</td>
                             </tr>
                             </tbody>
                         </table>
@@ -147,7 +148,7 @@
         {% endif %}
 
         <!-- Solo anual-->
-        {% if index.is_using_indice_no_conformidad and month.index == 12 %}
+        {% if index.is_using_indice_no_conformidad and month == 12 %}
             <div id="main-stats" style="margin-top: 50px;">
                 <div class="row stats-row stat">
                     <div class="col-md-12" style="text-align: left;">
@@ -197,7 +198,7 @@
             </div>
 
         {% endif %}
-        {% if index.is_using_medida_iperc and month.index == 6 %}
+        {% if index.is_using_medida_iperc and month == 6 %}
             <div id="main-stats" style="margin-top: 50px;">
                 <div class="row stats-row stat">
                     <div class="col-md-12" style="text-align: left;">
@@ -1043,138 +1044,32 @@
 
         {% endif %}
         {% if index.is_using_professional_sick %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row">
-                    <div class="col-md-12">
-                        <h4>
-                            Índice de Enfermedades Profesionales (<= 5)
-                        </h4>
-                    </div>
-                    <div class="col-md-12 stat">
-                        <div class="data">
-                            <span class="number">{{ index_detail.professional_sick }}%</span>
-                            IEP
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
+            {% include 'main/reports/hook/table.html' with title='Índice de Enfermedades Profesionales (<= 5)' title_numerator='N°Enfermedades Profesionales Acum x 200 000' title_denominator='Horas Hombre Trabajadas Acumuladas' index=values_details|get_by_key:'proffesional_sick' editable=True %}
         {% endif %}
+
+
         {% if index.is_using_medic_exam %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row">
-                    <div class="col-md-12">
-                        <h4>
-                            Índice de Examen Médico Ocupacional (100)
-                        </h4>
-                    </div>
-                    <div class="col-md-12 stat">
-                        <div class="data">
-                            <span class="number">{{ index_detail.medic_exam }}%</span>
-                            IEMOs
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
+            {% include 'main/reports/hook/table.html' with title='Índice de Examen Médico Ocupacional (100)' title_numerator='EMOs Ejecutados x 100' title_denominator='EMOs Programados.' index=values_details|get_by_key:'medic_exam' editable=True %}
         {% endif %}
+
         {% if index.is_using_ap_worker %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row">
-                    <div class="col-md-12">
-                        <h4>
-                            Índice de Trabajadores Aptos (>=90)
-                        </h4>
-                    </div>
-                    <div class="col-md-12 stat">
-                        <div class="data">
-                            <span class="number">{{ index_detail.ap_worker }}%</span>
-                            ITA
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
+            {% include 'main/reports/hook/table.html' with title='Índice de Trabajadores Aptos' title_numerator='N° de Trabajadores Aptos x10' title_denominator='N° de Trabajadores Evaluados.' index=values_details|get_by_key:'workers_up' editable=True %}
         {% endif %}
+
         {% if index.is_using_ap_worker_restric %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row">
-                    <div class="col-md-12">
-                        <h4>
-                            Índice de Trabajadores Aptos con restricción (>=90)
-                        </h4>
-                    </div>
-                    <div class="col-md-12 stat">
-                        <div class="data">
-                            <span class="number">{{ index_detail.ap_worker_restric }}%</span>
-                            ITAR
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
+            {% include 'main/reports/hook/table.html' with title='Índice de Trabajadores Aptos con restricción (>=90)' title_numerator='N° de Trabajadores Aptos con Restricción x100' title_denominator='N° de Trabajadores Evaluados.' index=values_details|get_by_key:'workers_up_restrictions' editable=True %}
         {% endif %}
         {% if index.is_using_aq_exposition %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row">
-                    <div class="col-md-12">
-                        <h4>
-                            Índice de Exposición a Agentes Químicos (<= 50)
-                        </h4>
-                    </div>
-                    <div class="col-md-12 stat">
-                        <div class="data">
-                            <span class="number">{{ index_detail.is_using_aq_exposition }}%</span>
-                            IEAQ
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
+            {% include 'main/reports/hook/table.html' with title='Índice de Exposición a Agentes Químicos' title_numerator='N° de Trabajadores Expuestos x100' title_denominator='N° Total de Trabajadores operacionales' index=values_details|get_by_key:'expose_quimic' editable=True %}
         {% endif %}
         <!--anual-->
+
         {% if index.is_using_monitoring %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row">
-                    <div class="col-md-12">
-                        <h4>
-                            Índice de Monitoreos Ocupacionales (>=90)
-                        </h4>
-                    </div>
-                    <div class="col-md-12 stat">
-                        <div class="data">
-                            <span class="number">{{ index_detail.monitoring }}%</span>
-                            IMO
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
+            {% include 'main/reports/hook/table.html' with title='Índice de Monitoreos Ocupacionales (>=90)' title_numerator='N° de Monitoreos Cumplidos x100' title_denominator='N° de Monitoreos Programados' index=values_details|get_by_key:'occupational_monitor' editable=True %}
         {% endif %}
+
         {% if index.is_using_medidas_control %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row">
-                    <div class="col-md-12">
-                        <h4>
-                            Índice de Medidas de Control Ocupacional (>=70)
-                        </h4>
-                    </div>
-                    <div class="col-md-12 stat">
-                        <div class="data">
-                            <span class="number">{{ index_detail.medidas_control }}%</span>
-                            IMCO
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
+            {% include 'main/reports/hook/table.html' with title='Índice de Medidas de Control Ocupacional (>=70)' title_numerator='N° de Medidas Implementadas x100' title_denominator='N° de Medidas Identificadas' index=values_details|get_by_key:'measure_occupational_control' editable=True %}
         {% endif %}
     </div>
 
@@ -1229,7 +1124,7 @@
                     var data = {
                         'numerator': $('#numerator_sgsst').val(),
                         'denominator': $('#denominator_sgsst').val(),
-                        'month':{{ month.index }},
+                        'month':{{ month }},
                         csrfmiddlewaretoken: "{{ csrf_token }}"
                     };
 
@@ -1260,7 +1155,7 @@
                     var data = {
                         'numerator': $('#numerator_legal').val(),
                         'denominator': $('#denominator_legal').val(),
-                        'month':{{ month.index }},
+                        'month':{{ month }},
                         csrfmiddlewaretoken: "{{ csrf_token }}"
                     };
 
@@ -1290,7 +1185,7 @@
                     var data = {
                         'numerator': $('#numerator_icsst').val(),
                         'denominator': $('#denominator_icsst').val(),
-                        'month':{{ month.index }},
+                        'month':{{ month }},
                         csrfmiddlewaretoken: "{{ csrf_token }}"
                     };
 
@@ -1320,7 +1215,7 @@
                     var data = {
                         'numerator': $('#numerator_indice_no_conformidad').val(),
                         'denominator': $('#denominator_indice_no_conformidad').val(),
-                        'month':{{ month.index }},
+                        'month':{{ month }},
                         csrfmiddlewaretoken: "{{ csrf_token }}"
                     };
 
@@ -1350,7 +1245,7 @@
                     var data = {
                         'numerator': $('#numerator_medida_iperc').val(),
                         'denominator': $('#denominator_medida_iperc').val(),
-                        'month':{{ month.index }},
+                        'month':{{ month }},
                         csrfmiddlewaretoken: "{{ csrf_token }}"
                     };
 
@@ -1380,7 +1275,7 @@
                     var data = {
                         'numerator': $('#numerator_liderazgo').val(),
                         'denominator': $('#denominator_liderazgo').val(),
-                        'month':{{ month.index }},
+                        'month':{{ month }},
                         csrfmiddlewaretoken: "{{ csrf_token }}"
                     };
 
@@ -1410,7 +1305,7 @@
                     var data = {
                         'numerator': $('#numerator_plan_contingencia').val(),
                         'denominator': $('#denominator_plan_contingencia').val(),
-                        'month':{{ month.index }},
+                        'month':{{ month }},
                         csrfmiddlewaretoken: "{{ csrf_token }}"
                     };
 

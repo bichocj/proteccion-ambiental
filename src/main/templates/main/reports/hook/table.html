@@ -1,0 +1,44 @@
+{% load main_extras %}
+<div id="main-stats" style="margin-top: 50px;">
+    <div class="row stats-row stat">
+        <div class="col-md-12" style="text-align: left;">
+            <h4>
+                {{ title }}
+            </h4>
+            <br>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th class="col-md-4">
+                        {{ title_numerator }}
+                    </th>
+                    <th class="col-md-4">
+                        <span class="line"></span>
+                        {{ title_denominator }}
+                    </th>
+                    <th class="col-md-4">
+                        <span class="line"></span>
+                        Record
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                {% if editable %}
+                    <tr>
+                        <td><input type="text" name="numerator" value="{{ index|numerator }}"></td>
+                        <td><input type="text" name="denominator" value="{{ index|denominator }}"></td>
+                        <td><input type="text" name="value" value="{{ index|value }}"></td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td>{{ index|numerator }}</td>
+                        <td>{{ index|denominator }}</td>
+                        <td>{{ index|value }}%</td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>

@@ -86,9 +86,9 @@ urlpatterns += [
 urlpatterns += [
     # Reportes
     url(r'^(?P<company_slug>[-\w]+)/informes/$', main._views.report.reports, name='reports'),
-    url(r'^(?P<company_slug>[-\w]+)/informe/mensual/(?P<mes>\d+)/$', main._views.report.monthly_report,
+    url(r'^(?P<company_slug>[-\w]+)/informe/mensual/(?P<month>\d+)/$', main._views.report.monthly_report,
         name='report_monthly'),
-    url(r'^(?P<company_slug>[-\w]+)/informe/mensual/actualizar/(?P<mes>\d+)/$', main._views.report.refresh_inform,
+    url(r'^(?P<company_slug>[-\w]+)/informe/mensual/actualizar/(?P<month>\d+)/$', main._views.report.refresh_inform,
         name='report_update'),
     # Indices
     url(r'^(?P<company_slug>[-\w]+)/indices/$', views.indices, name='indices'),
