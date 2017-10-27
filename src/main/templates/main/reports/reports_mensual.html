@@ -970,301 +970,88 @@
         {% endif %}
 
         {% if index.is_using_frecuency %}
-            {% include 'main/reports/hook/table.html' with title='Índice de Frecuencia (<=10)' title_numerator='N°Accidentes T. Perdido Acum x 200 000' title_denominator='Horas Hombre Trabajadas Acumuladas' index=values_details|get_by_key:'frecuency' editable=False %}
+            {% include 'main/reports/hook/table.html' with title='Índice de Frecuencia (<=10)' title_numerator='N°Accidentes T. Perdido Acum x 200 000' title_denominator='Horas Hombre Trabajadas Acumuladas' value_detail=values_details|get_by_key:'frecuency' editable=False %}
         {% endif %}
 
         {% if index.is_using_severity %}
-            {% include 'main/reports/hook/table.html' with title='Índice de Severidad (<=50)' title_numerator='N°días perdidos Acum x 200 000' title_denominator='Horas Hombre Trabajadas Acumuladas' index=values_details|get_by_key:'severity' editable=True %}
+            {% include 'main/reports/hook/table.html' with title='Índice de Severidad (<=50)' title_numerator='N°días perdidos Acum x 200 000' title_denominator='Horas Hombre Trabajadas Acumuladas' value_detail=values_details|get_by_key:'severity' editable=True %}
         {% endif %}
 
         {% if index.is_using_accidentality %}
-            {% include 'main/reports/hook/table.html' with title='Índice de Accidentabilidad (<= 1)' title_numerator='IF x IS' title_denominator='1000' index=values_details|get_by_key:'accidentability' editable=True %}
+            {% include 'main/reports/hook/table.html' with title='Índice de Accidentabilidad (<= 1)' title_numerator='IF x IS' title_denominator='1000' value_detail=values_details|get_by_key:'accidentability' editable=True %}
         {% endif %}
         {% if index.is_using_professional_sick %}
-            {% include 'main/reports/hook/table.html' with title='Índice de Enfermedades Profesionales (<= 5)' title_numerator='N°Enfermedades Profesionales Acum x 200 000' title_denominator='Horas Hombre Trabajadas Acumuladas' index=values_details|get_by_key:'proffesional_sick' editable=True %}
+            {% include 'main/reports/hook/table.html' with title='Índice de Enfermedades Profesionales (<= 5)' title_numerator='N°Enfermedades Profesionales Acum x 200 000' title_denominator='Horas Hombre Trabajadas Acumuladas' value_detail=values_details|get_by_key:'proffesional_sick' editable=True %}
         {% endif %}
 
 
         {% if index.is_using_medic_exam %}
-            {% include 'main/reports/hook/table.html' with title='Índice de Examen Médico Ocupacional (100)' title_numerator='EMOs Ejecutados x 100' title_denominator='EMOs Programados.' index=values_details|get_by_key:'medic_exam' editable=True %}
+            {% include 'main/reports/hook/table.html' with title='Índice de Examen Médico Ocupacional (100)' title_numerator='EMOs Ejecutados x 100' title_denominator='EMOs Programados.' value_detail=values_details|get_by_key:'medic_exam' editable=True %}
         {% endif %}
 
         {% if index.is_using_ap_worker %}
-            {% include 'main/reports/hook/table.html' with title='Índice de Trabajadores Aptos' title_numerator='N° de Trabajadores Aptos x10' title_denominator='N° de Trabajadores Evaluados.' index=values_details|get_by_key:'workers_up' editable=True %}
+            {% include 'main/reports/hook/table.html' with title='Índice de Trabajadores Aptos' title_numerator='N° de Trabajadores Aptos x10' title_denominator='N° de Trabajadores Evaluados.' value_detail=values_details|get_by_key:'workers_up' editable=True %}
         {% endif %}
 
         {% if index.is_using_ap_worker_restric %}
-            {% include 'main/reports/hook/table.html' with title='Índice de Trabajadores Aptos con restricción (>=90)' title_numerator='N° de Trabajadores Aptos con Restricción x100' title_denominator='N° de Trabajadores Evaluados.' index=values_details|get_by_key:'workers_up_restrictions' editable=True %}
+            {% include 'main/reports/hook/table.html' with title='Índice de Trabajadores Aptos con restricción (>=90)' title_numerator='N° de Trabajadores Aptos con Restricción x100' title_denominator='N° de Trabajadores Evaluados.' value_detail=values_details|get_by_key:'workers_up_restrictions' editable=True %}
         {% endif %}
         {% if index.is_using_aq_exposition %}
-            {% include 'main/reports/hook/table.html' with title='Índice de Exposición a Agentes Químicos' title_numerator='N° de Trabajadores Expuestos x100' title_denominator='N° Total de Trabajadores operacionales' index=values_details|get_by_key:'expose_quimic' editable=True %}
+            {% include 'main/reports/hook/table.html' with title='Índice de Exposición a Agentes Químicos' title_numerator='N° de Trabajadores Expuestos x100' title_denominator='N° Total de Trabajadores operacionales' value_detail=values_details|get_by_key:'expose_quimic' editable=True %}
         {% endif %}
         <!--anual-->
 
         {% if index.is_using_monitoring %}
-            {% include 'main/reports/hook/table.html' with title='Índice de Monitoreos Ocupacionales (>=90)' title_numerator='N° de Monitoreos Cumplidos x100' title_denominator='N° de Monitoreos Programados' index=values_details|get_by_key:'occupational_monitor' editable=True %}
+            {% include 'main/reports/hook/table.html' with title='Índice de Monitoreos Ocupacionales (>=90)' title_numerator='N° de Monitoreos Cumplidos x100' title_denominator='N° de Monitoreos Programados' value_detail=values_details|get_by_key:'occupational_monitor' editable=True %}
         {% endif %}
 
         {% if index.is_using_medidas_control %}
-            {% include 'main/reports/hook/table.html' with title='Índice de Medidas de Control Ocupacional (>=70)' title_numerator='N° de Medidas Implementadas x100' title_denominator='N° de Medidas Identificadas' index=values_details|get_by_key:'measure_occupational_control' editable=True %}
+            {% include 'main/reports/hook/table.html' with title='Índice de Medidas de Control Ocupacional (>=70)' title_numerator='N° de Medidas Implementadas x100' title_denominator='N° de Medidas Identificadas' value_detail=values_details|get_by_key:'measure_occupational_control' editable=True %}
         {% endif %}
     </div>
 
 
 {% endblock %}
 {% block scripts %}
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
-    <script src="{% static 'main/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'main/js/jquery-ui-1.10.2.custom.min.js' %}"></script>
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
-    <script src="{% static 'main/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'main/js/jquery-ui-1.10.2.custom.min.js' %}"></script>
+{#    <script src="{% static 'main/js/bootstrap.min.js' %}"></script>#}
+{#    <script src="{% static 'main/js/jquery-ui-1.10.2.custom.min.js' %}"></script>#}
+{#    <script src="{% static 'main/js/bootstrap.min.js' %}"></script>#}
+{#    <script src="{% static 'main/js/jquery-ui-1.10.2.custom.min.js' %}"></script>#}
     <!-- knob -->
     <script src="{% static 'main/js/jquery.knob.js' %}"></script>
     <!-- flot charts -->
-    <script src="{% static 'main/js/jquery.flot.js' %}"></script>
-    <script sr="{% static 'main/js/jquery.flot.stack.js' %}"></script>
-    <script src="{% static 'main/js/jquery.flot.resize.js' %}"></script>
-    <script src="{% static 'main/js/theme.js' %}"></script>
+{#    <script src="{% static 'main/js/jquery.flot.js' %}"></script>#}
+{#    <script sr="{% static 'main/js/jquery.flot.stack.js' %}"></script>#}
+{#    <script src="{% static 'main/js/jquery.flot.resize.js' %}"></script>#}
+{#    <script src="{% static 'main/js/theme.js' %}"></script>#}
     <!-- knob -->
     <script type="text/javascript">
-        $(document).ready(function () {
-            var user = {% if request.user.is_superuser %}true{% else %}false{% endif %};
-            if (!user) {
-                $('#numerator_sgsst').attr('readonly', true);
-                $('#denominator_sgsst').attr('readonly', true);
-                $('#sgsst_btn').css({display: "none"});
-                $('#numerator_legal').attr('readonly', true);
-                $('#denominator_legal').attr('readonly', true);
-                $('#legal_btn').css({display: "none"});
-                $('#numerator_icsst').attr('readonly', true);
-                $('#denominator_icsst').attr('readonly', true);
-                $('#icsst_btn').css({display: "none"});
-                $('#numerator_indice_no_conformidad').attr('readonly', true);
-                $('#denominator_indice_no_conformidad').attr('readonly', true);
-                $('#indice_no_conformidad_btn').css({display: "none"});
-                $('#numerator_medida_iperc').attr('readonly', true);
-                $('#denominator_medida_iperc').attr('readonly', true);
-                $('#medida_iperc_btn').css({display: "none"});
-                $('#numerator_liderazgo').attr('readonly', true);
-                $('#denominator_liderazgo').attr('readonly', true);
-                $('#liderazgo_btn').css({display: "none"});
-            }
-            var display_restore ={{ display_restore_btn|default:'true' }};
-            if (display_restore == 0) {
-                $('#restore_btn').css({display: "none"})
-            }
-            $('#sgsst_btn').click(function (e) {
+        $('.btn-update-index').click(function(e){
+            e.preventDefault();
+            var button = $(e.target);
+            button.text('actualizando ...');
+            button.prop( "disabled", true );
 
-                    e.preventDefault();
-                    var url = '';
-                    var data = {
-                        'numerator': $('#numerator_sgsst').val(),
-                        'denominator': $('#denominator_sgsst').val(),
-                        'month':{{ month }},
-                        csrfmiddlewaretoken: "{{ csrf_token }}"
-                    };
+            let tr = button.parents('tr');
+            let valueDetail = tr.attr('valueDetail');
 
-                    url = '{% url 'main:indices_update' company_slug 'sgsst'%}';
-                    //var data = $(this).serializeArray();
-                    console.log(data);
-                    $.ajax({
-                        url: url,
-                        method: 'post',
-                        data: data,
-                        dataType: "JSON",
-                        success: function (response) {
+            let url= '{% url 'main:indices_update' company_slug 'INDICE_SLUG' %}';
 
-                            $('#sgsst_val').text(response.val + '%');
-                            $('#restore_btn').css({display: "inline"});
-                            console.log(response);
-
-                        }
-
-                    });
-
+            $.post(
+                url.replace('INDICE_SLUG', valueDetail),
+                {
+                    month:{{ month }},
+                    numerator: tr.find('[name="numerator"]').val(),
+                    denominator: tr.find('[name="denominator"]').val(),
+                    value: tr.find('[name="value"]').val(),
+                },
+                function (response) {
+                    alert('actualizado')
+                    button.text('actualizar');
+                    button.prop( "disabled", false);
                 }
-            );
-            $('#legal_btn').click(function (e) {
+            )
 
-                    e.preventDefault();
-                    var url = '';
-                    var data = {
-                        'numerator': $('#numerator_legal').val(),
-                        'denominator': $('#denominator_legal').val(),
-                        'month':{{ month }},
-                        csrfmiddlewaretoken: "{{ csrf_token }}"
-                    };
-
-                    url = '{% url 'main:indices_update' company_slug 'legal'%}';
-                    //var data = $(this).serializeArray();
-                    console.log(data);
-                    $.ajax({
-                        url: url,
-                        method: 'post',
-                        data: data,
-                        dataType: "JSON",
-                        success: function (response) {
-                            $('#legal_val').text(response.val + '%');
-                            $('#restore_btn').css({display: "inline"});
-                            console.log(response);
-
-                        }
-
-                    });
-
-                }
-            );
-            $('#icsst_btn').click(function (e) {
-
-                    e.preventDefault();
-                    var url = '';
-                    var data = {
-                        'numerator': $('#numerator_icsst').val(),
-                        'denominator': $('#denominator_icsst').val(),
-                        'month':{{ month }},
-                        csrfmiddlewaretoken: "{{ csrf_token }}"
-                    };
-
-                    url = '{% url 'main:indices_update' company_slug 'icsst'%}';
-                    //var data = $(this).serializeArray();
-                    console.log(data);
-                    $.ajax({
-                        url: url,
-                        method: 'post',
-                        data: data,
-                        dataType: "JSON",
-                        success: function (response) {
-                            $('#icsst_val').text(response.val + '%');
-                            $('#restore_btn').css({display: "inline"});
-                            console.log(response);
-
-                        }
-
-                    });
-
-                }
-            );
-            $('#indice_no_conformidad_btn').click(function (e) {
-
-                    e.preventDefault();
-                    var url = '';
-                    var data = {
-                        'numerator': $('#numerator_indice_no_conformidad').val(),
-                        'denominator': $('#denominator_indice_no_conformidad').val(),
-                        'month':{{ month }},
-                        csrfmiddlewaretoken: "{{ csrf_token }}"
-                    };
-
-                    url = '{% url 'main:indices_update' company_slug 'indice_no_conformidad'%}';
-                    //var data = $(this).serializeArray();
-                    console.log(data);
-                    $.ajax({
-                        url: url,
-                        method: 'post',
-                        data: data,
-                        dataType: "JSON",
-                        success: function (response) {
-                            $('#indice_no_conformidad_val').text(response.val + '%');
-                            $('#restore_btn').css({display: "inline"});
-                            console.log(response);
-
-                        }
-
-                    });
-
-                }
-            );
-            $('#medida_iperc_btn').click(function (e) {
-
-                    e.preventDefault();
-                    var url = '';
-                    var data = {
-                        'numerator': $('#numerator_medida_iperc').val(),
-                        'denominator': $('#denominator_medida_iperc').val(),
-                        'month':{{ month }},
-                        csrfmiddlewaretoken: "{{ csrf_token }}"
-                    };
-
-                    url = '{% url 'main:indices_update' company_slug 'medida_iperc'%}';
-                    //var data = $(this).serializeArray();
-                    console.log(data);
-                    $.ajax({
-                        url: url,
-                        method: 'post',
-                        data: data,
-                        dataType: "JSON",
-                        success: function (response) {
-                            $('#medida_iperc_val').text(response.val + '%');
-                            $('#restore_btn').css({display: "inline"});
-                            console.log(response);
-
-                        }
-
-                    });
-
-                }
-            );
-            $('#liderazgo_btn').click(function (e) {
-
-                    e.preventDefault();
-                    var url = '';
-                    var data = {
-                        'numerator': $('#numerator_liderazgo').val(),
-                        'denominator': $('#denominator_liderazgo').val(),
-                        'month':{{ month }},
-                        csrfmiddlewaretoken: "{{ csrf_token }}"
-                    };
-
-                    url = '{% url 'main:indices_update' company_slug 'liderazgo'%}';
-                    //var data = $(this).serializeArray();
-                    console.log(data);
-                    $.ajax({
-                        url: url,
-                        method: 'post',
-                        data: data,
-                        dataType: "JSON",
-                        success: function (response) {
-                            $('#liderazgo_val').text(response.val + '%');
-                            $('#restore_btn').css({display: "inline"});
-                            console.log(response);
-
-                        }
-
-                    });
-
-                }
-            );
-            $('#plan_contingencia_btn').click(function (e) {
-
-                    e.preventDefault();
-                    var url = '';
-                    var data = {
-                        'numerator': $('#numerator_plan_contingencia').val(),
-                        'denominator': $('#denominator_plan_contingencia').val(),
-                        'month':{{ month }},
-                        csrfmiddlewaretoken: "{{ csrf_token }}"
-                    };
-
-                    url = '{% url 'main:indices_update' company_slug 'plan_contingencia'%}';
-                    //var data = $(this).serializeArray();
-                    console.log(data);
-                    $.ajax({
-                        url: url,
-                        method: 'post',
-                        data: data,
-                        dataType: "JSON",
-                        success: function (response) {
-                            $('#plan_contingencia_val').text(response.val + '%');
-                            $('#restore_btn').css({display: "inline"});
-                            console.log(response);
-
-                        }
-
-                    });
-
-                }
-            );
         });
 
     </script>

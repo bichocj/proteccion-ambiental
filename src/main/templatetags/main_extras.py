@@ -64,6 +64,13 @@ def numerator(value):
     except:
         return ''
 
+@register.filter
+def key(value):
+    try:
+        return value.key
+    except:
+        return ''
+
 
 @register.filter
 def denominator(value):

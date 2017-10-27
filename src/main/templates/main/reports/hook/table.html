@@ -20,20 +20,24 @@
                         <span class="line"></span>
                         Record
                     </th>
+                    {% if editable %}
+                        <th></th>
+                    {% endif %}
                 </tr>
                 </thead>
                 <tbody>
                 {% if editable %}
-                    <tr>
-                        <td><input type="text" name="numerator" value="{{ index|numerator }}"></td>
-                        <td><input type="text" name="denominator" value="{{ index|denominator }}"></td>
-                        <td><input type="text" name="value" value="{{ index|value }}"></td>
+                    <tr valueDetail="{{ value_detail|key }}">
+                        <td><input type="text" name="numerator" value="{{ value_detail|numerator }}"></td>
+                        <td><input type="text" name="denominator" value="{{ value_detail|denominator }}"></td>
+                        <td><input type="text" name="value" value="{{ value_detail|value }}"></td>
+                        <td><button class="btn btn-default btn-update-index">actualizar</button></td>
                     </tr>
                 {% else %}
                     <tr>
-                        <td>{{ index|numerator }}</td>
-                        <td>{{ index|denominator }}</td>
-                        <td>{{ index|value }}%</td>
+                        <td>{{ value_detail|numerator }}</td>
+                        <td>{{ value_detail|denominator }}</td>
+                        <td>{{ value_detail|value }}%</td>
                     </tr>
                 {% endif %}
                 </tbody>
