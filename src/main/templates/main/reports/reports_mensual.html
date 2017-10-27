@@ -1078,13 +1078,19 @@
                         value: tr.find('[name="value"]').val(),
                     }
                 }
-            ).done(function (response) {
-                    alert('actualizado')
+            )
+                .done(function (response) {
+                        alert('actualizado')
+
+                    }
+                )
+                .fail(function () {
+                    alert("error, intente luego");
+                })
+                .always(function () {
                     button.text('actualizar');
                     button.prop("disabled", false);
-
-                }
-            )
+                });
 
         });
 
