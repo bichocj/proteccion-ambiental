@@ -1,9 +1,10 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.views.static import serve
 
 import main._views.personal
 import main._views.report
 from main import views
+from main.api import router
 from proteccion_ambiental import settings
 
 urlpatterns = [
@@ -95,6 +96,12 @@ urlpatterns += [
     url(r'^(?P<company_slug>[-\w]+)/indices/restore/(?P<mounth>\d+)/$', views.restore_indices, name='restore_indices'),
     url(r'^(?P<company_slug>[-\w]+)/indices/(?P<indice_slug>[-\w]+)/$', views.indices_update, name='indices_update'),
 
+]
+
+# API
+urlpatterns += [
+    url(r'^', include(router.urls)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]
 
 urlpatterns += [

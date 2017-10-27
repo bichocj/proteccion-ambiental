@@ -27,7 +27,7 @@
                 </thead>
                 <tbody>
                 {% if editable %}
-                    <tr valueDetail="{{ value_detail|key }}">
+                    <tr valueDetail="{{ value_detail.pk }}">
                         <td><input type="text" name="numerator" value="{{ value_detail|numerator }}"></td>
                         <td><input type="text" name="denominator" value="{{ value_detail|denominator }}"></td>
                         <td><input type="text" name="value" value="{{ value_detail|value }}"></td>

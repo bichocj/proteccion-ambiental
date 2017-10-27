@@ -23,7 +23,7 @@
             </div>
         </div>
         <div class="col-md-12">
-            <h3>Mes {% trans month_label  %}</h3>
+            <h3>Mes {% trans month_label %}</h3>
             <h4 class="">Compañia: {{ company.name }}</h4>
             <a class="btn-flat icon pull-right" id="restore_btn"
                href="{% url 'main:report_update' company_slug month %}">
@@ -398,7 +398,7 @@
                             <tr>
                                 <td>{{ values_details|get_by_key:'improvements'|numerator }}</td>
                                 <td>{{ values_details|get_by_key:'improvements'|denominator }}</td>
-                                <td>{{ values_details|get_by_key:'improvements'|value }}% </td>
+                                <td>{{ values_details|get_by_key:'improvements'|value }}%</td>
                             </tr>
                             </tbody>
                         </table>
@@ -694,9 +694,9 @@
                             </thead>
                             <tbody>
                             <tr>
-                                <td> ??? </td>
-                                <td> ??? </td>
-                                <td> ???% </td>
+                                <td> ???</td>
+                                <td> ???</td>
+                                <td> ???%</td>
                             </tr>
                             </tbody>
                         </table>
@@ -1013,42 +1013,76 @@
 
 {% endblock %}
 {% block scripts %}
-{#    <script src="{% static 'main/js/bootstrap.min.js' %}"></script>#}
-{#    <script src="{% static 'main/js/jquery-ui-1.10.2.custom.min.js' %}"></script>#}
-{#    <script src="{% static 'main/js/bootstrap.min.js' %}"></script>#}
-{#    <script src="{% static 'main/js/jquery-ui-1.10.2.custom.min.js' %}"></script>#}
+    {#    <script src="{% static 'main/js/bootstrap.min.js' %}"></script>#}
+    {#    <script src="{% static 'main/js/jquery-ui-1.10.2.custom.min.js' %}"></script>#}
+    {#    <script src="{% static 'main/js/bootstrap.min.js' %}"></script>#}
+    {#    <script src="{% static 'main/js/jquery-ui-1.10.2.custom.min.js' %}"></script>#}
     <!-- knob -->
     <script src="{% static 'main/js/jquery.knob.js' %}"></script>
     <!-- flot charts -->
-{#    <script src="{% static 'main/js/jquery.flot.js' %}"></script>#}
-{#    <script sr="{% static 'main/js/jquery.flot.stack.js' %}"></script>#}
-{#    <script src="{% static 'main/js/jquery.flot.resize.js' %}"></script>#}
-{#    <script src="{% static 'main/js/theme.js' %}"></script>#}
+    {#    <script src="{% static 'main/js/jquery.flot.js' %}"></script>#}
+    {#    <script sr="{% static 'main/js/jquery.flot.stack.js' %}"></script>#}
+    {#    <script src="{% static 'main/js/jquery.flot.resize.js' %}"></script>#}
+    {#    <script src="{% static 'main/js/theme.js' %}"></script>#}
     <!-- knob -->
     <script type="text/javascript">
-        $('.btn-update-index').click(function(e){
+        // using jQuery
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        var csrftoken = getCookie('csrftoken');
+
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        $.ajaxSetup({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+
+        $('.btn-update-index').click(function (e) {
             e.preventDefault();
             var button = $(e.target);
             button.text('actualizando ...');
-            button.prop( "disabled", true );
+            button.prop("disabled", true);
 
             let tr = button.parents('tr');
-            let valueDetail = tr.attr('valueDetail');
+            let valueDetailId = tr.attr('valueDetail');
 
-            let url= '{% url 'main:indices_update' company_slug 'INDICE_SLUG' %}';
+            let url = '{% url 'main:valuesdetail-detail' 0 %}';
 
-            $.post(
-                url.replace('INDICE_SLUG', valueDetail),
-                {
-                    month:{{ month }},
-                    numerator: tr.find('[name="numerator"]').val(),
-                    denominator: tr.find('[name="denominator"]').val(),
-                    value: tr.find('[name="value"]').val(),
-                },
-                function (response) {
+            $.ajax({
+                    url: url.replace('0', valueDetailId),
+                    method: 'put',
+                    data: {
+                        numerator: tr.find('[name="numerator"]').val(),
+                        denominator: tr.find('[name="denominator"]').val(),
+                        value: tr.find('[name="value"]').val(),
+                    }
+                }
+            ).done(function (response) {
                     alert('actualizado')
                     button.text('actualizar');
-                    button.prop( "disabled", false);
+                    button.prop("disabled", false);
+
                 }
             )
 
