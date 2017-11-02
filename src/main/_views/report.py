@@ -24,28 +24,22 @@ def refresh_inform(request, company_slug, month):
     workers_in_month = count_worker.workers
     hours_worked_in_month = count_worker.hours
 
-    # is_empty_index = validate_index(index_detail)
-    # display_restore_btn = 0
-    # if request.user.is_superuser:
-    #     display_restore_btn = 1
-
     if index.is_using_sgsst:
         denominator_sgsst = Events.objects.filter(Q(calendar__company=company),
                                                   Q(event_start__month=month)).count()
 
         numerator_sgsst = Events.objects.filter(Q(calendar__company=company), Q(state=DONE),
                                                 Q(event_start__month=month)).count()
-        if not numerator_sgsst:
-            numerator_sgsst = 0
 
         value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='sgsst')
 
         value_detail.numerator = numerator_sgsst
         value_detail.denominator = denominator_sgsst
+        if denominator_sgsst > 0:
+            value_detail.value = numerator_sgsst * 100 / denominator_sgsst
+        else:
+            value_detail.value = 0
         value_detail.save()
-
-        index_detail.sgsst = numerator_sgsst * 100 / denominator_sgsst
-        # index_detail.save()
 
     if index.is_using_legal:
         denominator_legal = LegalRequirement.objects.filter(Q(entitie=company),
@@ -57,12 +51,11 @@ def refresh_inform(request, company_slug, month):
 
         value_detail.numerator = numerator_legal
         value_detail.denominator = denominator_legal
-        value_detail.save()
-        if denominator_legal == 0:
-            index_detail.legal = 0
+        if denominator_legal > 0:
+            value_detail.value = numerator_legal * 100.00 / denominator_legal
         else:
-            index_detail.legal = numerator_legal * 100.00 / denominator_legal
-            # index_detail.save()
+            value_detail.value = 0
+        value_detail.save()
 
     if index.is_using_capacitacion:
         events = Events.objects.filter(calendar__company=company, event_start__month=month,
@@ -445,7 +438,7 @@ def refresh_inform(request, company_slug, month):
     if index.is_using_professional_sick:
         value_detail, _is_new = ValuesDetail.objects.get_or_create(detail=index_detail, key='proffesional_sick')
 
-    if index.is_using_medic_exam :
+    if index.is_using_medic_exam:
         value_detail, _is_new = ValuesDetail.objects.get_or_create(detail=index_detail, key='medic_exam')
 
     if index.is_using_ap_worker:
@@ -461,7 +454,8 @@ def refresh_inform(request, company_slug, month):
         value_detail, _is_new = ValuesDetail.objects.get_or_create(detail=index_detail, key='occupational_monitor')
 
     if index.is_using_medidas_control:
-        value_detail, _is_new = ValuesDetail.objects.get_or_create(detail=index_detail, key='measure_occupational_control')
+        value_detail, _is_new = ValuesDetail.objects.get_or_create(detail=index_detail,
+                                                                   key='measure_occupational_control')
 
     # else:
     #     try:

@@ -31,8 +31,8 @@
             <table id="example">
                 <thead>
                 <tr>
-                    <th>Título</th>
                     <th><span class="line"></span>Fecha</th>
+                    <th>Título</th>
                     <th><span class="line"></span>Tipo</th>
                     <th><span class="line"></span>Trabajador</th>
                     {% if request.user.is_superuser or request.user|has_group:"Doctor"%}
@@ -44,8 +44,8 @@
                 <tbody>
                 {% for accident in accidents %}
                     <tr>
-                        <td>{{ accident.title }}</td>
                         <td>{{ accident.date }}</td>
+                        <td>{{ accident.title }}</td>
                         <td>{{ accident.get_type_accident_display }}</td>
                         <td>{{ accident.worker.name }}  {{ accident.worker.last_name }}</td>
                         {% if request.user.is_superuser or request.user|has_group:"Doctor" %}
@@ -71,7 +71,9 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#example').dataTable({
-                "sPaginationType": "full_numbers"
+                "sPaginationType": "full_numbers",
+                   aaSorting: [[0, 'desc']]
+
             });
         });
     </script>

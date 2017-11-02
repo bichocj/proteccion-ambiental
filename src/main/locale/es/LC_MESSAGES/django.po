@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-10-24 07:46-0500\n"
+"POT-Creation-Date: 2017-11-02 08:39-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,7 +66,7 @@ msgstr ""
 msgid "Apellidos"
 msgstr ""
 
-#: models.py:55 models.py:159
+#: models.py:55 models.py:164
 msgid "Codigo"
 msgstr ""
 
@@ -75,98 +75,118 @@ msgid "Cargo"
 msgstr ""
 
 #: models.py:58
-msgid "Esta activo"
-msgstr ""
+msgid "photo"
+msgstr "foto"
 
-#: models.py:66
+#: models.py:59
+msgid "date in"
+msgstr "fecha de ingreso"
+
+#: models.py:60
+msgid "date out"
+msgstr "fecha de salida"
+
+#: models.py:70
 msgid "worker quantity"
 msgstr "cantidad de trabajadores"
 
-#: models.py:83
+#: models.py:71
+msgid "hours worked"
+msgstr "horas trabajadas"
+
+#: models.py:88
 msgid "Nombre Requerimiento"
 msgstr ""
 
-#: models.py:84 models.py:236
+#: models.py:89 models.py:245
 msgid "Descripcion"
 msgstr ""
 
-#: models.py:135
+#: models.py:140
 msgid "Tipo Normativa"
 msgstr ""
 
-#: models.py:136
+#: models.py:141
 msgid "Codigo Normativa"
 msgstr ""
 
-#: models.py:137
+#: models.py:142
 msgid "Fecha Publicacion"
 msgstr ""
 
-#: models.py:139
+#: models.py:144
 msgid "Titulo del Dispositivo Legal"
 msgstr ""
 
-#: models.py:140
+#: models.py:145
 msgid "Que Aplica?"
 msgstr ""
 
-#: models.py:142
+#: models.py:147
 msgid "Evidencia Registro"
 msgstr ""
 
-#: models.py:143
+#: models.py:148
 msgid "Frecuencia"
 msgstr ""
 
-#: models.py:144
+#: models.py:149
 msgid "Fecha Ultima Evaluacion"
 msgstr ""
 
-#: models.py:146
+#: models.py:151
 msgid "Cumplimiento (%)"
 msgstr ""
 
-#: models.py:147
+#: models.py:152
 msgid "Observaciones"
 msgstr ""
 
-#: models.py:148 models.py:149 models.py:212
+#: models.py:153 models.py:154 models.py:217
 msgid "Estado"
 msgstr ""
 
-#: models.py:213
+#: models.py:218
 msgid "Programa"
 msgstr ""
 
-#: models.py:214 models.py:239
-msgid "Fecha"
-msgstr ""
-
-#: models.py:215 models.py:243
+#: models.py:219 models.py:252
 msgid "Evidencia"
 msgstr ""
 
-#: models.py:235
+#: models.py:221
+msgid "exam date"
+msgstr ""
+
+#: models.py:222
+msgid "expiration date"
+msgstr ""
+
+#: models.py:244
 msgid "Titulo"
 msgstr ""
 
-#: models.py:237
+#: models.py:246
 msgid "Tipo de Accidente"
 msgstr ""
 
-#: models.py:240
+#: models.py:248
+msgid "Fecha"
+msgstr ""
+
+#: models.py:249
 msgid "Dias Perdidos"
 msgstr ""
 
-#: models.py:282
+#: models.py:291
 msgid "Archivo"
 msgstr ""
 
-#: models.py:283
+#: models.py:292
 msgid "Tipo"
 msgstr ""
 
-#: models.py:286
+#: models.py:295
 msgid "Nombre"
 msgstr ""
 
@@ -194,7 +214,7 @@ msgid "format"
 msgstr "formato"
 
 #: templates/main/config/requirements/list.html:18
-#: templates/main/layout_with_out_nav.html:83
+#: templates/main/layout_with_out_nav.html:97
 msgid "requirements"
 msgstr "requerimientos"
 
@@ -206,7 +226,7 @@ msgstr "nuevo requerimiento"
 msgid "this requirements will copy in a company when you create one"
 msgstr "estos requerimientos seran copiados a una empresa cuando cree una"
 
-#: templates/main/layout.html:131
+#: templates/main/layout.html:181
 msgid "indices"
 msgstr ""
 
@@ -214,14 +234,14 @@ msgstr ""
 msgid "address"
 msgstr "dirección"
 
-#: views.py:79
+#: views.py:77
 msgid "Nueva Compañía"
 msgstr "Nueva empresa"
 
-#: views.py:114
+#: views.py:112
 msgid "edit company"
 msgstr "editar empresa"
 
-#: views.py:477
+#: views.py:474
 msgid "requirement"
 msgstr "requerimiento"

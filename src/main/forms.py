@@ -98,7 +98,7 @@ class MedicControlForm(ModelForm):
 
     class Meta:
         model = MedicControl
-        fields = ['worker', 'state', 'program', 'date', 'evidence']
+        fields = ['worker', 'state', 'program', 'date','date_expiration', 'evidence']
 
     def __init__(self, *args, **kwargs):
         super(MedicControlForm, self).__init__(*args, **kwargs)

@@ -55,7 +55,11 @@ class Worker(models.Model):
     code = models.CharField(_('Codigo'), max_length=100, null=False, blank=False)
     company = models.ForeignKey(Company, null=False)
     cargo = models.IntegerField(_('Cargo'), choices=cargos, default=RECURSOS_HUMANOS, null=False)
-    estado = models.BooleanField(_('Esta activo'), default=True, null=False)
+    photo = models.ImageField(_('photo'),null=True, upload_to='photos')
+    date_in = models.DateField(_('date in'), null=True, blank=True)
+    date_out = models.DateField(_('date out'), null=True, blank=True)
+
+    # estado = models.BooleanField(_('Esta activo'), default=True, null=False)
 
     def __str__(self):
         return self.name + ' ' + self.last_name
@@ -212,8 +216,10 @@ class MedicControl(models.Model):
     worker = models.ForeignKey(Worker)
     state = models.IntegerField(_('Estado'), choices=medic_states, default=NO_APTO, null=False, blank=False)
     program = models.IntegerField(_('Programa'), choices=medic_program, default=AUDITIVA, null=False, blank=False)
-    date = models.DateField(_('Fecha'), null=False, default=datetime.now)
     evidence = models.FileField(_('Evidencia'), upload_to="examen_medico/", null=True)
+
+    date = models.DateField(_('exam date'), null=False, default=datetime.now)
+    date_expiration = models.DateField(_('expiration date'), null=False, default=datetime.now)
 
 
 class Accident(models.Model):
@@ -224,11 +230,13 @@ class Accident(models.Model):
     ACCIDENT_5 = 5
     ACCIDENT_6 = 6
     ACCIDENT_7 = 7
+    INCIDENT = 7
     TYPE_ACCIDENT_CHOICES = (
         (FIRST_AID, 'ACCIDENTES CON PRIMEROS AUXILIOS'),
         (MEDIC_ATTENTION, 'ACCCIDENTE CON ATENCION MEDICA'),
         (AID_LOST, 'ACCIDENTES CON TIEMPO PERDIDO'),
         (AID_FATAL, 'ACCIDENTES FATALES'),
+        (INCIDENT, 'INCIDENTE'),
         (ACCIDENT_5, 'INCIDENTES PELIGROS'),
         (ACCIDENT_6, 'ENFERMEDADES OCUPACIONALES'),
         (ACCIDENT_7, 'ACTOS INSEGUROS'),

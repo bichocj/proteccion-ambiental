@@ -7,7 +7,7 @@ from main.functions import add_form_control_class
 
 
 class MettingForm(ModelForm):
-    date = forms.Field(widget=DateInputWidget)
+    date = forms.Field(widget=DateInputWidget, label=_('date'))
 
     class Meta:
         model = Metting
@@ -21,11 +21,11 @@ class MettingForm(ModelForm):
 
 
 class AgreementForm(ModelForm):
-    date = forms.Field(widget=DateInputWidget)
+    date = forms.Field(widget=DateInputWidget, label=_('date'))
 
     class Meta:
         model = Agreement
-        fields = ['title', 'content', 'date']
+        fields = ['number', 'title', 'content', 'date', 'owner', 'observations']
 
     def __init__(self, *args, **kwargs):
         super(AgreementForm, self).__init__(*args, **kwargs)
@@ -44,7 +44,7 @@ class AgreementDetailForm(ModelForm):
 
     class Meta:
         model = AgreementDetail
-        fields = ['description', 'date_start', 'date_until', 'state', 'evidence']
+        fields = ['description', 'date_start', 'date_until', 'state', 'evidence', 'owner']
         # widgets = {
         #     'date_start': DateInputWidget
         # 'date_start': DateInput(attrs={'type': 'date'}, format='%m-%d-%Y')

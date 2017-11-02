@@ -1,9 +1,10 @@
 from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm, SetPasswordForm, AuthenticationForm
 from django.contrib.auth.models import User
-from django.forms import ModelForm
+from django.forms import ModelForm, DateTimeField, Field
 from django.utils.translation import ugettext as _
 
 from accounts.models import Person
+from main.forms import DateInputWidget
 from main.models import Worker
 from main.functions import add_form_control_class
 
@@ -23,9 +24,12 @@ class PasswordChangeFormEdited(PasswordChangeForm):
 
 
 class WorkerForm(ModelForm):
+    date_in = Field(widget=DateInputWidget, label=_('date in'))
+    date_out = Field(widget=DateInputWidget, label=_('date out'))
+
     class Meta:
         model = Worker
-        fields = ['code', 'name', 'last_name', 'cargo']
+        fields = '__all__'
 
     def __init__(self, *args, **kwargs):
         super(WorkerForm, self).__init__(*args, **kwargs)
@@ -33,15 +37,15 @@ class WorkerForm(ModelForm):
         add_form_control_class(self.fields)
 
 
-class WorkerEditForm(ModelForm):
-    class Meta:
-        model = Worker
-        fields = ['name', 'last_name', 'code', 'cargo',]
-
-    def __init__(self, *args, **kwargs):
-        super(WorkerEditForm, self).__init__(*args, **kwargs)
-        _instance = kwargs.pop('instance', None)
-        add_form_control_class(self.fields)
+# class WorkerEditForm(ModelForm):
+#     class Meta:
+#         model = Worker
+#         fields = ['name', 'last_name', 'code', 'cargo', 'photo']
+#
+#     def __init__(self, *args, **kwargs):
+#         super(WorkerEditForm, self).__init__(*args, **kwargs)
+#         _instance = kwargs.pop('instance', None)
+#         add_form_control_class(self.fields)
 
 
 class PasswordResetFormEdited(PasswordResetForm):

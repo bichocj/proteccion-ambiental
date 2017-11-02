@@ -51,9 +51,23 @@
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
-
+    <style>
+        .message-alert{
+            z-index: 10000;
+            margin: auto;
+            width: 20%;
+            right: 0;
+            position: fixed;
+            left: 0;
+            display: none;
+        }
+    </style>
 </head>
 <body>
+<div class="alert alert-success message-alert">
+    <i class="icon-ok-sign"></i> <span class="message"></span>
+</div>
+
 <header class="navbar navbar-inverse" role="banner">
     <div class="navbar-header">
         <button class="navbar-toggle" type="button" data-toggle="collapse" id="menu-toggler">
@@ -81,9 +95,9 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li><a href="{% url 'main:config_requirements_list' %}">{% trans 'requirements'|capfirst %}</a></li>
-{#                    {% if company_slug %}#}
-{#                        <li><a href="{% url 'main:indices' company.slug %}">{% trans 'indices'|capfirst %}</a></li>#}
-{#                    {% endif %}#}
+                    {#                    {% if company_slug %}#}
+                    {#                        <li><a href="{% url 'main:indices' company.slug %}">{% trans 'indices'|capfirst %}</a></li>#}
+                    {#                    {% endif %}#}
                 </ul>
 
             </li>
@@ -117,9 +131,9 @@
 <!-- call this page plugins -->
 
 <!-- knob -->
-{% if not calendar and not accident_view and not report_view%}
-{#    <script src="http://code.jquery.com/jquery-latest.js"></script>#}
-    <script src="{% static 'fullcalendar/fullcalendar/lib/jquery.min.js' %}"></script>
+{% if not calendar and not accident_view and not report_view %}
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+{#    <script src="{% static 'fullcalendar/fullcalendar/lib/jquery.min.js' %}"></script>#}
     <script src="{% static 'main/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'main/js/jquery-ui-1.10.2.custom.min.js' %}"></script>
     <script src="{% static 'main/js/wysihtml5-0.3.0.js' %}"></script>
@@ -131,13 +145,13 @@
         $(function () {
 
             // add uniform plugin styles to html elements
-            if(typeof uniform !== 'undefined'){
+            if (typeof uniform !== 'undefined') {
                 $("input:checkbox, input:radio").uniform();
             }
             // select2 plugin for select elements
 
             // datepicker plugin
-            if(typeof datepicker !== 'undefined') {
+            if (typeof datepicker !== 'undefined') {
                 $('.input-datepicker').datepicker().on('changeDate', function (ev) {
                     $(this).datepicker('hide');
                 });

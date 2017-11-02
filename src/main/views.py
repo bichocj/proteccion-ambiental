@@ -11,7 +11,7 @@ from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import ugettext as _
 
-from accounts.forms import WorkerForm, WorkerEditForm
+from accounts.forms import WorkerForm
 from indices.forms import IndexForm
 from indices.models import Index, Index_Detail, ValuesDetail
 from main.models import Worker, Employee, AccidentDetail
@@ -263,7 +263,7 @@ def worker_new(request, company_slug):
     title = 'Nuevo Trabajador Legal'
     company = Company.objects.get(slug=company_slug)
     if request.POST:
-        form = WorkerForm(request.POST)
+        form = WorkerForm(request.POST, request.FILES)
         if form.is_valid():
             worker = form.save(commit=False)
             worker.company = company
@@ -334,15 +334,14 @@ def worker_edit(request, company_slug, worker_pk):
     company = Company.objects.get(slug=company_slug)
     worker = Worker.objects.get(pk=worker_pk)
     if request.POST:
-        form = WorkerEditForm(request.POST, instance=worker)
+        form = WorkerForm(request.POST, request.FILES, instance=worker)
         if form.is_valid():
             form.save()
-            print(company_slug)
             return redirect(reverse('main:workers', kwargs={'company_slug': company.slug}))
         else:
             message = 'Revisa la informacion'
     else:
-        form = WorkerEditForm(instance=worker)
+        form = WorkerForm(instance=worker)
     return render(request, 'main/layout_form.html', locals())
 
 
@@ -716,7 +715,7 @@ def config_requirement_new(request):
 @login_required
 def accident_list(request, company_slug):
     company = get_object_or_404(Company, slug=company_slug)
-    accidents = Accident.objects.filter(company=company)
+    accidents = Accident.objects.filter(company=company).order_by('-date')
     accident_view = True
     return render(request, "main/accidents/list.html", locals())
 

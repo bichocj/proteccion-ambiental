@@ -127,7 +127,11 @@
                     xkey: 'device',
                     ykeys: ['sells'],
                     labels: ['Incidentes'],
-                    barRatio: 0.4,
+
+                     yLabelFormat: function(y){return y != Math.round(y)?'':y;},
+
+
+                    barRatio: 1,
                     xLabelMargin: 10,
                     hideHover: 'auto',
                     barColors: ["#3d88ba"]

@@ -37,7 +37,8 @@
                     <th>Acuerdo</th>
                     <th class="line">Detalles</th>
                     <th><span class="line"></span>Fecha Acuerdo</th>
-                    <th><span class="line"></span>Tareas Completadas (%)</th>
+                    <th><span class="line"></span>% de cumplimiento</th>
+                    <th>Estado</th>
 
                     {% if request.user.is_superuser %}
                         <th><span class="line"></span>Opciones</th>
@@ -59,8 +60,13 @@
                                 {% endif %}
                             </td>
                         {% else %}
-                            <td>Agrege Detalles</td>
+                            <td></td>
                         {% endif %}
+                        <td>
+                            {% if agreement.percentage == 0 %}<span class="label label-danger">PENDIENTE</span>{% endif %}
+                            {% if agreement.percentage > 0 and agreement.percentage < 100 %}<span class="label label-success">EN PROCESO</span>{% endif %}
+                            {% if agreement.percentage == 100 %}<span class="label label-success">FINALIZADO</span>{% endif %}
+                        </td>
                         {% if request.user.is_superuser %}
                             <td>
                                 <a href="{% url 'acuerdos_sst:agreement_detail' company.slug agreement.pk %}"

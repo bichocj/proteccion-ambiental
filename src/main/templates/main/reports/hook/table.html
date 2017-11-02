@@ -28,9 +28,9 @@
                 <tbody>
                 {% if editable %}
                     <tr valueDetail="{{ value_detail.pk }}">
-                        <td><input type="text" name="numerator" value="{{ value_detail|numerator }}"></td>
-                        <td><input type="text" name="denominator" value="{{ value_detail|denominator }}"></td>
-                        <td><input type="text" name="value" value="{{ value_detail|value }}"></td>
+                        <td><input type="text" class="form-control" name="numerator" value="{{ value_detail|numerator }}"></td>
+                        <td><input type="text" class="form-control" name="denominator" value="{{ value_detail|denominator }}"></td>
+                        <td><input type="text" class="form-control" name="value" value="{{ value_detail|value }}"></td>
                         <td><button class="btn btn-default btn-update-index">actualizar</button></td>
                     </tr>
                 {% else %}

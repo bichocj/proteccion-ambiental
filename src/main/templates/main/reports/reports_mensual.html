@@ -33,80 +33,13 @@
         </div>
 
         {% if index.is_using_sgsst %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row stat">
-                    <div class="col-md-12" style="text-align: left;">
-                        <h4>
-                            Índice de Cumplimiento del SGSST (>=90)
-                        </h4>
-                        <br>
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="col-md-4">
-                                    Actividades Plan Trabajo
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Actividades Programadas Plan Trabajo:
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Record
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>{{ values_details|get_by_key:'sgsst'|numerator }}</td>
-                                <td>{{ values_details|get_by_key:'sgsst'|denominator }}</td>
-                                <td>{{ values_details|get_by_key:'sgsst'|value }}% ICSST</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
+            {% if index.is_using_medidas_control %}
+                {% include 'main/reports/hook/table.html' with title='Índice de Cumplimiento del SGSST (>=90)' title_numerator='Actividades Plan Trabajo' title_denominator='Actividades Programadas Plan Trabajo:' value_detail=values_details|get_by_key:'sgsst' editable=False %}
+            {% endif %}
 
-                </div>
-            </div>
-
-        {% endif %}
-        {% if index.is_using_legal %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row stat">
-                    <div class="col-md-12" style="text-align: left;">
-                        <h4>
-                            Índice Legal (>=100)
-                        </h4>
-
-                        <br>
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="col-md-4">
-                                    Requisitos Cumplidos :
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Requisitos identificados:
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Record
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>{{ values_details|get_by_key:'legal'|numerator }}</td>
-                                <td>{{ values_details|get_by_key:'legal'|denominator }}</td>
-                                <td>{{ index_detail.legal }}% ILEG</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                </div>
-            </div>
+            {% if index.is_using_legal %}
+                {% include 'main/reports/hook/table.html' with title='Índice Legal (>=100)' title_numerator='Requisitos Cumplidos :' title_denominator='Requisitos identificados:' value_detail=values_details|get_by_key:'legal' editable=False %}
+            {% endif %}
 
 
         {% endif %}
@@ -149,54 +82,7 @@
 
         <!-- Solo anual-->
         {% if index.is_using_indice_no_conformidad and month == 12 %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row stat">
-                    <div class="col-md-12" style="text-align: left;">
-                        <h4>
-                            Indice de no Conformidades (>=100)
-                        </h4>
-
-                    </div>
-
-
-                    <div class="col-md-12 field-box">
-                        <div class="col-md-2">
-                            <label>No Conformidades levantadas:</label>
-                        </div>
-                        <div class="col-md-3 ">
-
-                            <input id="numerator_indice_no_conformidad" class="form-control" type="number"
-                                   value="{{ values_details|get_by_key:'indice_no_conformidad' |numerator }}"/>
-                        </div>
-
-                        <div class="field-box">
-                            <div class="col-md-2">
-                                <label>No Conformidades Identificadas:</label>
-                            </div>
-                            <div class="col-md-3">
-                                <input id="denominator_indice_no_conformidad" class="form-control" type="number"
-                                       value="{{ values_details|get_by_key:'indice_no_conformidad'|denominator }}"/>
-                            </div>
-                        </div>
-                        <div class="field-box col-md-2">
-                            <button id="indice_no_conformidad_btn" class="btn-flat inverse">Guardar</button>
-                        </div>
-                    </div>
-
-
-                    <div class="col-md-12">
-                        <div class="col-md-7"></div>
-                        <div class="col-md-5 data pull-right">
-                            <span class="number" id="indice_no_conformidad_val">{{ index_detail.indice_no_conformidad }}%</span>
-                            INC
-                        </div>
-
-
-                    </div>
-
-                </div>
-            </div>
-
+            {% include 'main/reports/hook/table.html' with title='Indice de no Conformidades (>=100)' title_numerator='No Conformidades levantadas:' title_denominator='No Conformidades Identificadas:' value_detail=values_details|get_by_key:'indice_no_conformidad' editable=False %}
         {% endif %}
         {% if index.is_using_medida_iperc and month == 6 %}
             <div id="main-stats" style="margin-top: 50px;">
@@ -1060,13 +946,12 @@
 
         $('.btn-update-index').click(function (e) {
             e.preventDefault();
-            var button = $(e.target);
+            let button = $(e.target);
             button.text('actualizando ...');
             button.prop("disabled", true);
 
             let tr = button.parents('tr');
             let valueDetailId = tr.attr('valueDetail');
-
             let url = '{% url 'main:valuesdetail-detail' 0 %}';
 
             $.ajax({
@@ -1080,8 +965,12 @@
                 }
             )
                 .done(function (response) {
-                        alert('actualizado')
-
+                        //alert('actualizado')
+                        $('.message-alert').show()
+                        $('.message-alert').find('.message').text("Registro Actualizado")
+                        setTimeout(function () {
+                            $('.message-alert').hide()
+                        },5000)
                     }
                 )
                 .fail(function () {

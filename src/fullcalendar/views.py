@@ -11,7 +11,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import ugettext as _
 
 from fullcalendar.forms import CalendarModelForm, EventsModelForm
-from fullcalendar.models import Calendar, Events, DOCTOR, DONE, INSPECTION, CAPACITATION, SIMULATION, CHARLAS, OTRO
+from fullcalendar.models import Calendar, Events, DOCTOR, DONE, INSPECTION, CAPACITATION, SIMULATION, CHARLAS, OTRO, \
+    INDUCCION, CAPACITACION_DE_LEY, CAPACITACION_ESPECIFICA, CAPACITACION_SEGURIDAD, CAPACITACION_DE_SALUD_OCUPACIONAL, \
+    ENTRENAMIENTO
 from main.models import Company
 
 
@@ -122,12 +124,27 @@ def events_json(request, calendar_id):
         all_day = event_start.hour == 0 and event_end.minute == 0
 
         if not event.is_cancelled:
+            color = None
+            if event.type_capacitations == INDUCCION:
+                color = 'yellow'
+            if event.type_capacitations == CAPACITACION_DE_LEY:
+                color = 'red'
+            if event.type_capacitations == CAPACITACION_ESPECIFICA:
+                color = 'purple'
+            if event.type_capacitations == CAPACITACION_SEGURIDAD:
+                color = 'orange'
+            if event.type_capacitations == CAPACITACION_DE_SALUD_OCUPACIONAL:
+                color = 'red'
+            if event.type_capacitations == ENTRENAMIENTO:
+                color = 'blue'
+
             events_list.append({
                 'id': event.id,
                 'start': event_start.strftime('%Y-%m-%dT%H:%M%z'),
                 'end': event_end.strftime('%Y-%m-%dT%H:%M%z'),
                 'title': event.title,
-                'allDay': all_day
+                'allDay': all_day,
+                "color": color
             })
     # if len(events_list) == 0:
     #    raise http.Http404
