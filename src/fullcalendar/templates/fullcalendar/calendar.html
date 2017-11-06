@@ -254,13 +254,15 @@
                                     title: response.title,
                                     start: new Date(response.start),
                                     end: new Date(response.end),
-                                    allDay: response.allDay
+                                    allDay: response.allDay,
+                                    color: response.color
                                 }, 'stick');
                             } else {
                                 w[0].title = response.title;
                                 w[0].start = new Date(response.start);
                                 w[0].end = new Date(response.end);
                                 w[0].allDay = response.allDay;
+                                w[0].color= response.color;
                                 $('#calendar').fullCalendar('updateEvent', w[0]);
                             }
 

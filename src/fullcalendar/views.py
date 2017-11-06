@@ -187,6 +187,21 @@ def save_event(request, slug):
             event.type = event.calendar.type
 
             event.save()
+
+            color = None
+            if event.type_capacitations == INDUCCION:
+                color = 'yellow'
+            if event.type_capacitations == CAPACITACION_DE_LEY:
+                color = 'red'
+            if event.type_capacitations == CAPACITACION_ESPECIFICA:
+                color = 'purple'
+            if event.type_capacitations == CAPACITACION_SEGURIDAD:
+                color = 'orange'
+            if event.type_capacitations == CAPACITACION_DE_SALUD_OCUPACIONAL:
+                color = 'red'
+            if event.type_capacitations == ENTRENAMIENTO:
+                color = 'blue'
+
             response['success'] = True
             response['message'] = _("Save Success")
             response['id'] = event.id
@@ -194,6 +209,7 @@ def save_event(request, slug):
             response['start'] = event.event_start.strftime('%Y-%m-%d %I:%M %p %z')
             response['end'] = event.event_end.strftime('%Y-%m-%d %I:%M %p %z')
             response['allDay'] = event.event_start.hour == 0 and event.event_end.minute == 0
+            response['color'] = color
         else:
             response['success'] = False
             print(form.errors)
@@ -279,6 +295,20 @@ def update_event(request, slug):
             if event.evidence:
                 event.state = DONE
 
+            color = None
+            if event.type_capacitations == INDUCCION:
+                color = 'yellow'
+            if event.type_capacitations == CAPACITACION_DE_LEY:
+                color = 'red'
+            if event.type_capacitations == CAPACITACION_ESPECIFICA:
+                color = 'purple'
+            if event.type_capacitations == CAPACITACION_SEGURIDAD:
+                color = 'orange'
+            if event.type_capacitations == CAPACITACION_DE_SALUD_OCUPACIONAL:
+                color = 'red'
+            if event.type_capacitations == ENTRENAMIENTO:
+                color = 'blue'
+
             event.save()
             response['success'] = True
             response['message'] = _("Save Success")
@@ -287,6 +317,7 @@ def update_event(request, slug):
             response['start'] = event.event_start.strftime('%Y-%m-%d %I:%M %p %z')
             response['end'] = event.event_end.strftime('%Y-%m-%d %I:%M %p %z')
             response['allDay'] = event.event_start.hour == 0 and event.event_end.minute == 0
+            response['color'] = color
         else:
             response['success'] = False
             print(form.errors)
