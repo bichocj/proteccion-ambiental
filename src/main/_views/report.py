@@ -12,6 +12,7 @@ from fullcalendar.models import Events, DONE, CAPACITATION, CHARLAS, OTRO, INSPE
 from improvements.models import Agreement as AgreementImprovement
 from indices.models import Index, Index_Detail, ValuesDetail
 from main.models import Company, LegalRequirement, Worker, CountWorker, Accident
+from main.views import company_edit
 
 
 def refresh_inform(request, company_slug, month):
@@ -20,7 +21,7 @@ def refresh_inform(request, company_slug, month):
     index, _ = Index.objects.get_or_create(company=company)
     index_detail, _ = Index_Detail.objects.get_or_create(index=index, mounth=month)
 
-    count_worker = CountWorker.objects.get(month_year__month=month)
+    count_worker = CountWorker.objects.get(month_year__month=month, company=company)
     workers_in_month = count_worker.workers
     hours_worked_in_month = count_worker.hours
 
@@ -459,7 +460,7 @@ def monthly_report(request, company_slug, month):
     month_label = current_date.replace(day=1).replace(month=int(month)).strftime('%B')
 
     company = get_object_or_404(Company, slug=company_slug)
-    counter = CountWorker.objects.get(month_year__month=month)
+    counter = CountWorker.objects.get(month_year__month=month, company=company)
     workers_in_month = counter.workers
 
     if workers_in_month > 100:

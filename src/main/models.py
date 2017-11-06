@@ -55,7 +55,7 @@ class Worker(models.Model):
     code = models.CharField(_('Codigo'), max_length=100, null=False, blank=False)
     company = models.ForeignKey(Company, null=False)
     cargo = models.IntegerField(_('Cargo'), choices=cargos, default=RECURSOS_HUMANOS, null=False)
-    photo = models.ImageField(_('photo'),null=True, upload_to='photos')
+    photo = models.ImageField(_('photo'), null=True, blank=True, upload_to='photos')
     date_in = models.DateField(_('date in'), null=True, blank=True)
     date_out = models.DateField(_('date out'), null=True, blank=True)
 
@@ -150,7 +150,8 @@ class LegalRequirement(models.Model):
     responsable = models.CharField(max_length=200, null=True, blank=True)
     cumplimiento = models.DecimalField(_('Cumplimiento (%)'), null=True, blank=True, max_digits=10, decimal_places=2)
     observations = models.TextField(_('Observaciones'), null=True, blank=True)
-    type_register = models.IntegerField(_('Estado'), choices=type_registers, default=General, null=False, blank=False)
+    type_register = models.IntegerField(_('area/proceso/documento relacionado'), choices=type_registers,
+                                        default=General, null=False, blank=False)
     state = models.IntegerField(_('Estado'), choices=state, default=NO_CUMPLIO, null=False, blank=False)
     # responsable = models.ForeignKey(Worker)
 
@@ -210,7 +211,8 @@ class MedicControl(models.Model):
         (PROTECCION_RES, "PROTECCION RESPIRATORIA"),
         (VIGILANCIA, "VIGILANCIA CONTRA TME"),
         (PROTECCION_RA, "PROTECCION RADIACION UV"),
-        (RIEGO, "RIESGO GEOLOGICO")
+        (RIEGO, "RIESGO GEOLOGICO"),
+        (8, "NINGUNO")
     )
     company = models.ForeignKey(Company, null=False, blank=False)
     worker = models.ForeignKey(Worker)
@@ -266,11 +268,11 @@ class Task(models.Model):
     meeting = models.ForeignKey(Meeting, null=True, blank=True)
     charge = models.CharField(max_length=100, null=False, blank=False)  # responsable
     content = models.TextField(null=False, blank=False)  # contenido
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
+    start_time = models.DateTimeField('Fecha de inicio')
+    end_time = models.DateTimeField('Fecha final')
     # Falta anadir evidencia de tipo imagen
     # status = models.IntegerField("status", choises = STATUS, default = )
-    expiration = models.DateTimeField()
+    expiration = models.DateTimeField('Fecha de Expiración')
 
 
 class Report(models.Model):

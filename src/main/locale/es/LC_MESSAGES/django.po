@@ -156,11 +156,11 @@ msgstr ""
 
 #: models.py:221
 msgid "exam date"
-msgstr ""
+msgstr "Fecha de Exámen"
 
 #: models.py:222
 msgid "expiration date"
-msgstr ""
+msgstr "Fecha de Expiración"
 
 #: models.py:244
 msgid "Titulo"

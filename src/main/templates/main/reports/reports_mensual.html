@@ -32,7 +32,7 @@
 
         </div>
 
-        {% if index.is_using_medidas_control %}
+        {% if index.is_using_sgsst %}
             {% include 'main/reports/hook/table.html' with title='Índice de Cumplimiento del SGSST (>=90)' title_numerator='Actividades Plan Trabajo' title_denominator='Actividades Programadas Plan Trabajo:' value_detail=values_details|get_by_key:'sgsst' editable=True %}
         {% endif %}
 

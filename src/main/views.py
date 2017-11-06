@@ -209,7 +209,7 @@ def medic_exam_new(request, company_slug):
     title = 'Nuevo Control Medico'
     company = Company.objects.get(slug=company_slug)
     if request.POST:
-        form = MedicControlForm(request.POST, request.FILES)
+        form = MedicControlForm(request.POST, request.FILES, company=company)
         if form.is_valid():
             medic_control = form.save(commit=False)
             medic_control.company = company
@@ -218,7 +218,7 @@ def medic_exam_new(request, company_slug):
         else:
             message = 'Revisa la informacion'
     else:
-        form = MedicControlForm()
+        form = MedicControlForm(company=company)
     return render(request, 'main/layout_form.html', locals())
 
 
@@ -228,7 +228,7 @@ def medic_exam_edit(request, company_slug, medic_pk):
     company = Company.objects.get(slug=company_slug)
     medic_control = MedicControl.objects.get(pk=medic_pk)
     if request.POST:
-        form = MedicControlForm(request.POST, request.FILES, instance=medic_control)
+        form = MedicControlForm(request.POST, request.FILES, instance=medic_control, company=company)
         if form.is_valid():
             medic_control = form.save(commit=False)
             medic_control.company = company
@@ -237,7 +237,7 @@ def medic_exam_edit(request, company_slug, medic_pk):
         else:
             message = 'Revisa la informacion'
     else:
-        form = MedicControlForm(instance=medic_control)
+        form = MedicControlForm(instance=medic_control, company=company)
     return render(request, 'main/layout_form.html', locals())
 
 
@@ -777,14 +777,14 @@ def accident_edit(request, company_slug, accident_pk):
     details = AccidentDetail.objects.filter(accident=accident)
     title = 'editar accidente'
     if request.POST:
-        form = AccidentForm(request.POST, request.FILES, instance=accident, user=request.user)
+        form = AccidentForm(request.POST, request.FILES, instance=accident, user=request.user, company=company)
         if form.is_valid():
             form.save()
             return redirect(reverse('main:accident_list', kwargs={"company_slug": company.slug}))
         else:
             message = 'Revise la informacion'
-    form = AccidentForm(instance=accident, user=request.user)
-    form_detail = AccidentDetailForm()
+    form = AccidentForm(instance=accident, user=request.user, company=company)
+    form_detail = AccidentDetailForm(company=company)
     return render(request, "main/accidents/accidents.html", locals())
 
 
@@ -809,7 +809,7 @@ def accident_new(request, company_slug):
     title = 'NUEVO ACCIDENTES, INCIDENTES, ENFERMEDAD OCUPACIONAL Y ACTO INSEGURO'
     active_item_menu = 'accidents'
     if request.POST:
-        form = AccidentForm(request.POST, request.FILES, user=request.user)
+        form = AccidentForm(request.POST, request.FILES, user=request.user, company=company)
         form_detail = AccidentDetailForm(request.POST)
         if form.is_valid() and form_detail.is_valid():
             accident = form.save(commit=False)
@@ -822,8 +822,8 @@ def accident_new(request, company_slug):
         else:
             message = 'Review all information . . .'
     else:
-        form = AccidentForm(user=request.user)
-        form_detail = AccidentDetailForm()
+        form = AccidentForm(user=request.user, company=company)
+        form_detail = AccidentDetailForm(company=company)
     return render(request, "main/accidents/accidents.html", locals())
 
 
@@ -831,5 +831,3 @@ def accident_new(request, company_slug):
 def agreement(request, company_slug):
     company = get_object_or_404(Company, slug=company_slug)
     return render(request, "main/agreement.html", locals())
-
-

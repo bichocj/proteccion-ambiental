@@ -101,8 +101,12 @@ class MedicControlForm(ModelForm):
         fields = ['worker', 'state', 'program', 'date','date_expiration', 'evidence']
 
     def __init__(self, *args, **kwargs):
+        company = kwargs.pop('company', None)
         super(MedicControlForm, self).__init__(*args, **kwargs)
         _instance = kwargs.pop('instance', None)
+        if company:
+            self.fields["worker"].queryset = Worker.objects.filter(company=company)
+
         add_form_control_class(self.fields)
         self.fields['date'].widget.attrs['class'] = 'form-control input-datepicker'
 
@@ -118,7 +122,10 @@ class AccidentForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
+        company = kwargs.pop('company', None)
         super(AccidentForm, self).__init__(*args, **kwargs)
+        if company:
+            self.fields["worker"].queryset = Worker.objects.filter(company=company)
         _instance = kwargs.pop('instance', None)
         if user:
             group = Group.objects.get(name="Doctor")
@@ -137,7 +144,10 @@ class AccidentDetailForm(ModelForm):
         fields = ['worker']
 
     def __init__(self, *args, **kwargs):
+        company = kwargs.pop('company', None)
         super(AccidentDetailForm, self).__init__(*args, **kwargs)
+        if company:
+            self.fields["worker"].queryset = Worker.objects.filter(company=company)
         _instance = kwargs.pop('instance', None)
         add_form_control_class(self.fields)
 

@@ -29,7 +29,7 @@ class WorkerForm(ModelForm):
 
     class Meta:
         model = Worker
-        fields = '__all__'
+        exclude = ('company',)
 
     def __init__(self, *args, **kwargs):
         super(WorkerForm, self).__init__(*args, **kwargs)
