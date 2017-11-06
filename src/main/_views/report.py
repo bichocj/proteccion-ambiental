@@ -358,20 +358,6 @@ def refresh_inform(request, company_slug, month):
             #         values = ValuesDetail(detail=index_detail, key='medida_iperc')
             #     numerator_medida_iperc = values.numerator
             #     denominator_medida_iperc = values.denominator
-    if index.is_using_liderazgo:
-
-        events = Events.objects.filter(event_start__month=month, calendar__company=company)
-        for owner_index, owner_val in Events.OWNER:
-            value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='lidership__' + owner_val)
-            value_detail.numerator = events.filter(responsable=owner_index, state=DONE).count()
-            value_detail.denominator = events.filter(responsable=owner_index).count()
-            if value_detail.denominator > 0:
-                value_detail.value = (value_detail.numerator * 100 / value_detail.denominator)
-            else:
-                value_detail.value = 0
-
-            value_detail.save()
-
 
 
             # if index_detail.liderazgo == 0:
@@ -397,26 +383,19 @@ def refresh_inform(request, company_slug, month):
             #     numerator_liderazgo = values.numerator
             #     denominator_liderazgo = values.denominator
     if index.is_using_plan_contingencia:
-        # if index_detail.plan_contingencia == 0:
         denominator_plan_contingencia = Agreement.objects.filter(Q(company=company),
                                                                  Q(date__month=month)).count()
         numerator_plan_contingencia = Agreement.objects.filter(Q(company=company), Q(percentage=100),
                                                                Q(date__month=month)).count()
-        # if not numerator_plan_contingencia:
-        #     numerator_plan_contingencia = 0
-        # try:
         value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='plan_contingencia')
-        # except:
-        #     values = ValuesDetail(detail=index_detail, key='plan_contingencia')
         value_detail.numerator = numerator_plan_contingencia
         value_detail.denominator = denominator_plan_contingencia
-        value_detail.save()
-        if denominator_plan_contingencia == 0:
-            index_detail.plan_contingencia = 0
-        else:
-            index_detail.plan_contingencia = numerator_plan_contingencia * 100.00 / denominator_plan_contingencia
 
-    index_detail.save()
+        if denominator_plan_contingencia == 0:
+            value_detail.value = 0
+        else:
+            value_detail.value = numerator_plan_contingencia * 100.00 / denominator_plan_contingencia
+        value_detail.save()
 
     if index.is_using_mejora:
         agreements = AgreementImprovement.objects.filter(date__month=month, company=company)
@@ -450,12 +429,18 @@ def refresh_inform(request, company_slug, month):
     if index.is_using_medidas_control:
         value_detail, _is_new = ValuesDetail.objects.get_or_create(detail=index_detail, key='expose_quimic')
 
-    if index.is_using_medidas_control:
-        value_detail, _is_new = ValuesDetail.objects.get_or_create(detail=index_detail, key='occupational_monitor')
+    if index.is_using_liderazgo:
+        value_detail, _is_new = ValuesDetail.objects.get_or_create(detail=index_detail, key='lidership__')
 
-    if index.is_using_medidas_control:
-        value_detail, _is_new = ValuesDetail.objects.get_or_create(detail=index_detail,
-                                                                   key='measure_occupational_control')
+    if index.is_using_auditorias:
+        value_detail, _is_new = ValuesDetail.objects.get_or_create(detail=index_detail, key='mentoring  ')
+
+    if index.is_using_reconocimiento_trabajador:
+        value_detail, _is_new = ValuesDetail.objects.get_or_create(detail=index_detail, key='recognitizion')
+
+    if index.is_using_engenieer:
+        value_detail, _is_new = ValuesDetail.objects.get_or_create(detail=index_detail, key='disponibility_ing')
+
 
     # else:
     #     try:

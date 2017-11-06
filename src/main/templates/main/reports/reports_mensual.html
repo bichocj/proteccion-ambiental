@@ -32,831 +32,101 @@
 
         </div>
 
-        {% if index.is_using_sgsst %}
-            {% if index.is_using_medidas_control %}
-                {% include 'main/reports/hook/table.html' with title='Índice de Cumplimiento del SGSST (>=90)' title_numerator='Actividades Plan Trabajo' title_denominator='Actividades Programadas Plan Trabajo:' value_detail=values_details|get_by_key:'sgsst' editable=False %}
-            {% endif %}
-
-            {% if index.is_using_legal %}
-                {% include 'main/reports/hook/table.html' with title='Índice Legal (>=100)' title_numerator='Requisitos Cumplidos :' title_denominator='Requisitos identificados:' value_detail=values_details|get_by_key:'legal' editable=False %}
-            {% endif %}
-
-
+        {% if index.is_using_medidas_control %}
+            {% include 'main/reports/hook/table.html' with title='Índice de Cumplimiento del SGSST (>=90)' title_numerator='Actividades Plan Trabajo' title_denominator='Actividades Programadas Plan Trabajo:' value_detail=values_details|get_by_key:'sgsst' editable=True %}
         {% endif %}
-        {% if index.is_using_icsst %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row stat">
-                    <div class="col-md-12" style="text-align: left;">
-                        <h4>
-                            Implementación CSST (>=90)
-                        </h4>
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="col-md-4">
-                                    Acuerdos SST implementados:
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Acuerdos SST planificados:
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Record
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>{{ values_details|get_by_key:'icsst' |numerator }}</td>
-                                <td>{{ values_details|get_by_key:'icsst'|denominator }}</td>
-                                <td>{{ index_detail.icsst }}% ICSST</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
 
-                </div>
-            </div>
+        {% if index.is_using_legal %}
+            {% include 'main/reports/hook/table.html' with title='Índice Legal (>=100)' title_numerator='Requisitos Cumplidos :' title_denominator='Requisitos identificados:' value_detail=values_details|get_by_key:'legal' editable=True %}
+        {% endif %}
+
+        {% if index.is_using_icsst %}
+            {% include 'main/reports/hook/table.html' with title='Implementación CSST (>=90)' title_numerator='Acuerdos SST implementados:' title_denominator='Acuerdos SST planificados:' value_detail=values_details|get_by_key:'icsst' editable=True %}
         {% endif %}
 
         <!-- Solo anual-->
         {% if index.is_using_indice_no_conformidad and month == 12 %}
-            {% include 'main/reports/hook/table.html' with title='Indice de no Conformidades (>=100)' title_numerator='No Conformidades levantadas:' title_denominator='No Conformidades Identificadas:' value_detail=values_details|get_by_key:'indice_no_conformidad' editable=False %}
+            {% include 'main/reports/hook/table.html' with title='Indice de no Conformidades (>=100)' title_numerator='No Conformidades levantadas:' title_denominator='No Conformidades Identificadas:' value_detail=values_details|get_by_key:'indice_no_conformidad' editable=True %}
         {% endif %}
+
         {% if index.is_using_medida_iperc and month == 6 %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row stat">
-                    <div class="col-md-12" style="text-align: left;">
-                        <h4>
-                            Indice de Medidas de Control IPERC (>=90)
-                        </h4>
-
-                    </div>
-
-
-                    <div class="col-md-12 field-box">
-                        <div class="col-md-2">
-                            <label>Controles Implementados:</label>
-                        </div>
-                        <div class="col-md-3 ">
-
-                            <input id="numerator_medida_iperc" class="form-control" type="number"
-                                   value="{{ values_details|get_by_key:'medida_iperc' |numerator }}"/>
-                        </div>
-
-                        <div class="field-box">
-                            <div class="col-md-2">
-                                <label>Controles Programados:</label>
-                            </div>
-                            <div class="col-md-3">
-                                <input id="denominator_medida_iperc" class="form-control" type="number"
-                                       value="{{ values_details|get_by_key:'medida_iperc'|denominator }}"/>
-                            </div>
-                        </div>
-                        <div class="field-box col-md-2">
-                            <button id="medida_iperc_btn" class="btn-flat inverse">Guardar</button>
-                        </div>
-                    </div>
-
-
-                    <div class="col-md-12">
-                        <div class="col-md-7"></div>
-                        <div class="col-md-5 data pull-right">
-                            <span class="number" id="medida_iperc_val">{{ index_detail.medida_iperc }}%</span>
-                            IMC
-                        </div>
-
-
-                    </div>
-
-                </div>
-            </div>
-
+            {% include 'main/reports/hook/table.html' with title='Indice de Medidas de Control IPERC (>=90)' title_numerator='Controles Implementados:' title_denominator='Controles Programados:' value_detail=values_details|get_by_key:'medida_iperc' editable=True %}
         {% endif %}
         {% if index.is_using_liderazgo %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row stat">
-                    <div class="col-md-12" style="text-align: left;">
-                        <h4>
-                            Indice Liderazgo Participativo (>=90)
-                        </h4>
-                        <br>
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="col-md-4">
-                                    Rol
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>Actividades Preventivas Cumplidas
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>Actividades Preventivas Programadas
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>Record
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for values_detail_lidership in values_details|get_by_key:'lidership__' %}
-                                <tr class="first">
-                                    <td>
-                                        {{ values_detail_lidership.key|clean:'lidership__' }}
-                                    </td>
-                                    <td>
-                                        {{ values_detail_lidership.numerator }}
-                                    </td>
-                                    <td>
-                                        {{ values_detail_lidership.denominator }}
-                                    </td>
-                                    <td>
-                                        {{ values_detail_lidership.value }}%
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-
-
-                    {#                    <div class="col-md-12 field-box">#}
-                    {#                        <div class="col-md-2">#}
-                    {#                            <label>Actividades Preventivas Cumplidas:</label>#}
-                    {#                        </div>#}
-                    {#                        <div class="col-md-3 ">#}
-                    {##}
-                    {#                            <input id="numerator_liderazgo" class="form-control" type="number"#}
-                    {#                                   value="{{ values_details|get_by_key:'liderazgo' |numerator }}"/>#}
-                    {#                        </div>#}
-                    {##}
-                    {#                        <div class="field-box">#}
-                    {#                            <div class="col-md-2">#}
-                    {#                                <label>Actividades Preventivas Programadas:</label>#}
-                    {#                            </div>#}
-                    {#                            <div class="col-md-3">#}
-                    {#                                <input id="denominator_liderazgo" class="form-control" type="number"#}
-                    {#                                       value="{{ values_details|get_by_key:'liderazgo'|denominator }}"/>#}
-                    {#                            </div>#}
-                    {#                        </div>#}
-                    {#                        <div class="field-box col-md-2">#}
-                    {#                            <button id="liderazgo_btn" class="btn-flat inverse">Guardar</button>#}
-                    {#                        </div>#}
-                    {#                    </div>#}
-
-
-                    {#                    <div class="col-md-12">#}
-                    {#                        <div class="col-md-7"></div>#}
-                    {#                        <div class="col-md-5 data pull-right">#}
-                    {#                            <span class="number" id="liderazgo_val">{{ index_detail.liderazgo }}%</span>#}
-                    {#                            ILP#}
-                    {#                        </div>#}
-                    {#                    </div>#}
-
-                </div>
-            </div>
-
+            {% include 'main/reports/hook/table.html' with title='Indice Liderazgo Participativo (>=90)' title_numerator='Actividades Preventivas Cumplidas:' title_denominator='Actividades Preventivas Programadas:' value_detail=values_details|get_by_key:'lidership' editable=True %}
         {% endif %}
+
         {% if index.is_using_plan_contingencia %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row stat">
-                    <div class="col-md-12" style="text-align: left;">
-                        <h4>
-                            Indice de Actividades del plan de contingencia (>=90)
-                        </h4>
-
-
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="col-md-4">
-                                    Actividades Preventivas Cumplidas:
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Actividades Preventivas Programadas:
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Record
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>{{ values_details|get_by_key:'plan_contingencia' |numerator }}</td>
-                                <td>{{ values_details|get_by_key:'plan_contingencia'|denominator }}</td>
-                                <td>{{ index_detail.plan_contingencia }}% IAPC</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                </div>
-            </div>
+            {% include 'main/reports/hook/table.html' with title='Indice de Actividades del plan de contingencia (>=90)' title_numerator='Actividades Preventivas Cumplidas:' title_denominator='Actividades Preventivas Programadas:' value_detail=values_details|get_by_key:'plan_contingencia' editable=True %}
         {% endif %}
+
         {% if index.is_using_mejora %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row">
-                    <div class="col-md-12">
-                        <h4>
-                            Índice de Mejora (>=90)
-                        </h4>
-                        <br>
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="col-md-4">
-                                    Actividades de Mejoras Cumplidas:
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Actividades de Mejoras Programadas:
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Record
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>{{ values_details|get_by_key:'improvements'|numerator }}</td>
-                                <td>{{ values_details|get_by_key:'improvements'|denominator }}</td>
-                                <td>{{ values_details|get_by_key:'improvements'|value }}%</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
+            {% include 'main/reports/hook/table.html' with title='Índice de Mejora (>=90)' title_numerator='Actividades de Mejoras Cumplidas:' title_denominator='Actividades de Mejoras Programadas:' value_detail=values_details|get_by_key:'improvements' editable=True %}
         {% endif %}
+
         {% if index.is_using_capacitacion %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row">
-                    <div class="col-md-12">
-                        <h4>
-                            Índice de Capacitación (>=90)
-                        </h4>
-                        <br>
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="col-md-4">
-                                    Capacitaciones Cumplidas:
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Capacitaciones Programadas:
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Record
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>{{ values_details|get_by_key:'training'|numerator }}</td>
-                                <td>{{ values_details|get_by_key:'training'|denominator }}</td>
-                                <td>{{ values_details|get_by_key:'training'|value }}% IC</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
+            {% include 'main/reports/hook/table.html' with title='Índice de Capacitación (>=90)' title_numerator='Capacitaciones Cumplidas' title_denominator='Capacitaciones Programadas:' value_detail=values_details|get_by_key:'training' editable=True %}
         {% endif %}
+
         {% if index.is_using_personal_capacitado %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row">
-                    <div class="col-md-12">
-                        <h4>
-                            Índice de Personal Capacitado (>=90)
-                        </h4>
-                        <br>
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="col-md-4">
-                                    Ponderado (capacitaciones * personas en capacitacion / total de personal ):
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Total de personal en el presente mes:
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Record
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>{{ values_details|get_by_key:'personal_training'|numerator }}</td>
-                                <td>{{ values_details|get_by_key:'personal_training'|denominator }}</td>
-                                <td>{{ values_details|get_by_key:'personal_training'|value }}% IC</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
+            {% include 'main/reports/hook/table.html' with title='Índice de Personal Capacitado (>=90)' title_numerator='Ponderado (capacitaciones * personas en capacitacion / total de personal ):' title_denominator='Total de personal en el presente mes:' value_detail=values_details|get_by_key:'personal_training' editable=True %}
         {% endif %}
+
         {% if index.is_using_intensidad_formativa %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row">
-                    <div class="col-md-12">
-                        <h4>
-                            Índice de Intensidad Formativa
-                        </h4>
-                        <br>
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="col-md-4">
-                                    Horas sumadas de capacitaciones y charlas 'realizadas' * 100
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Total de trabajadores
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Record
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>{{ values_details|get_by_key:'formative_intensity'|numerator }}</td>
-                                <td>{{ values_details|get_by_key:'formative_intensity'|denominator }}</td>
-                                <td>{{ values_details|get_by_key:'formative_intensity'|value }}</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
+            {% include 'main/reports/hook/table.html' with title='Índice de Intensidad Formativa' title_numerator='Horas sumadas de capacitaciones y charlas realizadas * 100' title_denominator='Total de trabajadores:' value_detail=values_details|get_by_key:'formative_intensity' editable=True %}
         {% endif %}
+
         {% if index.is_using_charlas %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row">
-                    <div class="col-md-12">
-                        <h4>
-                            Indice de Charlas Periodicas de Seguridad (>=90)
-                        </h4>
-
-                        <br>
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="col-md-4">
-                                    (N° de Charlas al mes realizados x N° de Trabajadores capacitados) x 100
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    (N° de Charlas al mes programados x N° de Trabajadores programados)
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Record
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>{{ values_details|get_by_key:'security_talks'|numerator }}</td>
-                                <td>{{ values_details|get_by_key:'security_talks'|denominator }}</td>
-                                <td>{{ values_details|get_by_key:'security_talks'|value }}%</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
+            {% include 'main/reports/hook/table.html' with title='Indice de Charlas Periodicas de Seguridad (>=90)' title_numerator='(N° de Charlas al mes realizados x N° de Trabajadores capacitados) x 100' title_denominator='(N° de Charlas al mes programados x N° de Trabajadores programados):' value_detail=values_details|get_by_key:'security_talks' editable=True %}
         {% endif %}
+
         {% if index.is_using_incidentes %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row">
-                    <div class="col-md-12">
-                        <h4>
-                            Indice de Reporte de Incidentes (<=25)
-                        </h4>
-                        <br>
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="col-md-4">
-                                    Nº Trabajadores reportaron x 100
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Nº Dias del mes
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Record
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>{{ values_details|get_by_key:'incidents'|numerator }}</td>
-                                <td>{{ values_details|get_by_key:'incidents'|denominator }}</td>
-                                <td>{{ values_details|get_by_key:'incidents'|value }}%</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
+            {% include 'main/reports/hook/table.html' with title='Indice de Reporte de Incidentes (<=25)' title_numerator='Nº Trabajadores reportaron x 100' title_denominator='Nº Dias del mes' value_detail=values_details|get_by_key:'incidents' editable=True %}
         {% endif %}
+
         {% if index.is_using_inspecciones %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row">
-                    <div class="col-md-12">
-                        <h4>
-                            Indice de Inspecciones (>=90)
-                        </h4>
-                        <br>
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="col-md-4">
-                                    Nº Inspecciones en SST realizadas x 100
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Nº Inspecciones en SST planificadas
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Record
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>{{ values_details|get_by_key:'inspections'|numerator }}</td>
-                                <td>{{ values_details|get_by_key:'inspections'|denominator }}</td>
-                                <td>{{ values_details|get_by_key:'inspections'|value }}%</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
+            {% include 'main/reports/hook/table.html' with title='Indice de Inspecciones (>=90)' title_numerator='Nº Inspecciones en SST realizadas x 100' title_denominator='Nº Inspecciones en SST planificadas' value_detail=values_details|get_by_key:'inspections' editable=True %}
         {% endif %}
+
         {% if index.is_using_observaciones_planeadas %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row">
-                    <div class="col-md-12">
-                        <h4>
-                            Índice de Observaciones planeadas de trabajo (>=100)
-                        </h4>
-                        <br>
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="col-md-4">
-                                    Opt realizadas x Personal Observado x 100
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Opt realizadas x Personal Previsto
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Record
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>{{ values_details|get_by_key:'observations'|numerator }}</td>
-                                <td>{{ values_details|get_by_key:'observations'|denominator }}</td>
-                                <td>{{ values_details|get_by_key:'observations'|value }}%</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
+            {% include 'main/reports/hook/table.html' with title='Índice de Observaciones planeadas de trabajo (>=100)' title_numerator='Opt realizadas x Personal Observado x 100' title_denominator='Opt realizadas x Personal Previsto' value_detail=values_details|get_by_key:'observations' editable=True %}
         {% endif %}
+
         <!-- anual-->
         {% if index.is_using_auditorias %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row">
-                    <div class="col-md-12">
-                        <h4>
-                            Índice de Auditorias
-                        </h4>
-                        <br>
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="col-md-4">
-                                    N° de Auditorias Ejecutadas x100
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    N° de Auditorias Programadas
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Record
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td> ???</td>
-                                <td> ???</td>
-                                <td> ???%</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                </div>
-            </div>
-
+            {% include 'main/reports/hook/table.html' with title='Índice de Auditorias' title_numerator='N° de Auditorias Ejecutadas x100' title_denominator='N° de Auditorias Programadas' value_detail=values_details|get_by_key:'mentoring' editable=True %}
         {% endif %}
+
         {% if index.is_using_simulacros_emergencia %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row">
-                    <div class="col-md-12">
-                        <h4>
-                            Índice de Simulacros de Emergencia (>=90)
-                        </h4>
-                        <br>
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="col-md-4">
-                                    Nº Simulacros de Emerg. realizadas x 100
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Nº Simulacros de Emerg. Planificadas
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Record
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>{{ values_details|get_by_key:'simulacrum'|numerator }}</td>
-                                <td>{{ values_details|get_by_key:'simulacrum'|denominator }}</td>
-                                <td>{{ values_details|get_by_key:'simulacrum'|value }}%</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
+            {% include 'main/reports/hook/table.html' with title='Índice de Simulacros de Emergencia (>=90)' title_numerator='Nº Simulacros de Emerg. realizadas x 100' title_denominator='Nº Simulacros de Emerg. Planificadas' value_detail=values_details|get_by_key:'simulacrum' editable=True %}
         {% endif %}
+
         {% if index.is_using_reconocimiento_trabajador %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row">
-                    <div class="col-md-12">
-                        <h4>
-                            Índice de Reconocimiento del Trabajador (>=90)
-                        </h4>
-                        <br>
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="col-md-4">
-                                    Nº Reconocimientos realizados x 100
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Nº Reconocimientos planificados
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Record
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>???</td>
-                                <td>???</td>
-                                <td>???</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
+            {% include 'main/reports/hook/table.html' with title='Índice de Reconocimiento del Trabajador (>=90)' title_numerator='Nº Reconocimientos realizados x 100' title_denominator='Nº Reconocimientos planificados' value_detail=values_details|get_by_key:'recognitizion' editable=True %}
         {% endif %}
+
         {% if index.is_using_engenieer %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row">
-                    <div class="col-md-12">
-                        <h4>
-                            Índice de Disponibilidad Ingeniero SST (>=90)
-                        </h4>
-
-                        <br>
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="col-md-4">
-                                    Horas Contratadas Ing. SST
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    N° total trabajadores
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Record
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>???</td>
-                                <td>???</td>
-                                <td>???</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
+            {% include 'main/reports/hook/table.html' with title='Índice de Disponibilidad Ingeniero SST (>=90)' title_numerator='Horas Contratadas Ing. SST' title_denominator='N° total trabajadores' value_detail=values_details|get_by_key:'disponibility_ing' editable=True %}
         {% endif %}
+
         {% if index.is_using_first_auxi %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row">
-                    <div class="col-md-12">
-                        <h4>
-                            Índice de Accidentes con Primeros Auxilios (<= 10)
-                        </h4>
-
-                        <br>
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="col-md-4">
-                                    N°Accidentes Primeros Auxilios Acum x 200 000
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Horas Hombre Trabajadas Acumuladas
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Record
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>{{ values_details|get_by_key:'first_aid'|numerator }}</td>
-                                <td>{{ values_details|get_by_key:'first_aid'|denominator }}</td>
-                                <td>{{ values_details|get_by_key:'first_aid'|value }}%</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+            {% include 'main/reports/hook/table.html' with title='Índice de Accidentes con Primeros Auxilios (<= 10)' title_numerator='N°Accidentes Primeros Auxilios Acum x 200 000' title_denominator='Horas Hombre Trabajadas Acumuladas' value_detail=values_details|get_by_key:'first_aid' editable=True %}
         {% endif %}
+
         {% if index.is_using_medic_atention %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row">
-                    <div class="col-md-12">
-                        <h4>
-                            Índice de Accidentes con Atención Médica (<=20)
-                        </h4>
-                        <br>
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="col-md-4">
-                                    N°Accidentes A. Medica Acum x 200 000
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Horas Hombre Trabajadas Acumuladas
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Record
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>{{ values_details|get_by_key:'medic_attention'|numerator }}</td>
-                                <td>{{ values_details|get_by_key:'medic_attention'|denominator }}</td>
-                                <td>{{ values_details|get_by_key:'medic_attention'|value }}%</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+            {% include 'main/reports/hook/table.html' with title='Índice de Accidentes con Atención Médica (<=20)' title_numerator='N°Accidentes A. Medica Acum x 200 000' title_denominator='Horas Hombre Trabajadas Acumuladas' value_detail=values_details|get_by_key:'medic_attention' editable=True %}
         {% endif %}
 
         {% if index.is_using_lose_time %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row">
-                    <div class="col-md-12">
-                        <h4>
-                            Índice de Accidentes con Tiempo Perdido (<=20)
-                        </h4>
-
-                        <br>
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="col-md-4">
-                                    N°Accidentes T. Perdido Acum x 200 000
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Horas Hombre Trabajadas Acumuladas
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Record
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>{{ values_details|get_by_key:'aids_lost'|numerator }}</td>
-                                <td>{{ values_details|get_by_key:'aids_lost'|denominator }}</td>
-                                <td>{{ values_details|get_by_key:'aids_lost'|value }}%</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
+            {% include 'main/reports/hook/table.html' with title='Índice de Accidentes con Tiempo Perdido (<=20)' title_numerator='N°Accidentes T. Perdido Acum x 200 000' title_denominator='Horas Hombre Trabajadas Acumuladas' value_detail=values_details|get_by_key:'aids_lost' editable=True %}
         {% endif %}
+
         {% if index.is_using_fatal_accident %}
-            <div id="main-stats" style="margin-top: 50px;">
-                <div class="row stats-row">
-                    <div class="col-md-12">
-                        <h4>
-                            Índice de Accidentes Fatales (=0)
-                        </h4>
-
-                        <br>
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th class="col-md-4">
-                                    N°Accidentes Fatales x 200 000
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Horas Hombre Trabajadas Acumuladas
-                                </th>
-                                <th class="col-md-4">
-                                    <span class="line"></span>
-                                    Record
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>{{ values_details|get_by_key:'aids_fatal'|numerator }}</td>
-                                <td>{{ values_details|get_by_key:'aids_fatal'|denominator }}</td>
-                                <td>{{ values_details|get_by_key:'aids_fatal'|value }}%</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
+            {% include 'main/reports/hook/table.html' with title='Índice de Accidentes Fatales (=0)' title_numerator='N°Accidentes Fatales x 200 000' title_denominator='Horas Hombre Trabajadas Acumuladas' value_detail=values_details|get_by_key:'aids_fatal' editable=True %}
         {% endif %}
 
         {% if index.is_using_frecuency %}
-            {% include 'main/reports/hook/table.html' with title='Índice de Frecuencia (<=10)' title_numerator='N°Accidentes T. Perdido Acum x 200 000' title_denominator='Horas Hombre Trabajadas Acumuladas' value_detail=values_details|get_by_key:'frecuency' editable=False %}
+            {% include 'main/reports/hook/table.html' with title='Índice de Frecuencia (<=10)' title_numerator='N°Accidentes T. Perdido Acum x 200 000' title_denominator='Horas Hombre Trabajadas Acumuladas' value_detail=values_details|get_by_key:'frecuency' editable=True %}
         {% endif %}
 
         {% if index.is_using_severity %}

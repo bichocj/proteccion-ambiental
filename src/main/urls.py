@@ -93,8 +93,8 @@ urlpatterns += [
         name='report_update'),
     # Indices
     url(r'^(?P<company_slug>[-\w]+)/indices/$', views.indices, name='indices'),
-    url(r'^(?P<company_slug>[-\w]+)/indices/restore/(?P<mounth>\d+)/$', views.restore_indices, name='restore_indices'),
-    url(r'^(?P<company_slug>[-\w]+)/indices/(?P<indice_slug>[-\w]+)/$', views.indices_update, name='indices_update'),
+    # url(r'^(?P<company_slug>[-\w]+)/indices/restore/(?P<mounth>\d+)/$', views.restore_indices, name='restore_indices'),
+    # url(r'^(?P<company_slug>[-\w]+)/indices/(?P<indice_slug>[-\w]+)/$', views.indices_update, name='indices_update'),
 
 ]
 
