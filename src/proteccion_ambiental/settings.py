@@ -24,7 +24,7 @@ SECRET_KEY = 'cbmh=gjuq58rj46%i_t8*_fbf+@he*wc(xj)7c7i%rj(s(@j#y'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*',]
+ALLOWED_HOSTS = ['*', ]
 
 # Application definition
 
@@ -35,6 +35,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
     'rest_framework',
     'sorl.thumbnail',
     'widget_tweaks',
@@ -122,5 +123,8 @@ LOGIN_REDIRECT_URL = '/'
 MEMBER_GROUP = 'equipo JRA'
 COMPANY_JRA_SLUG = 'pro_tam'
 
+DATE_INPUT_FORMATS = ['%Y-%m-%d', ]
 
-DATE_INPUT_FORMATS = ['%Y-%m-%d',]
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
+}

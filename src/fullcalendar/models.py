@@ -129,8 +129,8 @@ class Events(models.Model):
         (SEGURIDAD, "ING. SEGURIDAD"),
         (MEDICO, "MEDICO OCUPACIONAL"),
         (OPERACIONES, "JEFE DE OPERACIONES"),
-        (GERENTE_GENERAL,"GERENTE GENERAL"),
-        (SUPERVISOR_OPERACIONES,"SUPERVISOR DE OPERACIONES")
+        (GERENTE_GENERAL, "GERENTE GENERAL"),
+        (SUPERVISOR_OPERACIONES, "SUPERVISOR DE OPERACIONES")
 
     )
     calendar = models.ForeignKey(Calendar)
@@ -156,3 +156,11 @@ class Events(models.Model):
                                              default=INDUCCION)
     type_inspeccions = models.IntegerField(_('TIpo Inspeccion'), choices=type_inspeccion, null=True, blank=True,
                                            default=INSPECCION_DE_SEGURIDAD)
+
+    def __str__(self):
+        return self.title
+
+
+class AttachFile(models.Model):
+    file = models.FileField(upload_to='attaches')
+    event = models.ForeignKey(Events)

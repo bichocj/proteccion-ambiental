@@ -17,7 +17,24 @@
           media='print'/>
     <link href="{% static 'fullcalendar/fullcalendar/lib/cupertino/jquery-ui.min.css' %}" rel="stylesheet"/>
     <link rel="stylesheet" href="{% static 'main/css/compiled/calendar.css' %}" type="text/css" media="screen"/>
-
+    <style>
+        .fileUpload {
+            position: relative;
+            overflow: hidden;
+            margin: 10px;
+        }
+        .fileUpload input.upload {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin: 0;
+            padding: 0;
+            font-size: 20px;
+            cursor: pointer;
+            opacity: 0;
+            filter: alpha(opacity=0);
+        }
+    </style>
 
 
 {% endblock %}
@@ -54,44 +71,57 @@
                           id="event-form">
                         {% for f in form %}
                             {% csrf_token %}
-                            {% if not f|is_hidden %}
-                                {% if f|is_file_input %}
-                                    <div class="form-group {% if f.errors %}has-error{% endif %}">
-                                        <label for="id_{{ f.name }}"
-                                               class="col-sm-2 control-label">{{ f.label|capfirst }}</label>
-                                        <div class="col-sm-10">
-
-                                            <a id="event_file" target="_blank"></a>
-
-
-                                            {{ f }}
-
-                                            {% for error in f.errors %}
-                                                <p class="help-block">{{ error }}</p>
-                                            {% endfor %}
-                                        </div>
-
-                                    </div>
-                                {% else %}
-                                    <div class="form-group {% if f.errors %}has-error{% endif %}">
-                                        <label for="id_{{ f.name }}"
-                                               class="col-sm-2 control-label">{{ f.label|capfirst }}</label>
-                                        <div class="col-sm-10">
-
-                                            {{ f }}
-
-                                            {% for error in f.errors %}
-                                                <p class="help-block">{{ error }}</p>
-                                            {% endfor %}
-                                        </div>
-
-                                    </div>
-                                {% endif %}
-
-                            {% endif %}
-
+                            {% include 'main/hooks/field_with_label.html' with field=f %}
+{#                            {% if not f|is_hidden %}#}
+{#                                {% if f|is_file_input %}#}
+{#                                    <div class="form-group {% if f.errors %}has-error{% endif %}">#}
+{#                                        <label for="id_{{ f.name }}"#}
+{#                                               class="col-sm-2 control-label">{{ f.label|capfirst }}</label>#}
+{#                                        <div class="col-sm-10">#}
+{##}
+{#                                            <a id="event_file" target="_blank"></a>#}
+{##}
+{##}
+{#                                            {{ f }}#}
+{##}
+{#                                            {% for error in f.errors %}#}
+{#                                                <p class="help-block">{{ error }}</p>#}
+{#                                            {% endfor %}#}
+{#                                        </div>#}
+{##}
+{#                                    </div>#}
+{#                                {% else %}#}
+{#                                    <div class="form-group {% if f.errors %}has-error{% endif %}">#}
+{#                                        <label for="id_{{ f.name }}"#}
+{#                                               class="col-sm-2 control-label">{{ f.label|capfirst }}</label>#}
+{#                                        <div class="col-sm-10">#}
+{##}
+{#                                            {{ f }}#}
+{##}
+{#                                            {% for error in f.errors %}#}
+{#                                                <p class="help-block">{{ error }}</p>#}
+{#                                            {% endfor %}#}
+{#                                        </div>#}
+{##}
+{#                                    </div>#}
+{#                                {% endif %}#}
+{##}
+{#                            {% endif %}#}
 
                         {% endfor %}
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">Archivos</label>
+                            <div class="col-md-8">
+                                <ul id="files_uploaded">
+                                </ul>
+                                <div class="fileUpload btn btn-primary">
+                                    <span>Seleccionar</span>
+                                    <input id="uploadBtn" multiple="true" type="file" class="upload" />
+                                </div>
+
+                            </div>
+                        </div>
+
                         <input type="number" hidden id="event_id_pk">
                     </form>
                 </div>
@@ -161,10 +191,24 @@
                         method: 'POST',
                         dataType: 'json',
                         success: function (response) {
-                            console.log(response.data);
                             if (response.success) {
+                                $.get('{% url 'fullcalendar:attachfile-list' %}?event='+calEvent.id, function(files){
+                                    let ul = $('#files_uploaded');
+                                    for(let f=0; f < files.length; f++){
+                                        let e = files[f].file
+                                        let elem = $('<li>')
+                                        elem.attr('id','file_'+f)
+                                        let elem_a = $('<a>')
+                                        elem_a.attr('href',e).attr('target','_blank')
+                                        e = e.split('/')
+                                        e = e[e.length-1]
+                                        elem_a.text(e)
+                                        elem_a.appendTo(elem)
+                                        ul.append(elem);
+                                    }
+                                });
+
                                 $.each(response.data, function (index, value) {
-                                    console.log(response.data);
                                     if (index == 'event_start' || index == 'event_end') {
                                         $('#id_' + index).val(
                                             moment(value).format(format)
@@ -217,6 +261,10 @@
                 });
             };
 
+            $('#event-form').on('reset', function (e) {
+                $('#files_uploaded').find('li').remove()
+                $("#uploadBtn")[0].value = ''
+            })
             $('#event-form').on('submit', function (e) {
                 e.preventDefault();
 
@@ -225,7 +273,7 @@
 
                 var url = '';
                 var data = new FormData($('#event-form').get(0));
-                data.append('evidence', $("#id_evidence")[0].files[0]);
+{#                data.append('evidence', $("#id_evidence")[0].files[0]);#}
 
                 if ($("#event_id_pk").val() == "") {
                     url = $(this).attr('action');
@@ -237,7 +285,7 @@
                 }
                 var method = $(this).attr('method');
                 //var data = $(this).serializeArray();
-                console.log(data.data);
+{#                console.log(data.data);#}
                 $.ajax({
                     url: url,
                     method: method,
@@ -262,9 +310,32 @@
                                 w[0].start = new Date(response.start);
                                 w[0].end = new Date(response.end);
                                 w[0].allDay = response.allDay;
-                                w[0].color= response.color;
+                                w[0].color= response.color
                                 $('#calendar').fullCalendar('updateEvent', w[0]);
                             }
+
+                            let data = new FormData();
+                            data.append('event', response.id)
+                            data.append('csrfmiddlewaretoken', "{{ csrf_token }}")
+                            let files = $("#uploadBtn")[0].files;
+                            for(let f=0; f < files.length; f++) {
+                                data.append('file', files[f])
+                                $('file_'+f).css('background-color','#ccc')
+                                $.ajax({
+                                    url: '{% url 'fullcalendar:attachfile-list' %}',
+                                    method: 'post',
+                                    data: data,
+                                    dataType: "JSON",
+                                    processData: false,
+                                    contentType: false,
+                                    success: function (response) {
+                                        $('file_'+f).css('background-color','red')
+                                    }
+                                })
+                            }
+
+                            $('#files_uploaded').find('li').remove()
+                            $("#uploadBtn")[0].value = ''
 
                             $('#event-form').trigger("reset");
                             $('#event').modal('hide');
@@ -299,6 +370,14 @@
                 todayBtn: true
             });
 
+            document.getElementById("uploadBtn").onchange = function () {
+                let ul = $('#files_uploaded');
+                for(let f=0; f < this.files.length; f++){
+                    let elem = $('<li>').attr('id','file_'+f)
+                    elem.text(this.files[f].name)
+                    ul.append(elem);
+                }
+            };
 
         });
 

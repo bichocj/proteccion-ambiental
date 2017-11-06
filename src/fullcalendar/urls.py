@@ -1,10 +1,17 @@
 from fullcalendar import views
+from fullcalendar.api import router
 
 __author__ = 'jona'
 
-from django.conf.urls import url
+from django.conf.urls import url, include
 
+
+# API
 urlpatterns = [
+    url(r'^api/', include(router.urls)),
+]
+
+urlpatterns += [
     url(r'^(?P<company_slug>[-\w]+)/list/$', views.calendar_list, name="calendar_list"),
     url(r'^(?P<company_slug>[-\w]+)/new/$', views.calendar_new, name="new"),
     url(r'^(?P<company_slug>[-\w]+)/edit/(?P<calendar_id>\d+)/$', views.calendar_edit, name="edit"),
@@ -18,3 +25,5 @@ urlpatterns = [
     url(r'^event/update/(?P<slug>[-\w]+)/$', views.update_event, name="update_event"),
     url(r'^settings/(?P<slug>[-\w]+)/$', views.settings_calendar, name="settings_calendar")
 ]
+
+

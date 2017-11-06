@@ -81,11 +81,11 @@ class EventsModelForm(ModelForm):
     hours_worked = forms.FloatField(widget=forms.HiddenInput(), required=False)
     number_workers = forms.IntegerField(widget=forms.HiddenInput(), required=False)
 
-    evidence = forms.FileField(label="Evidencia", required=False)
+    # evidence = forms.FileField(label="Evidencia", required=False)
 
     class Meta:
         model = Events
-        exclude = ("is_cancelled", "created_by", "calendar", "type")
+        exclude = ("is_cancelled", "created_by", "calendar", "type", "evidence")
 
     def __init__(self, *args, **kwargs):
         calendar = kwargs.pop('calendar', None)
