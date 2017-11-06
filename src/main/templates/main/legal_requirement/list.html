@@ -1,6 +1,11 @@
 {% extends 'main/layout.html' %}
 {% load static %}
-{% block more_styles %}
+{% block styles %}
+    <style>
+        .content{
+            overflow: initial;
+        }
+    </style>
 {% endblock %}
 {% block content %}
 
@@ -30,7 +35,7 @@
             <th><span class="line"></span>Codigo Normativa</th>
             <th><span class="line"></span>Fecha Publicacion</th>
             <th><span class="line"></span>Titulo Dispositivo Legal</th>
-            <th><span class="line"></span>Que aplica?</th>
+            <th><span class="line"></span>Articulos a Cumplir</th>
             <th><span class="line"></span>Frecuencia</th>
             <th><span class="line"></span>Fecha Ult. Evaluaciones</th>
             <th><span class="line"></span>Responsable</th>

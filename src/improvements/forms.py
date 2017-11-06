@@ -7,11 +7,12 @@ from main.functions import add_form_control_class
 
 
 class MettingForm(ModelForm):
-    date = forms.Field(widget=DateInputWidget)
+    date = forms.Field(widget=DateInputWidget, label=_('fecha de generación de propuesta'))
 
     class Meta:
         model = Metting
-        fields = ['title', 'date']
+        # fields = ['title', 'date', 'description']
+        exclude = ('company','percentage')
 
     def __init__(self, *args, **kwargs):
         super(MettingForm, self).__init__(*args, **kwargs)

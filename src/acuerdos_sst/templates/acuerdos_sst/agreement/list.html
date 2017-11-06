@@ -67,7 +67,12 @@
                             <td>{{ agreement.description }}</td>
                             <td>{{ agreement.date_start }}</td>
                             <td>{{ agreement.date_until }}</td>
-                            <td>{{ agreement.get_state_display }}</td>
+                            <td>
+                            {% if agreement.state == 0 %}<span class="label label-danger">PENDIENTE</span>{% endif %}
+                            {% if agreement.state == 1 %}<span class="label label-success">EN PROCESO</span>{% endif %}
+                            {% if agreement.state == 2 %}<span class="label label-success">FINALIZADO</span>{% endif %}
+
+                            </td>
                             {% if agreement.evidence %}
                                 <td><a href="{{ agreement.evidence.url }}" download="{{ agreement.evidence.file }}"><i
                                         class="icon-download"></i> {{ agreement.evidence.name }}</a></td>

@@ -39,7 +39,7 @@
                     <th><span class="line"></span>Fecha Acuerdo</th>
                     <th><span class="line"></span>% de cumplimiento</th>
                     <th>Estado</th>
-
+                    <th>Observations</th>
                     {% if request.user.is_superuser %}
                         <th><span class="line"></span>Opciones</th>
                     {% endif %}
@@ -63,9 +63,12 @@
                             <td></td>
                         {% endif %}
                         <td>
-                            {% if agreement.percentage == 0 %}<span class="label label-danger">PENDIENTE</span>{% endif %}
+                            {% if agreement.percentage == 0 or not agreement.percentage %}<span class="label label-danger">PENDIENTE</span>{% endif %}
                             {% if agreement.percentage > 0 and agreement.percentage < 100 %}<span class="label label-success">EN PROCESO</span>{% endif %}
                             {% if agreement.percentage == 100 %}<span class="label label-success">FINALIZADO</span>{% endif %}
+                        </td>
+                        <td>
+                            {{ agreement.observations|default:'' }}
                         </td>
                         {% if request.user.is_superuser %}
                             <td>

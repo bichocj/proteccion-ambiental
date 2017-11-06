@@ -6,11 +6,50 @@ from main.models import Company
 
 
 class Metting(models.Model):
-    title = models.CharField(_('title'), max_length=100, null=False, blank=False)
-    date = models.DateField(_('date'), null=False, default=datetime.now)
+    SEGURIDAD = 1
+    OPERACIONES = 2
+    RRHH = 3
+    ACCOUNTING = 4
+    GERENTE_GENERAL = 5
+    ALL = 6
+
+    APPLIED_TO = (
+        (SEGURIDAD, "SEGURIDAD Y SALUD OCUPACIONAL"),
+        (OPERACIONES, "OPERACIONES"),
+        (RRHH, "RR.HH."),
+        (ACCOUNTING, "CONTABILIDAD"),
+        (GERENTE_GENERAL, "GERENTE GENERAL"),
+        (ALL, "TODOS"),
+    )
+
+    CHIEF_SSOMA = 1
+    CHIEF_OPERACIONES = 2
+    CHIEF_SUPER_OPERACIONES = 3
+    CHIEF_RRHH = 4
+    CHIEF_ACCOUNTING = 5
+    CHIEF_GERENTE_GENERAL = 6
+
+    OWNER = (
+        (CHIEF_SSOMA, "Jefe de SSOMA"),
+        (CHIEF_OPERACIONES, "Jefe de operaciones"),
+        (CHIEF_SUPER_OPERACIONES, "Supervisor de operaciones"),
+        (CHIEF_RRHH, "RRHH"),
+        (CHIEF_ACCOUNTING, "Contabilidad"),
+        (CHIEF_GERENTE_GENERAL, "GERENTE GENERAL"),
+    )
+
+    title = models.CharField(_('nombre de la mejora'), max_length=100, null=False, blank=False)
+    description = models.TextField(_('descripción'), null=True, blank=True)
+    inconvenient = models.TextField(_('inconveniente detectado'), null=True, blank=True)
+    propose = models.TextField(_('propuesta'), null=True, blank=True)
+    applied_to = models.IntegerField(_('aplicado a'), choices=APPLIED_TO, default=ALL)
+    date = models.DateField(_('fecha de generación de propuesta'), null=False, default=datetime.now)
+    owner = models.IntegerField(_('responsable de la mejora'), choices=OWNER, default=CHIEF_GERENTE_GENERAL)
+    effectiveness = models.BooleanField(_('efectividad'), default=False)
+
     company = models.ForeignKey(Company, null=False, blank=False, related_name='metting_company')
     percentage = models.DecimalField(_('percentage'), max_digits=10, decimal_places=2, null=True)
-    evidence = models.FileField(_('evidence'), upload_to="improvements/meetings/", null=True)
+    evidence = models.FileField(_('evidence'), upload_to="improvements/meetings/", null=True, blank=True)
 
 
 class Agreement(models.Model):

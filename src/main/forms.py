@@ -94,7 +94,7 @@ class LegalRequirementForm(ModelForm):
 
 class MedicControlForm(ModelForm):
     worker = forms.ModelChoiceField(queryset=Worker.objects.all(), label='Trabajador')
-    evidence = forms.FileField(required=False)
+    evidence = forms.FileField(required=False, label='Exámen')
 
     class Meta:
         model = MedicControl

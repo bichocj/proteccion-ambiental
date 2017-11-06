@@ -18,9 +18,9 @@ def meeting_list(request, company_slug):
 
 def meeting_new(request, company_slug):
     company = Company.objects.get(slug=company_slug)
-    title = 'Nueva Reunion para Acuerdos de Comite SST'
+    title = 'Nueva Reunion de Mejora'
     if request.POST:
-        form = MettingForm(request.POST)
+        form = MettingForm(request.POST, request.FILES)
         if form.is_valid():
             meeting = form.save(commit=False)
             meeting.company = company
