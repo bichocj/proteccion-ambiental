@@ -1,13 +1,12 @@
 from django.contrib import admin
 
-from .models import Format, Report, Task, Accident, Meeting, HistoryFormats, Company, Requirement, Employee
+from .models import Format, Report, Task, Accident, Meeting, HistoryFormats, Company, Requirement
 
 
 class FormatAdmin(admin.ModelAdmin):
     list_display = ('requirement', 'company','type_format')
 
 
-admin.site.register(Employee)
 admin.site.register(Requirement)
 admin.site.register(Format, FormatAdmin)
 admin.site.register(Report)

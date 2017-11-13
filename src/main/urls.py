@@ -75,6 +75,13 @@ urlpatterns = [
 
 ]
 
+# Users
+urlpatterns += [
+    url(r'^(?P<company_slug>[-\w]+)/user/new/$', views.user_new, name='user_new'),
+    url(r'^(?P<company_slug>[-\w]+)/user/delete/(?P<pk>\d+)/$', views.user_delete, name='user_delete'),
+    # url(r'^(?P<company_slug>[-\w]+)/user/edit/(?P<pk>\d+)/$', views.user_edit, name='user_edit'),
+]
+
 # Personal
 urlpatterns += [
     url(r'^(?P<company_slug>[-\w]+)/personal/contador/$', main._views.personal.personal_counter_list,

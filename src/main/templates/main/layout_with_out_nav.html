@@ -109,6 +109,7 @@
                 {% else %}
                     {{ request.user.first_name }}
                 {% endif %}
+                | {{ request.user.groups.all.0 }}
                 <b class="caret"></b>
             </a>
             <ul class="dropdown-menu">

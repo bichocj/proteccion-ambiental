@@ -2,7 +2,7 @@
 import os
 from datetime import datetime
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.db import models
 from django.utils.text import slugify
 from django.utils.translation import ugettext as _
@@ -161,13 +161,13 @@ class Company_Requirement(models.Model):
     requirement = models.ForeignKey(Requirement, null=False)
 
 
-class Employee(User):
-    code = models.CharField(_('Codigo'), max_length=50, null=False, blank=False)
-    company = models.ForeignKey(Company, null=False, blank=False)
-    time = models.IntegerField(default=0)
-
-
-Company.user = property(lambda e: Employee.objects.filter(company=e).first())
+# class Employee(User):
+#     code = models.CharField(_('Codigo'), max_length=50, null=False, blank=False)
+#     company = models.ForeignKey(Company, null=False, blank=False)
+#     time = models.IntegerField(default=0)
+#
+#
+# Company.user = property(lambda e: Employee.objects.filter(company=e).first())
 
 
 class Meeting(models.Model):
@@ -309,10 +309,16 @@ class UseProduct(models.Model):
     quantity = models.IntegerField(null=False, blank=False)
 
 
-class Work(models.Model):
-    employee = models.ForeignKey(Employee, null=False, blank=False)
-    task = models.ForeignKey(Task, null=False, blank=False)
-    time = models.DateTimeField()
+# class Work(models.Model):
+#     employee = models.ForeignKey(Employee, null=False, blank=False)
+#     task = models.ForeignKey(Task, null=False, blank=False)
+#     time = models.DateTimeField()
 
 
-User.company = property(lambda e: Company.objects.get(employee__pk=e.pk))  # NOQA
+# User.company = property(lambda e: Company.objects.get(employee__pk=e.pk))  # NOQA
+
+
+class UserCompany(models.Model):
+    user = models.ForeignKey(User)
+    group = models.ForeignKey(Group)
+    company = models.ForeignKey(Company, null=True, blank=True)

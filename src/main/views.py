@@ -5,19 +5,21 @@ from decimal import Decimal
 
 from django import http
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User, Group
 from django.core.urlresolvers import reverse
 from django.db.models import Q
+from django.http import Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import ugettext as _
 
 from accounts.forms import WorkerForm
 from indices.forms import IndexForm
 from indices.models import Index, Index_Detail, ValuesDetail
-from main.models import Worker, Employee, AccidentDetail
+from main.models import AccidentDetail, UserCompany, Worker
 from proteccion_ambiental.settings import COMPANY_JRA_SLUG
-from .forms import CompanyForm, FormatForm, AccidentForm, EmployeeForm, RequirementForm, LegalRequirementForm, \
-    MedicControlForm, AccidentDetailForm
+from .forms import CompanyForm, FormatForm, AccidentForm, RequirementForm, LegalRequirementForm, \
+    MedicControlForm, AccidentDetailForm, UserCompanyForm
 from .models import Company, Format, Requirement, HistoryFormats, Accident, Company_Requirement, LegalRequirement, \
     MedicControl
 
@@ -26,16 +28,16 @@ from .models import Company, Format, Requirement, HistoryFormats, Accident, Comp
 def home(request):
     company_jra_slug = COMPANY_JRA_SLUG
     user = request.user
-    try:
-        employee = Employee.objects.get(user_ptr_id=user.pk)
-    except Employee.DoesNotExist:
-        employee = None
-    show = False
-    show_all = False
-    if employee and employee.company.slug == company_jra_slug:
-        show = True
-    if user.groups.filter(name="Doctor").exists():
-        show_all = True
+    # try:
+    #     employee = Employee.objects.get(user_ptr_id=user.pk)
+    # except Employee.DoesNotExist:
+    #     employee = None
+    # show = False
+    # show_all = False
+    # if employee and employee.company.slug == company_jra_slug:
+    #     show = True
+    # if user.groups.filter(name="Doctor").exists():
+    #     show_all = True
     return render(request, 'main/home.html', locals())
 
 
@@ -50,6 +52,7 @@ def config(request, company_slug):
 @login_required
 def panel(request, company_slug):
     company = get_object_or_404(Company, slug=company_slug)
+    users = UserCompany.objects.filter(company=company)
     return render(request, 'main/panel.html', locals())
 
 
@@ -57,19 +60,14 @@ def panel(request, company_slug):
 @login_required
 def company_list(request):
     user = request.user
-    if user.is_superuser or User.objects.filter(pk=user.pk, groups__name='Doctor').exists():
-        companias = Company.objects.all()
-        companies = list()
-        for c in companias:
-            if not c.slug == COMPANY_JRA_SLUG:
-                companies.append(c)
+    if user.is_superuser:
+        companies = Company.objects.exclude(slug=COMPANY_JRA_SLUG)
     else:
-        employee = Employee.objects.get(user_ptr_id=user.pk)
-        company = employee.company
-        companies = list()
-        companies.append(company)
+        user_company = UserCompany.objects.get(user=user)
+        company = user_company.company
+        companies = [company, ]
 
-    return render(request, "main/company/list.html", locals())
+        return render(request, "main/company/list.html", locals())
 
 
 @login_required
@@ -77,8 +75,8 @@ def company_new(request):
     title = _('Nueva Compañía')
     if request.POST:
         company_form = CompanyForm(request.POST, request.FILES)
-        employee_form = EmployeeForm(request.POST)
-        if company_form.is_valid() and employee_form.is_valid():
+        # employee_form = EmployeeForm(request.POST)
+        if company_form.is_valid():  # and employee_form.is_valid():
             company = company_form.save()
             requirements = Requirement.objects.filter(type_requirement=Requirement.ENTERPRISE)
             for requirement in requirements:
@@ -94,16 +92,16 @@ def company_new(request):
                         h.format = f
                         h.save()
 
-            employee = employee_form.save(commit=False)
-            employee.company = company
-            employee.save()
+            # employee = employee_form.save(commit=False)
+            # employee.company = company
+            # employee.save()
             return redirect(reverse('main:company_list'))
         else:
             message = 'ERROR: Revise la informacion...!'
             return render(request, "main/company/form.html", locals())
     else:
         company_form = CompanyForm()
-        employee_form = EmployeeForm()
+        # employee_form = EmployeeForm()
     return render(request, "main/company/form.html", locals())
 
 
@@ -115,24 +113,24 @@ def company_edit(request, company_slug):
         update_action = request.GET.get('update')
         if update_action == 'company':
             company_form = CompanyForm(request.POST, request.FILES, instance=company)
-            employee_form = EmployeeForm(instance=company.user)
+            # employee_form = EmployeeForm(instance=company.user)
             if company_form.is_valid():
                 company = company_form.save()
                 return redirect(reverse('main:company_list'))
-        if update_action == 'contact':
-            employee_form = EmployeeForm(request.POST, request.FILES, instance=company.user)
+                # if update_action == 'contact':
+            # employee_form = EmployeeForm(request.POST, request.FILES, instance=company.user)
             company_form = CompanyForm(instance=company)
-            if employee_form.is_valid():
-                if company.user:
-                    employee = employee_form.save()
-                else:
-                    employee = employee_form.save(commit=False)
-                    employee.company = company
-                    employee.save()
-                return redirect(reverse('main:company_list'))
+            # if employee_form.is_valid():
+            #     if company.user:
+            #         employee = employee_form.save()
+            #     else:
+            #         employee = employee_form.save(commit=False)
+            #         employee.company = company
+            #         employee.save()
+            #     return redirect(reverse('main:company_list'))
     else:
         company_form = CompanyForm(instance=company)
-        employee_form = EmployeeForm(instance=company.user)
+        # employee_form = EmployeeForm(instance=company.user)
 
     return render(request, "main/company/edit.html", locals())
 
@@ -640,9 +638,10 @@ def restore_indices(request, company_slug, mounth):
 
 
 def indices_update(request, company_slug, indice_slug):
-    company = get_object_or_404(Company, slug=company_slug)
-    index = Index.objects.get(company=company)
-    return http.HttpResponse(json.dumps(response), content_type="application/json")
+    # company = get_object_or_404(Company, slug=company_slug)
+    # index = Index.objects.get(company=company)
+    # return http.HttpResponse(json.dumps(response), content_type="application/json")
+    raise Http404
 
 
 @login_required
@@ -831,3 +830,63 @@ def accident_new(request, company_slug):
 def agreement(request, company_slug):
     company = get_object_or_404(Company, slug=company_slug)
     return render(request, "main/agreement.html", locals())
+
+
+def user_new(request, company_slug):
+    company = get_object_or_404(Company, slug=company_slug)
+    if request.POST:
+        form = UserCompanyForm(request.POST)
+        if form.is_valid():
+            user = User(
+                first_name=form.cleaned_data.get('first_name'),
+                username=form.cleaned_data.get('username'),
+                email=form.cleaned_data.get('username')
+            )
+            user.set_password(form.cleaned_data.get('password1'))
+            group = Group.objects.get(pk=form.cleaned_data.get('group'))
+            user.save()
+            user.groups.add(group)
+            user.save()
+            user_company = UserCompany.objects.create(
+                group=group,
+                user=user,
+                company=company)
+            return redirect(reverse('main:panel', kwargs={'company_slug': company_slug}))
+    else:
+        form = UserCompanyForm()
+    title = _('New user in %(company)s') % {'company': company.name}
+    return render(request, 'main/layout_form.html', locals())
+
+
+def user_delete(request, company_slug, pk):
+    company = get_object_or_404(Company, slug=company_slug)
+    user_company = get_object_or_404(UserCompany, pk=pk)
+    user_company.delete()
+    return redirect(reverse('main:panel', kwargs={'company_slug': company_slug}))
+
+# def user_edit(request, company_slug, pk):
+#     company = get_object_or_404(Company, slug=company_slug)
+#     user_company = get_object_or_404(UserCompany, pk=pk)
+#     if request.POST:
+#         form = UserCompanyForm(request.POST)
+#         if form.is_valid():
+#             user = user_company.user
+#             user.first_name = form.cleaned_data.get('first_name')
+#             user.username = form.cleaned_data.get('username')
+#             user.set_password(form.cleaned_data.get('password'))
+#             user.save()
+#
+#             user_company.group = Group.objects.get(pk=form.cleaned_data.get('group')),
+#             user_company.save()
+#
+#             return redirect(reverse('main:panel', kwargs={'company_slug': company_slug}))
+#     else:
+#         form = UserCompanyForm(
+#             {
+#                 'first_name': user_company.user.first_name,
+#                 'username': user_company.user.username,
+#                 'group': user_company.group,
+#              }
+#         )
+#     title = _('Edit user in %(company)s') % {'company': company.name}
+#     return render(request, 'main/layout_form.html', locals())

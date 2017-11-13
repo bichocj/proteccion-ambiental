@@ -39,7 +39,7 @@
                     <span>{{ company.short_name|upper }}</span>
                 </a>
             </li>
-            {% if not request.user|has_group:"Doctor" %}
+            {% if perms.main.change_company_requirement %}
                 <li>
                     <div class="pointer hide">
                         <div class="arrow"></div>
@@ -50,7 +50,8 @@
                         <span>Requerimientos</span>
                     </a>
                 </li>
-
+            {% endif %}
+            {% if perms.main.change_worker %}
                 <li>
                     <div class="pointer hide">
                         <div class="arrow"></div>
@@ -80,7 +81,8 @@
                     </ul>
 
                 </li>
-
+            {% endif %}
+            {% if perms.main.change_accident %}
                 <li>
                     <div class="pointer hide">
                         <div class="arrow"></div>
@@ -93,46 +95,46 @@
                         <span>Accidentes</span>
                     </a>
                 </li>
+            {% endif %}
+            {% if perms.main.change_mediccontrol %}
+                <li>
+                    <div class="pointer hide">
+                        <div class="arrow"></div>
+                        <div class="arrow_border"></div>
+                    </div>
 
-
-                {% if request.user|has_group:"Doctor" or request.user.is_superuser %}
-                    <li>
-                        <div class="pointer hide">
-                            <div class="arrow"></div>
-                            <div class="arrow_border"></div>
-                        </div>
-
-                        <a href="{% url 'main:medic_exam' company.slug %}">
-                            <i class="icon-heart"></i>
-                            <span>ControlMedico</span>
-                        </a>
-                    </li>
-                {% endif %}
-                <!--<li>
+                    <a href="{% url 'main:medic_exam' company.slug %}">
+                        <i class="icon-heart"></i>
+                        <span>ControlMedico</span>
+                    </a>
+                </li>
+            {% endif %}
+            <!--<li>
                 <a href="{% url 'main:indices' company.slug %}">
                     <i class="icon-th-large"></i>
                     <span>Indicadores SST</span>
                 </a>
             </li>-->
-                <!--<li>
+            <!--<li>
                 <a href="{% url 'main:requirements_list' company.slug %}">
                     <i class="icon-plus"></i>
                     <span>Otros Indicadores</span>
                 </a>
             </li>-->
-            {% endif %}
-            <li>
-                <div class="pointer hide">
-                    <div class="arrow"></div>
-                    <div class="arrow_border"></div>
-                </div>
-                <a href="{% url 'fullcalendar:calendar_list' company.slug %}">
-                    <i class="icon-calendar-empty"></i>
-                    <span>Programas Anuales</span>
-                </a>
-            </li>
 
-            {% if not request.user|has_group:"Doctor" %}
+            {% if perms.fullcalendar.change_events %}
+                <li>
+                    <div class="pointer hide">
+                        <div class="arrow"></div>
+                        <div class="arrow_border"></div>
+                    </div>
+                    <a href="{% url 'fullcalendar:calendar_list' company.slug %}">
+                        <i class="icon-calendar-empty"></i>
+                        <span>Programas Anuales</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% if perms.acuerdos_sst.change_metting %}
                 <li>
                     <div class="pointer hide">
                         <div class="arrow"></div>
@@ -143,6 +145,8 @@
                         <span>Comite SST</span>
                     </a>
                 </li>
+            {% endif %}
+            {% if perms.improvements.change_metting %}
                 <li>
                     <div class="pointer hide">
                         <div class="arrow"></div>
@@ -153,6 +157,8 @@
                         <span>Mejoras</span>
                     </a>
                 </li>
+            {% endif %}
+            {% if perms.main.change_legalrequirement %}
                 <li>
                     <div class="pointer hide">
                         <div class="arrow"></div>
@@ -163,6 +169,8 @@
                         <span>Requisitos Legales</span>
                     </a>
                 </li>
+            {% endif %}
+            {% if perms.indices.change_index_detail %}
                 <li>
                     <div class="pointer hide">
                         <div class="arrow"></div>
