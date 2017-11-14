@@ -181,4 +181,5 @@ class UserCompanyForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super(UserCompanyForm, self).__init__(*args, **kwargs)
         self.fields['username'].label = _('email')
+        self.fields['group'] = forms.ChoiceField(choices=[(o.id, str(o)) for o in Group.objects.all()], label=_('group'))
         add_form_control_class(self.fields)

@@ -67,7 +67,7 @@ def company_list(request):
         company = user_company.company
         companies = [company, ]
 
-        return render(request, "main/company/list.html", locals())
+    return render(request, "main/company/list.html", locals())
 
 
 @login_required

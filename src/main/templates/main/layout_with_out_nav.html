@@ -50,7 +50,7 @@
     <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
     <style>
         .message-alert{
             z-index: 10000;
@@ -133,7 +133,7 @@
 
 <!-- knob -->
 {% if not calendar and not accident_view and not report_view %}
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
+
 {#    <script src="{% static 'fullcalendar/fullcalendar/lib/jquery.min.js' %}"></script>#}
     <script src="{% static 'main/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'main/js/jquery-ui-1.10.2.custom.min.js' %}"></script>

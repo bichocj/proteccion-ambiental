@@ -186,6 +186,9 @@
                             <a href="{% url 'main:reports' company.slug %}">Por mes</a>
                         </li>
                         <li>
+                            <a href="{% url 'main:reports_resume' company.slug %}">Grafico</a>
+                        </li>
+                        <li>
                             <a href="{% url 'main:indices' company.slug %}">{% trans 'indices'|capfirst %}</a>
                         </li>
                     </ul>

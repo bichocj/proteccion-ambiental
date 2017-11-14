@@ -49,12 +49,6 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>{{ company.user.get_full_name }}</td>
-                                <td>{{ company.user.username }}</td>
-                                <td>ADMIN</td>
-                                <td></td>
-                            </tr>
                             {% for u in users %}
                                 <tr>
                                     <td>{{ u.user.get_full_name }}</td>

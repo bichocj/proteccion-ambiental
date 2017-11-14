@@ -94,10 +94,10 @@ urlpatterns += [
 urlpatterns += [
     # Reportes
     url(r'^(?P<company_slug>[-\w]+)/informes/$', main._views.report.reports, name='reports'),
-    url(r'^(?P<company_slug>[-\w]+)/informe/mensual/(?P<month>\d+)/$', main._views.report.monthly_report,
-        name='report_monthly'),
-    url(r'^(?P<company_slug>[-\w]+)/informe/mensual/actualizar/(?P<month>\d+)/$', main._views.report.refresh_inform,
-        name='report_update'),
+    url(r'^(?P<company_slug>[-\w]+)/informe/resumen/$', main._views.report.report_resume, name='reports_resume'),
+    url(r'^(?P<company_slug>[-\w]+)/informe/resumen/data/(?P<key>[-\w]+)/$', main._views.report.report_resume_data, name='report_resume_data'),
+    url(r'^(?P<company_slug>[-\w]+)/informe/mensual/(?P<month>\d+)/$', main._views.report.monthly_report, name='report_monthly'),
+    url(r'^(?P<company_slug>[-\w]+)/informe/mensual/actualizar/(?P<month>\d+)/$', main._views.report.refresh_inform, name='report_update'),
     # Indices
     url(r'^(?P<company_slug>[-\w]+)/indices/$', views.indices, name='indices'),
     # url(r'^(?P<company_slug>[-\w]+)/indices/restore/(?P<mounth>\d+)/$', views.restore_indices, name='restore_indices'),

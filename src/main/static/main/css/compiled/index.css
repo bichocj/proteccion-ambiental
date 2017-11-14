@@ -39,7 +39,7 @@
   box-shadow: inset 0px 3px 4px -1px #fafafa; }
 
 /* Stats chart */
-#statsChart {
+#statsChart, .statsChart {
   height: 250px;
   margin-top: 65px; }
 

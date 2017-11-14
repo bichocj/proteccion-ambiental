@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
+import json
 from datetime import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.db.models import Q, Sum
+from django.http import HttpResponse
 from django.shortcuts import redirect, get_object_or_404, render
 from django.utils.translation import ugettext as _
 
@@ -442,7 +444,6 @@ def refresh_inform(request, company_slug, month):
     if index.is_using_engenieer:
         value_detail, _is_new = ValuesDetail.objects.get_or_create(detail=index_detail, key='disponibility_ing')
 
-
     # else:
     #     try:
     #         values = ValuesDetail.objects.get(detail=index_detail, key='plan_contingencia')
@@ -484,3 +485,62 @@ def reports(request, company_slug):
               range(1, 13)]
     year = datetime.now().year
     return render(request, "main/reports/reports.html", locals())
+
+
+@login_required()
+def report_resume(request, company_slug):
+    company = get_object_or_404(Company, slug=company_slug)
+    index, _ = Index.objects.get_or_create(company=company)
+    # current_date = datetime.now()
+    # months = [{'mes': '{}'.format(_(current_date.replace(day=1).replace(month=i).strftime('%B'))), 'index': i} for i in
+    #           range(1, 13)]
+    # year = datetime.now().year
+
+
+    return render(request, 'main/reports/reports_draw.html', locals())
+
+
+@login_required()
+def report_resume_data(request, company_slug, key):
+    company = get_object_or_404(Company, slug=company_slug)
+    index, _ = Index.objects.get_or_create(company=company)
+    # index_details = Index_Detail.objects.filter(index=index).order_by('mounth')
+    # for i in index_details:
+    #     print(i)
+
+    value_details = ValuesDetail.objects.filter(detail__index=index, key=key).order_by('detail__mounth')
+
+    values = list()
+    for i in range(1,12):
+        val = 0
+        for v in value_details:
+            if v.detail.mounth == i:
+                val = int(v.value)
+                break
+
+        values.append([i, val])
+
+    data = {
+        'data1': {
+            "label": key,
+            "data": values
+        },
+        'data2': {
+            "label": "USA",
+            "data": [[1, 100],
+                     [2, 100],
+                     [3, 100],
+                     [4, 100],
+                     [5, 100],
+                     [6, 100],
+                     [7, 100],
+                     [8, 100],
+                     [9, 100],
+                     [10, 100],
+                     [11, 100],
+                     [12, 100]
+                     ]
+        },
+    }
+
+    return HttpResponse(json.dumps(data))

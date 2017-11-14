@@ -1,5 +1,5 @@
 /* Stats chart */
-#statsChart {
+#statsChart, .statsChart  {
   width: 97%;
   height: 250px;
   margin-top: 65px; }
