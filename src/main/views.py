@@ -141,6 +141,8 @@ def format_list(request, company_slug, requirement_pk):
     requirement = Requirement.objects.get(pk=requirement_pk)
     title = requirement.name
     formats = Format.objects.filter(company=company, requirement=requirement)
+
+    domain = request.META['HTTP_HOST']
     formats_pdf = list()
     formats_xlsx = list()
     if formats.count() != 0:
