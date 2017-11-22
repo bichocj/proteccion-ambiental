@@ -36,7 +36,7 @@
                     <tbody>
                     {% for format in formats_pdf %}
                         <tr>
-                            <td><a href="https://view.officeapps.live.com/op/view.aspx?src={{ domain }}{{ format.file.url }}" download="{{ format.file.file }}"><i class="icon-download"></i> {{ format.name }}</a></td>{% if request.user.is_superuser %}
+                            <td><a href="https://view.officeapps.live.com/op/view.aspx?src={{ domain }}{{ format.file.url }}" download="https://view.officeapps.live.com/op/view.aspx?src={{ domain }}{{ format.file.url }}"><i class="icon-download"></i> {{ format.name }}</a></td>{% if request.user.is_superuser %}
                             <td>
                                 <div>
                                     <button type="button" class="btn btn-default" data-toggle="modal"
@@ -122,7 +122,7 @@
 
                     {% for format in formats_xlsx %}
                         <tr>
-                            <td><a href="https://view.officeapps.live.com/op/view.aspx?src={{ domain }}{{ format.file.url }}" download="{{ format.file.file }}"> <i class="icon-download"></i> {{ format.name }}</a></td>
+                            <td><a href="https://view.officeapps.live.com/op/view.aspx?src={{ domain }}{{ format.file.url }}" download="https://view.officeapps.live.com/op/view.aspx?src={{ domain }}{{ format.file.url }}"> <i class="icon-download"></i> {{ format.name }}</a></td>
                         {% if request.user.is_superuser %}
                             <td>
                                 <div>
@@ -130,7 +130,7 @@
                                             data-target="#formatForm{{ format.pk }}"
                                             data-whatever="r4">Historial
                                     </button>
-                                    <a href="{% url 'main:format_update' company_slug requirement_pk format.pk %}"
+                                    <a href="{% url 'main:format_update' company_slug requirement_pk format.vi pk %}"
                                        class="btn btn-default">Actualizar</a>
                                 </div>
                             {% endif %}
