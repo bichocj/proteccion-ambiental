@@ -25,6 +25,7 @@ def meeting_new(request, company_slug):
             meeting = form.save(commit=False)
             meeting.company = company
             meeting.save()
+            form.save_m2m()
             return redirect(reverse('improvements:agreement_list',
                                     kwargs={"meeting_pk": meeting.pk, "company_slug": company_slug}))
         else:

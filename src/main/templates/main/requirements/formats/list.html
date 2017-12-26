@@ -46,6 +46,9 @@
                                     <a href="{% url 'main:format_update' company_slug requirement_pk format.pk %}"
                                        class="btn btn-default">Actualizar
                                     </a>
+                                    <a href="{% url 'main:format_delete' company_slug requirement_pk format.pk %}"
+                                       class="btn btn-default btn-confirm-delete">Eliminar
+                                    </a>
                                 </div>
                             {% endif %}
                         {% if request.user.is_superuser %}
@@ -133,6 +136,8 @@
                                     </button>
                                     <a href="{% url 'main:format_update' company_slug requirement_pk format.pk %}"
                                        class="btn btn-default">Actualizar</a>
+                                    <a href="{% url 'main:format_delete' company_slug requirement_pk format.pk  %}"
+                                       class="btn btn-default btn-confirm-delete">Eliminar</a>
                                 </div>
                             {% endif %}
                             {% if request.user.is_superuser %}

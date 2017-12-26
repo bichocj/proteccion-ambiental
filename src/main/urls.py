@@ -63,6 +63,8 @@ urlpatterns = [
         views.format_update, name='format_update'),
     url(r'^(?P<company_slug>[-\w]+)/requirement/(?P<requirement_pk>\d+)/format/new/$', views.format_new,
         name='format_new'),
+    url(r'^(?P<company_slug>[-\w]+)/requirement/(?P<requirement_pk>\d+)/format/(?P<format_pk>\d+)/delete/$', views.format_delete,
+        name='format_delete'),
 
     url(r'^(?P<company_slug>[-\w]+)/config/$', views.config, name='config'),
 

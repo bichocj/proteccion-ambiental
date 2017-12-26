@@ -746,6 +746,12 @@ def format_new_other(request, company_slug, requirement_pk):
 
 
 @login_required
+def format_delete(request, company_slug, requirement_pk, format_pk):
+    format = get_object_or_404(Format, pk=format_pk)
+    format.delete()
+    return redirect(reverse('main:format_list', kwargs={"company_slug": company_slug, "requirement_pk": requirement_pk}))
+
+@login_required
 def format_new(request, company_slug, requirement_pk):
     company = get_object_or_404(Company, slug=company_slug)
     requirement = get_object_or_404(Requirement, pk=requirement_pk)

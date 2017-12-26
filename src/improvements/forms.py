@@ -19,7 +19,7 @@ class MettingForm(ModelForm):
         _instance = kwargs.pop('instance', None)
         add_form_control_class(self.fields)
         # self.fields['date'].widget.attrs['class'] = 'form-control input-datepicker'
-
+    
 
 class AgreementForm(ModelForm):
     date = forms.Field(widget=DateInputWidget)

@@ -7,13 +7,13 @@
     <div id="pad-wrapper" class="users-list">
         <div class="table-wrapper products-table">
             <div class="row header">
-                <h3>REUNIONES DE ACUERDOS DE MEJORAS</h3>
+                <h3>PROPUESTAS DE MEJORAS</h3>
                 {% if request.user.is_superuser %}
                     <div class="col-md-4 col-sm-12 col-xs-12 pull-right">
                         <a href="{% url 'improvements:meeting_new' company.slug %}"
                            class="btn-flat success pull-right">
                             <span>&#43;</span>
-                            Nueva Reunion
+                            Nueva Propuesta
                         </a>
                     </div>
                 {% endif %}

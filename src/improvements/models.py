@@ -4,6 +4,10 @@ from django.db import models
 from django.utils.translation import ugettext as _
 from main.models import Company
 
+class MettingAppliedTo(models.Model):    
+    name = models.CharField(_('responsable'), max_length=100, null=False, blank=False)
+    def __str__(self):
+        return self.name
 
 class Metting(models.Model):
     SEGURIDAD = 1
@@ -42,7 +46,7 @@ class Metting(models.Model):
     description = models.TextField(_('descripción'), null=True, blank=True)
     inconvenient = models.TextField(_('inconveniente detectado'), null=True, blank=True)
     propose = models.TextField(_('propuesta'), null=True, blank=True)
-    applied_to = models.IntegerField(_('aplicado a'), choices=APPLIED_TO, default=ALL)
+    applied_to = models.ManyToManyField(MettingAppliedTo, verbose_name=_('Aplicado a'))
     date = models.DateField(_('fecha de generación de propuesta'), null=False, default=datetime.now)
     owner = models.IntegerField(_('responsable de la mejora'), choices=OWNER, default=CHIEF_GERENTE_GENERAL)
     effectiveness = models.BooleanField(_('efectividad'), default=False)
@@ -51,6 +55,9 @@ class Metting(models.Model):
     percentage = models.DecimalField(_('percentage'), max_digits=10, decimal_places=2, null=True)
     evidence = models.FileField(_('evidence'), upload_to="improvements/meetings/", null=True, blank=True)
 
+    def __str__(self):
+        return self.title
+    
 
 class Agreement(models.Model):
     metting = models.ForeignKey(Metting, null=True, blank=True)
