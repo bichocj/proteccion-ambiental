@@ -23,6 +23,7 @@ urlpatterns += [
     url(r'^event/$', views.get_event, name="get_event"),
     url(r'^event/save/(?P<slug>[-\w]+)$', views.save_event, name="save_event"),
     url(r'^event/update/(?P<slug>[-\w]+)/$', views.update_event, name="update_event"),
+    url(r'^event/delete/(?P<slug>[-\w]+)/$', views.delete_event, name="delete_event"),
     url(r'^settings/(?P<slug>[-\w]+)/$', views.settings_calendar, name="settings_calendar")
 ]
 

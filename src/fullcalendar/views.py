@@ -330,6 +330,12 @@ def update_event(request, slug):
         json.dumps(response),
         content_type="application/json")
 
+def delete_event(request, slug):
+    if request.POST:
+        if request.POST.get('id'):
+            e = get_object_or_404(Events, pk=request.POST.get('id'))
+            e.delete()
+    return http.HttpResponse(1)
 
 def settings_calendar(request, slug):
     company = request.user.company

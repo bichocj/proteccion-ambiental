@@ -64,7 +64,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title">Event</h4>
+                    <h4 class="modal-title">Evento</h4>
                 </div>
                 <div class="modal-body">
                     <form method="post" class="form-horizontal" action="{% url 'fullcalendar:save_event' slug %}"
@@ -72,42 +72,6 @@
                         {% for f in form %}
                             {% csrf_token %}
                             {% include 'main/hooks/field_with_label.html' with field=f %}
-{#                            {% if not f|is_hidden %}#}
-{#                                {% if f|is_file_input %}#}
-{#                                    <div class="form-group {% if f.errors %}has-error{% endif %}">#}
-{#                                        <label for="id_{{ f.name }}"#}
-{#                                               class="col-sm-2 control-label">{{ f.label|capfirst }}</label>#}
-{#                                        <div class="col-sm-10">#}
-{##}
-{#                                            <a id="event_file" target="_blank"></a>#}
-{##}
-{##}
-{#                                            {{ f }}#}
-{##}
-{#                                            {% for error in f.errors %}#}
-{#                                                <p class="help-block">{{ error }}</p>#}
-{#                                            {% endfor %}#}
-{#                                        </div>#}
-{##}
-{#                                    </div>#}
-{#                                {% else %}#}
-{#                                    <div class="form-group {% if f.errors %}has-error{% endif %}">#}
-{#                                        <label for="id_{{ f.name }}"#}
-{#                                               class="col-sm-2 control-label">{{ f.label|capfirst }}</label>#}
-{#                                        <div class="col-sm-10">#}
-{##}
-{#                                            {{ f }}#}
-{##}
-{#                                            {% for error in f.errors %}#}
-{#                                                <p class="help-block">{{ error }}</p>#}
-{#                                            {% endfor %}#}
-{#                                        </div>#}
-{##}
-{#                                    </div>#}
-{#                                {% endif %}#}
-{##}
-{#                            {% endif %}#}
-
                         {% endfor %}
                         <div class="form-group">
                             <label class="col-md-2 control-label">Archivos</label>
@@ -126,6 +90,8 @@
                     </form>
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn default pull-left" style="display: none" id="btn_delete">{% trans "Eliminar"|capfirst %}</button>
+
                     <button type="button" class="btn default" data-dismiss="modal">{% trans "close"|capfirst %}</button>
                     <button type="submit" class="btn blue" id="form_button"
                             form="event-form">{% trans "save changes"|capfirst %}
@@ -178,6 +144,7 @@
                     $('#event').modal('show');
                     $('#id_event_start').val(moment(startDate).format(format)).addClass('edited');
                     $('#id_event_end').val(moment(endDate).format(format)).addClass('edited');
+                    $('#btn_delete').hide();
                 },
                 eventClick: function (calEvent, jsEvent, view) {
                     $('#event-form').trigger("reset");
@@ -221,6 +188,7 @@
                                 $("#event_file").attr("href", response.data.url_evidence).text('Anterior: \n' + response.data.evidence_name);
                                 $("#event_id_pk").val(response.data.event);
                                 $('#event').modal('show');
+                                $('#btn_delete').show();
 
                             } else {
                                 console.log(response.message);
@@ -273,7 +241,6 @@
 
                 var url = '';
                 var data = new FormData($('#event-form').get(0));
-{#                data.append('evidence', $("#id_evidence")[0].files[0]);#}
 
                 if ($("#event_id_pk").val() == "") {
                     url = $(this).attr('action');
@@ -284,8 +251,7 @@
                     data.append('id', $("#event_id_pk").val());
                 }
                 var method = $(this).attr('method');
-                //var data = $(this).serializeArray();
-{#                console.log(data.data);#}
+
                 $.ajax({
                     url: url,
                     method: method,
@@ -369,6 +335,28 @@
                 pickerPosition: "bottom-right",
                 todayBtn: true
             });
+
+            $('#btn_delete').click(function(){
+                let data = new FormData();
+                data.append('id', $("#event_id_pk").val())
+                data.append('csrfmiddlewaretoken', "{{ csrf_token }}")
+
+                $.ajax({
+                    url: '{% url 'fullcalendar:delete_event' slug %}',
+                    method: 'POST',
+                    data: data,
+                    dataType: "JSON",
+                    processData: false,
+                    contentType: false,
+                    success: function (response) {                    
+                        $('#event').modal('hide');
+                        $('#calendar').fullCalendar('removeEvents',$("#event_id_pk").val());
+                        $('#event-form').trigger("reset");
+                    }
+                });
+
+                
+            })
 
             document.getElementById("uploadBtn").onchange = function () {
                 let ul = $('#files_uploaded');
