@@ -11,18 +11,36 @@ from sorl.thumbnail import ImageField
 # from accounts.models import Worker
 
 
-GERENTE = 0
-SUPERVISOR = 1
-ASESOR_EXTERNO = 2
-RECURSOS_HUMANOS = 3
-COMITE = 4
+# GERENTE = 0
+# SUPERVISOR = 1
+# ASESOR_EXTERNO = 2
+# RECURSOS_HUMANOS = 3
+# COMITE = 4
+
+GERENTE_GENERAL = 1
+SUPERVISOR_DE_OPERACIONES = 2
+JEFE_DE_OPERACIONES  = 3
+RRHH_CONTABILIDAD = 4
+ASESOR_EXTERNO = 5
+OPERARIO = 6
+AUXILIAR_DE_ALMACEN = 7
+AUXILIAR_DE_LIMPIEZA = 8
+AUXILIAR_DE_CONTROL_DE_CALIDAD = 9
+AUXILIAR_DE_LAVADO_DE_BOTELLAS = 10
+AUXILIAR_DE_CARPINTERIA = 11
 
 cargos = (
-    (GERENTE, 'GERENTE'),
-    (SUPERVISOR, 'SUPERVISOR'),
-    (ASESOR_EXTERNO, 'ASESOR EXTERNO'),
-    (RECURSOS_HUMANOS, 'RECURSOS HUMANOS'),
-    (COMITE, 'COMITE')
+    (GERENTE_GENERAL,'GERENTE_GENERAL'),
+    (SUPERVISOR_DE_OPERACIONES,'SUPERVISOR_DE_OPERACIONES'),
+    (JEFE_DE_OPERACIONES,'JEFE_DE_OPERACIONES'),
+    (RRHH_CONTABILIDAD,'RRHH_CONTABILIDAD'),
+    (ASESOR_EXTERNO,'ASESOR_EXTERNO'),
+    (OPERARIO,'OPERARIO'),
+    (AUXILIAR_DE_ALMACEN,'AUXILIAR_DE_ALMACEN'),
+    (AUXILIAR_DE_LIMPIEZA,'AUXILIAR_DE_LIMPIEZA'),
+    (AUXILIAR_DE_CONTROL_DE_CALIDAD,'AUXILIAR_DE_CONTROL_DE_CALIDAD'),
+    (AUXILIAR_DE_LAVADO_DE_BOTELLAS,'AUXILIAR_DE_LAVADO_DE_BOTELLAS'),
+    (AUXILIAR_DE_CARPINTERIA,'AUXILIAR_DE_CARPINTERIA'),
 )
 
 
@@ -54,7 +72,7 @@ class Worker(models.Model):
     last_name = models.CharField(_('Apellidos'), max_length=100, null=True, blank=True, default='')
     code = models.CharField(_('Codigo'), max_length=100, null=False, blank=False)
     company = models.ForeignKey(Company, null=False)
-    cargo = models.IntegerField(_('Cargo'), choices=cargos, default=RECURSOS_HUMANOS, null=False)
+    cargo = models.IntegerField(_('Cargo'), choices=cargos, null=False)
     photo = models.ImageField(_('photo'), null=True, blank=True, upload_to='photos')
     date_in = models.DateField(_('date in'), null=True, blank=True)
     date_out = models.DateField(_('date out'), null=True, blank=True)

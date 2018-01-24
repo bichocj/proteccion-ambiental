@@ -35,6 +35,7 @@ class WorkerForm(ModelForm):
         super(WorkerForm, self).__init__(*args, **kwargs)
         _instance = kwargs.pop('instance', None)
         add_form_control_class(self.fields)
+        self.fields['date_out'].required = False
 
 
 # class WorkerEditForm(ModelForm):

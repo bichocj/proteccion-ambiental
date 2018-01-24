@@ -267,6 +267,7 @@ def worker_new(request, company_slug):
         if form.is_valid():
             worker = form.save(commit=False)
             worker.company = company
+            worker.date_out = None
             worker.save()
             return redirect(reverse('main:workers', kwargs={'company_slug': company_slug}))
         else:
@@ -336,7 +337,10 @@ def worker_edit(request, company_slug, worker_pk):
     if request.POST:
         form = WorkerForm(request.POST, request.FILES, instance=worker)
         if form.is_valid():
-            form.save()
+            worker = form.save(commit=False)
+            if worker.date_out == '':
+                worker.date_out = None
+            worker.save()
             return redirect(reverse('main:workers', kwargs={'company_slug': company.slug}))
         else:
             message = 'Revisa la informacion'
