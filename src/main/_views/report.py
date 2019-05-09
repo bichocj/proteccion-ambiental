@@ -495,7 +495,7 @@ def report_resume(request, company_slug):
     # months = [{'mes': '{}'.format(_(current_date.replace(day=1).replace(month=i).strftime('%B'))), 'index': i} for i in
     #           range(1, 13)]
     # year = datetime.now().year
-
+    value_details = ValuesDetail.objects.filter(detail__index=index).order_by('detail__mounth')    
 
     return render(request, 'main/reports/reports_draw.html', locals())
 
