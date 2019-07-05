@@ -41,8 +41,10 @@ def refresh_inform(request, company_slug, month):
         value_detail.save()
 
     if index.is_using_legal:
-        denominator_legal = LegalRequirement.objects.filter(entitie=company, datepublication__month=month, datepublication__year=year).count()
-        numerator_legal = LegalRequirement.objects.filter(entitie=company, state=LegalRequirement.CUMPLIO, datepublication__month=month, datepublication__year=year).count()
+        import pdb; pdb.set_trace()
+        denominator_legal = LegalRequirement.objects.filter(entitie=company, date_last_evaluation__month=month, date_last_evaluation__year=year).count()
+
+        numerator_legal = LegalRequirement.objects.filter(entitie=company, state=LegalRequirement.CUMPLIO, date_last_evaluation__month=month, date_last_evaluation__year=year).count()
         value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='legal')
         value_detail.numerator = numerator_legal
         value_detail.denominator = denominator_legal
