@@ -41,7 +41,6 @@ def refresh_inform(request, company_slug, month):
         value_detail.save()
 
     if index.is_using_legal:
-        import pdb; pdb.set_trace()
         denominator_legal = LegalRequirement.objects.filter(entitie=company, date_last_evaluation__month=month, date_last_evaluation__year=year).count()
 
         numerator_legal = LegalRequirement.objects.filter(entitie=company, state=LegalRequirement.CUMPLIO, date_last_evaluation__month=month, date_last_evaluation__year=year).count()
@@ -469,8 +468,8 @@ def report_resume(request, company_slug):
     # current_date = datetime.now()
     # months = [{'mes': '{}'.format(_(current_date.replace(day=1).replace(month=i).strftime('%B'))), 'index': i} for i in
     #           range(1, 13)]
-    # year = datetime.now().year
-    value_details = ValuesDetail.objects.filter(detail__index=index).order_by('detail__mounth')    
+    year = datetime.now().year
+    value_details = ValuesDetail.objects.filter(detail__index=index, detail__year=year ).order_by('detail__mounth')    
 
     return render(request, 'main/reports/reports_draw.html', locals())
 
@@ -482,8 +481,8 @@ def report_resume_data(request, company_slug, key):
     # index_details = Index_Detail.objects.filter(index=index).order_by('mounth')
     # for i in index_details:
     #     print(i)
-
-    value_details = ValuesDetail.objects.filter(detail__index=index, key=key).order_by('detail__mounth')
+    year = datetime.now().year
+    value_details = ValuesDetail.objects.filter(detail__index=index, detail__year=year, key=key).order_by('detail__mounth')
 
     values = list()
     for i in range(1,12):
