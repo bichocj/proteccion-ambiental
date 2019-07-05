@@ -15,7 +15,7 @@ from django.utils.translation import ugettext as _
 
 from accounts.forms import WorkerForm
 from indices.forms import IndexForm
-from indices.models import Index, Index_Detail, ValuesDetail
+from indices.models import Index, Index_Detail
 from main.models import AccidentDetail, UserCompany, Worker
 from proteccion_ambiental.settings import COMPANY_JRA_SLUG
 from .forms import CompanyForm, FormatForm, AccidentForm, RequirementForm, LegalRequirementForm, \
@@ -633,11 +633,12 @@ def restore_index(index):
 
 def restore_indices(request, company_slug, mounth):
     index = Index.objects.get(company__slug=company_slug)
+    year = datetime.date.today()
     try:
-        indices = Index_Detail.objects.get(index=index, mounth=mounth)
+        indices = Index_Detail.objects.get(index=index, mounth=mounth, year=year)
         indices = restore_index(indices)
     except Index_Detail.DoesNotExist:
-        indices = Index_Detail(index=index, mounth=mounth)
+        indices = Index_Detail(index=index, mounth=mounth, year=year)
         indices.save()
     return redirect(
         reverse('main:reports', kwargs={"company_slug": company_slug}))

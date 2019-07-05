@@ -155,7 +155,7 @@ class Index(models.Model):
 class Index_Detail(models.Model):
     index = models.ForeignKey(Index)
     mounth = models.IntegerField(null=True, blank=True)
-    # TODO add year
+    year = models.IntegerField(null=True, blank=True)
     sgsst = models.DecimalField(null=True, default=0, max_digits=10, decimal_places=2)
     legal = models.DecimalField(null=True, default=0, max_digits=10, decimal_places=2)
     icsst = models.DecimalField(null=True, default=0, max_digits=10, decimal_places=2)

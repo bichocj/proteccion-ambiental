@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
-from datetime import datetime
+from datetime import datetime, date
 
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
@@ -21,21 +21,17 @@ def refresh_inform(request, company_slug, month):
     company = Company.objects.get(slug=company_slug)
 
     index, _ = Index.objects.get_or_create(company=company)
-    index_detail, _ = Index_Detail.objects.get_or_create(index=index, mounth=month)
+    year = date.today().year
+    index_detail, _ = Index_Detail.objects.get_or_create(index=index, mounth=month, year=year)
 
     count_worker, _ = CountWorker.objects.get_or_create(month_year__month=month, company=company)
     workers_in_month = count_worker.workers
     hours_worked_in_month = count_worker.hours
 
     if index.is_using_sgsst:
-        denominator_sgsst = Events.objects.filter(Q(calendar__company=company),
-                                                  Q(event_start__month=month)).count()
-
-        numerator_sgsst = Events.objects.filter(Q(calendar__company=company), Q(state=DONE),
-                                                Q(event_start__month=month)).count()
-
+        denominator_sgsst = Events.objects.filter(calendar__company=company, event_start__month=month, event_start__year=year).count()
+        numerator_sgsst = Events.objects.filter(calendar__company=company, state=DONE, event_start__month=month, event_start__year=year).count()
         value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='sgsst')
-
         value_detail.numerator = numerator_sgsst
         value_detail.denominator = denominator_sgsst
         if denominator_sgsst > 0:
@@ -45,13 +41,9 @@ def refresh_inform(request, company_slug, month):
         value_detail.save()
 
     if index.is_using_legal:
-        denominator_legal = LegalRequirement.objects.filter(Q(entitie=company),
-                                                            Q(datepublication__month=month)).count()
-        numerator_legal = LegalRequirement.objects.filter(Q(entitie=company), Q(state=LegalRequirement.CUMPLIO),
-                                                          Q(datepublication__month=month)).count()
-
+        denominator_legal = LegalRequirement.objects.filter(entitie=company, datepublication__month=month, datepublication__year=year).count()
+        numerator_legal = LegalRequirement.objects.filter(entitie=company, state=LegalRequirement.CUMPLIO, datepublication__month=month, datepublication__year=year).count()
         value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='legal')
-
         value_detail.numerator = numerator_legal
         value_detail.denominator = denominator_legal
         if denominator_legal > 0:
@@ -61,9 +53,7 @@ def refresh_inform(request, company_slug, month):
         value_detail.save()
 
     if index.is_using_capacitacion:
-        events = Events.objects.filter(calendar__company=company, event_start__month=month,
-                                       calendar__type=CAPACITATION)
-
+        events = Events.objects.filter(calendar__company=company, event_start__month=month, event_start__year=year, calendar__type=CAPACITATION)
         value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='training')
 
         value_detail.numerator = events.filter(state=DONE).count()
@@ -75,14 +65,16 @@ def refresh_inform(request, company_slug, month):
         value_detail.save()
 
     if index.is_using_personal_capacitado:
-        events = Events.objects.filter(calendar__company=company, event_start__month=month,
-                                       calendar__type=CAPACITATION)
-
+        events = Events.objects.filter(calendar__company=company, event_start__month=month, event_start__year=year, calendar__type=CAPACITATION)
         value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='personal_training')
 
         events_training = events.filter(state=DONE, type_capacitations__isnull=False)
         events_training_total = events_training.count()
-        events_training_workers = events_training.aggregate(Sum('number_workers'))['number_workers__sum']
+        print('events_training_total')
+        print(events_training_total)
+        events_training_workers = events_training.aggregate(Sum('number_workers'))['number_workers__sum'] or 0
+        print('events_training_workers')
+        print(events_training_workers)
         value_detail.denominator = workers_in_month
 
         if value_detail.denominator > 0:
@@ -95,9 +87,8 @@ def refresh_inform(request, company_slug, month):
 
     if index.is_using_intensidad_formativa:
         hours_worked = \
-            (Events.objects.filter(calendar__company=company, event_start__month=month, state=DONE).filter(
-                Q(calendar__type=CAPACITATION) | Q(calendar__type=CHARLAS)).aggregate(Sum('hours_worked')))[
-                'hours_worked__sum']
+            (Events.objects.filter(calendar__company=company, event_start__month=month, event_start__year=year, state=DONE).filter(
+                Q(calendar__type=CAPACITATION) | Q(calendar__type=CHARLAS)).aggregate(Sum('hours_worked')))['hours_worked__sum'] or 0
 
         value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='formative_intensity')
         value_detail.numerator = hours_worked * 100
@@ -110,12 +101,11 @@ def refresh_inform(request, company_slug, month):
         value_detail.save()
 
     if index.is_using_charlas:
-        events = Events.objects.filter(calendar__company=company, event_start__month=month,
-                                       calendar__type=CHARLAS)
+        events = Events.objects.filter(calendar__company=company, event_start__month=month, event_start__year=year, calendar__type=CHARLAS)
         traings_todo = events.count()
         trainings_done = events.filter(state=DONE).count()
-        people_trained = (events.filter(state=DONE).aggregate(Sum('number_workers')))['number_workers__sum']
-        people_to_training = (events.aggregate(Sum('number_workers')))['number_workers__sum']
+        people_trained = (events.filter(state=DONE).aggregate(Sum('number_workers')))['number_workers__sum'] or 0
+        people_to_training = (events.aggregate(Sum('number_workers')))['number_workers__sum'] or 0
 
         if people_trained is None:
             people_trained = 0
@@ -135,7 +125,7 @@ def refresh_inform(request, company_slug, month):
 
     if index.is_using_incidentes:
 
-        workers_with_incidents = Accident.objects.filter(company=company, date__month=month).count()
+        workers_with_incidents = Accident.objects.filter(company=company, date__month=month, date__year=year,).count()
 
         value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='incidents')
         value_detail.numerator = workers_with_incidents * 100
@@ -149,8 +139,7 @@ def refresh_inform(request, company_slug, month):
 
     if index.is_using_inspecciones:
 
-        inspections = Events.objects.filter(calendar__company=company, event_start__month=month,
-                                            type=INSPECTION)
+        inspections = Events.objects.filter(calendar__company=company, event_start__month=month, event_start__year=year, type=INSPECTION)
 
         inspections_done = inspections.filter(state=DONE).count()
         inspections_todo = inspections.count()
@@ -167,8 +156,7 @@ def refresh_inform(request, company_slug, month):
 
     if index.is_using_observaciones_planeadas:
 
-        observations = Events.objects.filter(calendar__company=company, event_start__month=month, type=OTRO)
-
+        observations = Events.objects.filter(calendar__company=company, event_start__month=month, event_start__year=year, type=OTRO)
         observations_done = observations.filter(state=DONE).count()
         observations_todo = observations.count()
 
@@ -184,9 +172,7 @@ def refresh_inform(request, company_slug, month):
 
     if index.is_using_simulacros_emergencia:
 
-        simulacrums = Events.objects.filter(calendar__company=company, event_start__month=month,
-                                            type=SIMULATION)
-
+        simulacrums = Events.objects.filter(calendar__company=company, event_start__month=month, event_start__year=year, type=SIMULATION)
         simulacrums_done = simulacrums.filter(state=DONE).count()
         simulacrums_todo = simulacrums.count()
 
@@ -202,8 +188,7 @@ def refresh_inform(request, company_slug, month):
 
     if index.is_using_simulacros_emergencia:
 
-        simulacrums = Events.objects.filter(calendar__company=company, event_start__month=month,
-                                            type=SIMULATION)
+        simulacrums = Events.objects.filter(calendar__company=company, event_start__month=month, event_start__year=year, type=SIMULATION)
 
         simulacrums_done = simulacrums.filter(state=DONE).count()
         simulacrums_todo = simulacrums.count()
@@ -220,9 +205,7 @@ def refresh_inform(request, company_slug, month):
 
     if index.is_using_first_auxi:
 
-        aids = Accident.objects.filter(company=company, date__month=month,
-                                       type_accident=Accident.FIRST_AID).count()
-
+        aids = Accident.objects.filter(company=company, date__month=month, date__year=year, type_accident=Accident.FIRST_AID).count()
         value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='first_aid')
         value_detail.numerator = aids * 200000  # N°Accidentes Primeros Auxilios Acum x 200 000
         value_detail.denominator = hours_worked_in_month  # Horas Hombre Trabajadas Acumuladas
@@ -235,8 +218,7 @@ def refresh_inform(request, company_slug, month):
 
     if index.is_using_medic_atention:
 
-        aids = Accident.objects.filter(company=company, date__month=month,
-                                       type_accident=Accident.MEDIC_ATTENTION).count()
+        aids = Accident.objects.filter(company=company, date__month=month, date__year=year, type_accident=Accident.MEDIC_ATTENTION).count()
 
         value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='medic_attention')
         value_detail.numerator = aids * 200000  # N°Accidentes A. Medica Acum x 200 000
@@ -250,8 +232,7 @@ def refresh_inform(request, company_slug, month):
 
     if index.is_using_lose_time:
 
-        aids = Accident.objects.filter(company=company, date__month=month,
-                                       type_accident=Accident.AID_LOST).count()
+        aids = Accident.objects.filter(company=company, date__month=month, date__year=year, type_accident=Accident.AID_LOST).count()
 
         value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='aids_lost')
         value_detail.numerator = aids * 200000  # N°Accidentes con tiempo perdido x 200 000
@@ -265,8 +246,7 @@ def refresh_inform(request, company_slug, month):
 
     if index.is_using_fatal_accident:
 
-        aids = Accident.objects.filter(company=company, date__month=month,
-                                       type_accident=Accident.AID_FATAL).count()
+        aids = Accident.objects.filter(company=company, date__month=month, date__year=year, type_accident=Accident.AID_FATAL).count()
 
         value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='aids_fatal')
         value_detail.numerator = aids * 200000  # N°Accidentes Fatal x 200 000
@@ -279,8 +259,7 @@ def refresh_inform(request, company_slug, month):
         value_detail.save()
 
     if index.is_using_frecuency:
-        aids = Accident.objects.filter(company=company, date__month=month,
-                                       type_accident=Accident.AID_LOST).count()
+        aids = Accident.objects.filter(company=company, date__month=month, date__year=year, type_accident=Accident.AID_LOST).count()
 
         value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='frecuency')
         value_detail.numerator = aids * 200000  # N°Accidentes con tiempo perdido x 200 000
@@ -293,11 +272,9 @@ def refresh_inform(request, company_slug, month):
         value_detail.save()
 
     if index.is_using_icsst:
-        denominator_icsst = Agreement.objects.filter(Q(company=company),
-                                                     Q(date__month=month)).count()
+        denominator_icsst = Agreement.objects.filter(company=company, date__month=month, date__year=year).count()
 
-        numerator_icsst = Agreement.objects.filter(Q(company=company), Q(percentage=100),
-                                                   Q(date__month=month)).count()
+        numerator_icsst = Agreement.objects.filter(company=company, percentage=100, date__month=month, date__year=year).count()
         value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='icsst')
         value_detail.numerator = numerator_icsst
         value_detail.denominator = denominator_icsst
@@ -316,10 +293,8 @@ def refresh_inform(request, company_slug, month):
         #     denominator_icsst = values.denominator
     if index.is_using_indice_no_conformidad:
         # if index_detail.indice_no_conformidad == 0:
-        denominator_indice_no_conformidad = Agreement.objects.filter(Q(company=company),
-                                                                     Q(date__month=month)).count()
-        numerator_indice_no_conformidad = Agreement.objects.filter(Q(company=company), Q(percentage=100),
-                                                                   Q(date__month=month)).count()
+        denominator_indice_no_conformidad = Agreement.objects.filter(company=company, date__month=month, date__year=year).count()
+        numerator_indice_no_conformidad = Agreement.objects.filter(company=company, percentage=100, date__month=month, date__year=year).count()
 
         value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='indice_no_conformidad')
 
@@ -340,10 +315,8 @@ def refresh_inform(request, company_slug, month):
             #     denominator_indice_no_conformidad = values.denominator
     if index.is_using_medida_iperc:
         # if index_detail.medida_iperc == 0:
-        denominator_medida_iperc = Agreement.objects.filter(Q(company=company),
-                                                            Q(date__month=month)).count()
-        numerator_medida_iperc = Agreement.objects.filter(Q(company=company), Q(percentage=100.0),
-                                                          Q(date__month=month)).count()
+        denominator_medida_iperc = Agreement.objects.filter(company=company, date__month=month, date__year=year).count()
+        numerator_medida_iperc = Agreement.objects.filter(company=company, percentage=100.0, date__month=month, date__year=year).count()
         value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='medida_iperc')
 
         value_detail.numerator = numerator_medida_iperc
@@ -386,10 +359,8 @@ def refresh_inform(request, company_slug, month):
             #     numerator_liderazgo = values.numerator
             #     denominator_liderazgo = values.denominator
     if index.is_using_plan_contingencia:
-        denominator_plan_contingencia = Agreement.objects.filter(Q(company=company),
-                                                                 Q(date__month=month)).count()
-        numerator_plan_contingencia = Agreement.objects.filter(Q(company=company), Q(percentage=100),
-                                                               Q(date__month=month)).count()
+        denominator_plan_contingencia = Agreement.objects.filter(company=company, date__month=month, date__year=year).count()
+        numerator_plan_contingencia = Agreement.objects.filter(company=company, percentage=100, date__month=month, date__year=year).count()
         value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='plan_contingencia')
         value_detail.numerator = numerator_plan_contingencia
         value_detail.denominator = denominator_plan_contingencia
@@ -401,7 +372,7 @@ def refresh_inform(request, company_slug, month):
         value_detail.save()
 
     if index.is_using_mejora:
-        agreements = AgreementImprovement.objects.filter(date__month=month, company=company)
+        agreements = AgreementImprovement.objects.filter(date__month=month, date__year=year,  company=company)
         value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='improvements')
         value_detail.numerator = agreements.filter(percentage=100).count()
         value_detail.denominator = agreements.count()
@@ -469,8 +440,9 @@ def monthly_report(request, company_slug, month):
     else:
         indice_general = 200000
 
-    index, _ = Index.objects.get_or_create(company=company)
-    index_detail, _ = Index_Detail.objects.get_or_create(index=index, mounth=month)
+    index, _ = Index.objects.get_or_create(company=company)    
+    year = date.today().year
+    index_detail, _ = Index_Detail.objects.get_or_create(index=index, mounth=month, year=year)
     values_details = ValuesDetail.objects.filter(detail=index_detail)
 
     return render(request, 'main/reports/reports_mensual.html', locals())
