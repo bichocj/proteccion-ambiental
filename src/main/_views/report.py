@@ -269,7 +269,6 @@ def refresh_inform(request, company_slug, month):
         value_detail.save()
 
     if index.is_using_icsst:
-        import pdb; pdb.set_trace()
         denominator_icsst = Agreement.objects.filter(company=company, date__month=month, date__year=year).count()
 
         numerator_icsst = Agreement.objects.filter(company=company, percentage=100, date__month=month, date__year=year).count()
@@ -282,7 +281,7 @@ def refresh_inform(request, company_slug, month):
         else:
             index_detail.icsst = numerator_icsst * 100.00 / denominator_icsst
             value_detail.value = numerator_icsst * 100.00 / denominator_icsst
-            
+
         value_detail.save()
         index_detail.save()
         # else:
