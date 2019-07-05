@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Format, Report, Task, Accident, Meeting, HistoryFormats, Company, Requirement
+from .models import Format, Report, Task, Accident, Meeting, HistoryFormats, Company, Requirement, CountWorker
 
 
 class FormatAdmin(admin.ModelAdmin):
@@ -15,3 +15,4 @@ admin.site.register(Accident)
 admin.site.register(Meeting)
 admin.site.register(HistoryFormats)
 admin.site.register(Company)
+admin.site.register(CountWorker)
