@@ -137,6 +137,7 @@
 {#    <script src="{% static 'fullcalendar/fullcalendar/lib/jquery.min.js' %}"></script>#}
     <script src="{% static 'main/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'main/js/jquery-ui-1.10.2.custom.min.js' %}"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
     <script src="{% static 'main/js/wysihtml5-0.3.0.js' %}"></script>
     <script src="{% static 'main/js/bootstrap.datepicker.js' %}"></script>
     <script src="{% static 'main/js/jquery.uniform.min.js' %}"></script>
@@ -146,17 +147,17 @@
         $(function () {
 
             // add uniform plugin styles to html elements
-            if (typeof uniform !== 'undefined') {
                 $("input:checkbox, input:radio").uniform();
-            }
             // select2 plugin for select elements
 
             // datepicker plugin
-            if (typeof datepicker !== 'undefined') {
-                $('.input-datepicker').datepicker().on('changeDate', function (ev) {
-                    $(this).datepicker('hide');
-                });
-            }
+            // $.fn.datepicker.defaults.format = "yy-mm-dd";
+
+            
+            $('.input-datepicker').datepicker().on('changeDate', function (ev) {
+                $(this).datepicker('hide');
+            });
+            
 
 
             $("select").each(function (e, elem) {
