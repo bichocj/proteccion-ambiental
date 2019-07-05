@@ -24,7 +24,7 @@ def refresh_inform(request, company_slug, month):
     year = date.today().year
     index_detail, _ = Index_Detail.objects.get_or_create(index=index, mounth=month, year=year)
 
-    count_worker, _ = CountWorker.objects.get_or_create(month_year__month=month, company=company)
+    count_worker, _ = CountWorker.objects.get_or_create(month_year__month=month, month_year__year=year, company=company)
     workers_in_month = count_worker.workers
     hours_worked_in_month = count_worker.hours
 
@@ -432,7 +432,8 @@ def monthly_report(request, company_slug, month):
     month_label = current_date.replace(day=1).replace(month=int(month)).strftime('%B')
 
     company = get_object_or_404(Company, slug=company_slug)
-    counter, _ = CountWorker.objects.get_or_create(month_year__month=month, company=company)
+    year = date.today().year
+    counter, _ = CountWorker.objects.get_or_create(month_year__month=month, month_year__year=year, company=company)
     workers_in_month = counter.workers
 
     if workers_in_month > 100:
@@ -441,7 +442,7 @@ def monthly_report(request, company_slug, month):
         indice_general = 200000
 
     index, _ = Index.objects.get_or_create(company=company)    
-    year = date.today().year
+    
     index_detail, _ = Index_Detail.objects.get_or_create(index=index, mounth=month, year=year)
     values_details = ValuesDetail.objects.filter(detail=index_detail)
 
