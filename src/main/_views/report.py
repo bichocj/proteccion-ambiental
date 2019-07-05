@@ -71,11 +71,7 @@ def refresh_inform(request, company_slug, month):
 
         events_training = events.filter(state=DONE, type_capacitations__isnull=False)
         events_training_total = events_training.count()
-        print('events_training_total')
-        print(events_training_total)
         events_training_workers = events_training.aggregate(Sum('number_workers'))['number_workers__sum'] or 0
-        print('events_training_workers')
-        print(events_training_workers)
         value_detail.denominator = workers_in_month
 
         if value_detail.denominator > 0:
@@ -273,17 +269,21 @@ def refresh_inform(request, company_slug, month):
         value_detail.save()
 
     if index.is_using_icsst:
+        import pdb; pdb.set_trace()
         denominator_icsst = Agreement.objects.filter(company=company, date__month=month, date__year=year).count()
 
         numerator_icsst = Agreement.objects.filter(company=company, percentage=100, date__month=month, date__year=year).count()
         value_detail, _ = ValuesDetail.objects.get_or_create(detail=index_detail, key='icsst')
         value_detail.numerator = numerator_icsst
         value_detail.denominator = denominator_icsst
-        value_detail.save()
         if denominator_icsst == 0:
             index_detail.icsst = 0
+            value_detail.value = 0
         else:
             index_detail.icsst = numerator_icsst * 100.00 / denominator_icsst
+            value_detail.value = numerator_icsst * 100.00 / denominator_icsst
+            
+        value_detail.save()
         index_detail.save()
         # else:
         #     try:
